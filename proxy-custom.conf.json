@@ -1,0 +1,14 @@
+{
+    "/api": {
+        "target": "http://192.168.32.66:8085",
+        "secure": false
+    },
+    "/content": {
+        "target": "http://192.168.32.66:8085",
+        "secure": false
+    },
+    "/lmsapi": {
+        "target": "http://192.168.32.66:8085",
+        "secure": false
+    }
+}

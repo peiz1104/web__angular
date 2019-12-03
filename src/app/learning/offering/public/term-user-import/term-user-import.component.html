@@ -1,0 +1,115 @@
+<ng-container *ngIf="echoTpl" [ngTemplateOutlet]="echoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container>
+
+<ng-template #lookupModalContent>
+    <div class="attendance-import">
+        <div class="attendance-import-body">
+            <div class="leading-top">
+                <nz-steps [(nzCurrent)]="stepNumber" [nzSize]="'large'">
+                    <nz-step [nzTitle]="'模版下载和文件导入'"></nz-step>
+                    <nz-step [nzTitle]="'校验结果展示'"></nz-step>
+                    <nz-step [nzTitle]="'成功结果展示'"></nz-step>
+                </nz-steps>
+            </div>
+            <div class="tab-box">
+                <nz-tabset [(nzSelectedIndex)]="stepNumber">
+                    <nz-tab>
+                        <div class="first-step" nz-row>
+                            <div nz-col [nzOffset]="4" [nzSpan]="16">
+                                <div class="title">用户导入前请按照模板内容完成填写
+                                    <span class="down" (click)="downloadExcelModel()">下载模板</span>
+                                </div>
+                                <!-- <div class="first-img-box">
+                                    <img class="img-url" cui-lazy-load src="assets/images/term_user.png" alt="模板实例">
+                                    <span>模板截图</span>
+                                </div> -->
+                                <div class="notes-box">
+                                    <div class="notes-title">模板填写说明：</div>
+                                    <div class="notes-detail">1. 红色字段为必填项，其他列为可选列,需按照要求格式填写，不能改变格式类型；</div>
+                                    <div class="notes-detail">2. 列名和列的位置固定，不可修改；录入数据时不可合并单元格；</div>
+                                    <div class="notes-detail">3. 导入功能支持文件后缀为 .xls，.xlsx ，使用本模板即可；</div>
+                                </div>
+
+                                <div nz-row class="select-box">
+                                    <div class="select-title" nz-col [nzSpan]="4">
+                                        选择导入模板：
+                                    </div>
+                                    <div nz-col [nzSpan]="20" class="lond-file-box">
+                                        <cui-fileupload name="file" mode="file" url="/api/documents/upload" [auto]="true" (uploadComplete)="initImport($event)" accept=".xls,.xlsx"
+                                            [maxFileSize]="1024*1024*20"></cui-fileupload>
+                                    </div>
+                                    <span class="text-muted">
+                                        <i class="fa fa-info-circle text-info"></i> 可以在此处批量导入用户信息。导入功能支持文件后缀为.xls，.xlsx ， 不能超过20M。</span>
+                                    <div class="text-danger">{{importErrInfo}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </nz-tab>
+                    <nz-tab>
+                        <div class="three-step">
+                            <div nz-row>
+                                <div class="base" nz-col [nzSpan]="8" [nzOffset]="1">
+                                    <h4>可以成功导入的数据</h4>
+                                </div>
+                                <div nz-col [nzSpan]="18" [nzOffset]="3">
+                                    <cui-data-table #tableHandle [columns]="leadColumns" [loading]='loading' [data]="excelInfo?.right">
+                                    </cui-data-table>
+                                </div>
+                            </div>
+                            <div nz-row>
+                                <div class="base" nz-col [nzSpan]="8" [nzOffset]="2">
+                                    <h4>加载失败的数据</h4>
+                                </div>
+                                <div nz-col [nzSpan]="18" [nzOffset]="3">
+                                    <cui-data-table #tableHandles [columns]="leadColumns" [loading]='loading' [data]="excelInfo?.err">
+                                    </cui-data-table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </nz-tab>
+                    <nz-tab>
+                        <div class="three-step">
+                            <div *ngIf="judgeTbcMax!='Y'" nz-row>
+                                <div class="base" nz-col [nzSpan]="8" [nzOffset]="1">
+                                    <h4>可以成功导入的数据</h4>
+                                </div>
+                                <div nz-col [nzSpan]="18" [nzOffset]="3">
+                                    <cui-data-table #tableHandle [columns]="leadColumns" [loading]='loading' [data]="excelInfo?.right">
+                                    </cui-data-table>
+                                </div>
+                            </div>
+                            <div *ngIf="judgeTbcMax=='Y'" nz-row>
+                                <div class="max-tbc">
+                                    <h4>
+                                        <span class="icon-max">
+                                            <i class="iconfont icon-frowno"></i>
+                                        </span> 导入人数超过最大注册人数，不可导入人员！</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </nz-tab>
+                </nz-tabset>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #lookupModalFooter>
+    <div class="sublit-buttons">
+        <button class="m-w-20" nz-button [nzType]="'default'" (click)="previousStep()" *ngIf="stepNumber > 0 && stepNumber < 2">
+            <span>上一步</span>
+        </button>
+        <button class="m-w-20" nz-button [nzType]="'primary'" (click)="nextStep(stepNumber)" *ngIf="stepNumber < 1" [disabled]="canNextStep">
+            <span>下一步</span>
+        </button>
+        <button class="m-w-20" nz-button [nzType]="'primary'" (click)="doneStep()" *ngIf="stepNumber == 1" [disabled]="ifSubmitImport">
+            <span>确认导入</span>
+        </button>
+        <button class="m-w-20" nz-button [nzType]="'primary'" (click)="importOk()" *ngIf="stepNumber == 2" [disabled]="judgeTbcMax=='Y'">
+            <span>完成</span>
+        </button>
+        <button class="m-w-20" nz-button [nzType]="'primary'" (click)="cancelStep()" *ngIf="stepNumber < 2">
+            <span>取消</span>
+        </button>
+    </div>
+</ng-template>

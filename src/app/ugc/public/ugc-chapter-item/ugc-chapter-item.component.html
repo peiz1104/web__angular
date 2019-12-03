@@ -1,0 +1,115 @@
+<div class="rco-item-wrap d-flex my-3 rco-course" *ngIf="chapter.contentType == 'COURSE'">
+    <div class="title">
+        <h5 class="py-2 m-0">
+            <i class="fa fa-{{getIcon()}} text-primary"></i>
+            <span class="text-primary">{{chapter.title}}</span>
+        </h5>
+    </div>
+    <div class="actions ml-auto">
+        <ng-container *ngIf="editable">
+            <!-- <button type="button" nz-button [disabled]="getSelected()?.contentType == 'TOPIC'" (click)="openAddGroup($event)">
+                <i class="anticon anticon-folder-add"></i> 添加组</button> -->
+            <nz-dropdown [nzPlacement]="'bottomLeft'">
+                <button type="button" nz-button nz-dropdown [disabled]="getSelected()?.contentType == 'TOPIC'">
+                    <i class="anticon anticon-file-add"></i> 添加内容</button>
+                <ul nz-menu>
+                    <li nz-menu-item>
+                        <a class="action-item" (click)="openAddUpload($event)" title="上传内容">
+                            <i class="anticon anticon-upload"></i> 上传内容</a>
+                    </li>
+     
+                </ul>
+            </nz-dropdown>
+        </ng-container>
+        <!-- <button type="button" nz-button (click)="openPreview($event)">
+            <i class="fa fa-play-circle"></i> 预览</button> -->
+    </div>
+</div>
+<!-- 
+<div class="rco-item-wrap group-info" *ngIf="chapter.contentType == 'TOPIC_GROUP'" [ngClass]="{'selected': chapter.selected}" (click)="check()">
+    <div class="rco-item d-flex align-items-center">
+        <i class="anticon anticon-folder mr-3" style="font-size: 1.5rem;"></i>
+        <div class="title d-inline" style="font-size: 1.5rem;">{{chapter.title}}</div>
+        <div class="actions ml-auto" *ngIf="editable">
+            <a class="action-item" (click)="openAddUpload($event, true)" title="上传内容">
+                <i class="anticon anticon-upload"></i>
+            </a>
+            <nz-dropdown [nzPlacement]="'bottomRight'">
+                <a class="ant-dropdown-link action-item" nz-dropdown title="更多操作">
+                    <i class="anticon anticon-ellipsis"></i>
+                </a>
+                <ul nz-menu style="min-width: 5rem;">
+                    <li nz-menu-item (click)="openItemEdit($event, true)">
+                        <i class="anticon anticon-edit"></i> 修改</li>
+                    <li nz-menu-item (click)="delete($event)">
+                        <i class="anticon anticon-delete"></i> 删除</li>
+                </ul>
+            </nz-dropdown>
+        </div>
+    </div>
+</div> -->
+
+<div class="rco-item-wrap rco-topic" *ngIf="chapter.contentType != 'COURSE' && chapter.contentType != 'TOPIC_GROUP'" [ngClass]="{'selected': chapter.selected}"
+    (click)="check()">
+    <div class="rco-item d-flex align-items-center" (click)="openPreview($event, true)">
+        <ng-container [ngTemplateOutlet]="topicInfo"></ng-container>
+        <div class="actions ml-auto" *ngIf="editable">
+            <a class="action-item" title="编辑" (click)="openItemEdit($event, true)">
+                <i class="anticon anticon-edit"></i>
+            </a>
+            <a class="action-item" title="删除" (click)="delete($event)">
+                <i class="anticon anticon-delete"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="hasChildren()" [hidden]="!expanded" class="rco-group" [ngClass]="{'course-children': chapter.contentType == 'COURSE'}">
+    <div *ngFor="let r of children" class="rco-item-outer">
+        <spk-ugc-chapter-item [chapter]="r" [(chapters)]="chapters" [courseId]="courseId" [start] ='false' [editable]="editable"></spk-ugc-chapter-item>
+    </div>
+</div>
+
+<div *ngIf="isBlank()">
+    <nz-alert [nzType]="'warning'" [nzShowIcon]="true">
+        <div alert-body>
+            没有添加任何章节信息
+            <span *ngIf="editable">，请 “添加” 章节内容信息</span>。
+        </div>
+    </nz-alert>
+</div>
+
+<ng-template #topicInfo>
+    <ng-container [ngSwitch]="chapter.type">
+
+
+        <div *ngSwitchCase="'VIDEO'">
+            <div class="media">
+                <i class="fa fa-file-video-o fa-3x text-primary mr-3 align-self-center"></i>
+                <div class="media-body">
+                    <h5 class="mt-0 mb-2">{{chapter.title || chapter.video?.originFileName}}</h5>
+                    <span *ngIf="chapter.durition">时长: {{chapter.video?.durition}} 分钟</span>
+                    <!-- 转码完成后才有，单位是秒-得转 -->
+                    <span class="d-inline-block text-truncate" style="max-width: 400px;">{{chapter.description}}</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div *ngSwitchDefault>
+            <div class="media">
+                <i class="fa fa-file fa-3x text-primary mr-3 align-self-center"></i>
+                <div class="media-body">
+                    <h5 class="mt-0 mb-2">{{chapter.title}}</h5>
+                    <span class="d-inline-block text-truncate" style="max-width: 400px;">{{chapter.description}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>
+
+
+<ng-template #preview>
+    <iframe width="100%" height="640" [src]="getSaveUrl(chapter.startingUrl)" frameborder="0" allowfullscreen></iframe>
+</ng-template>

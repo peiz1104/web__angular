@@ -1,0 +1,83 @@
+<div class="step-list">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h3 class="page-title">研发管理
+                <small>| 研发项目阶段</small>
+            </h3>
+            <div class="actions pull-right">
+                <button [routerLink]="['../../']" type="button" class="btn btn-light">
+                    <span>
+                        返回列表
+                        <i class="fa fa-level-up"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="select-body">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadData($event)">
+
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="name" placeholder="请输入项目阶段名称">
+                            </div>
+                            <div class="form-group ml-2">
+                                <button type="button" class="btn btn-primary" (click)="searchData()">搜索</button>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+                <ng-template #listTools>
+                    <div class="btn-group">
+                        <button *ngIf="(devStatus!='END'&&devStatus!='CANCEL')" (click)="addstep($event)" nz-button [nzType]="'primary'">
+                            <i style="font-size:14px" class="iconfont icon-tianjia"></i>
+                            <span>新增</span>
+                        </button>
+                        <button *ngIf="(devStatus!='END'&&devStatus!='CANCEL')" (click)="mutipledelete($event)" nz-button [nzType]="'primary'">
+                            <i class="iconfont icon-shanchu"></i>
+                            <span>删除</span>
+                        </button>
+                    </div>
+                </ng-template>
+
+                <ng-template cuiColTpl="phaseNo" let-row="row">
+                    <span> 第{{row.phaseNo}} 阶段</span>
+                </ng-template>
+                <ng-template cuiColTpl="user" let-row="row">
+                    <span>{{row.user?.displayName}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="implementation" let-row="row">
+                    <button [nzSize]="'small'" (click)="history(row)" *ngIf="devStatus!=='END'&&(loginUserMessage.userTokenId==row.createdById||loginUserMessage.userTokenId==row.user?.id)"
+                        [disabled]="false" nz-button [nzType]="'primary'">
+                        <span>操作</span>
+                    </button>
+                    <!-- <span *ngIf="devStatus!=='END'&&(loginUserMessage.userTokenId==row.createdById||loginUserMessage.userTokenId==row.user?.id)"
+                        style="color:#993300;cursor:pointer" (click)="history(row)">操作</span> -->
+                    <button [nzSize]="'small'" title="阶段负责人和创建人可操作！" *ngIf="devStatus!=='END'&&(loginUserMessage.userTokenId!=row.createdById&&loginUserMessage.userTokenId!=row.user?.id)"
+                        [disabled]="true" nz-button [nzType]="'primary'">
+                        <span>操作</span>
+                    </button>
+                    <!-- <span title="阶段负责人和创建人可操作！" *ngIf="devStatus!=='END'&&(loginUserMessage.userTokenId!=row.createdById&&loginUserMessage.userTokenId!=row.user?.id)"
+                        style="color:#888;cursor:pointer">操作</span> -->
+                    <span *ngIf="devStatus=='END'" style="color:#993300;cursor:pointer" (click)="history(row)">历史</span>
+                </ng-template>
+                <ng-template cuiColTpl="notice" let-row="row">
+                    <span style="color:#007bbf;cursor:pointer" (click)="goNotice(row)">进入</span>
+                </ng-template>
+                <ng-template cuiColTpl="status" let-row="row">
+                    <nz-progress [ngModel]="row.mileageProgress" [nzStrokeWidth]="5" [nzStatus]="'active'"></nz-progress>
+                </ng-template>
+                <ng-template cuiColTpl="edit" let-row="row">
+                    <i *ngIf="(loginUserMessage.userTokenId==row.createdById||loginUserMessage.userTokenId==row.user?.id)&&devStatus!='END'"
+                        title="编辑" (click)="devedit(row)" style="color:#007bbf;cursor:pointer;" class="iconfont icon-bianji-copy"></i>
+                    <i *ngIf="(loginUserMessage.userTokenId!=row.createdById&&loginUserMessage.userTokenId!=row.user?.id)||devStatus=='END'"
+                        title="阶段负责人和创建人可编辑未结项的项目阶段信息" style="color:#666;cursor:pointer;" class="iconfont icon-bianji-copy"></i>
+                </ng-template>
+            </cui-data-table>
+        </nz-spin>
+    </div>
+</div>

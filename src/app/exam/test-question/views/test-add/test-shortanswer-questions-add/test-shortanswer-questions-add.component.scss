@@ -1,0 +1,62 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-08 13:50:42
+ * @Last Modified by: mozhengqian
+ * @Last Modified time: 2017-11-11 20:16:42
+ */
+
+ :host::ng-deep {
+    .test-add-form-row {
+        .ant-checkbox-group {
+            position: absolute;
+            left: 0px;
+            top: 15px;
+            .ant-checkbox-wrapper {
+                line-height: 80px;
+                display: block;
+                margin-bottom: 15px;
+            }
+        }
+        .ant-radio-group {
+            display: block;
+            text-align: center;
+        }
+        .label-box {
+            margin-bottom: 15px;
+            line-height: 80px;
+            .i-box {
+                text-align: center;
+                i {
+                    font-size: 18px;
+                    cursor: pointer;
+                    margin-right: 10px;
+                }
+            }
+            .blue {
+                color: #007bff;
+            }
+            .red {
+                color: red;
+            }
+            .label-title {
+                line-height: 80px;
+            }
+        }
+    }
+    .test-add-search {}
+    .test-add-content {
+        .ant-card {
+            width: 65%;
+            margin: 15px auto;
+            .ant-card-extra {
+                top: 8px;
+            }
+        }
+    }
+    .test-add-btn-box {
+        text-align: center;
+        .search-btn {
+            height: 30px;
+        }
+    }
+}

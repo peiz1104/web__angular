@@ -1,0 +1,196 @@
+<div class="sex">
+    <span class="name">
+        <span class="sexName">姓名：</span>
+        <nz-input class="sexInput" [(ngModel)]="inputValue" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+    </span>
+    <span class="teacherLevel">
+        <span class="sexName">讲师级别：</span>
+        <nz-select style="width: 110px;" [(ngModel)]="selectedOption" [nzPlaceHolder]="'全部'" nzAllowClear>
+            <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option" [nzDisabled]="option.disabled">
+            </nz-option>
+        </nz-select>
+    </span>
+    <button style="margin-top: 9px;" nz-button [nzType]="'primary'" [nzLoading]="isSearching" (click)="handelSearch()">
+        <i class="iconfont icon-sousuo"></i>
+        <span>搜索</span>
+    </button>
+</div>
+<div class="GenerateLessons">
+    <button nz-button [nzType]="'primary'" *ngIf="isEdit" nzGhost (click)="isEdit ? handelCheckedAll() : notEdit()">
+        <span>全选</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="!isEdit" disabled nzGhost (click)="isEdit ? handelCheckedAll() : notEdit()">
+        <span>全选</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="isEdit" nzGhost (click)="isEdit ? handelNoCheckedAll() : notEdit() ">
+        <span>反选</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="!isEdit" disabled nzGhost (click)="isEdit ? handelNoCheckedAll() : notEdit() ">
+        <span>反选</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="isEdit" nzGhost (click)="isEdit ? handelGenerateLessons() : notEdit()">
+        <span>生成授课记录</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="!isEdit" disabled nzGhost (click)="isEdit ? handelGenerateLessons() : notEdit()">
+        <span>生成授课记录</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="isEdit" nzGhost (click)="isEdit ? handelAdd() : notEdit()">
+        <span>添加</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="!isEdit" disabled nzGhost (click)="isEdit ? handelAdd() : notEdit()">
+        <span>添加</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="isEdit" nzGhost (click)="isEdit ? handelDelete() : notEdit()">
+        <span>删除</span>
+    </button>
+    <button nz-button [nzType]="'primary'" *ngIf="!isEdit" disabled nzGhost (click)="isEdit ? handelDelete() : notEdit()">
+        <span>删除</span>
+    </button>
+    <!-- 确认复核权限 *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:CONFIRM_CHECK'}" -->
+    <button nz-button [disabled]="!isEdit" [nzType]="'primary'" nzGhost (click)="handelConfirmationReview()">
+        <span>确认复核</span>
+    </button>
+    <!--<button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:PUSHRECORD'}" (click)="toAmisTeacherRecord()">手动推送授课记录到AMIS</button>-->
+    <button nz-button [nzType]="'primary'" nzGhost (click)="handelRevokeReview()" style="margin-right: 6px;" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:CANCEL_CHECK'}">
+        <span>撤销复核</span>
+    </button>
+</div>
+<div style="width: 100%;height: 1px;background: #e8e8e8;"></div>
+<nz-spin [nzSpinning]="isTeacher">
+    <div class="main">
+        <div class="teacher" *ngIf="lessonListData&&lessonListData.length>0">
+            <div *ngFor="let items of lessonListData">
+                <div class="teacherItem">
+                    <span class="teacherName">
+                        <span class="name" [ngStyle]="{'line-height':items.detailList ? items.detailList.length*70-16+'px' : '' }">{{items.userName}}</span>
+                    </span>
+                    <div class="teacherTitleItem" *ngFor="let item of items.detailList">
+                        <span class="courseTitle">
+                            <h3>{{item.courseName}}</h3>
+                            <p style="text-align:left;">讲师类别：{{teacherLevel(item.teacherType)}} &nbsp;&nbsp;&nbsp;&nbsp; 授课课时量：{{item.teachingPeriod}}
+                                &nbsp;&nbsp;&nbsp;&nbsp; 评估结果：{{item.evaluationScore}} &nbsp;&nbsp;&nbsp;&nbsp; 推送AMIS情况：{{toAMISType(item.toAmis)}}
+                            </p>
+                        </span>
+                        <span class="qualified">
+                            <input type="checkbox" [checked]="ids.indexOf(item.teachingRecordId)!==-1" (click)="handelChecked($event,item.teachingRecordId)"
+                            />
+                        </span>
+                        <span class="change">
+                            <i class="iconfont icon-bianji-copy" [ngStyle]="{'color':isEdit ? '#388ecb' : '#bdbdbd'}" (click)="isEdit ? handelEdit(items.userName,item.teachingRecordId,item.teachingPeriod,item.evaluationScore) : notEdit()"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="bank"></div>
+            </div>
+            <div class="coursePage">
+                <nz-pagination [(nzPageIndex)]="indexPage" [nzTotal]="total" (nzPageIndexChange)="handleIndexChange($event)"></nz-pagination>
+            </div>
+        </div>
+        <div class="teacher" *ngIf="lessonListData&&lessonListData.length==0">
+            <p style="font-size: 16px;">
+                <i class="anticon anticon-info-circle-o" style="color:#28a745;"></i>没有查询到符合条件的记录</p>
+        </div>
+    </div>
+
+</nz-spin>
+<nz-modal [nzVisible]="isVisible" [nzTitle]="'授课管理'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <div class="editModal">
+            <span class="teacherName">讲师姓名：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueTeacherName" [nzPlaceHolder]="'Basic usage'" [nzDisabled]="true"></nz-input>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">课时量：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueCourseHour" [nzPlaceHolder]="'请输入课时量！'"></nz-input>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">授课质量评估结果：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueEvaluationResults" [nzPlaceHolder]="'请输入授课质量评估结果'"></nz-input>
+            </span>
+        </div>
+    </ng-template>
+</nz-modal>
+<nz-modal [nzVisible]="isVisibleAdd" [nzTitle]="'授课管理'" [nzContent]="modalCon" (nzOnCancel)="handleAddCancel($event)" [nzFooter]="modalFooter">
+    <ng-template #modalCon>
+        <div class="editModal">
+            <span class="teacherName">选择课程：</span>
+            <span class="teacherInput">
+                <nz-select style="width: 120px;" [(ngModel)]="_selectedOption" [nzPlaceHolder]="'选择课程'" nzAllowClear (ngModelChange)="handelChooseCourse($event)">
+                    <nz-option *ngFor="let option of _options" [nzLabel]="option.label" [nzValue]="option" [nzDisabled]="option.disabled">
+                    </nz-option>
+                </nz-select>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">选择讲师：</span>
+            <span class="teacherInput">
+                <nz-select style="width: 120px;" [(ngModel)]="choseTeacherSelect" [nzPlaceHolder]="'选择课程'" nzAllowClear (ngModelChange)="handelChooseTeacher($event)">
+                    <nz-option *ngFor="let option of choseTeacher" [nzLabel]="option.label" [nzValue]="option" [nzDisabled]="option.disabled">
+                    </nz-option>
+                </nz-select>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">课时量：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueCourseHours" [nzPlaceHolder]="'请输入课时量!'"></nz-input>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">评估名称：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueEvaName" [nzPlaceHolder]="'请输入评估名称!'"></nz-input>
+            </span>
+        </div>
+        <div class="editModal">
+            <span class="teacherName">授课质量评估结果：</span>
+            <span class="teacherInput">
+                <nz-input [(ngModel)]="inputValueEvaNameRes" [nzPlaceHolder]="'请输入授课质量评估结果!'"></nz-input>
+            </span>
+        </div>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="handleAddCancel($event)">
+            取消
+        </button>
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="isConfirmLoading" (click)="handleAddOk($event)">
+            保存
+        </button>
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="isConfirmLoadingNext" (click)="handleAddOkNext($event)">
+            保存并添加下一个
+        </button>
+    </ng-template>
+</nz-modal>
+<!-- 是否删除 -->
+<nz-modal [nzVisible]="isDelete" [nzTitle]="'授课管理'" [nzConfirmLoading]="isDeleteLoading" [nzContent]="modalDelete" (nzOnCancel)="handleIsDeledtCancel($event)"
+    (nzOnOk)="handleIsDeledtOk($event)">
+    <ng-template #modalDelete>
+        <p>是否删除？</p>
+    </ng-template>
+</nz-modal>
+<!-- 是否生成 -->
+<nz-modal [nzVisible]="isGenerate" [nzTitle]="'授课记录'" [nzConfirmLoading]="isGenerateLoading" [nzContent]="modalGenerate"
+    (nzOnCancel)="handleIsGenerateCancel($event)" (nzOnOk)="handleIsGenerateOk($event)">
+    <ng-template #modalGenerate>
+        <p>是否生成授课记录？</p>
+    </ng-template>
+</nz-modal>
+<!-- 确认复核 -->
+<nz-modal [nzVisible]="IsConfirmationReviewVisibile" [nzTitle]="'确认复核'" [nzConfirmLoading]="IsConfirmationReviewLoading"
+    [nzContent]="modalConfir" (nzOnCancel)="handleIsConfirmationReviewCancel($event)" (nzOnOk)="handleIsConfirmationReviewOk($event,'confirm')">
+    <ng-template #modalConfir>
+        <p>是否确认复核？</p>
+    </ng-template>
+</nz-modal>
+<!-- 撤销复核 -->
+<nz-modal [nzVisible]="IsRevokeReviewVisible" [nzTitle]="'撤销复核'" [nzConfirmLoading]="IsRevokeReviewLoading" [nzContent]="modalRevoke"
+    (nzOnCancel)="handleRevokeReviewCancel($event)" (nzOnOk)="handleRevokeReviewOk($event,'concel')">
+    <ng-template #modalRevoke>
+        <p>是否撤销复核？</p>
+    </ng-template>
+</nz-modal>

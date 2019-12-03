@@ -1,0 +1,30 @@
+<nz-popover *ngIf="userGroup" [nzTitle]="getNamePath(userGroup.name)" [nzPlacement]="placement" [nzTrigger]="trigger">
+    <div nz-popover [ngClass]="styleClass">
+      <ng-container [ngTemplateOutlet]="echoTpl || defaultEcho"></ng-container>
+    </div>
+    <ng-template #nzTemplate>
+      <dl>
+        <dt class="d-inline">路径: </dt>
+        <dd class="d-inline">{{namePathDisplay}}</dd>
+      </dl>
+      <dl class="mt-2">
+        <dt class="d-inline">编码: </dt>
+        <dd class="d-inline">{{userGroup.code || '暂无'}}</dd>
+        <dt class="d-inline ml-5">组织级别: </dt>
+        <dd class="d-inline mr-2">
+          <span [ngSwitch]="userGroup.regionType">
+              <nz-tag *ngSwitchCase="'PARENT'" [nzColor]="'green'">总部</nz-tag>
+              <nz-tag *ngSwitchCase="'PROVINCE'" [nzColor]="'cyan'">省级</nz-tag>
+              <nz-tag *ngSwitchCase="'PREFECTURE'" [nzColor]="'blue'">地市</nz-tag>
+              <nz-tag *ngSwitchDefault>普通</nz-tag>
+          </span>
+        </dd>
+      </dl>
+      <!-- <dl>
+        <dt class="d-inline">简介: </dt>
+        <dd class="d-inline">{{userGroup.description || '暂无'}}</dd>
+      </dl> -->
+    </ng-template>
+</nz-popover>
+
+<ng-template #defaultEcho>{{getNamePath(userGroup.name)}}</ng-template>

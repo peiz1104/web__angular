@@ -1,0 +1,48 @@
+:host::ng-deep{
+    .complex-search-bar-search-box{
+        left:40px;
+    }
+    .listTab{
+        .ant-modal{
+            width: 1000px!important;
+        }
+        .ant-modal-footer{
+            display: none;
+        }
+        .ant-modal-content{
+            top:-50px!important;
+        }
+        .ant-modal-body{
+            height: 516px;
+        }
+        .information{
+
+           .infor{
+               width: 100%;
+               overflow: hidden;
+               span{
+                   width: 50%;
+                   display: block;
+                   float: left;
+                   height: 30px;
+                   line-height: 30px;
+                   i{
+                    font-style: normal;
+                   }
+               }
+           }
+            .title{
+                overflow: hidden;
+                span{
+                    text-align: center;
+                    width: 16.66%;
+                    display: block;
+                    float: left;
+                    line-height: 50px;
+                    height: 36px;
+                }
+            }
+        }
+    }
+    
+}

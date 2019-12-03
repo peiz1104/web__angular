@@ -1,0 +1,146 @@
+<!-- User Lookup -->
+
+<ng-container *ngIf="echoTpl || inputControlEchoTpl" [ngTemplateOutlet]="echoTpl || inputControlEchoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container>
+
+
+<ng-template #inputControlEchoTpl>
+    <div *ngIf="!echoTpl" class="ant-select ant-select-enabled ant-select-show-search2" [style]="style" [style.width]="'100%'">
+        <div class="ant-select-selection" [ngClass]="{'ant-select-selection--multiple': mode=='multiple', 'ant-select-selection--single': mode=='single'}"
+            (click)="openLookup()">
+            <div class="ant-select-selection__rendered">
+                <div *ngIf="!_value || _value?.length == 0" class="ant-select-selection__placeholder">{{placeholder}}</div>
+                <div *ngIf="overflow && _value?.length > overflow" class="ant-select-selection__placeholder text-secondary">您已选择{{_value.length}}个用户</div>
+                <ul *ngIf="isMultiple && (!overflow || _value?.length <= overflow)">
+                    <li *ngFor="let u of _value" class="ant-select-selection__choice ng-trigger ng-trigger-tagAnimation">
+                        <div class="ant-select-selection__choice__content">{{u.displayName}}</div>
+                        <span *ngIf="!hideDelete" class="ant-select-selection__choice__remove" style="top: 0;" (click)="_remove($event,u,_value)"></span>
+                    </li>
+                </ul>
+                <div *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__placeholder text-secondary">{{_value[0].displayName}}</div>
+            </div>
+            <span *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__clear ng-star-inserted" (click)="clear($event)"></span>
+            <span class="ant-select-arrow"></span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #lookupModalTitle>
+    <h5>选择讲师</h5>
+</ng-template>
+<ng-template #lookupModalContent>
+    <div>
+        <ng-container [ngTemplateOutlet]="userSelect"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #lookupModalFooter>
+    <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="_ok()"> 确 定 </button>
+        <button type="button" class="btn btn-light" (click)="_cancel()"> 取 消 </button>
+    </div>
+</ng-template>
+
+
+<ng-template #userSelect>
+    <div>
+        <cui-layout>
+            <cui-layout>
+                <cui-layout-content>
+                    <div class="px-4">
+                        <ng-container [ngTemplateOutlet]="userSelectList"></ng-container>
+                    </div>
+                </cui-layout-content>
+            </cui-layout>
+        </cui-layout>
+    </div>
+</ng-template>
+
+<ng-template #userSelectList>
+    <div style="min-height: 200px;">
+        <nz-alert *ngIf="selection && selection.length > 0" [nzType]="'info'">
+            <span alert-body>已选择 {{ selection.length}} 个用户，请点击确定按钮完成操作</span>
+        </nz-alert>
+
+        <cui-data-table #tableHandle [columns]="columns" [data]="teacherData?.content" [pagination]="teacherData" [loading]="loading"
+            selectType="checkbox" [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #simpleSearch>
+                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                    <div style="position: relative" class="cui-data-table-form-body">
+                        <div nz-row>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div style="width:80%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userGroupId">所属机构</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-user-group-select formControlName="userGroupId"></spk-user-group-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div style="width:80%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userName">讲师工号</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="userName" [nzPlaceHolder]="'请输入讲师工号'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div style="width:80%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="displayName">讲师姓名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入讲师姓名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="position:absolute;top:0px;right:0px;" class='simple-search-bar-search-box'>
+                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                <i class="fa fa-search"></i>查询</button>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="type" let-row="row">
+                <span>{{row.teacherType=="FULLTIME"?'专职讲师':(row.teacherType=="PARTTIME"?'兼职讲师':'外部讲师')}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="group" let-row="row">
+                <span>{{namePath(row.userGroup?.namePath)}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="isPost" let-row="row">
+                <span style="cursor:pointer;" class="text-primary" (click)="ispublish(row)">{{row.publishStatus?'已发布':'未发布'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="sex" let-row="row">
+                {{(row.sex == 'FAMALE'?'女':'男')||'---'}}
+            </ng-template>
+            <ng-template cuiColTpl="rank" let-row="row">
+                {{isLvs(row)}}
+            </ng-template>
+            <ng-template cuiColTpl="start" let-row="row">
+                {{(row.startDate | date:"yyyy-MM-dd")||'---'}}
+            </ng-template>
+            <ng-template cuiColTpl="myDate" let-row="row">
+                {{(row.birthday | date:"yyyy-MM-dd")||'---'}}
+            </ng-template>
+            <ng-template cuiColTpl="look" let-row="row">
+                <i style="cursor:pointer;" class="anticon anticon-search text-primary" (click)="lookCourse(row)"></i>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</ng-template>
+
+<!-- <nz-select [nzMode]="'multiple'" [nzPlaceHolder]="''" [nzAllowClear]="true" [hidden]="true"></nz-select> -->

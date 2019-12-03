@@ -1,0 +1,160 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">教辅管理
+            <small>| 教辅管理列表</small>
+        </h3>
+    </div>
+</div>
+<div class="assist-management-box">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)" [isComplexSearch]="true">
+
+            <!-- <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="username" [nzPlaceHolder]="'请输入名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template> -->
+
+            <ng-template #complexSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="search">用户名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="search" [nzPlaceHolder]="'请输入用户名或姓名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="">管辖范围</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-user-group-select mode="single" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-col [nzSpan]="4">
+                                        <div class='complex-search-bar-search-box' style="margin-left: 50px;">
+                                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <div>
+                    <button *spkAuthzIf="{hasPermission: 'PERIOD:ASSISTANT:ADD'}" (click)="userLookupLeaders()" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia-copy"></i> 添加教辅管理人员</button>
+                    <!-- <spk-user-lookup #userLookupLeaders (ok)="userLookupOkLeaders($event)">
+                        <ng-template #echoTpl>
+                            <button *spkAuthzIf="{hasPermission: 'PERIOD:ASSISTANT:ADD'}" (click)="userLookupLeaders.openLookup()" nz-button [nzType]="'primary'">
+                                <i class="iconfont icon-tianjia-copy"></i> 添加教辅管理人员</button>
+                        </ng-template>
+                    </spk-user-lookup> -->
+
+                    <button *spkAuthzIf="{hasPermission:'PERIOD:ASSISTANT:REMOVE'}" nz-button [nzType]="'primary'" (click)="mutipleDelete($event)">
+                        <span>
+                            <i class="iconfont icon-shanchu"></i> 删除</span>
+                    </button>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <i *spkAuthzIf="{hasPermission:'PERIOD:ASSISTANT:REMOVE'} else deleteDom" title="删除" (click)="deleteuser([row.id])" class="iconfont icon-shanchu"
+                    style="cursor:pointer;font-size:16px;color:red;"></i>
+                <ng-template #deleteDom>
+                    <i title="没有权限不可删除" class="iconfont icon-shanchu"></i>
+                </ng-template>
+                <i *spkAuthzIf="{hasPermission:'PERIOD:ASSISTANT:VIEW'} else editDom" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#007bbf"
+                    title="编辑" (click)="editUser(row)"></i>
+                <ng-template #editDom>
+                    <i title="没有权限不可编辑" class="iconfont icon-bianji-copy"></i>
+                </ng-template>
+            </ng-template>
+            <ng-template cuiColTpl="username" let-row="row">
+                <span>{{ row.user ? row.user.username:'--' }}</span>
+            </ng-template>
+            <ng-template cuiColTpl="email" let-row="row">
+                <span>{{row.user?.email}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="displayName" let-row="row">
+                <span>{{ row.user ? row.user.displayName:'--'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <span>{{ getUserNamePath(row.userGroup ? row.user.userGroup.namePath : '')}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="opear" let-row="row">
+                <span>{{getUserNamePath(row?.userGroup?.namePath)}}</span>
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+
+<nz-modal class="user-add-eidt-modal" [nzZIndex]="1001" *ngIf="isVisible" [nzVisible]="isVisible" [nzFooter]="false" [nzWidth]="800"
+    [nzTitle]="editId?'编辑教辅管理人员':'添加教辅管理人员'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="spinningEdit" [nzTip]="'正在读取数据...'">
+            <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+                <div class="form-group">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>授权用户</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.userIds">
+                            <spk-user-lookup mode="single" formControlName="userIds" placeholder="请选择用户"></spk-user-lookup>
+                            <div nz-form-explain *ngIf="_form.controls.userIds.dirty&&_form.controls.userIds.hasError('required')">请选择用户!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>管辖范围</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.userGroup">
+                            <spk-user-group-select placeholder="请选择管辖单位" formControlName="userGroup"></spk-user-group-select>
+                            <div nz-form-explain *ngIf="_form.controls.userGroup.dirty&&_form.controls.userGroup.hasError('required')">请选择管辖范围!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-7">
+                        <div class="form-group">
+                            <div nz-form-item nz-row>
+                                <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                                    <button [disabled]="_form.invalid" [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存</button>
+                                    <span (click)="goBack()" class="cancel-btn">取消</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

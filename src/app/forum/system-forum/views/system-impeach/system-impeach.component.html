@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">举报管理
+      <small>| 查看举报信息列表</small>
+    </h3>
+  </div>
+
+  <div class="page-body">
+    <cui-data-table #impeachsTable [columns]="columns" [data]="impeachs?.content" [pagination]="impeachs" [loading]="loading"
+      selectType="checkbox" (reload)="loadData($event)" [(selection)]="checkImpeach" [isComplexSearch]="'true'">
+      <ng-template #complexSearch>
+        <form class="search-bar">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">论坛类型：</label>
+                <div class="col-9" style="margin-top: 5px">
+                  <nz-radio-group name="forumType" [(ngModel)]="forumType" (ngModelChange)="typeChange()">
+                    <label nz-radio nzValue="SITE">站点级论坛</label>
+                    <label nz-radio nzValue="OFFERING">活动级论坛</label>
+                  </nz-radio-group>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">活动级论坛：</label>
+                <div class="col-9">
+                  <nz-select #forumsName name="forumId" class="w-100" nzAllowClear nzShowSearch [nzDisabled]="isEnable" [nzShowSearch]="true"
+                    [nzPlaceHolder]="'请选择活动级论坛'" [(ngModel)]="selectedForumId">
+                    <!-- <nz-option nzLabel="Jack" nzValue="jack"></nz-option>
+                    <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                    <nz-option nzLabel="Tom" nzValue="tom"></nz-option> -->
+                    <nz-option *ngFor="let option of offeringForums" [nzLabel]="option.name" [nzValue]="option.id">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">话题标题：</label>
+                <div class="col-9">
+                  <nz-input name="topicTitle" [nzPlaceHolder]="'请输入话题标题'" [(ngModel)]="topicTitle"></nz-input>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group row mb-0">
+                <div class="col-3 offset-1">
+                  <button type="button" class="btn btn-primary" (click)="searchImpeach()">搜索</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+      <!-- <ng-template #listTools>
+        <button type="button" class="btn btn-success" (click)="handled()">标记为已处理</button>
+        <button type="button" class="btn btn-warning" (click)="unhandled()">标记为未处理</button>
+        <button type="button" class="btn btn-danger" (click)="deleteImpeach()">删除</button>
+      </ng-template> -->
+
+      <ng-template cuiColTpl="state" let-row="row">
+        <span class="text-success" *ngIf="row.state == 'HANDLED'">已处理</span>
+        <span class="text-warning" *ngIf="row.state == 'UNHANDLED'">未处理</span>
+        <span class="text-success" *ngIf="row.state == 'DELETED'">删除</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="createdDate" let-row="row">
+        <span>{{row.createdDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="topicTitle" let-row="row">
+        <a href="javascript:;" (click)="showModal(row)" *ngIf="row.replyId">{{row.topic.title}}(回复)</a>
+        <a href="javascript:;" (click)="showModal(row)" *ngIf="!row.replyId">{{row.topic.title}}(帖子)</a>
+      </ng-template>
+
+      <ng-template #actionGroup let-row="row">
+        <button type="button" class="btn btn-outline-primary" (click)="handled()">标记为已处理</button>
+        <button type="button" class="btn btn-outline-info" (click)="unhandled()">标记为未处理</button>
+        <button type="button" class="btn btn-outline-danger" (click)="deleteImpeach()">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+  </div>
+
+  <nz-modal *ngIf="modelLoad" [nzWidth]="1000" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'编辑'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+      <div *ngIf="isVisible">
+        <spk-impeach-show-info [type]="type" [info]="info" [impeachId]="impeachId" (closeModal)="closeModel()">
+        </spk-impeach-show-info>
+      </div>
+    </ng-template>
+  </nz-modal>

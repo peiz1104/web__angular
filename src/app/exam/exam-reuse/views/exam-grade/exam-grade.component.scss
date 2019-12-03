@@ -1,0 +1,26 @@
+:host ::ng-deep .card-body {
+    .list-search-bar {
+        .simple-search-bar {
+            width: 100%;
+        }
+    }
+    .cui-data-table-wrap .table .align-middle {
+        text-overflow: inherit;
+    }
+    .primary {
+        color: #0062cc;
+    }
+    .warning {
+        color: #f04134;
+    }
+    .review {
+        cursor: pointer;
+    }
+}
+
+.cui-data-table-wrap {
+    th,
+    td {
+        word-break: break-all;
+    }
+}

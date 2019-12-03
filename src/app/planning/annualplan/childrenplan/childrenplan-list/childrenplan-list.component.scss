@@ -1,0 +1,94 @@
+:host ::ng-deep {
+    .list-children-hover{
+        display: inline-block;
+        width:60px;
+        height:30px;
+        line-height: 30px;
+        text-align: center;
+        border:1px solid #007bff;
+        border-radius: 4px;
+        padding:0px 4px;
+        position: relative;
+        top:2px;
+    }
+    .textLeft{
+        width: 100%;
+        height: 100%;
+        text-align: left;
+        display: block;
+    }
+    .text-over{
+        div{
+            li{
+                width:100px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                // white-space: nowrap;
+            }
+           
+        }
+    }
+   .dropdown-menu-right{
+        // left:56px!important;
+        transform: translate3d(-10px, 30px, 0px)!important; 
+        top: 0px; left: 0px; 
+        will-change: transform;
+    }
+    .hovershow:hover  .showcreatefirst{
+        display: inline-block;
+        left:0px !important;
+        margin-top: -1px;
+    }
+    .action-opeartion{
+        width:66px;
+    }
+    .list-children-hover:hover{
+     background: #007bff;
+     color:#ffff;
+    }
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    .btn-box{
+        .hover-show,.ant-btn,.ant-btn-primary:hover,.dropdown-menu,.dropdown-menu-right{
+          display: block;
+        }
+    }
+    .nz-overlay-pane{
+        .show-list-style{
+            width:100px;
+            // border:1px solid #efefef;
+            outline:#efefef dotted thin;
+            .ant-menu-item{
+                height:38px;
+                line-height: 38px;
+                .dropdown-item{
+                    padding:0.15rem 0.1rem;
+                }
+            }
+        }
+    }
+   
+    button{
+        cursor: pointer;
+    }
+    .ant-menu-item>a{
+        padding:0.15rem 0.1rem;
+    }
+    .rejectBtn {
+        position: absolute;
+        bottom: 10px;
+        left:16px;
+    }
+}
+.changeModal{
+    width: 110px;
+}
+.hiddenWord{
+    overflow:hidden; 
+    text-overflow:ellipsis;
+    display:-webkit-box; 
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; 
+}

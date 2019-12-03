@@ -1,0 +1,176 @@
+[[tutorial-create-module]]
+= 创建业务模块
+
+从上文，我们分析得到，课程管理模块属于 “学习系统” 大模块的一个子模块，我们业务上称为 “课程体系”。由于我们还没有开发过学习系统模块的其他功能，我们并没有现成的学习系统模块代码。因此，我们将一次创建和完善 “学习系统” 和 “课程体系” 模块的创建工作，并组织好模块结构关系。
+
+我们已经在 <<../reference.adoc#organize-business-module, 组织业务模块>> 章节说明过如何组织业务模块代码，这里不再赘述这些约定，直接讲述如何操作，以达到相应的目的。
+
+== 创建 “学习系统” 模块
+
+=== 创建业务模块
+
+“学习系统” 模块是系统的一级模块，我们将其组织在 `app` 目录下。
+
+.Angular CLI 命令行创建名为 `learning` 的一级业务模块
+[source,bash]
+----
+ng g m learning
+----
+执行此命令后将在 `src/app` 目录中看到新创建了一个名为 `ilearning` 的新目录，`ilearning`目录中包含一个名为 `ilearning.module.ts` 的文件。
+
+[tree,file=""]
+--
+./src/app/ilearning
+└── ilearning.module.ts
+--
+
+[NOTE]
+====
+1. `ng` 命令创建的代码默认以 `src/app` 作为起始目录，因此我们要在 `src/app` 目录下创建代码，直接给相对于 `src/app` 的路径即可。
+2. `ng g m [module-name]` 命令是一组简写，它的全拼是 `ng generate module [module-name]`。开发中熟悉指令后，一般常用简写格式。
+====
+
+=== 创建路由模块
+
+某些原因，Angular CLI 还没有对生成 routing module 的支持，因此，我们只能手动创建路由模块。
+
+1. 首先，我们在 ilearning 目录中创建名为 `ilearning-routing.module.ts` 的空白文件。
+
+2. 在编辑器中打开文件，输入如下内容：
++
+[source,typescript]
+----
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+
+const routes: Routes = [];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class LearningRoutingModule { }
+
+export const routedComponents = [];
+----
++
+[TIP]
+====
+编辑器一般都会有自动完成的功能或插件，可以快速生成上述代码。比如在 VS Code 中，在装有 `Angular TypeScript Snippets for VS Code` 后， 敲入 ``a-module-routing`` 回车即可生成上述结构的代码块。
+====
+
+3. 在平级的模块定义文件中引入对应的 `routing` 模块，这里在 `ilearning.module.ts` 文件中加入如下两行
++
+[source,typescript]
+----
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
+import { LearningRoutingModule } from './learning-routing.module';  <1>
+
+@NgModule({
+  imports: [
+    CommonModule,
+    LearningRoutingModule       <2>
+  ],
+  declarations: []
+})
+export class LearningModule { }
+----
++
+[NOTE]
+====
+其中打标记的两行为新加入的行
+====
+
+
+=== 在上级模块中加载新模块
+
+`ilearning` 模块的上级模块是应用根模块，因此我们需要在应用的根模块中引入 `ilearning` 模块。我们现在有两种方式引入新的业务模块，一种是直接在跟模块的 `imports` 中添加声明，一种是通过路由的 `loadChildren` 懒加载。我们这里选择的第二种，在 `src/app` 目录下，找到应用程序的根路由模块文件 `app-routing.module.ts`，在路由视图 `MainLayoutComponent`  部分添加子路由： `{ path: 'learning', loadChildren: 'app/learning/learning.module#LearningModule' }` 。
+
+.app-routing.module.ts
+[source,typescript]
+----
+...
+
+const routes: Routes = [
+  {
+    path: '', component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      ...
+      { path: 'learning', loadChildren: 'app/learning/learning.module#LearningModule' },  <1>
+    ]
+  },
+  { path: '**', component: PageNotFoundComponent }
+];
+
+...
+----
+<1> 标记行是新添加的子路由
+
+
+[NOTE]
+====
+由于ilearning模块还没有任何可视化的内容，我们还不能直观地感受到ilearning模块已经被添加到了应用系统中。我们只需要保证上述操作后应用程序编译不报错即可。后续步骤中我们将逐渐印证上述工作的重大意义。
+====
+
+
+== 创建 “课程体系” 模块
+
+“课程体系” 模块是 “学习系统” 的子模块。我们刚才创建了名为 `ilearning` 的模块作为 “学习系统” 模块，`ilearning` 是一级模块，那么创建二级模块和更深层次的自己模块会有什么异同呢？我们将在这一节中一一阐述。
+
+[CAUTION]
+刚刚卖了一个关子，其实二级模块的创建准备工作和一级模块的创建准备工作是完全一样的，不过是一些细节需要补充说明下罢了。
+
+
+=== 创建业务模块
+
+[source,bash]
+----
+ng g m learning/course
+----
+
+[NOTE]
+注意路径，细节分析待补充
+
+
+=== 创建路由模块
+
+同上，细节分析待补充
+
+=== 在上级模块中加载
+
+同上，细节分析待补充
+
+=== 创建业务模块包结构
+
+在 `src/app/ilearning/course` 目录中创建如下目录结构。
+
+[source, bash]
+--
+./src/app/ilearning
+├── course              <1>
+│   ├── entity          <2>
+│   ├── partial         <3>
+│   ├── service         <4>
+│   ├── public          <5>
+│   ├── views           <6>
+│   ├── utils           <7>
+│   ├── mock            <8>
+│   ├── course.module.ts          <9>
+│   ├── course-routing.module.ts  <10>
+│   └── index.ts        <11>
+├── ilearning.module.ts
+├── ilearning-routing.module.ts
+└── index.ts
+--
+
+
+== 题外话
+
+[CAUTION]
+====
+重构或添加代码生成工具，完成上述重复工作，生成相关目录结构和文件。比如service等的创建也是可以改造的，现有ng 生成的service代码也不是直接可用的，需要一些重复的冗余的工作使之可用。
+====

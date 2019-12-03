@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">评估问卷列表
+      <small>查看系统中现有的评估问卷</small>
+    </h3>
+  </div>
+
+  <div class="page-body">
+    <cui-data-table selectType="checkbox" [columns]="columns" [data]="papers" [loading]="loading" (reload)="loadData($event)"
+      [pagination]="pagination" (select)="onSelect($event)">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入评估问卷名">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+      <ng-template #listTools>
+        <button type="button" class="btn btn-primary" [routerLink]="['add']">
+          <i class="fa fa-plus"></i> 创建评估问卷</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+            <span>批量操作</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" (click)="publish()">发布</a>
+            <a class="dropdown-item" (click)="disPublish()">撤销发布</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="deleteBantch()">批量删除</a>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template cuiColTpl="statusTpl" let-row="row">
+        <a (click)="onPublish(row);" *ngIf="row.status=='DRAFT'" class="badge badge-secondary">未发布</a>
+        <a (click)="onPublish(row);" *ngIf="row.status=='RUNNING'" class="badge badge-success">已发布</a>
+      </ng-template>
+      <ng-template #rowActions let-row="row">
+        <a  *ngIf="row.status=='DRAFT'" class="text-success" [routerLink]="[row.id, 'edit']">修改问卷名</a>
+        <a  *ngIf="row.status=='RUNNING'" class="text-secondary" disabled>修改问卷名</a>
+        <span>|</span>
+        <a  *ngIf="row.status=='DRAFT'" class="text-success" [routerLink]="[row.id, 'questions']">问卷管理</a>
+        <a  *ngIf="row.status=='RUNNING'" class="text-secondary" disabled>问卷管理</a>
+        <span>|</span>
+        <a href="javascript:;" class="text-info" [routerLink]="[row.id, 'view']">预览</a>
+        <span>|</span>
+        <a  *ngIf="row.status=='DRAFT'" class="text-danger" (click)="delete(row.id,row)">删除</a>
+        <a  *ngIf="row.status=='RUNNING'" class="text-secondary" disabled>删除</a>
+      </ng-template>
+      <ng-template #actionGroup>
+        <button type="button" class="btn btn-info" (click)="publish()">发布</button>
+        <button type="button" class="btn btn-info" (click)="disPublish()">撤销发布</button>
+        <button class="btn btn-danger" (click)="deleteBantch()">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</div>

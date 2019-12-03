@@ -1,0 +1,116 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 编辑培训级别</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <!-- <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            当前位置：
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>计划管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>基础管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../list']">培训级别</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            编辑
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <div class="page-header">
+        <h3 class="page-title">编辑培训级别
+            <small></small>
+        </h3>
+
+    </div> -->
+
+    <div class="page-body">
+        <div class="container">
+            <div nz-row class='add-center'>
+                带
+                <span class='add-red'>*</span>为必填项
+            </div>
+            <form nz-form [formGroup]="validateForm" class="add-form-box">
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name" nz-form-item-required> 名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入名称！</div>
+                    </div>
+                </div>
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="trainingClassificationId" nz-form-item-required> 培训分类</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingClassificationId" nz-col [nzSpan]="12">
+                        <nz-select formControlName="trainingClassificationId" [nzPlaceHolder]="'请选择培训分类'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let trainingClassification of trainingClassifications" [nzLabel]="trainingClassification.name" [nzValue]="trainingClassification.id"></nz-option>
+                        </nz-select>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingClassificationId.dirty&&validateForm.controls.trainingClassificationId.hasError('required')">请选择人员分类！</div>
+                    </div>
+
+                </div>
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="isAdjust"> 是否允许调整考勤规则</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.isAdjust" nz-col [nzSpan]="12">
+                        <nz-switch formControlName="isAdjust">
+                            <i class=" anticon anticon-check" checked></i>
+                            <i style="font-size:12px" class=" anticon anticon-cross" unchecked></i>
+                        </nz-switch>
+                    </div>
+                </div>
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="shouldAbsence" nz-form-item-required> 应考勤次数</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.shouldAbsence" nz-col [nzSpan]="12">
+                        <nz-input formControlName="shouldAbsence"></nz-input>
+                        <div style="line-height:16px" class="tip-show">
+                            <i class="fa fa-info-circle text-info"></i>0代表没有限制</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.shouldAbsence.dirty&&validateForm.controls.shouldAbsence.hasError('required')">请输入应考勤次数！</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.shouldAbsence.dirty&&validateForm.controls.shouldAbsence.hasError('pattern')">输入有误！</div>
+                    </div>
+                </div>
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="maxAbsence" nz-form-item-required> 最大缺勤次数</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.maxAbsence" nz-col [nzSpan]="12">
+                        <nz-input formControlName="maxAbsence"></nz-input>
+                        <div style="line-height:16px" class="tip-show">
+                            <i class="fa fa-info-circle text-info"></i>0代表没有限制</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.maxAbsence.dirty&&validateForm.controls.maxAbsence.hasError('required')">请输入最大缺勤次数！</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.maxAbsence.dirty&&validateForm.controls.maxAbsence.hasError('pattern')">输入不正确！</div>
+                    </div>
+                </div>
+
+                <div nz-row class='add-center add-btn-div'>
+                    <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                    <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,validateForm.value)" type="button" [nzSize]="'large'">确定</button>
+                    <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

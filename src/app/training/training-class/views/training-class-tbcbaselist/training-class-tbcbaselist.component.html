@@ -1,0 +1,76 @@
+<div class="top-bread">
+  <div class="page-header">
+    <h5 class="page-title">
+      <small>基地列表</small>
+    </h5>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selection"
+                    [loading]="loading" (reload)="loadData($event)">
+
+      <ng-template #complexSearch>
+        <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+      </ng-template>
+
+      <ng-template #simpleSearch>
+        <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+      </ng-template>
+
+      <ng-template cuiColTpl="actions" let-row="row">
+        <div>
+          <a class="text-primary">查看</a>
+        </div>
+      </ng-template>
+
+      <ng-template #listTools>
+        <button  [disabled]="data?data.content.length>0:false" (click)="showTrainBase()" nz-button [nzType]="'primary'"> <span><i class="anticon anticon-plus"></i> 添加基地</span>
+        </button>
+      <!--  <button [disabled]="data?data.content.length>0:false" type="button" class="btn btn-primary" (click)="showTrainBase()"><i class="fa fa-plus"></i> 添加基地</button>-->
+      </ng-template>
+
+
+      <ng-template cuiColTpl="rowActions" let-row="row">
+        <a class="text-danger" (click)="delTrainBase(row.id)">删除</a>
+      </ng-template>
+
+
+      <ng-template cuiColTpl="lookwife" let-row="row">
+        <i style="cursor:pointer;" class="anticon anticon-search text-primary" (click)="lookWife(row.id)"></i>
+      </ng-template>
+
+      <ng-template cuiColTpl="lookpick" let-row="row">
+        <i style="cursor:pointer;" class="anticon anticon-search text-primary" (click)="lookPick(row.id)"></i>
+      </ng-template>
+
+    </cui-data-table>
+
+    <ng-template #simpleSearchBox>
+      <form nz-form [formGroup]="_searchForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+          <div nz-form-control>
+            <nz-input formControlName="tbcBaseName" [nzPlaceHolder]="'请输入培训基地名称'"> </nz-input>
+          </div>
+          <div class='simple-search-bar-search-box'>
+            <button nz-button [nzType]="'primary'" class='search-btn' (click)="_submitForm($event, _searchForm.value)"><i class="fa fa-search"></i>查询</button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+
+  </div>
+</div>
+
+
+<nz-modal [nzVisible]="isWife" [nzWidth]='980' [nzFooter]="false" [nzTitle]="'查看WIFI'" [nzContent]="modalContent" (nzOnCancel)="cancelWifi($event)">
+  <ng-template #modalContent>
+    <spk-training-class-tbcbase-wifilook *ngIf="isWife" (lookWifi)="cancelWifi($event)" [looktbcBaseId]="looktbcBaseId"></spk-training-class-tbcbase-wifilook>
+  </ng-template>
+</nz-modal>
+
+<nz-modal [nzVisible]="isPick" [nzWidth]='980' [nzFooter]="false" [nzTitle]="'查看接站地点'" [nzContent]="modalContent1" (nzOnCancel)="cancelPick($event)">
+  <ng-template #modalContent1>
+    <spk-training-class-tbcbase-picklook *ngIf="isPick" (lookPick)="cancelPick($event)" [looktbcBaseId]="looktbcBaseId"></spk-training-class-tbcbase-picklook>
+  </ng-template>
+</nz-modal>

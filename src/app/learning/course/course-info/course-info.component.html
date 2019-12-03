@@ -1,0 +1,19 @@
+<ng-container *ngIf="course">
+    <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'light'">
+        <li nz-menu-item [routerLink]="['./']" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}" [nzSelected]="rla.isActive"><span>课程属性</span></li>
+        <li nz-menu-item [routerLink]="['outline']" routerLinkActive #rla1="routerLinkActive" [nzSelected]="rla1.isActive"><span>课程大纲</span></li>
+         <!--人寿的‘课程培训’模块不需要讲师 <li nz-menu-item [routerLink]="['teachers']" routerLinkActive #rla2="routerLinkActive" [nzSelected]="rla2.isActive"><span>授课讲师</span></li>-->
+        <li *ngIf="!showTeachers" nz-menu-item [routerLink]="['teachers']" routerLinkActive #rla2="routerLinkActive" [nzSelected]="rla2.isActive">
+            <span>授课讲师</span>
+        </li>
+        <li nz-menu-item [routerLink]="['materials']" routerLinkActive #rla3="routerLinkActive" [nzSelected]="rla3.isActive"><span>课程资料</span></li>
+        <!-- <li nz-menu-item [nzDisable]="true"><span>课程测试</span></li> -->
+        <li nz-menu-item [routerLink]="['strategy']" routerLinkActive #rla5="routerLinkActive" [nzSelected]="rla5.isActive"><span>完成条件</span></li>
+        <!-- <li nz-menu-item [routerLink]="['trial']" routerLinkActive #rla6="routerLinkActive" [nzSelected]="rla6.isActive"><span>课程试看</span></li>
+        <li nz-menu-item [routerLink]="['assess']" routerLinkActive #rla7="routerLinkActive" [nzSelected]="rla7.isActive"><span>课程评估</span></li>-->
+    </ul>
+
+    <div class="mt-4">
+        <router-outlet></router-outlet>
+    </div>
+</ng-container>

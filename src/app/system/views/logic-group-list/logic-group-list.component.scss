@@ -1,0 +1,19 @@
+:host ::ng-deep {
+    .page-body {
+        .simple-search-bar {
+            .form-inline {
+                .ant-select-selection {
+                    width: 200px;
+                }
+            }
+        }
+        .badge-success {
+            color: #fff;
+            font-size: 14px;
+        }
+        .badge-secondary {
+            color: #fff;
+            font-size: 14px;
+        }
+    }
+}

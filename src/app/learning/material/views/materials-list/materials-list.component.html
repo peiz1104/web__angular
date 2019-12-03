@@ -1,0 +1,85 @@
+<div *ngIf="hasGroup()">
+    <!-- <nz-alert [nzType]="'info'">
+        <span alert-body>
+          <pre>指定该课程的资料，可以是文档、教案、第三方教材等。</pre>
+        </span>
+      </nz-alert> -->
+    <div class="mt-3 position-relative"></div>
+    <cui-data-table [columns]="columns" [data]="materials?.content" [pagination]="materials" [(selection)]="selection" selectType="checkbox"
+        [loading]='loading' (reload)="loadData($event)">
+
+        <ng-template #simpleSearch>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="sr-only">搜索关键词</label>
+                    <nz-input name="name" [nzPlaceHolder]="'请输入资料名称'" [(ngModel)]="searchBy.name"></nz-input>
+                </div>
+                <div class="form-group ml-2">
+                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                </div>
+            </form>
+        </ng-template>
+
+        <ng-template #listTools>
+            <div style="z-index:13" class="actions pull-right" *ngIf="hasGroup()">
+                <button [disabled]="isArchived" nz-button [nzType]="'primary'" (click)="openAdd()">
+                    <i class="fa fa-upload"></i> 本地上传</button>
+                <button nz-button [nzType]="'primary'" [disabled]="isArchived" (click)="referenceDocument('选择文档',lookupDialog)">
+                    <i class="fa fa-link"></i> 从文档库引用</button>
+            </div>
+        </ng-template>
+
+        <ng-template cuiColTpl="colTitle" let-row="row">
+            <span>
+                <strong>{{row.name}}</strong>
+            </span>
+        </ng-template>
+        <ng-template cuiColTpl="convertStatusCol" let-row="row">
+            <span class="text-success" *ngIf="row.documentInfo?.transcodeStatus == 'NEEDLESS'">无需转码</span>
+            <span class="text-success" *ngIf="row.documentInfo?.transcodeStatus == 'NOT_START'">未开始</span>
+            <span class="text-success" *ngIf="row.documentInfo?.transcodeStatus == 'WAITING'">等待转码</span>
+            <span class="text-info" *ngIf="row.documentInfo?.transcodeStatus == 'TRANSCODING'">转码中</span>
+            <span class="text-success" *ngIf="row.documentInfo?.transcodeStatus == 'COMPLETE'">转码完成</span>
+            <span class="text-danger" *ngIf="row.documentInfo?.transcodeStatus == 'FAILED'">转码失败</span>
+        </ng-template>
+        <ng-template cuiColTpl="rowAction" let-row="row">
+            <div class="text-right">
+                <a *ngIf="row.documentInfo?.isPreview && row.documentInfo?.transcodeStatus == 'COMPLETE'" class="text-info">查看</a>
+                <span *ngIf="row.documentInfo?.isPreview && row.documentInfo?.transcodeStatus == 'COMPLETE'">|</span>
+                <!--<a class="text-info" href="javascript:;"  (click)="download(row.id)" >下载</a> -->
+                <!-- <a href="javascript:;" class="text-info" (click)="downloadd(row)">下载</a> -->
+                <a href="/api/materialGroup/{{materialGroupId}}/materials/download/{{row.id}}" class="text-info" target="_blank">下载</a>
+                <span>|</span>
+                <a *ngIf="isArchived" class="text-info">编辑</a>
+                <a *ngIf="!isArchived" class="text-info" (click)="openEdit(row)">编辑</a>
+                <span>|</span>
+                <a *ngIf="!row.isPublished&&isArchived">删除</a>
+                <a href="javascript:;" class="text-danger" (click)="delete(row.id)" *ngIf="!row.isPublished&&!isArchived">删除</a>
+            </div>
+        </ng-template>
+
+        <ng-template #actionGroup>
+            <button type="button" class="btn btn-danger" (click)="delete()">批量删除</button>
+        </ng-template>
+
+    </cui-data-table>
+</div>
+
+<ng-template #lookupDialog>
+    <div cui-layer-content>
+        <cui-data-table [columns]="documentColumns" [data]="documents?.content" [pagination]="documents" selectType="checkbox" [(selection)]="documentSelection"
+            [loading]='documentsLoading' (reload)="loadDocument($event)">
+            <ng-template cuiColTpl="nameCol" let-row="row">
+                <i *ngIf="row.format=='doc' || row.format=='docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='ppt' || row.format=='pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='xls' || row.format=='xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                <span>{{row.name}}</span>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <div cui-layer-actions class="text-right">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="handleOk($event)">确定</button>
+        <button nz-button [nzType]="'default'" (click)="handleCancel($event)">取消</button>
+    </div>
+</ng-template>

@@ -1,0 +1,20 @@
+:host ::ng-deep {
+    .container-fluid {
+        .page-header {
+            position: relative;
+            .class-btn {
+                position: absolute;
+                right: 0;
+                top: 12px;
+            }
+        }
+    }
+    .hour-rule-view {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 16px;
+        .complex-search-bar-search-box {
+            left: 60px;
+        }
+    }
+}

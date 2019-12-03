@@ -1,0 +1,9 @@
+:host ::ng-deep{
+    .card-body{ 
+       // &:hover{
+            .card-action {
+                visibility: hidden !important;
+            }
+      //  }    
+    }
+}

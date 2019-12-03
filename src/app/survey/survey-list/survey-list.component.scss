@@ -1,0 +1,11 @@
+.ant-card-head-title,h3 {
+    padding-top: 13px;
+}
+:host ::ng-deep{
+    .badge-success{
+        color: #fff !important;
+    }
+    .badge-secondary{
+        color: #fff !important;
+    }
+}

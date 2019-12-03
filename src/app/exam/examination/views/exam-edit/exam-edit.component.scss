@@ -1,0 +1,28 @@
+.edit-body {
+    width: 100%;
+    .edit-left {
+        float: left;
+        width: 160px;
+        height: 100%;
+        .edit-nav {
+            height: 100%;
+            .ant-menu-item-selected,.ant-menu-item-selected >a{
+                color: rgba(0, 0, 0, 0.65);;
+                font-weight: normal;
+                background: transparent;
+            }
+            .active {
+                background-color: #ecf6fd;
+                border-right: 2px solid #388ecb;
+                a{
+                    color: #108ee9;;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+    .edit-right {
+        float: left;
+        width: calc(100% - 160px);
+    }
+}

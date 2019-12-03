@@ -1,0 +1,11 @@
+:host::ng-deep {
+    .promotion-modal {
+        .list-tool-bar {
+            height: 30px;
+            width: 30px;
+        }
+        .complex-search-bar-search-box {
+            left: 30px;
+        }
+    }
+}

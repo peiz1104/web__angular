@@ -1,0 +1,213 @@
+$radius: 5px;
+$comcolor: #0569b5; //主题颜色i*I
+$defaultColor: #666;
+$bodyWidth: 1200px; //页面内容部分最大宽度
+$bgColor: #f7f5f5; //页面背景色
+$size16: 16px;
+$size14: 14px;
+.right-key-label{
+    color: #000;
+}
+.user-answer-label{
+    color: #108ee9;
+}
+.tip-label{
+    display: inline-block;
+    min-width: 180px;
+}
+.tip-label-time{
+    display: inline-block;
+    min-width: 250px;
+}
+.htmlInline{
+        display: inline !important;
+        &>p:first-child{
+            display: inline-block;
+        }
+        img{
+            max-width: 300px;
+            max-height: 300px;
+            cursor: pointer;
+        }
+    }
+.box-one {
+        position: relative;
+        padding-right: 110px;
+        img{
+            max-width: 300px;
+            max-height: 300px;
+            cursor: pointer;
+        }
+        .title {
+            padding-bottom: 10px;
+        }
+        .answer {
+            margin-left: 20px;
+            position: relative;
+            &::after{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                content: '';
+                z-index: 100;
+            }
+            img{
+                position: relative;
+                z-index: 200;
+            }
+            .custom-checkbox{
+                white-space: nowrap;
+                cursor: pointer;
+                outline: none;
+                display: inline-block;
+                line-height: 1;
+                position: relative;
+                vertical-align: text-bottom;
+                margin-bottom: 1px;
+                input[type="checkbox"]{
+                    position: absolute;
+                    left: 0;
+                    z-index: 1;
+                    cursor: pointer;
+                    opacity: 0;
+                    filter: alpha(opacity=0);
+                    top: 0;
+                    bottom: 0;
+                    right: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+                span{
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    border: 1px solid #d9d9d9;
+                    border-radius: 2px;
+                    background-color: #fff;
+                    transition: all .3s;
+                }
+                input[type="checkbox"]:checked + span{
+                    background-color: #108ee9;
+                    border-color: #108ee9;
+                    &::before{
+                        -webkit-transform: rotate(45deg) scale(1);
+                        transform: rotate(45deg) scale(1);
+                        position: absolute;
+                        left: 4px;
+                        top: 1px;
+                        display: table;
+                        width: 5px;
+                        height: 8px;
+                        border: 2px solid #fff;
+                        border-top: 0;
+                        border-left: 0;
+                        content: " ";
+                        transition: all .2s cubic-bezier(.12,.4,.29,1.46) .1s;
+                        z-index: 9;
+                    }
+                    &::after{
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 2px;
+                        border: 1px solid #108ee9;
+                        content: "";
+                        -webkit-animation: antCheckboxEffect .36s ease-in-out;
+                        animation: antCheckboxEffect .36s ease-in-out;
+                        -webkit-animation-fill-mode: both;
+                        animation-fill-mode: both;
+                        visibility: hidden;
+                    }
+                }
+            }
+        }
+        .sign {
+            position: absolute;
+            top: 0px;
+            right: 20px;
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid $comcolor;
+            border-radius: $radius;
+            color: $comcolor;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            &.active {
+                color: #f67920;
+                border: 1px solid #f67920;
+            }
+        }
+    }
+    .box-one-nopadding{
+        padding-right: 0;
+    }
+    .ant-input {
+        resize: none;
+    }
+    /*单选题 判断*/
+    .ans-radio,
+    .ans-judge {
+        .ant-radio-wrapper {
+            display: block;
+        }
+    }
+    /*多选题*/
+    .ans-checkbox {
+        .ant-checkbox-wrapper {
+            display: block !important;
+        }
+    }
+    /*填空题*/
+    .ans-kong {
+        .ant-input {
+            margin-bottom: 10px;
+        }
+    }
+    /*匹配题*/
+    .ans-small {
+        margin-left: 20px;
+        display: flex;
+        ul {
+            flex: 1;
+            li {
+                line-height: 30px;
+            }
+        }
+    }
+    .ans-match {
+        .ans-only {
+            margin-top: 5px;
+        }
+    }
+    /*简答题*/
+    .ans-short {}
+    /*阅读理解*/
+    .que-red {
+        .special {
+            padding: 10px 0;
+            border: 1px dashed $comcolor;
+            margin: 10px;
+            &.active {
+                border: 1px dashed #f67920;
+            }
+            .title {
+                margin-left: 10px;
+                .childName {
+                    color: $comcolor;
+                    padding: 0 5px;
+                }
+            }
+            .answer-tip{
+                padding-left: 10px;
+            }
+        }
+    }

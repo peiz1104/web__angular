@@ -1,0 +1,21 @@
+<nz-popover *ngIf="category" [nzTitle]="category.name" [nzPlacement]="placement" [nzTrigger]="trigger">
+  <div nz-popover [ngClass]="styleClass">
+    <ng-container [ngTemplateOutlet]="echoTpl || defaultEcho"></ng-container>
+  </div>
+  <ng-template #nzTemplate>
+    <dl>
+      <dt class="d-inline">分类路径: </dt>
+      <dd class="d-inline">{{pathDisplay}}</dd>
+    </dl>
+    <dl class="mt-2">
+      <dt class="d-inline">介绍: </dt>
+      <dd class="d-inline">{{category.description || '暂无'}}</dd>
+      <!-- <dt class="d-inline ml-5">所属分类组: </dt>
+      <dd class="d-inline mr-2">
+        {{category.categoryGroup?.name}}
+      </dd> -->
+    </dl>
+  </ng-template>
+</nz-popover>
+
+<ng-template #defaultEcho>{{category.name}}</ng-template>

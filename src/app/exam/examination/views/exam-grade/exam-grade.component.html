@@ -1,0 +1,130 @@
+<div class="container-fluid">
+    <!-- <div class="page-header" *ngIf="createOrEditor">
+        <h3 class="page-title"> 成绩管理 <small>管理成绩</small></h3>
+
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../', 'condition']">返回课程列表 <i class="fa fa-level-up"></i></button>
+        </div>
+    </div> -->
+    <!-- <form name="exportForm" style="display:none" enctype="multipart/form-data" target='_blank' action={{exportUrl}} method="get">
+        <input type="text" name="examId" [value]="cache.examId">
+        <input *ngFor="let row of selection;let i = index;" [value]="row.tcsId" name="ids" type="number" />
+    </form> -->
+    <div class="card-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" selectType="checkbox" (reload)="loadData($event)" [pagination]="pagination" [loading]="loading" [(selection)]="selection">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userName">用户名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="userName" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="displayName">姓名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="managerGroup">所属组织</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <div>
+                                            <spk-user-group-select formControlName="managerGroup"></spk-user-group-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="status">通过状态</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-select formControlName="status">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                            <nz-option [nzLabel]="'通过'" [nzValue]="true"></nz-option>
+                                            <nz-option [nzLabel]="'未通过'" [nzValue]="false"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userStartTime">开始时间</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-qm-datepicker class="w-100" formControlName="userStartTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'开始时间'"></spk-qm-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="excuteStatus">结束时间</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-qm-datepicker class="w-100" formControlName="userEndTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'"></spk-qm-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cui-data-table-form-row">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button type="button" (click)="_submitForm($event, _searchForm.value)" [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                        搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" (click)="getExportUrl()">批量导出成绩</button>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="markStatus" let-row="row">
+                <ng-container [ngSwitch]="row.markStatus">
+                    <span *ngSwitchCase="true" class="primary">已阅卷</span>
+                    <span *ngSwitchCase="false" class="warning">未阅卷</span>
+                </ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="revieStatus" let-row="row">
+                <ng-container [ngSwitch]="row.revieStatus">
+                    <span *ngSwitchCase="true" class="primary">已复评</span>
+                    <span *ngSwitchCase="false" class="warning">未复评</span>
+                </ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="status" let-row="row">
+                <ng-container [ngSwitch]="row.status">
+                    <span *ngSwitchCase="true" class="primary">通过</span>
+                    <span *ngSwitchCase="false" class="warning">未通过</span>
+                </ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                <a class="text-primary review" (click)="toReview(row)">回顾考试</a>
+            </ng-template>
+            <ng-template cuiColTpl="userStartTime" let-row="row">
+                <div>{{row.userStartTime | date:'yyyy-MM-dd HH:mm:ss'||'未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="userEndTime" let-row="row">
+                <div>{{row.userEndTime | date:'yyyy-MM-dd HH:mm:ss'||'未定'}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

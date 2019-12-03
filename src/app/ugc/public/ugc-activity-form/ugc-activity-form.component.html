@@ -1,0 +1,180 @@
+<form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+    <h5 class="my-3">基本信息</h5>
+    <div class="row">
+        <div class="col-5 push-7 order-2">
+            <div>
+                <label>活动封面</label>
+                <cui-fileupload name="file" mode="image" [imageHolder]="getFormControl('thumbnail').value" url="/api/upload/file" [auto]="true" (uploadComplete)="onImageUpload($event)"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                    <i class="fa fa-info-circle text-info"></i>可以在此处上传封面图片。
+                    格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                    图片尺寸建议最小200*120，比例5:4
+                </span>
+            </div>
+        </div>
+        <div class="col-7 pull-5 order-1">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="title" nz-form-item-required>活动名称</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.title" nz-col [nzSpan]="18">
+                    <nz-input formControlName="title" [nzPlaceHolder]="''"></nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.title.dirty&&validateForm.controls.title.hasError('required')">活动名称不能为空</div>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>所属组织</label>
+                </div>
+                <div nz-form-control nz-col [nzValidateStatus]="validateForm.controls.userGroup" [nzSpan]="18">
+                    <spk-user-group-select formControlName="userGroup"></spk-user-group-select>
+                    <div nz-form-explain *ngIf="validateForm.controls.userGroup.dirty&&validateForm.controls.userGroup.hasError('required')">所属组织不能为空</div>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>所属分类</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <spk-category-select name="category.id" formControlName="category" identifier="common" (ngModelChange)="logSelectCategory($event)"></spk-category-select>
+                    <div class="text-danger" *ngIf="validateForm.controls.category.dirty&&validateForm.controls.category.hasError('required') || categoryType">所属分类必填</div>
+                </div>
+            </div>
+
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>活动时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <!-- 开始时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.startDate">
+                                <nz-datepicker (ngModelChange)="_startDateBeginChange()" [nzDisabledDate]="_disabledStartDateBegin" formControlName="startDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.startDate.dirty&&validateForm.controls.startDate.hasError('required')">开始时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="2">
+                        <p nz-form-split>-</p>
+                    </div>
+                    <!-- 结束时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.endDate">
+                                <nz-datepicker (ngModelChange)="_startDateEnd=$event;_startDateEndChange()" [nzDisabledDate]="_disabledStartDateEnd" formControlName="endDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.endDate.dirty&&validateForm.controls.endDate.hasError('required')">结束时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>作品上传时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <!-- 开始时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.uploadStartDate">
+                                <nz-datepicker [nzDisabledDate]="_disableduploadStartDate" formControlName="uploadStartDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.uploadStartDate.dirty&&validateForm.controls.uploadStartDate.hasError('required')">开始时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="2">
+                        <p nz-form-split>-</p>
+                    </div>
+                    <!-- 结束时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.uploadEndDate">
+                                <nz-datepicker (ngModelChange)="_startDateEnd=$event;_startDateEndChange()" [nzDisabledDate]="_disabledUploadEndDate" formControlName="uploadEndDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.uploadEndDate.dirty&&validateForm.controls.uploadEndDate.hasError('required')">结束时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>报名时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <!-- 开始时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollStartDate">
+                                <nz-datepicker (ngModelChange)="_endDateBeginChange()" [nzDisabledDate]="_disabledEndDateBegin" formControlName="enrollStartDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.enrollStartDate.dirty&&validateForm.controls.enrollStartDate.hasError('required')">开始时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="2">
+                        <p nz-form-split>-</p>
+                    </div>
+                    <!-- 结束时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollEndDate">
+                                <nz-datepicker (ngModelChange)="_endDateEndChange()" [nzDisabledDate]="_disabledEndDateEnd" formControlName="enrollEndDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.enrollEndDate.dirty&&validateForm.controls.enrollEndDate.hasError('required')">结束时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="leaders">活动负责人</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.leaders" nz-col [nzSpan]="18">
+                    <spk-user-lookup formControlName="leaders" placeholder="请选择活动负责人"></spk-user-lookup>
+                    <!-- <div nz-form-explain *ngIf="validateForm.controls.leaders.dirty&&validateForm.controls.leaders.hasError('required')">班级负责人不能为空</div> -->
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>内容是否必须审核</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-switch formControlName="isAudit"></nz-switch>
+                </div>
+            </div>
+
+
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="content">活动详情</label>
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <cui-ckeditor formControlName="content" [toolbarMode]="'um'"></cui-ckeditor>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-7">
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="6" [nzSpan]="12" nz-form-control>
+                    <button nz-button [nzType]="'primary'" [nzLoading]='loading' (click)="_save($event)">保存</button>
+                    <!-- <button nz-button (click)="resetForm($event)">Reset</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

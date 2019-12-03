@@ -1,0 +1,26 @@
+.board{
+    float: left;
+    width: 330px;
+    margin-right: 10px;
+}
+.board-add{
+    float: left;
+    width: 330px;;
+    height: 110px;
+    div{
+        height: 100%;
+        background: #eee;
+        line-height: 110px;
+    }
+}
+.line-limit-length {
+
+    max-width: 88px;
+
+    overflow: hidden;
+    
+    text-overflow: ellipsis;
+    
+    white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...
+    
+    }

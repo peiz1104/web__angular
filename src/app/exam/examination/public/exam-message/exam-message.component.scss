@@ -1,0 +1,19 @@
+:host ::ng-deep {
+    .ant-modal {
+        .ant-modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+    }
+    .ant-checkbox-wrapper {
+        .ant-checkbox.ant-checkbox-checked {
+            .ant-checkbox-inner {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+        }
+    }
+    .ant-row{
+        padding-top:2px;
+    }
+}

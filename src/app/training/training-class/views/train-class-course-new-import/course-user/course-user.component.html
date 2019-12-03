@@ -1,0 +1,115 @@
+<div class="course-user">
+    <nz-steps [(nzCurrent)]="current">
+        <nz-step [nzTitle]="'模版下载和文件导入'"></nz-step>
+        <nz-step [nzTitle]="'校验结果展示'"></nz-step>
+        <nz-step [nzTitle]="'成功结果展示'"></nz-step>
+    </nz-steps>
+
+    <div class="steps-content">
+        <div *ngIf="current==0" class="first-content">
+            <div class="import-template">
+                <span class="tip-word">导入前请按照模板，填写完整内容</span>
+                <a class="down-load" (click)="handelClickExport('U')">模板下载</a>
+            </div>
+            <div class="notice-message">
+                <h5>模板填写说明：
+                </h5>
+                <div class="item-tip">
+                    1. 红色列为必填项，其他列为可选列，需按照要求格式填写，不能改变格式类型；
+                </div>
+                <div class="item-tip">
+                    2.学员工号的输入方式为：工号+“，”+工号（逗号为中文逗号）。
+                </div>
+                <div class="item-tip">
+                    3. 列名和列的位置固定，不可修改；录入数据时不可合并单元格；
+                </div>
+                <div class="item-tip">
+                    4. 导入功能支持文件后缀为 .xls，.xlsx ，使用本模板即可；
+                </div>
+            </div>
+            <div class="upload-file-box">
+                <div class="select-title">
+                    上传文件：
+                </div>
+                <div class="lond-file-box">
+                    <cui-fileupload name="file" mode="file" url="/api/traingclass/courseuser/importfile" [auto]="true" (uploadComplete)="initImport($event)"
+                        accept=".xls,.xlsx"></cui-fileupload>
+                </div>
+                <span class="text-muted">
+                    <i class="fa fa-info-circle text-info"></i> 可以在此处批量导入课程老师信息。导入功能支持文件后缀为XLS,XLSX</span>
+                <div class="text-danger">{{importErrInfo}}</div>
+            </div>
+        </div>
+        <div *ngIf="current==1" class="show-right-error">
+            <div class="right-list">
+                <h5>正确信息列表</h5>
+                <div>
+                    <div class="list-title">
+                        <div class="title-item">序号</div>
+                        <div class="title-item">课程ID</div>
+                        <div class="title-item">学员工号</div>
+                    </div>
+                    <div class="no-data" *ngIf="rightList.length==0">
+                        <span class="tip">无正确记录，请重新填写上传</span>
+                    </div>
+                    <div class="list-box" *ngIf="rightList.length">
+                        <div class="sigle-box" *ngFor="let item of rightList">
+                            <div class="item-box">{{item?.orderNumber}}</div>
+                            <div class="item-box">{{item?.courseId}}</div>
+                            <div class="item-box-big">{{item?.userName}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="error-list">
+                <h5>错误信息列表</h5>
+                <div>
+                    <div class="list-title">
+                        <div class="title-item">序号</div>
+                        <div class="title-item">课程ID</div>
+                        <div class="title-item-big">错误信息</div>
+                    </div>
+                    <div class="no-data" *ngIf="errorList.length==0">
+                        <span class="tip">全部正确可以导入</span>
+                    </div>
+
+                    <div class="list-box" *ngIf="errorList.length">
+                        <div class="sigle-box" *ngFor="let item of errorList">
+                            <div class="item-box">{{item?.orderNumber}}</div>
+                            <div class="item-box">{{item?.courseId}}</div>
+                            <div class="item-box-big">{{item?.errorList.join(';')}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div *ngIf="current==2" class="import-success">
+            <div class="title">
+                <h5>
+                    <span class="success-icon">
+                        <i class="iconfont icon-chenggong"></i>
+                    </span>
+                    <span class="import-success">导入完成</span>
+                </h5>
+            </div>
+        </div>
+
+    </div>
+    <div class="steps-action">
+        <button nz-button [nzType]="'primary'" (click)="pre()" *ngIf="current > 0">
+            <span>上一步</span>
+        </button>
+        <button nz-button [nzType]="'primary'" (click)="next()" *ngIf="current === 0">
+            <span>下一步</span>
+        </button>
+        <button [nzLoading]="loading" nz-button [nzType]="'primary'" (click)="next()" *ngIf="current === 1">
+            <span>导入</span>
+        </button>
+        <button nz-button [nzType]="'primary'" (click)="done()" *ngIf="current === 2">
+            <span>完成</span>
+        </button>
+    </div>
+</div>

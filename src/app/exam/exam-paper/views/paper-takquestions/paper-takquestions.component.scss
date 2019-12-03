@@ -1,0 +1,72 @@
+:host::ng-deep {
+    .taking-question-box {
+        padding: 0 10px;
+        .preview-class {
+            .ant-btn-ghost {
+                display: none;
+            }
+        }
+        .btn-link {
+            cursor: pointer;
+        }
+        .list-search-bar {
+            margin-bottom: 16px;
+        }
+        .ques-casual {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .cui-data-table-form-box .cui-data-table-form-body .cui-data-table-form-row {
+            margin-bottom: 20px;
+        }
+        .ant-select {
+            width: 170px !important;
+        }
+        .cui-treenode-content.selected {
+            width: 170px !important;
+        }
+        .action-group {
+            display: none;
+        }
+        .page-info {
+            border: none;
+            padding: 0;
+            .page-info-select {
+                width: 300px;
+                .ant-modal-body {
+                    .cui-treenode-content.selected {
+                        width: 190px !important;
+                    }
+                }
+            }
+        }
+        .paper-header {
+            overflow: hidden;
+            padding: 20px 10px;
+            border-bottom: 1px solid #1b6aaa;
+            .paper-title {
+                h4 {
+                    font-weight: bold;
+                }
+                .paper-status {
+                    margin-top: 10px;
+                }
+                .color-publish {
+                    color: #dc5943;
+                }
+            }
+        }
+        .select-body {
+            margin: 5px 15px;
+            .parition-strategy {
+                font-size: 16px;
+                padding: 10px 0px;
+                color: #e9680d;
+            }
+        }
+    }
+}

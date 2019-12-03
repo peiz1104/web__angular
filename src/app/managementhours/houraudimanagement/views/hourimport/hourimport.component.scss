@@ -1,0 +1,157 @@
+:host::ng-deep {
+    .container-fluid {
+        position: relative;
+        .actions {
+            position: absolute;
+            right: 24px;
+            top: 12px;
+        }
+    }
+    .hour-import-box {
+        margin: 0 auto;
+        padding: 0px 16px;
+        .active {
+            color: #007bff;
+        }
+        .back-list {
+            position: relative;
+            height: 30px;
+            button {
+                position: absolute;
+                right: 14px;
+            }
+        }
+        .import-from-box {
+            .import-user {
+                width: 1100px;
+                margin: 20px auto;
+                box-shadow: 0px 0px 1px 0px;
+                padding: 10px;
+                border-radius: 10px;
+                min-height: 300px;
+                .page-body {
+                    .cui-data-table-wrap .cui-pagination .gobox .gobtn {
+                        line-height: 30px;
+                        top: -8px;
+                    }
+                    .down-load-template {
+                        width: 80px;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        display: inline-block;
+                        background: #337ab7;
+                        border-radius: 6px;
+                        color: #fff;
+                    }
+                    .input-group,
+                    .cui-fileupload-choose {
+                        input[type=file] {
+                            display: block;
+                            position: relative;
+                            top: -30px;
+                            height: 33px;
+                            z-index: 999;
+                            opacity: 0;
+                        }
+                    }
+                    .plan-template {
+                        margin: 0 auto;
+                        width: 80%;
+                        .noborder {
+                            border-bottom: 0px !important;
+                        }
+                        .plan-template-li {
+                            border-bottom: 1px solid #ccc;
+                            padding: 10px;
+                            .input-cui {
+                                width: 352px;
+                                margin-left: 200px;
+                                .input-group,
+                                .cui-fileupload-choose {
+                                    .form-control,
+                                    .p-0 {
+                                        position: relative;
+                                        height: 29px;
+                                        width: 360px;
+                                        .input-progress {
+                                            width: 269px;
+                                        }
+                                        .input-placeholder {
+                                            position: absolute;
+                                            width: 300px;
+                                        }
+                                    }
+                                    .input-group-btn {
+                                        left: 270px;
+                                        position: absolute;
+                                    }
+                                }
+                            }
+                            .plan-template-li-title {
+                                // text-align: center;
+                                margin-bottom: 15px;
+                                h3 {
+                                    margin-left: 120px;
+                                    color: #0269ca;
+                                    font-size: 16px;
+                                    &:before {
+                                        content: '|';
+                                        margin-right: 5px;
+                                    }
+                                }
+                            }
+                            .plan-template-li-input-box {
+                                text-align: center;
+                                position: relative;
+                                .hour-template-import {
+                                    display: inline-block;
+                                    background: #1890ff;
+                                    color: #fff;
+                                    height: 28px;
+                                    line-height: 28px;
+                                    width: 60px;
+                                    text-align: center;
+                                    border-radius: 5px;
+                                }
+                                .input-box {
+                                    padding: 4px 7px;
+                                    width: 200px;
+                                    min-height: 28px;
+                                    font-size: 12px;
+                                    color: rgba(0, 0, 0, 0.65); // background-color: #fff;
+                                    overflow: hidden;
+                                    border-bottom: 1px solid #d9d9d9;
+                                    border-radius: 4px;
+                                    display: inline-block;
+                                    span {
+                                        margin-left: 5px;
+                                    }
+                                }
+                                .btn-box {
+                                    position: absolute;
+                                    margin-left: 10px;
+                                    width: 80px;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                        .plan-template-btns {
+                            text-align: center;
+                            margin-top: 15px;
+                        }
+                    }
+                    .box-center {
+                        margin-top: 10px;
+                        margin-bottom: 20px;
+                        .error-tip {
+                            color: red;
+                            font-size: 16px;
+                            line-height: 46px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

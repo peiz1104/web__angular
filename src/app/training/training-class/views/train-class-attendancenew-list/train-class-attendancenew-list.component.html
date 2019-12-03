@@ -1,0 +1,53 @@
+<div class="train-class-attendance-list">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>考勤信息缺勤次数列表</small>
+            </h5>
+        </div>
+    </div>
+    <div class="form-box container-fluid">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                    [(selection)]="selection" (reload)="loadData($event)">
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-form-control>
+                                        <nz-input formControlName="username" [nzPlaceHolder]="'用户名...'"> </nz-input>
+                                    </div>
+                                    <!-- <div nz-form-control>
+                                        <nz-input formControlName="time" [nzPlaceHolder]="'次数...'"> </nz-input>
+                                    </div> -->
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                            <button *ngIf="exportstate" type="button" class="btn btn-primary" (click)="exportattendance($event)">
+                                <i class="iconfont icon-daochu1"></i> 导出</button>
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <i title="查看" [routerLink]="['../','personmessagelist',row.user?.id]" class="iconfont icon-chakan1" style="cursor:pointer;font-size:16px;color:#007bbf;"></i>
+                    </ng-template>
+                    <ng-template cuiColTpl="displayName" let-row="row">
+                        <span>{{ row.user ? row.user.displayName : '--'}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="username" let-row="row">
+                        <span>{{ row.user ? row.user.username : '--'}}</span>
+                    </ng-template>
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

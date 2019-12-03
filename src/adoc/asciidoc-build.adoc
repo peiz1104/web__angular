@@ -1,0 +1,21 @@
+
+= 用 Gulp 和 asciidoctor.js 构建文档转换任务
+
+== 添加 Gulp 工具组 和 asciidoctor.js 转换工具
+
+[srouce, bash]
+----
+npm install --save-dev gulp gulp-clean gulp-html-beautify gulp-util through-gulp gulp-watch
+npm install --save-dev asciidoctor.js
+----
+
+== 添加 Asciidoctor gulp 组件
+
+详见： {projectHome}/tools/gulp/plugins/gulp-asciidoctor.js
+
+== 添加 将文本内容转为 *.doc.ts 的自定义 gulp 组件
+
+详见： {projectHome}/tools/gulp/plugins/gulp-content-trading.js
+
+
+== npm 代理工具 `nrm`

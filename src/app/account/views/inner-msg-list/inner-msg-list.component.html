@@ -1,0 +1,16 @@
+<div class="px-3 bg-white" style="height: 100%;">
+  <div class="page-header">
+    <h5 class="page-title">全部/未读/已读 消息</h5>
+  </div>
+  <div class="page-body">
+      <nav class="nav nav-pills flex-column flex-sm-row">
+          <a class="flex-sm-fill text-sm-center nav-link" [ngClass]="{'active': !type}" [routerLink]="['./', {}]">全部类型消息({{messageCount}})</a>
+          <a *ngFor="let sourcetype of messageTypes" class="flex-sm-fill text-sm-center nav-link" [ngClass]="{'active': type == sourcetype.identifier}" [routerLink]="['./', {type: sourcetype.identifier}]">{{sourcetype.name}}({{sourcetype.messageCount}})</a>
+        </nav>
+
+        <div class="mt-3"></div>
+
+        <cui-data-table [columns]="columns" [data]="messagePage?.content" [pagination]="messagePage"
+          selectType="checkbox"  [loading]="loading"></cui-data-table>
+  </div>
+</div>

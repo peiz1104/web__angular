@@ -1,0 +1,18 @@
+<div class="container-fluid1">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="true">
+        <div alert-body>
+            课程大纲是课程学习内容，可以是在线的学习资源，对于直播课程和面授课程，指课堂内容安排。 <br>
+            课程可以由多个章或节组成，其中一个章可以包括多个节，节可以包含课件内容。
+        </div>
+      </nz-alert>
+      
+      <nz-spin nzTip="正在读取数据..." [nzSpinning]="loading" style="display: block;">
+          <spk-rco-item *ngIf="rcoIndex && rcoIndex.length > 0; else blankOutlineInfo" [(rcos)]="rcoIndex" 
+            [courseId]="course?.id" [courseName]="course?.name" [editable]="editable"></spk-rco-item>
+          <ng-template #blankOutlineInfo>
+            <div *ngIf="!loading">
+                没有课程大纲
+            </div>
+          </ng-template>
+      </nz-spin>
+</div>

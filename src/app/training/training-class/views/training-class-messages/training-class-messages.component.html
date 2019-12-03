@@ -1,0 +1,197 @@
+<div class="message-body">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">{{trainingClass.name}}:
+                <small>培训班消息列表</small>
+            </h5>
+            <div class="actions pull-right">
+                <button type="button" class="btn btn-light" [routerLink]="['../../../../']">返回培训班列表
+                    <i class="fa fa-level-up"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div *ngIf="!hasMessageBox()">
+            <p class="text-secondary mb-2">
+                <i class="fa fa-info-circle fa-lg text-info"></i> 该培训班消息功能没有初始化，请点击下面的按钮初始化培训班消息管理。</p>
+            <button type="button" class="btn btn-secondary" (click)="initMessageBox()">初始化培训班消息</button>
+        </div>
+
+        <cui-data-table *ngIf="hasMessageBox()" #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox"
+            [(selection)]="selection" [loading]="loading" (reload)="loadData()">
+            <ng-template #simpleSearch>
+                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                    <div nz-row class="cui-data-table-form-body">
+                        <div nz-form-control>
+                            <nz-input formControlName="title" [nzPlaceHolder]="'主题名称'"> </nz-input>
+                        </div>
+                        <div class='simple-search-bar-search-box'>
+                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+            <!-- 自定义列显示 -->
+            <ng-template cuiColTpl="innerMessage" let-row="row">
+                <div *ngIf="row.innerSendStatus=='SUCCESS'" class="text-primary">已发送</div>
+                <div *ngIf="row.innerSendStatus=='FAIL' || row.innerSendStatus=='WAITING'" class="text-muted">未发送</div>
+            </ng-template>
+            <ng-template cuiColTpl="emailMessage" let-row="row">
+
+                <div *ngIf="row.emailSendStatus!=null" style="cursor: pointer" class="text-primary" (click)="messageListShow(row,'E')">
+                    <span *ngIf="row.emailSendStatus">已发送</span>
+                    <span *ngIf="!row.emailSendStatus">未发送</span>
+                    <i class="fa fa-eye"></i>
+                </div>
+                <div *ngIf="row.emailSendStatus==null" class="text-muted">
+                    <span>无</span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="shortMessage" let-row="row">
+                <div *ngIf="row.smsSendStatus !=null " style="cursor:pointer;" class="text-primary" (click)="messageListShow(row,'S')">
+                    <span *ngIf="row.smsSendStatus">已发送</span>
+                    <span *ngIf="!row.smsSendStatus">未发送</span>
+                    <i class="fa fa-eye"></i>
+                </div>
+                <div *ngIf="row.emailSendStatus ==null " class="text-muted">
+                    <span>无</span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="sendTime" let-row="row">
+                {{row.sendTime | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template #rowActions let-row="row">
+                <a class="text-primary" [routerLink]="['../',row.id,'info']">详情</a>
+                <span nz-table-divider></span>
+                <a class="text-primary" (click)="showModal(row)">预览</a>
+                <span nz-table-divider></span>
+                <a *ngIf="row.revokeStatus =='SEND' && row.innerSendStatus != 'SUCCESS'" class="text-danger" (click)="revokeOne(row)">撤销</a>
+                <a *ngIf="row.revokeStatus =='SEND' && row.innerSendStatus == 'SUCCESS'" class="text-muted">撤销</a>
+                <a *ngIf="row.revokeStatus =='REVOKED'" class="text-default">已撤销</a>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" [routerLink]="['../add']">
+                        <i class="fa fa-plus"></i> 创建消息</button>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <nz-modal [nzVisible]="showInfo" [nzZIndex]="1001" [nzWidth]="1000" [nzFooter]="false" [nzTitle]="'消息详情'" [nzContent]="modalContent"
+        (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <div class="info-body">
+                <div class="info-main clearfix">
+                    <div class="info-detail">
+                    <div class="info-all">
+                        <div class="info-top">
+                        <div class="title" [title]="oneMess?.title">{{oneMess?.title||'暂无标题'}}</div>
+                        <div class="info-small">
+                            <span>发布时间：{{(oneMess?.sendTime |dateMoment)||'---'}}</span>
+                            <span *ngFor="let one of oneMess?.types; let i = index">
+                                <ng-container *ngIf="one == 'INNER'">发送方式：站内发送</ng-container>
+                                <ng-container *ngIf="one == 'EMAIL'">发送方式：email发送</ng-container>
+                                <!-- <ng-container *ngIf="one == 'SMS'">发送方式：短信发送</ng-container> -->
+                                <ng-container *ngIf="i < oneMess.types.length-1">,</ng-container>
+                            </span>
+                            <span>接收人：<p class="info-look" (click)="messageListShow(oneMess,'I')">查看详情</p></span>
+                            <span>创建人：{{oneMess?.createdBy.displayName}}</span>
+                            <span>创建时间：{{(oneMess?.createdDate |dateMoment)||'---'}}</span>
+                            <!-- <span class="info-pdf" *ngIf="userInfomation?.logoicon?.id==30" (click)="downFile(info)"><i title="下载" class="iconfont icon-xiazai"></i>&nbsp;&nbsp;生成pdf</span> -->
+                        </div>
+                        </div>
+                        <div class="info-content" [innerHtml]="(oneMess?.content | textFiltering)||'暂无详情'"></div>
+                        <div class="info-down" *ngIf="oneMess?.attachmentUrl" (click)="downloadAttachment(row.id)">附件：
+                            <span>{{oneMess?.attachmentName}}</span>
+                            <i class="anticon anticon-download"></i>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <cui-data-table *ngIf="showInfo" #tableMess [columns]="messageInfo" [data]="oneMess" [loading]="showInfoLoading">
+                <ng-template cuiColTpl="content" let-row="row">
+                    <span [innerHtml]="row.content">
+                    </span>
+                </ng-template>
+                <ng-template cuiColTpl="attachmentName" let-row="row">
+                    <a class="text-primary" *ngIf="row.attachmentName !=null " (click)="downloadAttachment(row.id)"> {{row.attachmentName}}</a>
+                    <a class="text-muted" *ngIf="row.attachmentName ==null "> 暂无</a>
+                </ng-template>
+                <ng-template cuiColTpl="types" let-row="row">
+                    <span *ngFor="let one of row.types; let i = index">
+                        <ng-container *ngIf="one == 'INNER'">站内发送</ng-container>
+                        <ng-container *ngIf="one == 'EMAIL'">email发送</ng-container>
+                        <ng-container *ngIf="one == 'SMS'">短信发送</ng-container>
+                        <ng-container *ngIf="i < row.types.length-1">
+                            ,</ng-container>
+                    </span>
+                </ng-template>
+                <ng-template cuiColTpl="sendTime" let-row="row">
+                    {{row.sendTime | date: 'yyyy-MM-dd'}}
+                </ng-template>
+                <ng-template cuiColTpl="receiveUsers" let-row="row">
+                    <a class="text-primary" (click)="messageListShow(row,'I')">查看详情</a>
+                </ng-template>
+                <ng-template cuiColTpl="createdDate" let-row="row">
+                    {{row.createdDate| date: 'yyyy-MM-dd'}}
+                </ng-template>
+            </cui-data-table> -->
+        </ng-template>
+    </nz-modal>
+
+
+
+
+    <nz-modal [nzVisible]="showMessage" [nzZIndex]="1001" [nzWidth]="1000" [nzFooter]="false" [nzTitle]="'发送详情'" [nzContent]="modalContent2"
+        (nzOnCancel)="handleCancelMess($event)">
+        <ng-template #modalContent2>
+            <cui-data-table *ngIf="showMessage" #tableMess [columns]="emailMessageColumns" [data]="messageDatas?.content" [pagination]="messageDatas"
+                [loading]="messageLoading" (reload)="messageData(messageId,messageType)">
+                <ng-template #simpleSearch>
+                    <form nz-form [formGroup]="messageForm" (ngSubmit)="_submitMessForm($event, messageForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="username" [nzPlaceHolder]="'用户名'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+                <ng-template cuiColTpl="sendStatus" let-row="row">
+                    <span *ngIf="row.sendStatus == 'SUCCESS'">成功</span>
+                    <span *ngIf="row.sendStatus != 'SUCCESS'">失败</span>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+
+    <nz-modal [nzVisible]="showReceiveUsers" [nzZIndex]="1001" [nzWidth]="1000" [nzFooter]="false" [nzTitle]="'接收人详情'" [nzContent]="modalContent3"
+        (nzOnCancel)="handleCancelReceiveUsers($event)">
+        <ng-template #modalContent3>
+            <cui-data-table *ngIf="showReceiveUsers" #tableMess [columns]="messageUserColumns" [data]="messageDatas?.content" [pagination]="messageDatas"
+                [loading]="messageLoading" (reload)="messageData(messageId,messageType)">
+                <ng-template #simpleSearch>
+                    <form nz-form [formGroup]="messageForm" (ngSubmit)="_submitMessForm($event, messageForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="username" [nzPlaceHolder]="'用户名'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+                <ng-template cuiColTpl="sendStatus" let-row="row">
+                    <span *ngIf="row.sendStatus == 'SUCCESS'">成功</span>
+                    <span *ngIf="row.sendStatus != 'SUCCESS'">失败</span>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+</div>

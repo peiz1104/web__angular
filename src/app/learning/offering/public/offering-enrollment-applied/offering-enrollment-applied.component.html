@@ -1,0 +1,93 @@
+<cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selection"
+    [loading]="loading" (reload)="loadData($event)">
+    <ng-template #simpleSearch>
+        <form [formGroup]="_searchForm" class="form-inline">
+            <div class="form-goup ml-2">
+                <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入用户名或姓名'"></nz-input>
+            </div>
+
+            <button type="button" class="btn btn-primary ml-2" (click)="loadData()">搜索</button>
+        </form>
+    </ng-template>
+
+    <ng-template cuiColTpl="enrollType" let-row="row">
+        <div [ngSwitch]="row.enrollType">
+            <div *ngSwitchCase="'REQUIRED'">必修</div>
+            <div *ngSwitchCase="'OPEN'">选修</div>
+            <div *ngSwitchCase="'CLOSED'">审批</div>
+            <div *ngSwitchCase="'BUY'">购买</div>
+            <div *ngSwitchDefault></div>
+        </div>
+    </ng-template>
+    <ng-template cuiColTpl="enrollStatus" let-row="row">
+        <div [ngSwitch]="row.enrollStatus">
+            <div *ngSwitchCase="'ENROLLED'">已注册</div>
+            <div *ngSwitchCase="'APPLIED'">已申请</div>
+            <div *ngSwitchCase="'REFUSED'">已拒绝</div>
+            <div *ngSwitchDefault></div>
+        </div>
+    </ng-template>
+    <ng-template cuiColTpl="userUserGroupName" let-row="row">
+        <span>{{getNamePath(row?.userUserGroupNamePath)}}</span>
+    </ng-template>
+    <ng-template cuiColTpl="createdDate" let-row="row">
+        <span>{{row.createdDate | date: 'yyyy-MM-dd HH:mm'}}</span>
+    </ng-template>
+    <ng-template cuiColTpl="lastModifiedDate" let-row="row">
+        <span>{{row.lastModifiedDate | date: 'yyyy-MM-dd'}}</span>
+    </ng-template>
+    <ng-template cuiColTpl="actions" let-row="row">
+        <a class="text-primary" (click)="approve(row)">审批</a>
+    </ng-template>
+
+    <ng-template #listTools>
+        <button nz-button [nzType]="'primary'" (click)="approve()">
+            <i class="fa fa-ticket"></i> 审批</button>
+        <button nz-button [nzType]="'primary'" (click)="userExport()" [disabled]="exportShow">
+            <i class="fa fa-download"></i> 导出</button>
+    </ng-template>
+</cui-data-table>
+
+<nz-modal [nzVisible]="approveModalVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="approveCancel($event)">
+    <ng-template #modalTitle>
+        注册审批
+    </ng-template>
+    <ng-template #modalContent>
+        <nz-alert *ngIf="approveMessage" [nzType]="'error'" [nzMessage]="approveMessage" [nzShowIcon]="true" [nzCloseable]="true"
+            class="mb-3"></nz-alert>
+
+        <form *ngIf="_approveForm" nz-form [formGroup]="_approveForm" [nzLayout]="'horizontal'">
+            <div nz-form-item nz-row style="margin-bottom: 0.5rem;">
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>审批意见</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-radio-group formControlName="status">
+                        <label nz-radio [nzValue]="'ENROLLED'">
+                            <span>通过</span>
+                        </label>
+                        <label nz-radio [nzValue]="'REFUSED'">
+                            <span>拒绝</span>
+                        </label>
+                    </nz-radio-group>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>理由</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <textarea nz-input formControlName="reason" nzPlaceHolder="选填，最多250个字" maxlength="250" rows="3"></textarea>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="approveOk($event)" [nzLoading]="approveConfirmLoading">
+            确 定
+        </button>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="approveCancel($event)">
+            取 消
+        </button>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,123 @@
+<div class="with-side">
+  <div class="side">
+    <div class="side-body" style="width: 20rem; height: 100%; background-color: #F4F6F8;">
+      <div class="card rounded-0" style="height: 100%; background-color: #F4F6F8;">
+        <div class="card-body" style="height: 100%; background-color: #F4F6F8; overflow: hidden;">
+          <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+
+    <div class="container-fluid">
+      <div class="page-header">
+        <h3 class="page-title">[{{target?.code || target?.id}}] {{target?.name}}:鍟嗗煄鍒楄〃 <small></small></h3>
+        
+     
+      </div>
+
+      <div class="page-body">
+
+                <ul class="mb-4 d-flex">
+                  <li *ngFor="let it of getPath(target)">/ {{it}} </li>
+                </ul>
+
+      
+              <div class="tab-content" id="pills-tabContent">
+        <cui-data-table #userTable [columns]="columns" [data]="users" [pagination]="pagination" [loading]="loading" 
+           [dynamicColumns]="true">
+          <ng-template #complexSearch>
+            <form class="search-bar">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group row">
+                    <label class="col-form-label col-3">鐢ㄦ埛鍚�</label>
+                    <div class="col-9">
+                      <input type="text" name="username" class="form-control" placeholder="璇疯緭鍏ョ敤鎴峰悕">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group row">
+                    <label class="col-form-label col-3">濮撳悕</label>
+                    <div class="col-9">
+                      <input type="text" name="name" class="form-control" placeholder="璇疯緭鍏ュ鍚�">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group row">
+                    <label class="col-form-label col-3">鎵嬫満鍙�</label>
+                    <div class="col-9">
+                      <input type="text" name="name" class="form-control" placeholder="璇疯緭鍏ユ墜鏈哄彿">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group row">
+                    <label class="col-form-label col-3">閭</label>
+                    <div class="col-9">
+                      <input type="text" name="name" class="form-control" placeholder="璇疯緭鍏ラ偖绠�">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group row">
+                    <div class=" col-9 offset-3">
+                      <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+                        <label class="form-check-label"><input type="checkbox" class="form-check-input"> 浠呮煡璇㈡湰绾х粍缁�</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group row mb-0">
+                    <div class="col-3 offset-1">
+                      <button type="button" class="btn btn-primary" (click)="loadData()">鎼滅储</button>
+                      <button type="reset" class="btn " >娓呯┖</button>
+                      <a href="javascript:;" class="btn btn-link" (click)="userTable.isComplexSearch=false">鏅�氭悳绱�</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </ng-template>
+
+          <ng-template #simpleSearch>
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="璇疯緭鍏ョ敤鎴峰悕銆佸鍚嶆垨閭">
+              </div>
+              <div class="form-group ml-2">
+                <button type="button" class="btn btn-primary" (click)="loadData()">鎼滅储</button>
+                <a href="javascript:;" class="btn btn-link" (click)="userTable.isComplexSearch=true">楂樼骇鎼滅储</a>
+              </div>
+            </form>
+          </ng-template>
+          
+          <ng-template #listTools>
+              <button type="button" class="btn btn-primary"  [routerLink]="['add', {userGroupIdselected: (target ? target.id : '')}]"><i class="fa fa-plus"></i> 鍒涘缓鍟嗗煄1</button>
+          <!--   <button type="button" class="btn btn-primary"  [routerLink]="['../','add']"><i class="fa fa-plus"></i> 鍒涘缓鍟嗗煄</button> -->
+          </ng-template>
+
+          <ng-template cuiColTpl="startDate" let-row="row">
+            {{getDate(row.startDate)}}
+          </ng-template>
+          <ng-template cuiColTpl="endDate" let-row="row">
+            {{getDate(row.endDate)}}
+          </ng-template>
+          <ng-template #rowActions let-row="row">
+            <a href="javascript:;" [routerLink]="['../', row.id, 'edit']" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EDIT'}">缂栬緫</a>
+            <a href="javascript:;" class="text-danger" (click)="delete(row.id)" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}">鍒犻櫎</a>
+          </ng-template>
+
+          <!-- <ng-template #actionGroup>
+            <button class="btn btn-danger" (click)="delete()" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}">鎵归噺鍒犻櫎</button>
+          </ng-template> -->
+        </cui-data-table>
+              </div>
+      </div>
+    </div>
+  </div>
+</div>

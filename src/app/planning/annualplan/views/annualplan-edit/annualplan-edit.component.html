@@ -1,0 +1,93 @@
+<div class="container-fluid">
+    <!-- <div class="page-header">
+    <h3 class="page-title">编辑年度计划 <small></small></h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../list']">返回年度计划列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <spk-annualplan-form [annualPlan]="annualPlan" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)"></spk-annualplan-form> 
+        </div>
+      </div>
+    </div>
+  </div> -->
+    <!-- <nz-breadcrumb>
+        当前位置：
+        <nz-breadcrumb-item>
+            <a>计划管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../../list']">年度计划</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            编辑计划
+        </nz-breadcrumb-item>
+    </nz-breadcrumb> -->
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 编辑年度计划</small>
+        </h3>
+    </div>
+
+    <div class="page-body">
+        <div class="container">
+            <div nz-row class='add-center'>
+                带
+                <span class='add-red'>*</span>为必填项
+            </div>
+            <form nz-form [formGroup]="validateForm" class="edit-form-box">
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="years" nz-form-item-required> 计划年份</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.years" nz-col [nzSpan]="12">
+                        <nz-select [nzDisabled]=true formControlName="years" [nzPlaceHolder]="'请选择年份'" [nzSize]="'small'" [nzShowSearch]="true" class='add-select'>
+                            <nz-option [nzLabel]="'2016'" [nzValue]="'2016'"></nz-option>
+                            <nz-option [nzLabel]="'2017'" [nzValue]="'2017'"></nz-option>
+                            <nz-option [nzLabel]="'2018'" [nzValue]="'2018'"></nz-option>
+                            <nz-option [nzLabel]="'2019'" [nzValue]="'2019'"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="name" nz-form-item-required> 年度计划名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name" [nzDisabled]=true>
+                            <ng-template #addOnBefore>{{validateForm.controls.years.value}}</ng-template>
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入年度计划名称!</div>
+                    </div>
+                </div>
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="trainingBudget" nz-form-item-required> 培训预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingBudget" nz-col [nzSpan]="12">
+                        <nz-input-number formControlName="trainingBudget" [nzMin]="0.00" [nzStep]="1"></nz-input-number>（元）
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingBudget.dirty&&validateForm.controls.trainingBudget.hasError('required')">请输入培训预算!</div>
+                    </div>
+                </div>
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="researchBudget" nz-form-item-required>研发预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.researchBudget" nz-col [nzSpan]="12">
+                        <nz-input-number formControlName="researchBudget" [nzMin]="0.00" [nzStep]="1"></nz-input-number>（元）
+                        <div nz-form-explain *ngIf="validateForm.controls.researchBudget.dirty&&validateForm.controls.researchBudget.hasError('required')">请输入研发预算!</div>
+                    </div>
+                </div>
+                <div nz-row class='add-center add-btn-div'>
+                    <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                    <button nz-button (click)="_submitForm($event,validateForm.value)" *ngIf="submitLoading == false" type="button" [nzSize]="'large'">确定</button>
+                    <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../../list']">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

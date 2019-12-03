@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">修改基地</h3>
+    
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../../']">返回列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+      
+          <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+
+          <spk-train-base-form [trainBase]="trainBase" (doSubmit)="onSubmit($event)"></spk-train-base-form>
+
+        
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="d-flex flex-column" style="height: 100%;">
+    <div>
+        <nz-input [nzType]="'text'" [nzPlaceHolder]="'搜索'" [(ngModel)]="ugSearchText" (ngModelChange)="onUserGroupSearch($event)">
+            <ng-template #prefix>
+                <i class="anticon anticon-search"></i>
+            </ng-template>
+        </nz-input>
+
+        <div *ngIf="ugSearchText">
+            <div class="mt-2">
+                <h5 class="d-inline">部门</h5>
+                <p class="d-inline">共筛选出 {{ugSearchResult?.totalElements || 0}} 个部门</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3" style="overflow-y: auto;">
+        <cui-tree #tree [hidden]="ugSearchText" [value]="roots" [config]="_defaultTreeConfig" [selectionMode]="mode=='multiple' ? 'checkbox' : 'single'"
+            [propagateSelectionDown]="false" [propagateSelectionUp]="false" (nodeSelect)="onNodeSelect($event)" (nodeUnselect)="onNodeUnselect($event)">
+            <ng-template #nodeTemplate let-node="node" let-me="me">
+                <spk-user-group-popover *ngIf="node.data.type == 'USER_GROUP'" [userGroup]="node.data" [echoTpl]="echoTpl" placement="right">
+                </spk-user-group-popover>
+                <ng-container *ngIf="node.data.type != 'USER_GROUP'" [ngTemplateOutlet]="echoTpl"></ng-container>
+                <ng-template #echoTpl>
+                    <div class="text-truncate">
+                        <span class="cui-treenode-toggler fa fa-fw" [ngClass]="{'fa-caret-right': node.hasChildren, 'fa-rotate-45': node.expanded}" (click)="me.toggle($event)"></span>
+                        <span class="cui-treenode-chkbox" *ngIf="me.tree.selectionMode == 'checkbox'">
+                            <div class="cui-chkbox-box">
+                            <span class="cui-chkbox-icon fa" [ngClass]="{'fa-check': isSelected(node), 'fa-minus': node.partialSelected}"></span>
+                            </div>
+                        </span>
+                        <span class="ug-tree-item">
+                                <i *ngIf="!node.icon" class="fa fa-fw" [ngClass]="{'fa-folder': !node.expanded, 'fa-folder-open': node.expanded}"></i>
+                                <i *ngIf="node.icon" [class]="'fa fa-fw ' + node.icon"></i>
+                                {{node.label}}
+                        </span>
+                    </div>
+                </ng-template>
+            </ng-template>
+        </cui-tree>
+
+        <div *ngIf="ugSearchText">
+            <ul>
+                <li class="ug-item" *ngFor="let ug of ugSearchResult?.content" (click)="onFreeSelect(ug)">
+                    <spk-user-group-popover [userGroup]="ug">
+                        <ng-template #echoTpl>
+                            <div style="margin: -6px 0; line-height: 32px;">
+                                <i class="fa fa-folder"></i>
+                                {{ug.name}}
+                            </div>
+                        </ng-template>
+                    </spk-user-group-popover>
+                </li>
+            </ul>
+            <div *ngIf="ugSearchResult?.totalPages > 1" class="m-2">
+                <span>精确搜索条件 或者</span>
+                <a class="text-primary">展开其余 {{ ugSearchResult?.totalElements - ugSearchResult?.numberOfElements }} 条</a>
+            </div>
+        </div>
+    </div>
+</div>

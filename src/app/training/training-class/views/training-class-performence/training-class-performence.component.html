@@ -1,0 +1,28 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">{{trainingName}}: 成绩管理
+            <small>管理培训班的相关成绩</small>
+        </h3>
+        <div class="actions pull-right"></div>
+    </div>
+    <nz-tabset [nzSelectedIndex]="tableIndex" [nzTabPosition]="'top'" (nzSelectChange)="changeTableIndex($event)" [nzType]="'card'">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                培训班成绩
+            </ng-template>
+            <spk-training-class-results *ngIf="tableIndex==0"></spk-training-class-results>
+        </nz-tab>
+        <nz-tab *ngIf="currentStatus=='N'">
+            <ng-template #nzTabHeading>
+                成绩策略
+            </ng-template>
+            <spk-strategy *ngIf="tableIndex==1" strategyType="training" [objectId]="classId"></spk-strategy>
+        </nz-tab>
+        <!-- <nz-tab>
+            <ng-template #nzTabHeading>
+                课程成绩
+            </ng-template>
+            <spk-training-class-achievement></spk-training-class-achievement>
+        </nz-tab> -->
+    </nz-tabset>
+</div>

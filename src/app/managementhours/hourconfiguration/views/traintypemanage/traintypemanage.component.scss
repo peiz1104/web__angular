@@ -1,0 +1,21 @@
+:host::ng-deep {
+    .base-seting-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 12px;
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+            .active {
+                color: #108ee9;
+            }
+        }
+    }
+    .header-box {
+        padding-top: 20px;
+    }
+}

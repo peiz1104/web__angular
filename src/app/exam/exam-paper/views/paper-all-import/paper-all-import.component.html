@@ -1,0 +1,243 @@
+<div class="paper-all-import">
+    <!-- <div class="top-bread">
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                在线考试
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/exam/exam-paper']" [queryParams]="link">试卷管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="color-active">整卷导入</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div> -->
+    <div class="form-box">
+        <div class="import-intrduce">
+            <span>导入试题请按照模板格式整理试题：</span>
+            <!-- <div [innerHTML]="innerhtml | innerHtmlPipe">这是我的管道</div> -->
+            <a href="assets/File/{{fileType=='EXCEL'?'examPaperTemplate.xls':'wordTemplate.doc'}}" target="_blank">试卷模板下载</a>
+            <a href="" (click)="papershowmodel($event)">试卷模板说明</a>
+            <div style="color:red;">注意：WORD导入必须按模板标准文件方能导入成功，系统【导出的WORD文件】不可直接导入，不符合导入标准模板</div>
+            <!-- <nz-modal *ngIf="isVisible" [nzVisible]="isVisible" [nzTitle]="'试卷模板说明'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)" [nzWidth]="900">
+                <ng-template #modalContent>
+                    <div class="header-title">
+                        试卷模板填写说明
+                    </div>
+                    <div class="list">一、红色字体标题列为必填项。 </div>
+                    <div class="list">二、模板仅支持文本形式的试题，不支持图片、音频、视频等。 </div>
+                    <div class="list">三、题型为“阅读理解题”或“组合题”的试题，由一个父题和若干个子题构成。父题占一行，然后在父题行以下依次输入子题，每道子题占一行，子题个数应与父题的参考答案项中填写的数目对应；父题与子题、子题与子题必须相邻，不得间隔其他试题；每道子题按照相应题型的要求填写。
+                    </div>
+                    <div class="list">四、填空题题干中的空白部分为英文输入状态下的“ _____ ”（1个空格+5个下划线+1个空格）。 </div>
+                    <div class="list">五、请不要在模板中插入列，以及改变模板中列的顺序。 </div>
+                    <div class="list">六、模板中所有试题的选项列，每项最大支持输入1000个汉字。 </div>
+                    <div class="list">七、 模板作为试卷模板导入时，模板文件名即为试卷名称；模板中每个工作表名称即为试卷对应分区名称；模板工作表下试题为试卷对应分区下试题，每个工作表格式与模板格式相同。 </div>
+                    <div class="header-title">
+                        试卷模板列说明
+                    </div>
+                    <div class="list">一、题型：请从下拉选项中选取试题题型。 </div>
+                    <div class="list">二、难度：请从下拉选项中选取试题难度。 </div>
+                    <div class="list">三、分数：试题对应分数，只支持到小数点后一位。子题分值填写不生效，子题分值算法（子题分值=主题分值/子题数量；除不尽的情况：最后子题分值 = 最后子题分值+（主题分值-子题平均分之和））
+                    </div>
+                    <div class="list">四、时长：试题的答题时长，请填写整数（单位为秒）。 </div>
+                    <div class="list">五、参考答案：
+                        <div class="sub-list"> 1) 题型为：单选题，输入A、B、C、D…中正确答案对应一项的字母(第一项为A，第二项为B，第三项为C....以此类推)；</div>
+                        <div class="sub-list"> 2) 题型为：多选题，输入A、B、C、D…中对应一项或多项的字母(第一项为A，第二项为B，第三项为C....以此类推)，正确答案对应多项时，字母之间不需任何间隔（如ABC）；</div>
+                        <div class="sub-list"> 3) 题型为：判断题，仅填写"对"或"错"；</div>
+                        <div class="sub-list"> 4) 题型为：匹配题，按照问题所匹配的答题次序依次输入字母（如ADC）；</div>
+                        <div class="sub-list"> 5) 题型为：填空题，输入题干中空的个数，也就是正确答案的个数；</div>
+                        <div class="sub-list"> 6) 题型为：简答题、问答题、论述题、名词解释题、做图题，请以文字形式输入参考答案；</div>
+                        <div class="sub-list"> 7) 题型为：阅读理解题、组合题，请输入子题的个数；</div>
+                        <div class="sub-list"> 8) 题型为：案例分析题、计算题、听力题，请以文字形式输入参考答案；</div>
+                    </div>
+                    <div class="list">六、模板中所有试题的选项列，每项最大支持输入1000个汉字。 </div>
+                    <div class="list">七、 选项：根据试题需要填写试题选项，每项占一列，可以为多项。
+                        <div class="sub-list">1) 题型为：单选题、多选题，每项为一个答案选项； </div>
+                        <div class="sub-list"> 2) 题型为：判断题，不填写任何内容；</div>
+                        <div class="sub-list"> 3) 题型为：匹配题，先依次输入问题，每个问题占一项（一个单元格），可以为多项；然后英文输入状态下输入 |||| （四竖）作为与选项的分隔符（占一个单元格），之后输入答案选项，每个答案选项为一项（占一个单元格），可以为多项；</div>
+                        <div class="sub-list">4) 题型为：填空题，每个空对应答案，依次输入。所填写项的个数应与参考答案项填写的个数对应。 </div>
+                        <div class="sub-list"> 5) 题型为：简答题、问答题、论述题、名词解释题、做图题、阅读理解题、组合题、案例分析题、计算题、听力题，此项均不需输入任何内容。</div>
+                    </div>
+                </ng-template>
+            </nz-modal> -->
+            <nz-modal [nzVisible]="isShowDesc&&fileType=='EXCEL'" [nzTitle]="'试卷模板说明'" [nzContent]="modalContent" (nzOnCancel)="showDesc()"
+                (nzOnOk)="showDesc()" [nzWidth]="900" [nzFooter]="modalFooterW">
+                <ng-template #modalContent>
+                    <div class="header-title">
+                        试题模板填写说明
+                    </div>
+                    <div class="list">一、红色字体标题列为必填项。</div>
+                    <div class="list">二、模板仅支持文本形式的试题，不支持图片、音频、视频等。</div>
+                    <div class="list">三、题型为“阅读理解题”或“组合题”的试题，由一个父题和若干个子题构成。父题占一行，然后在父题行以下依次输入子题，每道子题占一行，子题个数应与父题的参考答案项中填写的数目对应；父题与子题、子题与子题必须相邻，不得间隔其他试题；每道子题按照相应题型的要求填写。</div>
+                    <div class="list">四、填空题题干中的空白部分为英文输入状态下的“ _____ ”（1个空格+5个下划线+1个空格）。</div>
+                    <div class="list">五、请不要在模板中插入列，以及改变模板中列的顺序。</div>
+                    <div class="list">六、模板中所有试题的选项列，每项最大支持输入1000个汉字。</div>
+                    <div class="header-title">
+                        试题模板列说明：
+                    </div>
+                    <div class="list">一、题型：请从下拉选项中选取试题题型。</div>
+                    <div class="list">二、难度：请从下拉选项中选取试题难度。</div>
+                    <div class="list">三、分数：试题对应分数，只支持到小数点后一位。</div>
+                    <div class="list">四 时长：试题的答题时长，请填写整数（单位为秒）。 </div>
+                    <div class="list">五、参考答案：
+                        <div class="sub-list"> 1) 题型为：单选题，输入A、B、C、D…中正确答案对应一项的字母(第一项为A，第二项为B，第三项为C....以此类推)；</div>
+                        <div class="sub-list"> 2) 题型为：多选题，输入A、B、C、D…中对应一项或多项的字母(第一项为A，第二项为B，第三项为C....以此类推)，正确答案对应多项时，字母之间不需任何间隔（如ABC）；</div>
+                        <div class="sub-list"> 3) 题型为：判断题，仅填写'对'或'错'；</div>
+                        <div class="sub-list"> 4) 题型为：匹配题，按照问题所匹配的答题次序依次输入字母（如ADC）；</div>
+                        <div class="sub-list"> 5) 题型为：填空题，输入题干中空的个数，也就是正确答案的个数；</div>
+                        <div class="sub-list"> 6) 题型为：简答题、问答题、论述题、名词解释题、做图题，请以文字形式输入参考答案；</div>
+                        <div class="sub-list"> 7) 题型为：阅读理解题、组合题，请输入子题的个数；</div>
+                        <div class="sub-list"> 8) 题型为：案例分析题、计算题、听力题，请以文字形式输入参考答案；</div>
+                    </div>
+                    <div class="list">六、是否子题：如果此题为阅读理解题或组合题的子题请输入“y”，否则不要输入任何内容。</div>
+                    <div class="list">七、 选项：根据试题需要填写试题选项，每项占一列，可以为多项。
+                        <div class="sub-list">1) 题型为：单选题、多选题，每项为一个答案选项；</div>
+                        <div class="sub-list">2) 题型为：判断题，不填写任何内容；</div>
+                        <div class="sub-list">3) 题型为：匹配题，先依次输入问题，每个问题占一项（一个单元格），可以为多项；然后英文输入状态下输入 |||| （四竖）作为与选项的分隔符（占一个单元格），之后输入答案选项，每个答案选项为一项（占一个单元格），可以为多项；</div>
+                        <div class="sub-list">4) 题型为：填空题，每个空对应答案，依次输入。所填写项的个数应与参考答案项填写的个数对应；</div>
+                        <div class="sub-list">5) 题型为：简答题、问答题、论述题、名词解释题、做图题、阅读理解题、组合题、案例分析题、计算题、听力题，此项均不需输入任何内容。</div>
+                    </div>
+                </ng-template>
+                <ng-template #modalFooterW>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="showDesc()">
+                        确定
+                    </button>
+                </ng-template>
+            </nz-modal>
+            <nz-modal [nzVisible]="isShowDesc&&fileType=='WORD'" [nzTitle]="'试卷模板说明'" [nzContent]="modalContentW" (nzOnCancel)="showDesc()"
+                (nzOnOk)="showDesc()" [nzWidth]="900" [nzFooter]="modalFooterW">
+                <ng-template #modalContentW>
+                    <div class="modal-word-desc-img">
+                        <h5>第一步：</h5>
+                        <img src="assets/images/wordDesc1.png">
+                    </div>
+                    <div class="modal-word-desc-img">
+                        <h5>第二步：</h5>
+                        <img src="assets/images/wordDesc2.png">
+                    </div>
+                    <div class="modal-word-desc-img">
+                        <h5>第三步：</h5>
+                        <img src="assets/images/wordDesc3.png">
+                    </div>
+                    <div class="modal-word-desc-img">
+                        <h5>第四步：</h5>
+                        <img src="assets/images/wordDesc4.png">
+                    </div>
+                    <div class="modal-word-desc-img">
+                        <h5>第五步：</h5>
+                        <img src="assets/images/wordDesc5.png">
+                    </div>
+                </ng-template>
+                <ng-template #modalFooterW>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="showDesc()">
+                        确定
+                    </button>
+                </ng-template>
+            </nz-modal>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="7">
+                <label>
+                    <span class="import">*</span>请选择组织</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <spk-user-group-select [(ngModel)]="managerGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="7">
+                <label>文件类型:</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <nz-select [nzDisabled]="isLoading" [nzPlaceHolder]="'文件类型'" [(ngModel)]="fileType" (ngModelChange)="changeValue()" style="width:200px;">
+                    <nz-option *ngFor="let item of dicTypeList" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="7">
+                <label>
+                    <span class="import">*</span>请选择文件</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <input [disabled]="isLoading" (change)="changeFile($event)" accept="{{fileType=='EXCEL'?'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'.doc,.docx'}}"
+                    type="file" />
+                <!-- <nz-input (change)="changeFile($event)" [nzType]="'file'"></nz-input> -->
+            </div>
+        </div>
+        <div nz-row *ngIf="radioValue=='Y'">
+            <div nz-col [nzSpan]="7">
+                <label>
+                    <span class="import">*</span>请选择分类</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <nz-input (click)="showModal()" [(ngModel)]="selectName" [nzReadonly]="true"></nz-input>
+            </div>
+            <nz-modal [nzVisible]="knowledgeIdVisible" [nzTitle]="'请选择分类'" [nzContent]="modalContent" (nzOnCancel)="handleKnowCancel()"
+                (nzOnOk)="handleKnowOk()">
+                <ng-template #modalContent>
+                    <cui-tree *ngIf="knowledgeIdVisible" [config]="treeConfig" selectionMode="single" (onSelectionChange)="onSelectionChange($event)"
+                        [value]="nodesTree" (nodeSelect)="onNodeSelect($event)" (nodeUnselect)="onNodeUnselect($event)"></cui-tree>
+                </ng-template>
+            </nz-modal>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="7">
+                <label>文件名称</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <nz-input [(ngModel)]="filename" [nzReadonly]="true" [nzPlaceHolder]="'文件名称'"></nz-input>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="7">
+                <label>试卷中试题是否存入题库</label>
+            </div>
+            <div nz-col [nzOffset]="1" [nzSpan]="10">
+                <nz-radio-group [disabled]="isLoading" [(ngModel)]="radioValue">
+                    <label nz-radio [nzValue]="'Y'">
+                        <span>是</span>
+                    </label>
+                    <label nz-radio [nzValue]="'N'">
+                        <span>否</span>
+                    </label>
+                </nz-radio-group>
+                <div *ngIf="fileType=='EXCEL'" style="color: red">
+                    试题包含普通文本、富文本两种类型数据信息。普通文本为纯文本标准字体。适合EXCEL、WORD形式操作， 富文本为以w3c标准的html格式文本内容，包含字体样式、图片等多元化信息，适合WORD形式操作， 不要使用EXCEL形式操作。
+                </div>
+            </div>
+        </div>
+        <div class="propess-info" *ngIf="isShowProess" nz-row>
+            <div class="proess-text" nz-col [nzSpan]="13">{{uploadObj.stageMessager||'导入中'}}:{{proessNum+'%'}}</div>
+            <span class="propess-back" nz-col [nzSpan]="13">
+                <span class="propess-num" [style.width]="uploadObj.endNum+'%'"></span>
+            </span>
+        </div>
+        <!-- <div *ngIf="errorResolve.length">
+            <div *ngFor="let item of errorResolve;" style="color:red">
+                <span>{{item.sheetName}}表，第{{item.excelRow}}行错误：</span>
+                <span *ngFor="let data of item.errMap">
+                    <span>{{data.key}}</span>
+                </span>
+            </div>
+        </div> -->
+        <div *ngIf="uploadObj.errorMsg" class="paddingLeft20" style="color:red">
+            错误：{{uploadObj.errorMsg}}
+        </div>
+        <div *ngFor="let item of uploadObj.errorObj;" class="paddingLeft20" style="color:red">
+            {{item.sheetName}}表中，第{{item.excelRow}}行错误：
+            <span *ngFor="let data of item.errMap">
+                <span>{{data.key}}</span>
+            </span>
+        </div>
+        <div nz-row>
+            <div nz-col [nzOffset]="7" [nzSpan]="12">
+                <button [nzLoading]="isLoading" (click)="submitForm($event)" nz-button [nzType]="'primary'" [nzSize]="'large'">导入</button>
+                <button nz-button [nzSize]="'large'" [routerLink]="['/exam/exam-paper']" [queryParams]="link">返回</button>
+            </div>
+        </div>
+    </div>
+</div>

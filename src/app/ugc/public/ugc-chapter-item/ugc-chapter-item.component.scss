@@ -1,0 +1,133 @@
+.rco-item-wrap {
+    margin-top: 0.2rem;
+    border: 1px solid #f5f5f5;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    &.selected {
+        background: #ecf6fd;
+        border-color: #d2eafb;
+    }
+    &:not(.selected):hover {
+        background: #eff8ff;
+    }
+}
+
+.rco-course {
+    background: #eef4f9;
+    padding: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.group-info {
+    background: #f8f8f8;
+    margin-top: 1rem;
+}
+
+.rco-topic {
+    background: #ffffff;
+}
+
+.rco-item {
+    display: flex; // background-color: #f5f5f5;
+    // border: 1px solid #dddddd;
+    // padding: 0.5rem;
+    cursor: pointer;
+    >.anticon {
+        line-height: 1.5;
+    }
+    .title {
+        // padding: 0.5rem;
+        cursor: pointer;
+        &.expanded {
+            font-weight: bold;
+        }
+    }
+    .edit-title-link {
+        display: none;
+    }
+    &:hover {
+        .edit-title-link {
+            display: inline-block;
+        }
+    }
+    .actions {
+        vertical-align: middle;
+        .action-item {
+            display: inline-block;
+            padding: 0.3625rem;
+            .anticon {
+                font-size: 1.5rem;
+                font-weight: 400;
+                color: rgba($color: #000000, $alpha: 0.54);
+                &:hover {
+                    font-weight: 600;
+                    color: rgba($color: #000000, $alpha: 0.9);
+                }
+            }
+        }
+    }
+}
+
+/****************/
+
+.rco-group {
+    margin: 0 0 0 2rem;
+    padding: 0;
+    position: relative;
+    &::before {
+        display: inline-block;
+        content: "";
+        position: absolute;
+        z-index: 1;
+        top: -14px;
+        bottom: 16px;
+        left: -14px;
+        border: 1px dotted #67B2DD;
+        border-width: 0 0 0 1px;
+    }
+    .rco-item-wrap {
+        position: relative;
+        z-index: 100;
+        &::before {
+            display: inline-block;
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -13px;
+            width: 13px;
+            height: 0;
+            border-top: 1px dotted #67B2DD;
+            z-index: 1;
+        }
+    }
+    &.course-children {
+        margin-left: 3rem;
+    }
+    >div:last-child>spk-rco-item>.rco-item-wrap::before {
+        left: -15px;
+        width: 15px;
+        height: 50%;
+        background: #ffffff;
+    }
+    >div {
+        position: relative;
+        &:last-child::before {
+            display: inline-block;
+            content: "";
+            position: absolute;
+            top: 2.5rem;
+            left: -15px;
+            width: 15px;
+            height: 100%; // border-top: 1px dotted #67B2DD;
+            z-index: 1;
+            background: #ffffff;
+        }
+    }
+}
+
+// spk-rco-item:last-child > .rco-item-wrap::before {
+//     left: -15px;
+//     width: 15px;
+//     height: 50%;
+//     background: #ffffff;
+// }

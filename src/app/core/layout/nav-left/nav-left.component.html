@@ -1,0 +1,36 @@
+<ng-container *ngFor="let item of navItems;let m = index">
+    <ng-container *ngIf="item.requirePermission; else notPermission">
+        <ng-container #requirePermission *spkAuthzIf="item.requirePermission">
+            <ng-container *ngTemplateOutlet="menuItem; context: {item: item,m:m}"></ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-template #notPermission>
+        <ng-container *ngTemplateOutlet="menuItem; context: {item: item,m:m}"></ng-container>
+    </ng-template>
+
+</ng-container>
+
+<ng-template #menuItem let-item="item" let-m="m">
+    <li [nzOpen]="getOpen(item,m)" *ngIf="item?.children?.length > 0" nz-submenu [ngStyle]="{'background':item.corlor}">
+        <span class="show-arrow" title>
+            <i [ngClass]="'menuicon mr-2 iconfont '+item.icon"></i>
+            <span class="nav-text">{{item.name}}</span>
+            <i class="arrow-tip-cloum iconfont icon-xia"></i>
+        </span>
+
+        <ul *ngIf="item.children.length" style="width: 200px;display: block;background: #5c5c5c;box-shadow: 0 2px 8px #5c5c5c inset;">
+            <spk-nav-left [isCollapsed]="false" [navItems]="item.children"></spk-nav-left>
+        </ul>
+    </li>
+    <li [nzSelected]="url.indexOf(item.route)==0" *ngIf="item.children ? !item.children.length : !item.children" nz-menu-item
+        [ngStyle]="{'background':item.corlor}">
+        <a *ngIf="item.route" routerLinkActive="active" [routerLink]="['/'+item.route]">
+            <i [ngClass]="'menuicon mr-2 iconfont '+item.icon"></i>
+            <span>{{item.name}}</span>
+        </a>
+        <span *ngIf="!item.route">
+            <i [ngClass]="'menuicon mr-2 iconfont '+item.icon"></i>
+            <span class="nav-text">{{item.name}}</span>
+        </span>
+    </li>
+</ng-template>

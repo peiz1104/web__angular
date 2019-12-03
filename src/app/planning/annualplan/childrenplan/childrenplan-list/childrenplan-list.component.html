@@ -1,0 +1,497 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small [routerLink]="['../../../','list']">| 年度计划</small>
+            <small>| 年度子计划列表</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../../../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <!-- <div class="page-header">
+        <nz-breadcrumb>
+
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                年度子计划列表
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+
+
+    </div> -->
+    <nz-modal [nzVisible]="isVisible" [nzTitle]="'审核子计划'" [nzContent]="commitModalContent" (nzOnCancel)="handleCancel($event)"
+        (nzOnOk)="handleOk($event)" nzOkText="通过" nzCancelText="关闭">
+        <ng-template #commitModalContent>
+            审核意见：
+            <nz-input [(ngModel)]="message" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="''"></nz-input>
+            <button class='rejectBtn' nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="handleNO($event)">
+                拒绝
+            </button>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzVisible]="isVisibleOpenClass" [nzTitle]="'审核提前开班计划'" [nzContent]="commitOpenClass" (nzOnCancel)="openClassHandleCancel($event)"
+        (nzOnOk)="openClassHandleOk($event)" nzOkText="通过" nzCancelText="关闭">
+        <ng-template #commitOpenClass>
+            审核意见：
+            <nz-input [(ngModel)]="message" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="''"></nz-input>
+            <button class='rejectBtn' nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="openClassHandleNO($event)">
+                拒绝
+            </button>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzVisible]="isVisibleForCopy" [nzTitle]="'请输入您要复制的期数'" [nzContent]="modalContent" (nzOnCancel)="handleCancelForCopy($event)"
+        (nzOnOk)="handleOkForCopy($event)">
+        <ng-template #modalContent>
+            期数：
+            <nz-input-number [(ngModel)]="copyCounts" [nzMin]="1" [nzMax]="99" [nzPlaceHolder]="'请填写期数'"></nz-input-number>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzVisible]="isVisibleHistory" [nzTitle]="'子计划历史记录'" [nzContent]="historyModalContent" (nzOnCancel)="handleCancelHsitory($event)"
+        [nzWidth]="1000" [nzFooter]="false">
+        <ng-template #historyModalContent>
+            <cui-data-table [columns]="historyColumns" [data]="annualSubPlanHistorys" [(selection)]="historySelection">
+                <ng-template cuiColTpl="colprojectnumber" let-row="row">
+                    <div>{{row.projectNumber}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colname" let-row="row">
+                    <div>{{row.name}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colplantype" let-row="row">
+                    <span *ngIf="row.planType == 'CT'">境内内部</span>
+                    <span *ngIf="row.planType == 'CD'">境内外部</span>
+                    <span *ngIf="row.planType == 'OT'">境外内部</span>
+                    <span *ngIf="row.planType == 'OD'">境外外部</span>
+                    <span *ngIf="row.planType == 'RE'">课件研发</span>
+                    <span *ngIf="row.planType == 'EL'">其它</span>
+                </ng-template>
+                <ng-template cuiColTpl="coltrainingbudget" let-row="row">
+                    <div>{{getMoneyType(row?.trainingBudget)}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="coltrainingdate" let-row="row">
+                    <div>{{row.trainingDate}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="coldisplayname" let-row="row">
+                    <div>{{row.displayName}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="collastmodifieddate" let-row="row">
+                    <div>{{row.lastModifiedDate | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="rowAction" let-row="row">
+                    <div>
+                        <a [routerLink]="['../', row.id, row.planType+'H' ,'view']">详细</a>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzVisible]="isVisibleApproval" [nzTitle]="'审批记录'" [nzContent]="approvalModalContent" (nzOnCancel)="handleCancelApproval($event)"
+        [nzWidth]="1000" [nzWrapClassName]="'changeModal'" [nzFooter]="false">
+        <ng-template #approvalModalContent>
+            <cui-data-table [columns]="approvalColumns" [data]="approvalInfos" [(selection)]="approvalInfoSelection">
+                <ng-template cuiColTpl="colcreatedbydisplayname" let-row="row">
+                    <div class="changeModal">{{row.createdByDisplayName}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colusergroupname" let-row="row">
+                    <div style="width:200px">
+                        <ul class="mb-4 d-flex">
+                            <li *ngFor="let it of getPath(row.userGroup)">/ {{it}} </li>
+                        </ul>
+                    </div>
+                </ng-template>
+                <ng-template cuiColTpl="colcreateddate" let-row="row">
+                    <div class="changeModal">{{row.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colapprovalstatus" let-row="row">
+                    <div *ngIf="row.approvalStatus == 'P'" class="changeModal">通过</div>
+                    <div *ngIf="row.approvalStatus == 'R'" class="changeModal">拒绝</div>
+                    <div *ngIf="row.approvalStatus == 'YA'" class="changeModal">研修院待审核</div>
+                    <div *ngIf="row.approvalStatus == 'YP'" class="changeModal">研修院通过</div>
+                    <div *ngIf="row.approvalStatus == 'YR'" class="changeModal">研修院拒绝</div>
+                    <div *ngIf="row.approvalStatus == 'N'" class="changeModal">撤销</div>
+                </ng-template>
+                <ng-template cuiColTpl="colcomments" let-row="row">
+                    <div [ngClass]="{'hiddenWord': thisId.indexOf(row.id)==-1}" (click)="handleHiddenWord(row)" style="cursor: pointer;">{{row.comments}}</div>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+    <div class="page-body">
+
+        <cui-data-table #tableHandle [columns]="columns2" [data]="annualSubPlans?.content" [pagination]="annualSubPlans" [(selection)]="selection"
+            selectType="checkbox" (reload)="loadData($event)" [loading]="loading">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.name">
+                                <nz-input formControlName="name" [nzPlaceHolder]="'请输入子计划名称'" [nzSize]="'large'"></nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #complexSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="validateForm" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="name">子计划名称</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="18">
+                                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入子计划名称'" [nzSize]="'large'"></nz-input>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="displayName">填报人</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.displayName" nz-col [nzSpan]="18">
+                                        <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入填报人名称'" [nzSize]="'large'"></nz-input>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="trainingPlace">培训地点</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingPlace" nz-col [nzSpan]="18">
+                                        <nz-input formControlName="trainingPlace" [nzPlaceHolder]="'请输入培训地点'" [nzSize]="'large'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userGroup">填报机构</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.userGroup" nz-col [nzSpan]="18">
+                                        <spk-user-group-select formControlName="userGroup" [(ngModel)]="userGroup"></spk-user-group-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="approvalStatus">审核状态</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.approvalStatus" nz-col [nzSpan]="18">
+                                        <nz-select formControlName="approvalStatus" [nzSize]="'large'" [nzPlaceHolder]="'请选择审核状态'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                            <nz-option [nzLabel]="'未提交'" [nzValue]="'N'"></nz-option>
+                                            <nz-option [nzLabel]="'待审核'" [nzValue]="'A'"></nz-option>
+                                            <nz-option [nzLabel]="'已通过'" [nzValue]="'P'"></nz-option>
+                                            <nz-option [nzLabel]="'已拒绝'" [nzValue]="'R'"></nz-option>
+                                            <nz-option [nzLabel]="'已取消'" [nzValue]="'C'"></nz-option>
+                                            <nz-option [nzLabel]="'研修院待审核'" [nzValue]="'YA'"></nz-option>
+                                            <nz-option [nzLabel]="'研修院已通过'" [nzValue]="'YP'"></nz-option>
+                                            <nz-option [nzLabel]="'研修院已拒绝'" [nzValue]="'YR'"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="planIdentifier">计划标识</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.planIdentifier" nz-col [nzSpan]="18">
+                                        <nz-select formControlName="planIdentifier" [nzSize]="'large'" [nzPlaceHolder]="'请选择计划标识'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                            <nz-option [nzLabel]="'普通计划'" [nzValue]="'P'"></nz-option>
+                                            <nz-option [nzLabel]="'指定计划'" [nzValue]="'Z'"></nz-option>
+                                            <nz-option [nzLabel]="'分配计划'" [nzValue]="'F'"></nz-option>
+                                            <nz-option [nzLabel]="'临时计划'" [nzValue]="'L'"></nz-option>
+                                            <nz-option [nzLabel]="'延续计划'" [nzValue]="'Y'"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="trainingDate">培训时间</label>
+                                    </div>
+                                    <!-- <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingDate" nz-col [nzSpan]="18">
+                                        <nz-select formControlName="trainingDate" [nzSize]="'large'" [nzPlaceHolder]="'请选择培训时间'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                            <nz-option *ngFor="let tab of ['1','2','3','4','5','6','7','8','9','10','11','12']" nzLabel='{{tab}} 月' nzValue="{{tab}}月"></nz-option>
+                                        </nz-select>
+                                    </div> -->
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingDates" nz-col [nzSpan]="18">
+                                        <nz-select [nzMode]="'multiple'" formControlName="trainingDates" [nzSize]="'large'" [nzPlaceHolder]="'请选择培训时间'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'1月'" [nzValue]="'1'"></nz-option>
+                                            <nz-option [nzLabel]="'2月'" [nzValue]="'2'"></nz-option>
+                                            <nz-option [nzLabel]="'3月'" [nzValue]="'3'"></nz-option>
+                                            <nz-option [nzLabel]="'4月'" [nzValue]="'4'"></nz-option>
+                                            <nz-option [nzLabel]="'5月'" [nzValue]="'5'"></nz-option>
+                                            <nz-option [nzLabel]="'6月'" [nzValue]="'6'"></nz-option>
+                                            <nz-option [nzLabel]="'7月'" [nzValue]="'7'"></nz-option>
+                                            <nz-option [nzLabel]="'8月'" [nzValue]="'8'"></nz-option>
+                                            <nz-option [nzLabel]="'9月'" [nzValue]="'9'"></nz-option>
+                                            <nz-option [nzLabel]="'10月'" [nzValue]="'10'"></nz-option>
+                                            <nz-option [nzLabel]="'11月'" [nzValue]="'11'"></nz-option>
+                                            <nz-option [nzLabel]="'12月'" [nzValue]="'12'"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="executingState">执行状态</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.executingState" nz-col [nzSpan]="18">
+                                        <nz-select formControlName="executingState" [nzSize]="'large'" [nzPlaceHolder]="'请选择执行状态'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                            <nz-option [nzLabel]="'未执行'" [nzValue]="'N'"></nz-option>
+                                            <nz-option [nzLabel]="'已开班'" [nzValue]="'O'"></nz-option>
+                                            <nz-option [nzLabel]="'已执行'" [nzValue]="'E'"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="planTypes">计划类型</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.planTypes" nz-col [nzSpan]="18">
+                                        <nz-select [nzMode]="'multiple'" formControlName="planTypes" [nzSize]="'large'" [nzPlaceHolder]="'请输入计划类型'" [nzShowSearch]="true">
+                                            <nz-option [nzLabel]="'境内内部'" [nzValue]="'CT'"></nz-option>
+                                            <nz-option [nzLabel]="'境内外部'" [nzValue]="'CD'"></nz-option>
+                                            <nz-option [nzLabel]="'境外内部'" [nzValue]="'OT'"></nz-option>
+                                            <nz-option [nzLabel]="'境外外部'" [nzValue]="'OD'"></nz-option>
+                                            <nz-option [nzLabel]="'课件研发'" [nzValue]="'RE'"></nz-option>
+                                            <nz-option [nzLabel]="'其它'" [nzValue]="'EL'"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="projectNumber">子计划编号</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="validateForm.controls.projectNumber" nz-col [nzSpan]="18">
+                                        <nz-input formControlName="projectNumber" [nzPlaceHolder]="'请输入子计划编号'" [nzSize]="'large'"></nz-input>
+                                    </div>
+                                </div>
+ 
+                  
+                            </div>
+
+
+                            <div class="cui-data-table-form-row">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn' (click)="_submitForm($event,validateForm.value)">
+                                        <i class="fa fa-search"></i>查询</button>
+                                    <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <button type="button" class="btn btn-outline-primary" [routerLink]="['../../../', 'list']">返回</button>
+                <div class="btn-group show" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                        <span>
+                            <i class="iconfont  icon-jiahao"></i>创建</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'add']">录入计划</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'import']">导入计划</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'copy']">复制去年计划</a>
+                        <div *ngIf="regionType != 'PARENT'">
+                            <div class="dropdown-divider"></div>
+                            <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'introduce']">引入指定计划</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <nz-dropdown class="nz-dropdown-style">
+                    <a class="ant-dropdown-link" nz-dropdown>
+                        <button *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" type="button" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> 创建</button>
+                    </a>
+                    <ul class="show-list-style" *spkAuthzIf="{hasAnyPermission: ['PLANNING:ANNUAL_SUB_PLAN:ADD']}" nz-menu>
+                        <li style="height:'38px!important'" nz-menu-item>
+                            <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'add']">录入计划</a>
+                        </li>
+                        <div class="dropdown-divider"></div>
+                        <li style="height:'38px'" nz-menu-item>
+                            <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'import']">导入计划</a>
+                        </li>
+                        <div class="dropdown-divider"></div>
+                        <li style="height:'38px'" nz-menu-item>
+                            <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'copy']">复制去年计划</a>
+                        </li>
+                        <div class="dropdown-divider"></div>
+                        <li style="height:'38px'" nz-menu-item>
+                            <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'introduce']">引入指定计划</a>
+                        </li>
+                    </ul>
+                </nz-dropdown> -->
+                <!-- <button *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:SUBMIT'}" type="button" class="btn btn-outline-primary" (click)="commitToApproval()">
+                    提交审核</button> -->
+                <div class="btn-group" *spkAuthzIf="{hasAnyPermission: ['PLANNING:ANNUAL_SUB_PLAN:REVIEW',
+                    'PLANNING:ANNUAL_SUB_PLAN:REVIEW_CANCEL','PLANNING:ANNUAL_SUB_PLAN:CANCEL'
+                    ,'PLANNING:ANNUAL_SUB_PLAN:SUBMIT']}">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="selection.length? true:false ">
+                        <span>计划审核</span>
+                    </button>
+                    <!-- 控制选择多选后自动展开下拉的功能代码（需要则加入到下面的div标签中）：
+                        [ngClass]="selection.length ? 'dropdown-menu dropdown-menu-right show' :'dropdown-menu dropdown-menu-right'" -->
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:SUBMIT'}" class="dropdown-item" (click)="commitToApproval()">提交审核</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:REVIEW'}" class="dropdown-item" (click)="showModal()">审核计划</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:REVIEW_CANCEL'}" class="dropdown-item" (click)="revoke()">撤销审核</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:CANCEL'}" class="dropdown-item" (click)="cancel()">取消计划</a>
+                        <!-- <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'import']">导入</a> -->
+                        <!-- <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:EXPORT'}" class="dropdown-item" [routerLink]="['../', 'export']">导出</a> -->
+                        <!-- <div class="dropdown-divider"></div> -->
+                        <!-- <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'copy']">复制去年子计划</a>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}" class="dropdown-item" [routerLink]="['../', 'introduce']">引入指定计划</a> -->
+                    </div>
+                </div>
+                <div class="btn-group" *spkAuthzIf="{hasAnyPermission: ['PLANNING:ANNUAL_SUB_PLAN:AHEAD_SUBMIT',
+                'PLANNING:ANNUAL_SUB_PLAN:AHEAD_REVIEW','PLANNING:ANNUAL_SUB_PLAN:AHEAD_CANCEL_SUB'
+                ,'PLANNING:ANNUAL_SUB_PLAN:AHEAD_CANCEL_OPEN']}">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="selection.length? true:false ">
+                        <span>提前开班申请</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:AHEAD_SUBMIT'}" class="dropdown-item" (click)="openClassCommit()">提交申请</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:AHEAD_REVIEW'}" class="dropdown-item" (click)="openClassApproval()">审核计划</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:AHEAD_CANCEL_SUB'}" class="dropdown-item" (click)="openClassCancel()">撤销申请</a>
+                        <div class="dropdown-divider"></div>
+                        <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:AHEAD_CANCEL_OPEN'}" class="dropdown-item" (click)="aheadOpenClassCancel()">取消提前开班</a>
+                    </div>
+                </div>
+                <!-- <a *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:EXPORT'}" class="list-children-hover" [routerLink]="['../', 'export']">
+                    <i class="anticon anticon-export"></i> 导出</a> -->
+                <button *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:EXPORT'}" type="button" class="btn btn-outline-primary" (click)="exportplan($event)">
+                    <i class="iconfont icon-daochu1"></i> 导出</button>
+                <button *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:DELETE'}" type="button" class="btn btn-outline-primary" (click)="delete()">
+                    <i class="iconfont icon-shanchu"></i> 删除</button>
+            </ng-template>
+            <ng-template cuiColTpl="colprojectnumber" let-row="row">
+                <div>{{row.projectNumber}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colname" let-row="row">
+                <div>
+                    <a [routerLink]="['../', row.id, row.planType ,'view']">{{row.name}}</a>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="colplantype" let-row="row">
+                <span *ngIf="row.planType == 'CT'">境内内部</span>
+                <span *ngIf="row.planType == 'CD'">境内外部</span>
+                <span *ngIf="row.planType == 'OT'">境外内部</span>
+                <span *ngIf="row.planType == 'OD'">境外外部</span>
+                <span *ngIf="row.planType == 'RE'">课件研发</span>
+                <span *ngIf="row.planType == 'EL'">其它</span>
+            </ng-template>
+            <ng-template cuiColTpl="coltrainingbudget" let-row="row">
+                <div>{{getMoneyType(row.trainingBudget)}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colgroupname" let-row="row">
+                <div>
+                    <ul class="mb-4 d-flex">
+                        <li *ngFor="let it of getPath(row.userGroup)">/ {{it}} </li>
+                    </ul>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="coltrainingplace" let-row="row">
+                <div>{{row.trainingPlace == null ? '无' :row.trainingPlace}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="coldisplayname" let-row="row">
+                <div>{{row.displayName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colapprovalstatus" let-row="row">
+                <span *ngIf="row.approvalStatus == 'N'" class="text-success">未提交</span>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'A'" class="text-warning">待审核</a>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'P'" class="text-warning">已通过</a>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'R'" class="text-warning">已拒绝</a>
+                <span *ngIf="row.approvalStatus == 'C'" class="text-warning">已取消</span>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'YA'" class="text-warning">研修院待审核</a>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'YP'" class="text-warning">研修院已通过</a>
+                <a (click)="showApprovalInfo(row)" *ngIf="row.approvalStatus == 'YR'" class="text-warning">研修院已拒绝</a>
+            </ng-template>
+            <ng-template cuiColTpl="colaheadopening" let-row="row">
+                <span *ngIf="row.aheadOpening == 'N'" class="text-success">未提交</span>
+                <a (click)="showOpenClassApprovalInfo(row)" *ngIf="row.aheadOpening == 'A'" class="text-warning">待审核</a>
+                <a (click)="showOpenClassApprovalInfo(row)" *ngIf="row.aheadOpening == 'P'" class="text-warning">已通过</a>
+                <a (click)="showOpenClassApprovalInfo(row)" *ngIf="row.aheadOpening == 'R'" class="text-warning">已拒绝</a>
+            </ng-template>
+            <ng-template cuiColTpl="colexecutingstate" let-row="row">
+                <span *ngIf="row.executingState == 'N'" class="text-success">未执行</span>
+                <span *ngIf="row.executingState == 'O'" class="text-warning">已开班</span>
+                <span *ngIf="row.executingState == 'E'" class="text-warning">已执行</span>
+            </ng-template>
+
+            <ng-template cuiColTpl="colplanidentifier" let-row="row">
+                <span *ngIf="row.planIdentifier == 'P'">普通计划</span>
+                <span *ngIf="row.planIdentifier == 'L'">临时计划</span>
+                <span *ngIf="row.planIdentifier == 'Z'">指定计划</span>
+                <span *ngIf="row.planIdentifier == 'Y'">延续计划</span>
+                <span *ngIf="row.planIdentifier == 'F'">分配计划</span>
+            </ng-template>
+            <ng-template cuiColTpl="rowAction" let-row="row">
+                <div class="text-right">
+                    <span *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:EDIT'}">
+                        <a [routerLink]="['../',row.id, row.planType,annualSubPlans.number,'edit']" title="编辑" *ngIf="row.isEdit" class="text-primary">
+                            <i class="iconfont icon-bianji-copy"></i>
+                        </a>
+                        <span title="不可编辑" class="text-secondary" *ngIf="!row.isEdit">
+                            <i class="iconfont icon-bianji-copy"></i>
+                        </span>
+                    </span>
+                    <span *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:ADD'}">
+                        <span> | </span>
+                        <a title="复制" class="text-primary" (click)="copy(row)">
+                            <i class="iconfont icon-fuzhiwenjian"></i>
+                        </a>
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="rowAction2" let-row="row">
+                <div>
+                    <a title="查看" href="javascript:;" class="text-primary" (click)="showHistory(row)">
+                        <i style="font-size:16px;display: block;
+                        float: left;" class="iconfont icon-chakan1"></i>
+                        <i class="chakan" style="display: block;
+                        float: left;
+                        margin-top: -3px;
+                        margin-left: 2px;"></i>
+                        <div style="float: left;
+                        margin-left: 2px;
+                        margin-top: 2px;">{{row.updateTimes}}</div>
+                    </a>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{course.code}}]{{course.name}}: 属性
+      <small>编辑体系课程</small>
+    </h3>
+
+    <div class="actions pull-right">
+      <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzBanner]="true" class="d-none">
+        <div alert-body>
+          <span>输入此内容对象的属性 (元数据)。这些属性用来定义对象并帮助学员搜索和查看课程信息。请注意, 文本字段可以使用 HTML 标记进行格式化。如果此内容对象正由 Web 会议使用, 则不应将起始 URL 留空, 否则将无法召开会议。</span>
+        </div>
+      </nz-alert>
+      <div class="card mt-3">
+        <div class="card-body">
+          <cui-alert [value]="msg"></cui-alert>
+          <spk-course-form #courseForm [loading]="loading" [course]="course" (doSubmit)="doSubmit($event)"></spk-course-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

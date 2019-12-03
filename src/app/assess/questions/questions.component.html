@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="page-header" *ngIf="paperId">
+        <h3 class="page-title">修改问卷内容</h3>
+        <div class="actions pull-right">
+            <button nz-button [nzType]="'primary'" (click)="saveQuestions();" [nzLoading]="isLoading">
+            <span>保存</span>
+        </button>
+            <button nz-button [nzType]="'default'" (click)="toView();" *ngIf="outSide == 'TEMPLATE'" [nzLoading]="isLoadingOne">
+            <span>预览</span>
+        </button>
+        </div>
+    </div>
+    <!-- <div class="page-header clearfix" *ngIf="!paperId">
+    <div class="actions pull-right">
+        <button nz-button [nzType]="'primary'" (click)="saveQuestions()" [nzLoading]="isLoadingOne">
+            <span>保存修改</span>
+          </button>
+    </div>
+  </div> -->
+    <div class="page-body">
+        <div class="container">
+            <!-- <h5 class="text-center mt-4 mb-2" *ngIf="paper">{{paper.name}}</h5> -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item">
+                            <a (click)="onAddQuestion('SINGLE')" class="nav-link">单选</a>
+                        </li>
+                        <li class="nav-item">
+                            <a (click)="onAddMatrixQuestion('MATRIX_SINGLE')" class="nav-link">矩阵单选</a>
+                        </li>
+                        <li class="nav-item">
+                            <a (click)="onAddQuestion('SHORT_ANSWER')" class="nav-link">问答题</a>
+                        </li>
+                    </ul>
+                </div>
+                <div *ngFor="let q of questions;let idx=index;" [ngSwitch]="q.type" class="que-box" [ngClass]="{'se':q.isBordered}">
+                    <spk-assess-choice [question]="q" [idx]="idx" *ngSwitchCase="'SINGLE'"></spk-assess-choice>
+                    <spk-assess-matrix [question]="q" [idx]="idx" *ngSwitchCase="'MATRIX_SINGLE'"></spk-assess-matrix>
+                    <spk-assess-short-answer [question]="q" [idx]="idx" *ngSwitchCase="'SHORT_ANSWER'"></spk-assess-short-answer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

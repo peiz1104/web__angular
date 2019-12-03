@@ -1,0 +1,1044 @@
+<nz-modal [nzVisible]="isVisible" [nzWrapClassName]="'showModall'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)" [nzZIndex]="999" [nzClosable]="false">
+    <ng-template #modalContent>
+        <div class="main">
+            <div class="name">
+                <div class="theName">名称</div>
+                <!-- <div class="theBank"></div> -->
+                <div class="theProvince">
+                    <p *ngFor="let item of groupDataLeft;index as i" style="cursor: pointer" (click)="handleClickGroup(i,item.id)" [ngStyle]="{'background-color': groupIndex == i ? '#cce7ff' : ''}">{{item.name}}</p>
+                    <!-- 分页 -->
+                    <!-- <div class="page">
+                        <nz-pagination [(nzPageIndex)]="_current" [nzTotal]="50" [nzSize]="'small'"></nz-pagination>
+                    </div> -->
+                </div>
+            </div>
+            <div class="distribution">
+                <div class="distributionHead">
+                    <span>总名额：{{totalQuota}}</span>
+                    <span>剩余名额：{{remainingQuota}}</span>
+                    <button nz-button [nzType]="'primary'" (click)="handleAverageDistribution()">智能分配</button>
+                </div>
+                <div class="distributionSituation ">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupFir;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': deleteId.indexOf(item.org.id) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupFirIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="iconfont icon-jiahao"></i>
+                            <span>添加组织</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distributionSituation">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupSec;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': (groupSec.length>0&&deleteId.indexOf(item.org.id)) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupSecIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="iconfont icon-jiahao"></i>
+                            <span>添加组织</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distributionSituation borderRightNone">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupThi;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': (groupThi.length>0&&deleteId.indexOf(item.org.id)) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupThiIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="iconfont icon-jiahao"></i>
+                            <span>添加组织</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+<nz-modal [nzVisible]="isVisibleEdit" [nzZIndex]="999" [nzWrapClassName]="'showModalls'" [nzContent]="modalContents" (nzOnCancel)="handleCancels($event)"
+    (nzOnOk)="handleOk($event)" [nzClosable]="false">
+    <ng-template #modalContents>
+        <div class="main">
+            <!-- <div class="name">
+            <div class="theName">名称hhhh</div>
+            <div class="theBank"></div>
+            <div class="theProvince">
+                <p *ngFor="let item of groupDataLeft;index as i" (click)="handleClickGroup(i,item.id)" [ngStyle]="{'background-color': groupIndex == i ? '#cce7ff' : ''}">{{item.name}}</p>
+
+            </div>
+        </div> -->
+            <div class="distribution">
+                <div class="distributionHead">
+                    <span>总名额：{{totalQuota}}</span>
+                    <span>剩余名额：{{remainingQuota}}</span>
+                    <button nz-button [nzType]="'primary'" (click)="handleAverageDistribution()">智能分配</button>
+                </div>
+                <div class="distributionSituation ">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupFir;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': deleteId.indexOf(item.org.id) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupFirIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="anticon anticon-plus"></i>
+                            <span>添加组织</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distributionSituation">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupSec;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': (groupSec.length>0&&deleteId.indexOf(item.org.id)) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupSecIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="anticon anticon-plus"></i>
+                            <span>添加组织</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="distributionSituation borderRightNone">
+                    <div class="OrganizationAndDistribution">
+                        <span>组织</span>
+                        <span>分配情况</span>
+                    </div>
+                    <div *ngFor="let item of groupThi;index as i">
+                        <div class="BeijingBranch" [ngStyle]="{'display': (groupThi.length>0&&deleteId.indexOf(item.org.id)) ==-1 ? 'none' : 'block'}">
+                            <span [ngStyle]="{'color': item.perior ? '#e25b5b' : '#000000'}">{{item.org.name}}</span>
+                            <span class="inputNum">
+                                <input type="number" min="0" [value]="item.orderNo" (input)="anginchangeInput($event,item.org.id)">
+                                <i class="iconfont icon-2guanbi" (click)="handleDelete(item.org.id,item.orderNo)" style="cursor: pointer"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="groupThiIs" class="AddingTissue">
+                        <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+                        <button nz-button [nzType]="'primary'" (click)="ugLookup.openLookup()" style="cursor: pointer">
+                            <i class="anticon anticon-plus"></i>
+                            <span>添加组织</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small [routerLink]="['../../../','list']">| 年度计划</small>
+            <small>| 创建填报子计划</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="page-header">
+
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../', 'list']">年度子计划列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                创建填报子计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+
+        <div class="page-body">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" (nzSelectChange)="_resetForm($event.index)" class='tabs-box'>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        境内内部培训
+                    </ng-template>
+                    <form nz-form [formGroup]="validateInternalTrainingInForm" class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 基本信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="name" nz-form-item-required> 计划名称</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.name" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="name"></nz-input>
+                                            <div nz-form-explain style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                            <div nz-form-explain *ngIf="validateInternalTrainingInForm.controls.name.dirty&&validateInternalTrainingInForm.controls.name.hasError('required')">请输入计划名称！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDate" nz-form-item-required> 培训时间 </label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingDate" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-select formControlName="trainingDate" [nzPlaceHolder]="'请选择培训时间'" [nzSize]="'small'" [nzShowSearch]="true" class='add-select'>
+                                                <nz-option *ngFor="let tab of ['1','2','3','4','5','6','7','8','9','10','11','12']" nzLabel='{{tab}} 月' nzValue="{{tab}}月"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingPlace"> 培训地点</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingPlace" nz-col [nzSpan]="layoutData.layout2"
+                                            [ngSwitch]="instituteIf">
+                                            <nz-input formControlName="trainingPlace" *ngSwitchCase="'nohold'" [nzPlaceHolder]="'请输入培训地点'"></nz-input>
+                                            <nz-select formControlName="trainingPlace" *ngSwitchCase="'hold'" [nzPlaceHolder]="'请选择培训地点'" [nzShowSearch]="true">
+                                                <nz-option *ngFor="let trainingSchool of trainingSchools" [nzLabel]="trainingSchool.name" [nzValue]="trainingSchool.id"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            研修院举办
+                                            <label nz-checkbox formControlName="isTrainingSchoolPlan" (ngModelChange)="_console($event)"></label>
+                                        </div>
+
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingNumber" nz-form-item-required>培训人数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingNumber" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="trainingNumber" [nzMin]="0" [nzStep]="1" (ngModelChange)="handelTrainingNumber($event)"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (人)
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="correspondingNumber" nz-form-item-required> 本级人数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.correspondingNumber" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="correspondingNumber" [nzMin]="0" [nzStep]="1" (ngModelChange)="handelCorrespondingNumber($event)"></nz-input-number>
+                                            <div nz-form-explain *ngIf="validateInternalTrainingInForm.controls.correspondingNumber.dirty&&validateInternalTrainingInForm.controls.correspondingNumber.hasError('confirm')">本级人数不能超过培训人数</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (人)
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDays" nz-form-item-required> 培训天数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingDays" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="trainingDays" [nzMin]="0" [nzStep]="0.5"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：报到与返程共计0.5天</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (天)
+                                        </div>
+                                    </div>
+                                    <div *ngIf="regionType != 'PREFECTURE'">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                                <label>培训名额分配情况</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="layoutData.layout2">
+                                                <!--<nz-input nzType="textarea" [nzAutosize]="autosize">烦烦烦烦烦烦</nz-input>-->
+                                                <ul style="cursor: pointer;" [ngClass]="{'hidden': !isHidden}" class="up_down">
+                                                    <i *ngIf="trainingDistribution.length>0" class="anticon anticon-up up_up" [ngStyle]="{display:!isHidden ? 'none' : 'block'}"
+                                                        (click)="handelHidden()"></i>
+                                                    <i *ngIf="trainingDistribution.length>0" class="anticon anticon-down down_down" [ngStyle]="{display:!isHidden ? 'block' : 'none'}"
+                                                        (click)="handelHidden()"></i>
+                                                    <li *ngFor="let obj of trainingDistribution">
+                                                        <span *ngIf="obj.quotaCount>0">{{obj.userGroup.name}} : {{obj.quotaCount}}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div nz-col [nzSpan]="layoutData.layout3">
+                                                <span (click)="handleModal()" style="cursor: pointer;">分配</span>
+                                                <span *ngIf="!showedit" (click)="handleModalEdit()" style="cursor: pointer;color:red">编辑</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 培训信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingObject" nz-form-item-required> 培训对象</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingObject" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingObject"></nz-input>
+                                            <div nz-form-explain *ngIf="validateInternalTrainingInForm.controls.trainingObject.dirty&&validateInternalTrainingInForm.controls.trainingObject.hasError('required')">请填写培训对象！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="settingAttibutes" nz-form-item-required> 培训级别</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.settingAttibutes" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-cascader [class.class123]="true" formControlName="settingAttibutes" [nzOptions]="init_options" (ngModelChange)="setAttibutes($event)"
+                                                (nzChange)="setAttibutes($event)" [nzPlaceHolder]="'请选择培训级别'">
+                                            </nz-cascader>
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingContent" nz-form-item-required>培训内容</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingContent" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingContent" nzType="textarea" [nzRows]="4"></nz-input>
+                                            <div nz-form-explain *ngIf="validateInternalTrainingInForm.controls.trainingContent.dirty&&validateInternalTrainingInForm.controls.trainingContent.hasError('required')">请输入培训内容！</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li ">
+                                    <div class='tabs-title'>
+                                        <h3>培训经费</h3>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingCostPer" nz-form-item-required>培训经费标准</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingCostPer" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="trainingCostPer" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元/人/天)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="lectuerTransportationFee">讲师交通费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.lectuerTransportationFee" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="lectuerTransportationFee" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：含内部讲师往返补助</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="lectuerBoard">讲师食宿</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.lectuerBoard" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="lectuerBoard" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="outsideLectuerPretaxFee">外部讲师税前授课费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.outsideLectuerPretaxFee" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="outsideLectuerPretaxFee" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="commission">佣金</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.commission" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="commission" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <!-- <div nz-form-explain style="color: #f04134;">注：销售人员身份兼职讲师税前授课费（不计入预算）</div> -->
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="wages">工资</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.wages" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="wages" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：员工身份兼职讲师税前授课费（不计入预算）</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="otherCosts">其它费用</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.otherCosts" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="otherCosts" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trafficFee" nz-form-item-required>本级交通费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trafficFee" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudget()" formControlName="trafficFee" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingBudget" nz-form-item-required>培训经费预算</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.trainingBudget" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number [nzDisabled]=true formControlName="trainingBudget" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：经费余额 {{trainingBudgetOverage}} 元</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="expenseLevel">本级公司承担费用</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.expenseLevel" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateExpenseLower()" formControlName="expenseLevel" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="expenseLower">下级公司承担费用</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.expenseLower" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateExpenseLevel()" formControlName="expenseLower" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="remark">备注</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.remark" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="remark" [nzRows]="4" [nzType]="'textarea'"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-row class='add-center'>
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                            <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,typeData[0])" type="button" [nzSize]="'large'">确定</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                        </div>
+                    </form>
+                </nz-tab>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        境内外部培训
+                    </ng-template>
+                    <form nz-form [formGroup]="validateInExternalTrainingForm" class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 基本信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="name" nz-form-item-required> 计划名称</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.name" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="name"></nz-input>
+                                            <div nz-form-explain style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                            <div nz-form-explain *ngIf="validateInExternalTrainingForm.controls.name.dirty&&validateInExternalTrainingForm.controls.name.hasError('required')">请填写计划名称！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDate" nz-form-item-required> 培训时间 </label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingDate" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-select formControlName="trainingDate" [nzPlaceHolder]="'请选择培训时间'" [nzSize]="'small'" [nzShowSearch]="true" class='add-select'>
+                                                <nz-option *ngFor="let tab of ['1','2','3','4','5','6','7','8','9','10','11','12']" nzLabel='{{tab}} 月' nzValue="{{tab}}月"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingPlace"> 培训地点</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingPlace" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingPlace"></nz-input>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDays" nz-form-item-required> 培训天数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingDays" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetCD()" formControlName="trainingDays" [nzMin]="0" [nzStep]="0.5"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：报到与返程共计0.5天</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (天)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingNumber" nz-form-item-required>培训人数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingNumber" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetCD()" formControlName="trainingNumber" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (人)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class="tabs-title">
+                                        <h3> 培训信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingObject" nz-form-item-required> 培训对象</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingObject" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingObject"></nz-input>
+                                            <div nz-form-explain *ngIf="validateInExternalTrainingForm.controls.trainingObject.dirty&&validateInExternalTrainingForm.controls.trainingObject.hasError('required')">请填写培训对象！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingContent" nz-form-item-required>培训内容</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingContent" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingContent" nzType="textarea" [nzRows]="4"></nz-input>
+                                            <div nz-form-explain *ngIf="validateInExternalTrainingForm.controls.trainingContent.dirty&&validateInExternalTrainingForm.controls.trainingContent.hasError('required')">请填写培训内容！</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 培训经费</h3>
+                                    </div>
+                                    <!-- 人均培训费用 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingCostPer" nz-form-item-required>人均培训费用</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingCostPer" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetCD()" formControlName="trainingCostPer" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trafficFee">本级交通费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trafficFee" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetCD()" formControlName="trafficFee" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingBudget" nz-form-item-required>培训经费预算</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.trainingBudget" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number [nzDisabled]=true formControlName="trainingBudget" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：经费余额{{trainingBudgetOverage}}</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="remark">备注</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInExternalTrainingForm.controls.remark" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="remark" nzType="textarea" [nzRows]="4"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-row class='add-center'>
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                            <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,typeData[1])" type="button" [nzSize]="'large'">确定</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                        </div>
+                    </form>
+                </nz-tab>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        境外培训
+                    </ng-template>
+                    <form nz-form [formGroup]="validateOverseasTrainingForm" class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 基本信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="name" nz-form-item-required> 计划名称</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.name" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="name"></nz-input>
+                                            <div nz-form-explain style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                            <div nz-form-explain *ngIf="validateOverseasTrainingForm.controls.name.dirty&&validateOverseasTrainingForm.controls.name.hasError('required')">请输入计划名称！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDate" nz-form-item-required> 培训时间 </label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingDate" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-select formControlName="trainingDate" [nzPlaceHolder]="'请选择培训时间'" [nzSize]="'small'" [nzShowSearch]="true" class='add-select'>
+                                                <nz-option *ngFor="let tab of ['1','2','3','4','5','6','7','8','9','10','11','12']" nzLabel='{{tab}} 月' nzValue="{{tab}}月"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingPlace"> 培训地点</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingPlace" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingPlace"></nz-input>
+                                        </div>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDays" nz-form-item-required> 培训天数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingDays" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetOTOD()" formControlName="trainingDays" [nzMin]="0" [nzStep]="0.5"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：报到与返程共计0.5天</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (天)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingNumber" nz-form-item-required>培训人数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingNumber" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetOTOD()" formControlName="trainingNumber" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (人)
+                                        </div>
+                                    </div>
+                                    <!-- 类型 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="planType" nz-form-item-required>类型</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateInternalTrainingInForm.controls.planType" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-select formControlName="planType" [nzSize]="'large'" [nzPlaceHolder]="'请选择类型'" [nzShowSearch]="true">
+                                                <nz-option [nzLabel]="'境外内部培训'" [nzValue]="'OT'"></nz-option>
+                                                <nz-option [nzLabel]="'境外外部培训'" [nzValue]="'OD'"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 培训信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingObject" nz-form-item-required> 培训对象</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingObject" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingObject"></nz-input>
+                                            <div nz-form-explain *ngIf="validateOverseasTrainingForm.controls.trainingObject.dirty&&validateOverseasTrainingForm.controls.trainingObject.hasError('required')">请输入培训对象！</div>
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingContent" nz-form-item-required>培训内容</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingContent" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingContent" nzType="textarea" [nzRows]="4"></nz-input>
+                                            <div nz-form-explain *ngIf="validateOverseasTrainingForm.controls.trainingContent.dirty&&validateOverseasTrainingForm.controls.trainingContent.hasError('required')">请输入培训内容！</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class="tabs-title">
+                                        <h3> 培训经费</h3>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingCostPer" nz-form-item-required>培训经费标准</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingCostPer" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetOTOD()" formControlName="trainingCostPer" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元/人/天)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trafficFee" nz-form-item-required>本级交通费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trafficFee" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number (nzBlur)="evaluateTrainingBudgetOTOD()" formControlName="trafficFee" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingBudget" nz-form-item-required>培训经费预算</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.trainingBudget" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number [nzDisabled]=true formControlName="trainingBudget" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：经费余额 {{trainingBudgetOverage}} 元</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="remark">备注</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateOverseasTrainingForm.controls.remark" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="remark" nzType="textarea" [nzRows]="4"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-row class='add-center'>
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                            <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,typeData[2])" type="button" [nzSize]="'large'">确定</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                        </div>
+                    </form>
+                </nz-tab>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        课件研发
+                    </ng-template>
+                    <form nz-form [formGroup]="validateResearchDevelopmentCoursewareForm" class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 基本信息</h3>
+                                    </div>
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="name" nz-form-item-required> 计划名称</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.name" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="name"></nz-input>
+                                            <div nz-form-explain style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.name.dirty&&validateResearchDevelopmentCoursewareForm.controls.name.hasError('required')">请输入计划名称！</div>
+                                        </div>
+                                    </div>
+                                    <!-- 研发时间 -->
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDate" nz-form-item-required> 研发时间 </label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.trainingDate" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-select formControlName="trainingDate" [nzPlaceHolder]="'请选择研发时间'" [nzSize]="'small'" [nzShowSearch]="true" class='add-select'>
+                                                <nz-option *ngFor="let tab of ['1','2','3','4','5','6','7','8','9','10','11','12']" nzLabel='{{tab}} 月' nzValue="{{tab}}月"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                    <!-- 研发地点 -->
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingPlace"> 研发地点</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.trainingPlace" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="trainingPlace"></nz-input>
+                                        </div>
+                                    </div>
+                                    <!-- 研发天数 -->
+                                    <div nz-row nz-form-item>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingDays" nz-form-item-required> 研发天数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.trainingDays" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="trainingDays" [nzMin]="0" [nzStep]="0.5"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：报到与返程共计0.5天</div>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.trainingDays.dirty&&validateResearchDevelopmentCoursewareForm.controls.trainingDays.hasError('required')">请输入研发天数！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (天)
+                                        </div>
+                                    </div>
+                                    <!-- 研发人数 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingNumber" nz-form-item-required>研发人数</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.trainingNumber" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="trainingNumber" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.trainingNumber.dirty&&validateResearchDevelopmentCoursewareForm.controls.trainingNumber.hasError('required')">请输入研发人数！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (人)
+                                        </div>
+                                    </div>
+                                    <!-- 研发内容 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="researchContent" nz-form-item-required>研发内容</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.researchContent" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="researchContent" nzType="textarea" [nzRows]="4"></nz-input>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.researchContent.dirty&&validateResearchDevelopmentCoursewareForm.controls.researchContent.hasError('required')">请输入研发内容！</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3> 研发经费</h3>
+                                    </div>
+                                    <!-- 会议费 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="meetingCosts" nz-form-item-required>会议费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.meetingCosts" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="meetingCosts" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.meetingCosts.dirty&&validateResearchDevelopmentCoursewareForm.controls.meetingCosts.hasError('required')">请输入会议费！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <!-- 研发费 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="researchCost" nz-form-item-required>研发费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.researchCost" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="researchCost" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.researchCost.dirty&&validateResearchDevelopmentCoursewareForm.controls.researchCost.hasError('required')">请输入研发费！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="transportCosts" nz-form-item-required>交通费</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.transportCosts" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="transportCosts" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.transportCosts.dirty&&validateResearchDevelopmentCoursewareForm.controls.transportCosts.hasError('required')">请输入交通费！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                    <!-- 研发经费预算 -->
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="trainingBudget" nz-form-item-required>研发经费预算</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.trainingBudget" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input-number formControlName="trainingBudget" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                            <div nz-form-explain style="color: #f04134;">注：经费余额 {{researchBudgetOverage}} 元</div>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.trainingBudget.dirty&&validateResearchDevelopmentCoursewareForm.controls.trainingBudget.hasError('required')">请输入研发经费预算！</div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                            (元)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                            <label for="remark">备注</label>
+                                        </div>
+                                        <div nz-form-control [nzValidateStatus]="validateResearchDevelopmentCoursewareForm.controls.remark" nz-col [nzSpan]="layoutData.layout2">
+                                            <nz-input formControlName="remark" nzType="textarea" [nzRows]="4"></nz-input>
+                                            <div nz-form-explain *ngIf="validateResearchDevelopmentCoursewareForm.controls.remark.dirty&&validateResearchDevelopmentCoursewareForm.controls.remark.hasError('required')">Please input your required!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-row class='add-center'>
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                            <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,typeData[3])" type="button" [nzSize]="'large'">确定</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                        </div>
+                    </form>
+                </nz-tab>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        其他
+                    </ng-template>
+                    <form nz-form [formGroup]="validateOtherForm" class="childrenplan-form-box">
+                        <div class="childrenplan-form-body childrenplan-form-body2">
+                            <div nz-row nz-form-item>
+                                <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                    <label for="name" nz-form-item-required> 计划名称</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateOtherForm.controls.name" nz-col [nzSpan]="layoutData.layout2">
+                                    <nz-input formControlName="name"></nz-input>
+                                    <div nz-form-explain style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                    <div nz-form-explain *ngIf="validateOtherForm.controls.name.dirty&&validateOtherForm.controls.name.hasError('required')">请填写计划名称！</div>
+                                </div>
+                            </div>
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                    <label for="category" nz-form-item-required>类型</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateOtherForm.controls.category" nz-col [nzSpan]="layoutData.layout2">
+                                    <nz-select formControlName="category" [nzSize]="'large'" [nzPlaceHolder]="'请选择类型'" [nzShowSearch]="true">
+                                        <nz-option [nzLabel]="'购买培训教材'" [nzValue]="'PURCHASE'"></nz-option>
+                                        <nz-option [nzLabel]="'讲座'" [nzValue]="'LECTURE'"></nz-option>
+                                        <nz-option [nzLabel]="'其他'" [nzValue]="'OTHERS'"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                    <label for="trainingBudget" nz-form-item-required>培训经费预算</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateOtherForm.controls.trainingBudget" nz-col [nzSpan]="layoutData.layout2">
+                                    <nz-input-number formControlName="trainingBudget" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                    <div nz-form-explain style="color: #f04134;">注：经费余额 {{trainingBudgetOverage}} 元</div>
+                                    <div nz-form-explain *ngIf="validateOtherForm.controls.trainingBudget.dirty&&validateOtherForm.controls.trainingBudget.hasError('required')">请填写培训经费预算！</div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout3" class='layout-tips'>
+                                    (元)
+                                </div>
+                            </div>
+                            <div nz-form-item nz-row>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="layoutData.layout2">
+                                    <label nz-checkbox formControlName="isTrainingBudget">
+                                        <span>占用培训预算</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                    <label for="trainingContent" nz-form-item-required>培训内容</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateOtherForm.controls.trainingContent" nz-col [nzSpan]="layoutData.layout2">
+                                    <nz-input formControlName="trainingContent" nzType="textarea" [nzRows]="4"></nz-input>
+                                    <div nz-form-explain *ngIf="validateOtherForm.controls.trainingContent.dirty&&validateOtherForm.controls.trainingContent.hasError('required')">请填写培训内容！</div>
+                                </div>
+                            </div>
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="layoutData.layout1">
+                                    <label for="remark">备注</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateOtherForm.controls.remark" nz-col [nzSpan]="layoutData.layout2">
+                                    <nz-input formControlName="remark" nzType="textarea" [nzRows]="4"></nz-input>
+                                    <div nz-form-explain *ngIf="validateOtherForm.controls.remark.dirty&&validateOtherForm.controls.remark.hasError('required')">请填写备注！</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-row class='add-center'>
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                            <button nz-button (click)="_submitForm($event,typeData[4])" *ngIf="submitLoading == false" type="button" [nzSize]="'large'">确定</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                        </div>
+                    </form>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>

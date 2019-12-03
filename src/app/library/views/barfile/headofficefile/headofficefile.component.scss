@@ -1,0 +1,18 @@
+:host ::ng-deep {
+    .head-office-file {
+        .ant-row,
+        .ant-form-item {
+            .ant-form-item-control {
+                .ant-calendar-picker {
+                    width: 100%;
+                }
+            }
+        }
+        .complex-search-bar-search-box {
+            left: 40px;
+        }
+    }
+}
+.edit{
+    cursor: pointer;
+}

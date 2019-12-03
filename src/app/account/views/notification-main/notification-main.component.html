@@ -1,0 +1,24 @@
+<nz-layout style="height: 100%;">
+  <nz-sider [nzCollapsible]="true" [nzWidth]="150" [nzCollapsedWidth]="0" [(nzCollapsed)]="isCollapsed" class="bg-white">
+    <div class="py-4 px-3 bg-secondary" [hidden]="isCollapsed"><strong>消息中心</strong></div>
+    <ul nz-menu [nzMode]="'inline'" [nzTheme]="'light'" style="height: 100%;">
+      <li nz-submenu [nzOpen]="true">
+          <span title>站内消息</span>
+          <ul>
+              <li nz-menu-item [routerLink]="['innerMsg/all']" routerLinkActive #rlaa="routerLinkActive" [nzSelected]="rlaa.isActive"><span>全部消息</span></li>
+              <li nz-menu-item [routerLink]="['innerMsg/unread']" routerLinkActive #rlau="routerLinkActive" [nzSelected]="rlau.isActive"><span>未读消息</span></li>
+              <li nz-menu-item [routerLink]="['innerMsg/read']" routerLinkActive #rlar="routerLinkActive" [nzSelected]="rlar.isActive"><span>已读消息</span></li>
+          </ul>
+      </li>
+      <li nz-submenu [nzOpen]="true">
+          <span title>消息接收管理</span>
+          <ul>
+              <li nz-menu-item [routerLink]="['subscribe']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><span>基本接收管理</span></li>
+          </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-content>
+    <router-outlet></router-outlet>
+  </nz-content>
+</nz-layout>

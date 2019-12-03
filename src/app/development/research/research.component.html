@@ -1,0 +1,300 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">研发管理
+            <small>| 研发项目</small>
+        </h3>
+        <div class="actions pull-right">
+
+            <!-- <button nz-button [nzType]="'primary'" (click)="addProjectPhase()" [nzLoading]="isLoading"> 生成项目阶段
+            </button> -->
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="plan" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+        [(selection)]="selection" [loading]="loading">
+
+
+        <ng-template #simpleSearch>
+            <ng-container>
+                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                    <div nz-row class="cui-data-table-form-body">
+                        <div nz-form-control>
+                            <nz-input formControlName="name" [nzPlaceHolder]="'请输入项目名称'"> </nz-input>
+                        </div>
+                        <div class='simple-search-bar-search-box'>
+                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                <i class="fa fa-search"></i>查询</button>
+                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                        </div>
+                    </div>
+                </form>
+            </ng-container>
+        </ng-template>
+
+        <ng-template #complexSearch>
+            <ng-container>
+                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                    <div nz-row class="cui-data-table-form-body">
+                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="trainName">项目名称</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-input formControlName="name" [nzPlaceHolder]="'请输入项目名称'"></nz-input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="">项目年份</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-select formControlName="years" [nzPlaceHolder]="'请选择项目年份！'" nzAllowClear>
+                                        <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                        </nz-option>
+                                        <nz-option *ngFor="let option of yearArray" [nzLabel]="option" [nzValue]="option"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="">项目状态</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-select formControlName="devType" [nzPlaceHolder]="'请选择项目状态！'" nzAllowClear>
+                                        <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="'取消'" [nzValue]="'CANCEL'">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="'结项'" [nzValue]="'END'">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="'执行中'" [nzValue]="'CONDUCT'">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="">创建人</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-input formControlName="createBy" [nzPlaceHolder]="'请输入创建人'"></nz-input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="userGroup">所属机构</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="userGroup" nz-col [nzSpan]="18">
+                                    <spk-user-group-select mode="single" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="cui-data-table-form-row">
+                            <div class='complex-search-bar-search-box'>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-container>
+        </ng-template>
+        <ng-template #listTools>
+            <div class="btn-group">
+                <!-- <button (click)="mutipledelete($event)" type="button" class="btn btn-primary">
+                    <i class="anticon anticon-delete"></i> 删除</button> -->
+            </div>
+        </ng-template>
+        <ng-template cuiColTpl="planName" let-row="row">
+            <div style="text-align:left;color:#007bbf;cursor:pointer" (click)="showModalDetail(row)">{{row.name}}</div>
+        </ng-template>
+
+        <ng-template cuiColTpl="userGroupName" let-row="row">
+            <div style="text-align:left">{{namePath(row.createdByUserGroupNamePath)}}</div>
+        </ng-template>
+        <ng-template cuiColTpl="createdByName" let-row="row">
+            <div style="text-align:left">{{row.createdByDisplayName}}</div>
+        </ng-template>
+        <ng-template cuiColTpl="DevStatusCol" let-row="row">
+            <span *ngIf="row.devStatus== 'CONDUCT'">
+
+                <nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'">
+                    <a class="ant-dropdown-link" nz-dropdown>
+                        执行中
+                        <i class="anticon anticon-down"></i>
+                    </a>
+                    <ul nz-menu>
+                        <li nz-menu-item>
+                            <nz-popconfirm [nzTitle]="'确定要取消这个任务吗？'" (nzOnConfirm)="confirmok(row)" (nzOnCancel)="confirmcancel(row)" [nzPlacement]="'top'">
+                                <a nz-popconfirm>{{'取消'}}</a>
+                            </nz-popconfirm>
+                        </li>
+                        <li nz-menu-item>
+                            <nz-popconfirm [nzTitle]="'确定要结项吗？'" (nzOnConfirm)="confirmend(row)" (nzOnCancel)="confirmcancelend(row)" [nzPlacement]="'top'">
+                                <a nz-popconfirm>结项</a>
+                            </nz-popconfirm>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+            </span>
+            <span *ngIf="row.devStatus == 'END'" class="text-warning">已结项</span>
+            <span *ngIf="row.devStatus=='CANCEL'" style="color:red;">已取消</span>
+        </ng-template>
+        <ng-template cuiColTpl="devedit" let-row="row">
+            <i *ngIf="row.devStatus == 'END'" title="已结项不可编辑" style="color:#888;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+            <i (click)="editstepDetail(row)" *ngIf="row.devStatus != 'END'" title="编辑" style="color:#007bbf;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+            <!-- <i *ngIf="row.devStatus == 'END'" title="已结项不可编辑" style="color:#888;font-size:16px;cursor:pointer" class="anticon anticon-edit"></i>
+            <i (click)="editstepDetail(row)" *ngIf="row.devStatus != 'END'" title="编辑" style="color:#007bbf;font-size:16px;cursor:pointer"
+                class="anticon anticon-edit"></i> -->
+        </ng-template>
+        <ng-template cuiColTpl="actions" let-row="row">
+            <span (click)="stepLsit(row)" style="color:#993300;cursor:pointer">操作</span>
+            <!-- <span *ngIf="row.devStatus=='END'" style="color:#666;cursor:pointer" title="已结项不可操作">操作</span> -->
+        </ng-template>
+    </cui-data-table>
+</div>
+
+<nz-modal *ngIf="isVisible" [nzWidth]="900" [nzVisible]="isVisible" [nzTitle]="'研发项目详情'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)" class="content-modal-show">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="showSpinning" [nzTip]="'正在读取数据...'">
+            <div class="title-name">{{detailData?.name}}</div>
+            <div class="top-tip">项目信息</div>
+            <div class="dev-detail">
+                <div class="left">
+                    <div class="single">
+                        <span class="label">研发摘要：</span>
+                        <span class="content">{{detailData.remark||'无'}}</span>
+                    </div>
+
+
+                    <div class="single">
+                        <span class="label">研发类型：</span>
+                        <span class="content">{{detailData.devType?(detailData.devType=='COURSE'?'课件':'多媒体'):'无'}}</span>
+                    </div>
+
+                    <div class="single">
+                        <span class="label">研发天数：</span>
+                        <span class="content">{{detailData.trainingDays ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label"> 费用预算： </span>
+                        <span class="content">{{detailData.trainingBudget ||'无'}}</span>
+                    </div>
+
+                    <div class="single">
+                        <span class="label">人天标准：</span>
+                        <span class="content">{{detailData.standardCost ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">研发费：</span>
+                        <span class="content">{{detailData.researchCost ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">会议费：</span>
+                        <span class="content">{{detailData.meetingCosts ||'无'}}</span>
+                    </div>
+
+
+                    <div class="single">
+                        <span class="label">开始时间：</span>
+                        <span class="content">{{detailData.startDate ||''}}</span>
+                    </div>
+
+                </div>
+                <div class="right">
+                    <div class="single">
+                        <span class="label">项目名称：</span>
+                        <span class="content">{{detailData.name||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">研发地点：</span>
+                        <span class="content">{{detailData.trainingPlace ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">会议费：</span>
+                        <span class="content">{{detailData.meetingCosts ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">计划编号：</span>
+                        <span class="content">{{detailData.researchPlan?.projectNumber||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">用户类型：</span>
+                        <span class="content">{{detailData.userType?(detailData.userType=='COMMON'?'公共':(detailData.userType=='SALE'?'销售':(detailData.userType=='STAFF'?'员工':(detailData.userType=='TEACHER'?'讲师':'其他')))):'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">项目人数：</span>
+                        <span class="content">{{detailData.trainingNumber ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">交通费：</span>
+                        <span class="content">{{detailData.transportCosts ||'无'}}</span>
+                    </div>
+                    <div class="single">
+                        <span class="label">结束时间：</span>
+                        <span class="content">{{detailData.endDate ||''}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="step-detail">
+                <div class="step-title">研发阶段</div>
+                <div class="list-content">
+                    <div class="no-data" *ngIf="!(researchDetailData&&researchDetailData.length)">
+                        <i class="anticon anticon-frown-o"></i>
+                        <span>暂无研发阶段数据！</span>
+                    </div>
+                    <div *ngIf="researchDetailData&&researchDetailData.length" class="cost-table-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>阶段数</td>
+                                    <td>阶段名称</td>
+                                    <td>工作目标</td>
+                                    <td>里程进度</td>
+                                    <td>研发预算</td>
+                                    <td>研发费</td>
+                                    <td>交通费</td>
+                                    <td>会议费</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of researchDetailData;let i = index">
+                                    <td>{{item.phaseNo}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.target||'无'}}</td>
+                                    <td>
+                                        <nz-progress [ngModel]="item.mileageProgress" [nzStrokeWidth]="5" [nzStatus]="'active'"></nz-progress>
+                                    </td>
+                                    <td>{{item.trainingBudget}}</td>
+                                    <td>{{item.researchCost}}</td>
+                                    <td>{{item.transportCosts}}</td>
+                                    <td>{{item.meetingCosts}}</td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

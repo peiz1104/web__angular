@@ -1,0 +1,65 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">
+            <small>管理分类</small>
+        </h5>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="[category.id ? '../../list' : '../list',{ activeCategoryId: parentId }]">返回分类列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="page-body">
+        <div class="container">
+            <div class="card-body">
+                <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+                    <h5 class="my-3">基本信息</h5>
+                    <div class="row">
+                        <div class="col-7 pull-5 order-1">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="name" nz-form-item-required>名称</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="getFormControl('name')" nz-col [nzSpan]="18">
+                                    <nz-input formControlName="name" [nzPlaceHolder]="''"></nz-input>
+                                    <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">节点名称不能为空</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-7 pull-5 order-1">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="description" >简介</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="getFormControl('description')" nz-col [nzSpan]="18">
+                                    <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'5'"></nz-input>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-7">
+                            <div nz-form-item nz-row>
+                                <div nz-col [nzOffset]="6" [nzSpan]="12" nz-form-control>
+                                    <button nz-button [nzType]="'primary'" [nzLoading]="loading" (click)="onSubmit()">保存</button>
+                                    <!-- <button nz-button (click)="resetForm($event)">Reset</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

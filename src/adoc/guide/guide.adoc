@@ -1,0 +1,9 @@
+[[guide]]
+= 开发指南
+
+[partintro]
+--
+开发指南帮助你快速上手项目，了解项目结构。
+--
+
+include::quickstart.adoc[leveloffset=+1]

@@ -1,0 +1,86 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">任聘公文列表
+            <small>管理任聘公文</small>
+        </h3>
+        <div class="actions pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" (click)="adddocument()">
+                    <i class="fa fa-plus"></i> 任聘公文</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table #documentTable [columns]="columns" [data]="documents?.content" [pagination]="documents" [loading]="loading"
+            selectType="checkbox" [(selection)]="checkDocuments">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group row" style="margin-left: 3px;">
+                        <input type="text" class="form-control" name="docName" [(ngModel)]="document.docName" placeholder="请输入公文名称">
+                    </div>
+                    <div class="form-group row" style="margin-left: 110px;">
+                        <!-- <label class="col-form-label col-5">转码状态</label> -->
+                        <!-- <div class="col-7"> -->
+                        <select name="transcodeStatus" class="form-control" [(ngModel)]="documentInfo.transcodeStatus">
+                            <option [value]="null">全部</option>
+                            <option value="NEEDLESS">无须转码</option>
+                            <option value="NOT_START">未开始</option>
+                            <option value="WAITING">等待转码</option>
+                            <option value="TRANSCODING">转码中</option>
+                            <option value="COMPLETE">转码完成</option>
+                            <option value="FAILED">转码失败</option>
+                        </select>
+                        <!-- </div> -->
+                    </div>
+                    <div style="position:relative;left:16px" class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="searchDocument()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+
+
+            <ng-template cuiColTpl="nameCol" let-row="row">
+                <i *ngIf="row.format=='doc' || row.format=='docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='ppt' || row.format=='pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='xls' || row.format=='xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                <span>{{row.docName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="convertStatusCol" let-row="row">
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NEEDLESS'">无须转码</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NOT_START'">未开始</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'WAITING'">等待转码</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'TRANSCODING'">转码中</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'COMPLETE'">转码完成</span>
+                <span class="text-danger" *ngIf="row.documentInfo.transcodeStatus == 'FAILED'">转码失败</span>
+            </ng-template>
+
+            <ng-template cuiColTpl="look" let-row="row">
+                <i style="cursor:pointer;" class="iconfont icon-chaxun text-primary" (click)="lookTeacher(row)"></i>
+            </ng-template>
+
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <a *ngIf="row.documentInfo.isPreview && row.documentInfo.transcodeStatus == 'COMPLETE'" class="text-info" [routerLink]="['./preview', row.documentInfo.id]">预览</a>
+                <span *ngIf="row.documentInfo.isPreview && row.documentInfo.transcodeStatus == 'COMPLETE'">|</span>
+                <a href="/api/employment/documents/download/{{row.id}}" class="text-info" target="_blank">下载</a>
+                <span>|</span>
+                <a href="javascript:;" (click)="edit(row.id)">编辑</a>
+                <span>|</span>
+                <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a>
+            </ng-template>
+
+            <ng-template #actionGroup>
+                <button class="btn btn-danger" (click)="delete()">批量删除</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+
+
+<nz-modal [nzVisible]="isLook" [nzWidth]='980' [nzFooter]="false" [nzTitle]="'查看讲师'" [nzContent]="modalContent2" (nzOnCancel)="cancelTeacher($event)">
+    <ng-template #modalContent2>
+        <spk-documents-teacher-look *ngIf="isLook" (lookOk)="cancelTeacher($event)" [lookTeacherIds]="lookTeacherIds"></spk-documents-teacher-look>
+    </ng-template>
+</nz-modal>

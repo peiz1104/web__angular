@@ -1,0 +1,20 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">讨论管理
+      <small>管理该站点可用的论坛。您可创建一个新论坛以供讨论该站点。</small>
+    </h3>
+
+    <div class="actions pull-right">
+    </div>
+  </div>
+  <div class="page-body">
+    <ng-container *ngIf="!forum">
+      <p class="text-secondary mb-3">
+        <i class="fa fa-info-circle fa-lg text-info"></i> 该站点还没有初始化论坛功能，请点击下面的按钮初始化论坛</p>
+      <button type="button" class="btn btn-secondary" (click)="initCondition('required')">初始化论坛</button>
+    </ng-container>
+    <ng-container *ngIf="forum">
+      <router-outlet></router-outlet>
+    </ng-container>
+  </div>
+</div>

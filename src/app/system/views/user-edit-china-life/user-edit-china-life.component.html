@@ -1,0 +1,21 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">添加用户</h3>
+
+        <div class="actions pull-right">
+            <button class="btn btn-secondary" [routerLink]="['../../', 'list']">返回用户列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="page-body">
+        <nz-spin class="spinning-container" [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <div class="container">
+                <spk-user-form-new [loading]="loading" *ngIf="user" [user]="user" (save)="onSave($event)"></spk-user-form-new>
+            </div>
+        </nz-spin>
+    </div>
+</div>

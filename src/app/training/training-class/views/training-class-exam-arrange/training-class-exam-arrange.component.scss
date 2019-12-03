@@ -1,0 +1,20 @@
+:host::ng-deep {
+    .training-exam-box {
+        .select-body {
+            margin: 5px 15px;
+        }
+        .ant-modal {
+            width: 70%!important;
+        }
+    }
+    .closeBtn {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: 60px;
+        cursor: pointer;
+    }
+    button {
+        outline: none;
+    }
+}

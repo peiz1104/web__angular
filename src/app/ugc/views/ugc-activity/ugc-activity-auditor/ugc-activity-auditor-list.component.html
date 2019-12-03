@@ -1,0 +1,110 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">审核人员列表</h5>
+    </div>
+
+    <div class="page-body">
+
+        <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+            [(selection)]="selection"  (reload)="loadData()">
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+
+            <ng-template cuiColTpl="usename" let-row="row">
+
+                {{row.user.username || '-' }}
+            </ng-template>
+            <ng-template cuiColTpl="dispaleName" let-row="row">
+
+                {{row.user.displayName || '-'}}
+            </ng-template>
+            <ng-template cuiColTpl="phoneNumber" let-row="row">
+
+                {{row.user.phoneNumber || '-'}}
+            </ng-template>
+            <ng-template cuiColTpl="email" let-row="row">
+
+                {{row.user.email || '-'}}
+            </ng-template>
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <spk-user-group-popover [userGroup]="row.user.userGroup"></spk-user-group-popover>
+            </ng-template>
+             
+            <ng-template cuiColTpl="scopes" let-row="row">
+                <span *ngFor="let one of row.scopes; let i = index">
+                    {{one.name}}
+                    <ng-container *ngIf="i < row.scopes.length-1">
+                        ,</ng-container>
+                </span>
+            </ng-template>
+
+             
+
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <!-- <a class="text-danger" (click)=" addScope(row.id)" >设置范围</a> -->
+            <spk-user-group-select #ugLookup mode="multiple" style="display: inline-block;" [autoClear]="true" (selectOk)="userGroupLookupOk($event,row.id)">
+                <ng-template #echoTpl>
+                    <a class="text-primary" (click)="ugLookup.openLookup()">选择审核范围</a>
+                    <!-- <button type="button" class="btn btn-outline-primary" (click)="ugLookup.openLookup()">添加组织</button> -->
+                </ng-template>
+            </spk-user-group-select>
+                <!-- <a href="javascript:;" class="text-success" [routerLink]="[row.id, 'edit']">修改</a> -->
+                <span nz-table-divider></span>
+                <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete([row],true)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+                <!-- <a class="text-danger" (click)="delete([row])">删除</a> -->
+            </ng-template>
+            <ng-template #actionGroup let-row="row">
+                    <button class="btn btn-outline-danger" (click)="delete(null,false)">批量删除</button>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</div>
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-item>
+                <div nz-form-control>
+                    <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入用户名或姓名'"> </nz-input>
+                </div>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #theListTools>
+
+    <spk-user-lookup #userLookup (ok)="userLookupOk($event)">
+        <ng-template #echoTpl>
+            <button type="button" class="btn btn-outline-primary" (click)="userLookup.openLookup()">添加用户</button>
+        </ng-template>
+    </spk-user-lookup>
+
+
+    <button type="button" class="btn btn-danger" (click)="delete(null, false)">
+        批量删除</button>
+</ng-template>
+
+
+
+
+
+
+<!-- <nz-modal [nzWidth]="800" [nzVisible]="showStatus" [nzFooter]="false" [nzTitle]="'组织列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        //查找组织
+    </ng-template>
+</nz-modal> -->

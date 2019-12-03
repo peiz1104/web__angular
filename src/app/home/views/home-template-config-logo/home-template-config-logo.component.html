@@ -1,0 +1,31 @@
+<h6 class="config-title">
+    站点设置
+    <div class="item" (click)="onBack()">
+        <i class="iconfont icon-fanhui1"></i>返回
+    </div>
+    <div class="item" (click)="save()" *ngIf="!saveLoading">保存</div>
+    <div class="item" *ngIf="saveLoading">正在保存</div>
+</h6>
+<div class="site" *ngIf="moduleInfo&&logoInfo">
+    <div>
+        <div class="title">上传logo</div>
+        <cui-fileupload [imageHolder]="logoInfo?.imgUrl" name="files" mode="image" url="/api/upload/files" [auto]="true" (uploadComplete)="onUploadComplete($event)" accept=".jpg,.png,.bmp"></cui-fileupload>
+        <br>
+        <span class="text-muted">
+            <i class="fa fa-info-circle text-info"></i> 可以在此处上传logo。 格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。 图片尺寸建议最小200*50，比例4:1
+        </span>
+    </div>
+    <div>
+        <div class="title">导航信息</div>
+        <div class="nav" *ngFor="let one of navigation; let i=index">
+            <div class="nav-icon">
+                <i class="anticon anticon-arrow-up" *ngIf="i>0" (click)="up(one)"></i>
+                <i class="iconfont icon-xia" *ngIf="i<(navigation.length-1)" (click)="down(one)"></i>
+            </div>
+            <div class="nav-mid">
+                <nz-input [(ngModel)]="one.name" [nzPlaceHolder]="'请输入内容'"></nz-input>
+            </div>
+            <div class="nav-ri" (click)="onShow(one)">{{showName(one)}}</div>
+        </div>
+    </div>
+</div>

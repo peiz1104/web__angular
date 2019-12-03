@@ -1,0 +1,24 @@
+:host ::ng-deep .card-body {
+    .list-search-bar {
+        .simple-search-bar {
+            width: 100%;
+        }
+    }
+    .cui-data-table-wrap {
+        .table {
+            >tbody {
+                >tr {
+                    line-height: 28px;
+                }
+            }
+        }
+    }
+    .cui-data-table-wrap{
+        th,td{
+            word-break: break-all;
+        }
+    }
+    .complex-search-bar-search-box{
+        left:20px;
+    }
+}

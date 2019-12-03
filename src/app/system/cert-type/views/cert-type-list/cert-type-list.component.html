@@ -1,0 +1,71 @@
+<div class="top-bread">
+  <nz-breadcrumb class="bread">
+    <nz-breadcrumb-item>
+      您所在位置：
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      站点配置
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      证书分类
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+  <div class="page-header">
+    <h5 class="page-title"><small>证书类型列表</small></h5>
+    <div class="actions pull-right">
+    </div>
+  </div>
+</div>
+<div class="px-4">
+  <div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" (reload)="loadData($event)" selectType="checkbox"
+      [(selection)]="selection">
+      <ng-template #simpleSearch>
+        <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+      </ng-template>
+      <ng-template cuiColTpl="name" let-row="row">
+        <a class="text-primary">{{row.name}}</a>
+      </ng-template>
+      <ng-template cuiColTpl="lastModifiedDate" let-row="row">
+        {{row.lastModifiedDate | date: 'yyyy-MM-dd'}}
+      </ng-template>
+      <ng-template cuiColTpl="Identify" let-row="row">
+        <span *ngIf="row.identify=='TRAININGCLASS'">培训班</span>
+        <span *ngIf="row.identify=='EXAM'">考试</span>
+        <span *ngIf="row.identify=='CAREER'">职鉴</span>
+      </ng-template>
+      <ng-template cuiColTpl="actions" let-row="row">
+        <div class="text-right">
+          <a  class="text-info" [routerLink]="['../', row.id,'edit']">编辑</a>
+          <span>|</span>
+          <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row,true)">
+              <a nz-popconfirm class="text-danger">删除</a>
+          </nz-popconfirm>
+          <!-- <a href="javascript:;" class="text-danger" (click)="delete(row)">删除</a> -->
+        </div>
+      </ng-template>
+      <ng-template #listTools>
+          <div class="actions pull-right">
+              <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']"><i class="fa fa-plus"></i> 创建证书类型</button>
+                <button class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+          </div>
+      </ng-template>
+      <ng-template #actionGroup let-row="row">
+          <button class="btn btn-outline-danger" (click)="delete(null,false)">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</div>
+
+
+<ng-template #simpleSearchBox>
+  <form class="form-inline">
+    <div class="form-group">
+      <input type="text" class="form-control input-lg" name="searchBy.name" [(ngModel)]="searchBy.name" placeholder="请输入证书类型">
+    </div>
+    <div class="form-group ml-2">
+      <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+    </div>
+  </form>  
+</ng-template>
+

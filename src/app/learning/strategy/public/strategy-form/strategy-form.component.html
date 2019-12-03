@@ -1,0 +1,132 @@
+<form #strategyForm="ngForm" class="form-horizontal">
+    <div class="row">
+        <div class="col-6 pull-5 order-1">
+            <div class="form-group row" *ngIf="isCreate">
+                <label for="type" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>策略类型</label>
+                <div class="col-9">
+                    <select [disabled]="used == formType.default" #strategyType="ngModel" name="type" class="form-control" [(ngModel)]="strategy.type"
+                        (change)="showConditions()" required>
+                        <option *ngFor="let type of types" [value]="type.name">{{type.label}}</option>
+                    </select>
+                    <span class="pull-left text-danger" *ngIf="(strategyType.dirty || strategyType.touched) && strategyType.errors?.required">策略类型必填</span>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="false">
+                <label for="type" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>策略类型</label>
+                <div class="col-9">
+                    <input [disabled]="used == formType.default" type="text" name="type" class="form-control" [value]="showTypeName(strategy.type)"
+                        disabled>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="false">
+                <label for="name" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>合格分数线</label>
+                <div class="col-9">
+                    <input [disabled]="used == formType.default" #passScore="ngModel" type="number" max="100" min="1" name="passScore" class="form-control"
+                        [(ngModel)]="strategy.passScore" required>
+                    <span class="pull-left text-danger" *ngIf="(passScore.dirty || passScore.touched) && passScore.errors?.required">合格分数线必填</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>策略名称</label>
+                <div class="col-9">
+                    <input [disabled]="used == formType.default" #name="ngModel" type="text" name="name" class="form-control" [(ngModel)]="strategy.name"
+                        required>
+                    <span class="pull-left text-danger" *ngIf="(name.dirty || name.touched) && name.errors?.required">策略名称必填</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6 pull-5 order-2">
+
+            <div class="form-group row" *ngIf="false">
+                <label for="name" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>总分</label>
+                <div class="col-9">
+                    <input [disabled]="used == formType.default" #number="ngModel" type="number" max="100" min="1" name="totalScore" class="form-control"
+                        [(ngModel)]="strategy.totalScore" required>
+                    <span class="pull-left text-danger" *ngIf="(number.dirty || number.touched) && number.errors?.required">总分必填</span>
+                </div>
+            </div>
+            <!-- <div class="form-group row" *ngIf="isCreate">
+                <label for="" class="col-form-label col-3">所属组织</label>
+                <div class="col-9">
+                    <spk-user-group-select name="userGroup" [(ngModel)]="strategy.userGroup" [disabled]="used == formType.site"></spk-user-group-select>
+                    <span class="pull-left">如果不选,默认为当前用户管理的站点添加策略。</span>
+                </div>
+            </div> -->
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">内容描述</label>
+                <div class="col-9">
+                    <nz-input [disabled]="used == formType.default" name="description" [(ngModel)]="strategy.description" [nzType]="'textarea'"
+                        [nzRows]="'3'" [nzPlaceHolder]="''"></nz-input>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="form-group row" *ngIf="strategy.type!='course'">
+            <label for="name" class="col-form-label col-3">
+                <i class="fa fa-field-required"></i>合格分数线</label>
+            <div class="col-9">
+                <input [disabled]="used == formType.default" #passScore="ngModel" type="number" max="100" min="1" name="passScore" class="form-control"
+                    [(ngModel)]="strategy.passScore" required>
+                <span class="pull-left text-danger" *ngIf="(passScore.dirty || passScore.touched) && passScore.errors?.required">合格分数线必填</span>
+            </div>
+        </div> -->
+
+    </div>
+    <div class="row left adject-left">
+        <cui-data-table style="width:100%" *ngIf="strategy.type=='course'" [columns]="courseColumns" [data]="strategy?.conditions"
+            [loading]='loading' [(selection)]="selection" selectType="checkbox">
+            <ng-template cuiColTpl="colValueOne" let-row="row">
+                <ng-container *ngIf="row.code!='CE'&&row.code!='ST' &&row.code!='CA'">
+                    <input [disabled]="used == formType.default" type="number" max="100" min="1" class="form-control" [(ngModel)]="row.valueOne"
+                        [ngModelOptions]="{standalone: true}">
+                    <span>{{row.unitOne}}</span>
+                </ng-container>
+            </ng-template>
+        </cui-data-table>
+
+        <cui-data-table style="width:100%" *ngIf="strategy.type=='training'" [columns]="offeringColumns" [data]="strategy?.conditions"
+            [loading]='loading' [(selection)]="selection" selectType="checkbox">
+            <ng-template cuiColTpl="colValueOne" let-row="row">
+                <ng-container *ngIf="row.code!='OE'&&row.code!='OC'">
+                    <input [disabled]="used == formType.default" type="number" max="100" min="1" class="form-control" [(ngModel)]="row.valueOne"
+                        [ngModelOptions]="{standalone: true}">
+                    <span>{{row.unitOne}}</span>
+                </ng-container>
+            </ng-template>
+            <!-- <ng-template cuiColTpl="colValueOne" let-row="row">
+                <input [disabled]="used == formType.default" type="number" max="100" min="1" class="form-control" [(ngModel)]="row.valueOne"
+                    [ngModelOptions]="{standalone: true}">
+                <span>{{row.unitOne}}</span>
+            </ng-template> -->
+            <!-- 
+
+            <ng-template cuiColTpl="colValueTwo" let-row="row">
+                <input [disabled]="used == formType.default" type="number" max="100" min="1" class="form-control" [(ngModel)]="row.valueTwo"
+                    [ngModelOptions]="{standalone: true}">
+                <span>{{row.unitTwo}}</span>
+            </ng-template> -->
+        </cui-data-table>
+    </div>
+    <div class="row my-3">
+        <div class="col-7">
+            <div class="form-group row">
+                <div class="col-9 offset-3">
+                    <!-- *ngIf="used != formType.default" [disabled]="!strategyForm.valid" -->
+                    <button nz-button [nzType]="'primary'" (click)="saveStrategy()" [nzLoading]="saveLoading">保存</button>
+                    <button nz-button [nzType]="'primary'" [disabled]="!strategyForm.valid" *ngIf="isCreate && (used == formType.site || used ==formType.userGroup)"
+                        (click)="saveStrategy('next')" [nzLoading]="nextLoading">保存并继续</button>
+                    <button nz-button [nzType]="'primary'" (click)="choose()" *ngIf="used == formType.default || used==formType.offering">选择默认策略</button>
+                    <button nz-button [nzType]="'primary'" (click)="use()" *ngIf="used == formType.default || used==formType.offering">使用默认策略</button>
+                    <button nz-button [nzType]="'default'" *ngIf="used == formType.site || used ==formType.userGroup" (click)="list()">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

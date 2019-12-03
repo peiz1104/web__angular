@@ -1,0 +1,56 @@
+<div class="card-body mb-1" *ngIf="question.isShow">
+    <h4 class="card-title">{{idx+1}}、{{question.name}}
+        <span class="text-danger" *ngIf="question.required">*</span>
+    </h4>
+    <div class="my-row my-2 clearfix" *ngFor="let options of question.qList">
+        <div class="col-one" *ngFor="let option of options;" [ngStyle]="{'width':rowWidth}">
+            <label class="form-check-label" style="margin-left:18px;">
+        <input *ngIf="!question.isView" [name]="question.id" [checked]="option.defaultOpt" [type]="question.type == 'SINGLE' ? 'radio' : 'checkbox'"
+          class="form-check-input" disabled>
+        <input *ngIf="question.isView" [name]="question.id" [checked]="option.defaultOpt" [type]="question.type == 'SINGLE' ? 'radio' : 'checkbox'"
+          class="form-check-input" #foo>{{option.name}}
+        <span *ngIf="option.score">({{option.score}}分)</span>
+      </label>
+            <img *ngIf="option.imgPath" src="{{option.imgPath}}" style="width:120px;height:120px;cursor:pointer;" (click)="showImageModalMiddle(option)" />
+            <br/>
+            <div [innerHtml]="option.innerDescription"></div>
+        </div>
+    </div>
+    <div *ngIf="question.hasDesc" class="py-2 row ml-1">
+        <span class="text-danger">提示：</span>
+        <span *ngIf="question.hasDesc && !question.hasHighEdit">{{question.description}}</span>
+        <div *ngIf="question.hasHighEdit" [innerHtml]="question.innerDescription"></div>
+    </div>
+    <div class="card-action" [ngClass]="{'visible': question.isEdit}">
+
+        <spk-assess-question-action [question]="question" [idx]="idx"></spk-assess-question-action>
+
+        <div class="edit-question" *ngIf="question.isEdit">
+            <spk-assess-question-edit [question]="question" [idx]="idx"></spk-assess-question-edit>
+            <spk-assess-choice-option [question]="question" [idx]="idx"></spk-assess-choice-option>
+
+            <div class="d-flex justify-content-end">
+                <div class="mr-auto p-2">
+                    <a (click)="onAddOption();" class="btn btn-outline-success">添加选项</a>
+                </div>
+                <div class="p-2">
+                    <select [(ngModel)]="question.displayOptionNum" class="form-control" (change)="showOptions()">
+            <option value="1">竖向排序</option>
+            <option value="2">每行2列</option>
+            <option value="3">每行3列</option>
+            <option value="4">每行4列</option>
+            <option value="5">每行5列</option>
+            <option value="6">每行6列</option>
+          </select>
+                </div>
+            </div>
+            <a class="btn btn-warning btn-block" (click)="onSave();">完成编辑</a>
+        </div>
+    </div>
+
+    <nz-modal [nzFooter]="false" [nzWrapClassName]="'vertical-center-modal'" [nzWidth]="'1000'" [nzContent]="showImgDetail" [nzVisible]="isVisibleImgMiddle" (nzOnCancel)="cancelImg($event)">
+        <ng-template #showImgDetail>
+            <img *ngIf="currentOpt?.imgPath" src="{{currentOpt?.imgPath}}" style="max-width:900px;max-height:700px;" />
+        </ng-template>
+    </nz-modal>
+</div>

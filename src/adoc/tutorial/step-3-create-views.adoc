@@ -1,0 +1,17 @@
+[[create-views]]
+= 视图
+
+== 课程列表
+
+=== 创建列表组件
+
+[source,bash]
+----
+ng g c learning/course/views/course-list
+----
+
+== 添加课程
+
+== 编辑课程
+
+== 抽取表单

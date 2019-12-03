@@ -1,0 +1,302 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">课程列表</h5>
+    </div>
+    <div class="page-box-show-list">
+        <div style="height:45px;" class="search-table">
+            <div style="float:left" class="search">
+                <form nz-form [nzLayout]="'inline'">
+                    <div nz-form-item>
+                        <div nz-form-control>
+                            <input nz-input type="text" name="serchCourse" [(ngModel)]="serchCourse" placeholder="请输入课程名称">
+                        </div>
+
+                    </div>
+                    <button type="button" class="btn btn-primary" (click)="searchList()"> 搜 索 </button>
+                </form>
+
+            </div>
+        </div>
+        <div class="opear-list">
+            <button [disabled]="isArchived" nz-button [nzType]="'primary'" [routerLink]="['add']" routerLinkActive="router-link-active">
+                创建</button>
+            <spk-copy-training-course [trainingType]="trainingType" [trainId]="trainingClass.id" [groupName]="trainingClass?.userGroupName"
+                #copyCourse [multiple]="true" [echoTplCopy]="echoTplCopy" (afterSelected)="refreshTrainCourse($event)">
+                <ng-template #echoTplCopy>
+                    <button [disabled]="isArchived" nz-button [nzType]="'primary'" (click)="copyCourse.openLookup()">
+                        <span>从培训班复制</span>
+                    </button>
+                </ng-template>
+            </spk-copy-training-course>
+
+            <spk-offering-course-lookup [multiple]="true" [trainingType]="trainingType" [showSourceType]="true" [offeringId]="offeringId"
+                #courseLookup [echoTpl]="echoTpl" (afterSelected)="refreshCourse($event)">
+                <ng-template #echoTpl>
+                    <button [disabled]="isArchived" nz-button [nzType]="'primary'" (click)="courseLookup.openLookup()">
+                        <span>从课程体系复制</span>
+                    </button>
+                </ng-template>
+            </spk-offering-course-lookup>
+
+            <!-- <spk-course-system-lookup #courseLookup [multiple]="true" [echoTpl]="echoTpl" (afterSelected)="refreshCourse($event)">
+                <ng-template #echoTpl>
+                    <button nz-button [nzType]="'primary'" (click)="courseLookup.openLookup()">
+                        <span>从课程体系复制</span>
+                    </button>
+                </ng-template>
+            </spk-course-system-lookup> -->
+            <button [disabled]="isArchived" (click)="delete()" nz-button [nzType]="'primary'">
+                <span>删除</span>
+            </button>
+            <!-- <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> 选择课程成绩策略</button> -->
+            <!-- <div style="display: inline-block;position: relative;top: 12px;">
+                <nz-dropdown>
+                    <button nz-button nz-dropdown [nzType]="'primary'">
+                        <span>模板下载</span>
+                        <i class="anticon anticon-down"></i>
+                    </button>
+                    <ul nz-menu>
+                        <li nz-menu-item>
+                            <a rel="noopener noreferrer" (click)="handelClickExport('T')">课程讲师</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a rel="noopener noreferrer" (click)="handelClickExport('U')">课程学员</a>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+            </div> -->
+            <button [disabled]="isArchived" *ngIf="siteStatus" nz-button [nzType]="'primary'" (click)="handelClickImport()">
+                <span>导入</span>
+            </button>
+            <button *ngIf="siteStatus" nz-button [nzType]="'primary'" (click)="handelClickExhibition()">
+                <span>学员分组信息</span>
+            </button>
+            <span style="cursor:pointer;display:inline-block" (click)="toggleList()">
+                <img [src]="showlist?'assets/images/show_list_has.png':'assets/images/show_list_no.png'" alt="">
+            </span>
+            <span style="margin-left:-5px;cursor:pointer;display:inline-block" (click)="toggleShowList()">
+                <img [src]="listState?'assets/images/list_has.png':'assets/images/list_no.png'" alt="">
+            </span>
+        </div>
+        <nz-spin *ngIf="listState" [nzTip]="'正在读取数据...'" [nzSpinning]="loading">
+            <div class="show-list">
+                <div class="checked-all" style="padding-left:10px">
+                    <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+                    </label>
+                    <span style="margin-left:-2px;cursor:pointer" (click)="_checkAll(!_allChecked)">全选</span>
+                </div>
+                <div *ngIf="!showlist" style="height:1px;background-color:#e5e5e5;margin-bottom:6px"></div>
+                <div *ngIf="data?.content.length" class="data-content">
+                    <div class="single-box" *ngFor="let item of data.content">
+                        <span class="single-check-box">
+                            <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="singlechecked($event,item)"></label>
+                        </span>
+                        <div class="img-box">
+                            <img class="img-pic" onerror="this.src='assets/images/course.png'" [src]="item.imageUrl" alt="">
+                        </div>
+                        <div class="right-content-box">
+                            <div class="item-box">
+                                <span class="name">{{item.name}}</span>
+                            </div>
+                            <div class="item-box-children">
+                                <div class="single-children">编码：{{item.code}}</div>
+                                <div class="single-children">类型：{{getCourseTypeText(item.courseType)}}</div>
+                                <div class="single-children-small">学时：{{item.period}}</div>
+                                <div class="single-children">所属分类：{{item.category?.name}}</div>
+                            </div>
+                            <div class="item-box-children">
+                                <div class="single-children">
+                                    <a [routerLink]="[item.id, 'exam']">课程考试</a>
+                                </div>
+                                <div class="single-children-big">
+                                    <span>讲师：{{item.teacherNames}}</span>
+                                    <spk-course-teacher-system-lookup [needCourseId]="true" [courseId]="item.id" #teacherLookup (ok)="refreshteacher($event)">
+                                        <ng-template #echoTpl>
+                                            <i *ngIf="!isArchived" style="cursor:pointer;color:#0062cc;" class="fa fa-plus ml-1" (click)="teacherLookup.openLookup()"></i>
+                                            <i *ngIf="isArchived" style="cursor:pointer;color:#888" class="fa fa-plus ml-1" title="已结班不可添加讲师"></i>
+                                        </ng-template>
+                                    </spk-course-teacher-system-lookup>
+                                    <!-- <i style="cursor:pointer;color:#0062cc;" class="fa fa-plus ml-1" (click)="showTeacher(item)"></i> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-actions-box">
+                            <button [nzSize]="'small'" [disabled]="isArchived" [title]="isArchived?'已结班不可删除':''" (click)="delete(item.id)" nz-button
+                                [nzType]="'danger'">
+                                <span>删除</span>
+                            </button>
+                            <button [nzSize]="'small'" [routerLink]="[item.id]" nz-button [nzType]="'primary'">
+                                <span>管理</span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="data?.content.length==0" class="no-data">
+                    <div class="data-table-no-data py-4 my-4 text-center">
+                        <span class="fa fa-lg fa-info-circle text-success"></span>
+                        <span>没有查询到符合条件的记录</span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="data?.content.length&&listState" class="page-change-box">
+                <div style="margin-top: 14px;text-align: right;" class="page-nation">
+                    <nz-pagination nzShowTotal [(nzPageIndex)]="pageIndexCourse" [nzTotal]="data.totalElements" (nzPageIndexChange)="changePages($event)"
+                        [nzPageSize]="listPageSize"></nz-pagination>
+                </div>
+            </div>
+        </nz-spin>
+        <div *ngIf="showlist" class="page-body list">
+            <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadData($event)">
+                <ng-template #simpleSearch>
+                    <!-- <ng-container [ngTemplateOutlet]="simpleSearchForm"></ng-container> -->
+                </ng-template>
+                <ng-template cuiColTpl="thumbnail" let-row="row">
+                    <!-- <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+                     -->
+                    <h5>{{row.name}}</h5>
+                </ng-template>
+                <ng-template cuiColTpl="name" let-row="row">
+                    <span>{{row.code}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="type" let-row="row">
+                    <div>{{getCourseTypeText(row.courseType)}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="period" let-row="row">
+                    <div>{{row.period}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="cate" let-row="row">
+                    <div>{{row.category?.name}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="teacher" let-row="row">
+                    <div>
+                        <span>{{row.teacherNames}}</span>
+                        <spk-course-teacher-system-lookup [needCourseId]="true" [courseId]="row.id" #teacherLookup (ok)="refreshteacher($event)">
+                            <ng-template #echoTpl>
+                                <i *ngIf="!isArchived" style="cursor:pointer;color:#0062cc;" class="fa fa-plus ml-1" (click)="teacherLookup.openLookup()"></i>
+                                <i *ngIf="isArchived" style="cursor:pointer;color:#888" class="fa fa-plus ml-1" title="已结班不可添加讲师"></i>
+                            </ng-template>
+                        </spk-course-teacher-system-lookup>
+                        <!-- <i style="cursor:pointer;color:#0062cc;" class="fa fa-plus ml-1" (click)="showTeacher(row)"></i> -->
+                    </div>
+                </ng-template>
+                <ng-template cuiColTpl="courseExam" let-row="row">
+                    <a [routerLink]="[row.id, 'exam']">课程考试</a>
+                </ng-template>
+                <ng-template cuiColTpl="rowActions" let-row="row">
+                    <!-- <a [routerLink]="['./', 'assessment']">评估</a>
+                               <span nz-table-divider></span> -->
+                    <a [routerLink]="[row.id]">管理</a>
+                    <span nz-table-divider></span>
+                    <a class="text-danger" *ngIf="isArchived" title="已结班不可删除">删除</a>
+                    <a class="text-danger" *ngIf="!isArchived" (click)="delete(row.id)">删除</a>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </div>
+</div>
+
+<ng-template #simpleSearchForm>
+
+</ng-template>
+<nz-modal [nzVisible]="isVisibleExport" [nzTitle]="'导出模板'" [nzContent]="modalExport" (nzOnCancel)="handleCancelExport($event)"
+    (nzOnOk)="handleOkExport($event)">
+    <ng-template #modalExport>
+        <p>确定导出{{exportContent}}课程？</p>
+    </ng-template>
+</nz-modal>
+<!-- 展示列表 -->
+<nz-modal [nzVisible]="isExhibition" [nzTitle]="'课程学员分组信息'" [nzContent]="modalContentExhibition" (nzOnOk)="handleOkExhibition($event)"
+    [nzWrapClassName]="'exhibition'" [nzClosable]="false">
+    <ng-template #modalContentExhibition>
+        <div class="main">
+            <div class="title">
+                <span>缩略图</span>
+                <span>名称/编码</span>
+                <span>类型/学时</span>
+                <span>所属分类</span>
+                <span>学员</span>
+            </div>
+            <nz-spin [nzSpinning]="exhibition">
+                <div class="content" *ngFor="let item of exhibitionDatas">
+                    <span class="img">
+                        <img cui-lazy-load [src]="item.imageUrl" [alt]="item.name" width="72px" height="42px">
+                    </span>
+                    <span>{{item.name}}</span>
+                    <span>{{getCourseTypeText(item.courseType)}} 课时: {{item.period}}
+                    </span>
+                    <span>{{item.category.name}}</span>
+                    <span>{{item.regUsers}}</span>
+                </div>
+            </nz-spin>
+            <div style="text-align:right">
+                <nz-pagination [nzPageSize]="nzPageSize" [nzPageIndex]="pageIndex" [nzTotal]="total" (nzPageIndexChange)="handelChangeExhibition($event)"></nz-pagination>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+
+
+
+
+<nz-modal [nzVisible]="isVisible" [nzTitle]="'讲师列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+
+        <div class="input">
+            <div nz-form-control>
+                <nz-input [(ngModel)]="inputValue" [nzPlaceHolder]="'请输入老师姓名！'" (ngModelChange)="_console($event)"></nz-input>
+            </div>
+        </div>
+        <button type="button" (click)="handelSearch()" class="btn btn-primary"> 搜 索 </button>
+        <div>
+            <cui-data-table #tableHandle [columns]="column" [data]="dat?.content" [pagination]="dat" [loading]="loadin" selectType="checkbox"
+                [(selection)]="selectio" (reload)="loadDat($event)">
+
+                <ng-template #complexSearch>
+                    <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+                </ng-template>
+
+                <ng-template #simpleSearch>
+                    <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+                </ng-template>
+                <ng-template #listTools>
+                    <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+                </ng-template>
+
+
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+                </ng-template>
+
+                <ng-template cuiColTpl="type" let-row="row">
+                    <span>{{row.teacherType=="FULLTIME"?'专职讲师':(row.teacherType=="PARTTIME"?'兼职讲师':'外部讲师')}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="myName" let-row="row">
+                    <span>{{ row.teacherType=="EXTERNAL"?row.name :( row.user?.displayName)}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="group" let-row="row">
+                    <span>{{ row.teacherType=="EXTERNAL"?row.userGroup?.name :( row.user?.userGroup.name)}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="isPost" let-row="row">
+                    <span style="cursor:pointer;" class="text-primary" (click)="ispublish(row)">{{row.publishStatus?'已发布':'未发布'}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="sex" let-row="row">
+                    {{(row.user&&row.user.sex === 'FAMALE'?'女':'男')||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="rank" let-row="row">
+                    {{isLvs(row)}}
+                </ng-template>
+                <ng-template cuiColTpl="start" let-row="row">
+                    {{(row.startDate | date:"yyyy-MM-dd")||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="myDate" let-row="row">
+                    {{(row.birthday | date:"yyyy-MM-dd")||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="look" let-row="row">
+                    <i style="cursor:pointer;" class="anticon anticon-search text-primary" (click)="lookCourse(row)"></i>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </ng-template>
+</nz-modal>

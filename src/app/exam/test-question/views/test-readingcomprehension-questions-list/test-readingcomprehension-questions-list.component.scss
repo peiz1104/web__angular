@@ -1,0 +1,25 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-09 13:43:53
+ * @Last Modified by: mozhengqian
+ * @Last Modified time: 2017-11-09 16:53:37
+ */
+
+:host::ng-deep {
+    .select-box {
+        width: 80px;
+        .ant-select-selection--single {
+            height: 30px;
+        }
+    }
+    .cui-data-table-wrap{
+        th,td{
+            word-break: break-all;
+        }
+    }
+    .test-readingcomprehension-questions-list-body {
+        .select-body {
+            margin: 5px 15px;
+        }
+    }
+}

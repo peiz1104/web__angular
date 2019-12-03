@@ -1,0 +1,76 @@
+:host::ng-deep {
+    .paper-all-import {
+        padding: 5px 15px;
+        .error,
+        .import {
+            color: red;
+        }
+        .import {
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+        }
+        .form-box {
+            width: 1000px;
+            margin: 0 auto;
+            margin-top: 20px;
+            .ant-row {
+                margin-top: 20px;
+                .ant-col-7 {
+                    text-align: right;
+                }
+            }
+        }
+        .propess-info {
+            padding-left: 20px;
+            margin-top: 5px;
+            .proess-text {
+                text-align: center;
+            }
+            .propess-back {
+                display: inline-block;
+                height: 15px;
+                border-radius: 8px;
+                background: #eee;
+                margin-top: 1px;
+                overflow: hidden;
+                .propess-num {
+                    display: inline-block;
+                    height: 100%;
+                    background: #2bda39;
+                    border-radius: 8px;
+                    transition: width 5s linear;
+                    overflow: hidden;
+                }
+            }
+            .propess-text {
+                padding-left: 10px;
+            }
+        } //propess-info
+    }
+    .header-title {
+        height: 62px;
+        line-height: 62px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        .score {
+            color: #494949;
+        }
+    }
+    .modal-word-desc-img {
+        h5 {
+            margin: 8px 0;
+        }
+        img {
+            width: 100%;
+        }
+    }
+}

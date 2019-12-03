@@ -1,0 +1,131 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">课程体系
+            <small>管理体系课程</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <!-- <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']"><i class="fa fa-plus"></i> 创建课程</button> -->
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table [columns]="columns2" [data]="courses?.content" [pagination]="courses" [(selection)]="selection" selectType="checkbox"
+            [loading]='loading' (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div style="width:440px;" class="form-group ml-6">
+                        <label class="sr-only">分类</label>
+                        <spk-category-select name="category.id" (clickOk)="chooseCategory($event)" [(ngModel)]="searchBy.category" placeholder="按分类搜索"></spk-category-select>
+                    </div>
+                    <div class="line-other">
+                        <div style="width:160px;" class="form-group  ml-2 usergroup">
+                            <label class="sr-only">组织</label>
+                            <spk-user-group-select name="userGroupId" [(ngModel)]="searchBy.userGroupId"></spk-user-group-select>
+                            <!-- <nz-input name="userGroupId" [nzPlaceHolder]="'请输入课程名称'" [(ngModel)]="searchBy.userGroupId"></nz-input> -->
+                        </div>
+                        <div class="form-group  ml-2">
+                            <label class="sr-only">搜索关键词</label>
+                            <nz-input name="word" [nzPlaceHolder]="'请输入课程名称'" [(ngModel)]="searchBy.name"></nz-input>
+                        </div>
+                        <div class="form-group ml-2">
+                            <label class="sr-only">发布状态</label>
+                            <nz-select style="width: 100px;" name="status" [(ngModel)]="searchBy.status" [nzPlaceHolder]="'全部'">
+                                <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                </nz-option>
+                                <nz-option *ngFor="let ls of _status" [nzLabel]="ls.label" [nzValue]="ls.value">
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                        <div class="form-group  ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template #listTools>
+                <button nz-button [nzType]="'primary'" [routerLink]="['../', 'add']">
+                    <i class="fa fa-plus"></i> 创建课程</button>
+                <button nz-button [nzType]="'primary'" (click)="publish()">
+                    <span> 发布</span>
+                </button>
+                <button nz-button [nzType]="'primary'" (click)="disPublish()">
+                    <span>撤销发布</span>
+                </button>
+                <!-- <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                        <span>批量操作</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" (click)="publish()">发布</a>
+                        <a class="dropdown-item" (click)="disPublish()">撤销发布</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" (click)="archive()">归档</a>
+                        <a class="dropdown-item" (click)="disArchive()">撤销归档</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" (click)="delete()">批量删除</a>
+                    </div>
+                </div> -->
+            </ng-template>
+
+            <ng-template cuiColTpl="col2-0" let-row="row">
+                <!-- <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px"> -->
+                <img [src]="row.imageUrl" onerror="this.src='assets/images/course.png'" [alt]="row.name" width="72px" height="42px">
+            </ng-template>
+            <ng-template cuiColTpl="col2-1" let-row="row">
+                <strong>{{row.name}}</strong>
+
+            </ng-template>
+            <ng-template cuiColTpl="code" let-row="row">
+                <span>{{row.code}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="col2-2" let-row="row">
+                <div>{{getCourseTypeText(row.courseType)}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="period" let-row="row">
+                <span>{{row.period}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="col2-3" let-row="row">
+                <div>{{row.userGroup?.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="cat" let-row="row">
+                <span>{{row.category?.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="colTitle" let-row="row">
+                <span>
+                    <strong>{{row.name}}</strong>
+                </span>
+            </ng-template>
+            <ng-template cuiColTpl="colCourseType" let-row="row">
+                {{getCourseTypeText(row.courseType)}}
+            </ng-template>
+            <ng-template cuiColTpl="colIsPublished" let-row="row">
+                <ng-container *ngIf="row.isArchived">
+                    <span class="text-secondary">已归档</span>
+                </ng-container>
+                <ng-container *ngIf="!row.isArchived">
+                    <span *ngIf="row.isPublished" class="text-success">已发布</span>
+                    <span *ngIf="!row.isPublished" class="text-warning">未发布</span>
+                </ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="rowAction" let-row="row">
+                <div class="text-right">
+                    <a target="_blank" *ngIf="!row.isArchived" class="text-primary" [routerLink]="['../', row.id]">管理</a>
+                    <span class="text-secondary" title="已归档的课程不能编辑" *ngIf="row.isArchived">管理</span>
+                    <span>|</span>
+                    <a href="javascript:;" class="text-danger" (click)="delete(row)" *ngIf="!row.isPublished">删除</a>
+                    <span class="text-secondary" title="已发布的课程不能删除" *ngIf="row.isPublished">删除</span>
+                </div>
+            </ng-template>
+
+            <ng-template #actionGroup>
+                <button type="button" class="btn btn-info" (click)="publish()">发布</button>
+                <button type="button" class="btn btn-info" (click)="disPublish()">撤销发布</button>
+                <button type="button" class="btn btn-warning" (click)="archive()">归档</button>
+                <button type="button" class="btn btn-warning" (click)="disArchive()">撤销归档</button>
+                <button type="button" class="btn btn-danger" (click)="delete()">批量删除</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

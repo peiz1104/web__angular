@@ -1,0 +1,43 @@
+<nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzBanner]="true">
+  <div alert-body>
+    <span>您可以在此处上传视频文件来设置课程的试看内容，视频格式应为 MP4, 且大小不能超过 100MB。</span>
+    <span>上传成功后可以直接在线预览，但是需要点击保存按钮进行保存。</span>
+  </div>
+</nz-alert>
+<div class="card mt-3">
+  <div class="card-body">
+    <cui-alert [value]="msg"></cui-alert>
+      <div class="row justify-content-center">
+        <div class="col-8">
+          <div class="video-box">
+            <div class="video" *ngIf="!trial?.relativePath">
+              <div class="row justify-content-center">
+                <i class="fa fa-file-video-o fa-4x" aria-hidden="true"></i>
+              </div>
+              <div class="row justify-content-center">
+                <p>暂无试看文件</p>
+              </div>
+            </div>
+            <ng-container *ngIf="trial?.relativePath" class="video-max">
+              <spk-video-play [path]="trial?.relativePath" autoPlay="false" class="w-100 h-100"></spk-video-play>
+            </ng-container>
+          </div>
+          <div class="" *ngIf="editable">
+            <cui-fileupload name="file" mode="file" [accept]="accept" url="/api/upload/file" [auto]="true" [maxFileSize]="maxSize" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+            <br>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3 justify-content-center" *ngIf="editable">
+          <div class="col-2">
+            <ng-container [ngTemplateOutlet]="defaultActions"></ng-container>
+          </div>
+      </div>
+  </div>
+</div>
+
+<ng-template #defaultActions>
+  <!-- [disabled]="!_form.valid" -->
+  <button nz-button [nzType]="'primary'" (click)="onSubmit($event)" [nzLoading]="loading">保存</button>
+  <button nz-button [nzType]="'danger'" (click)="delete($event)" *ngIf="trial?.id">删除</button>
+</ng-template>

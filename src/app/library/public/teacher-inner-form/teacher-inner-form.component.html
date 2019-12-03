@@ -1,0 +1,194 @@
+<form #teacherForm="ngForm" class="form-horizontal" *ngIf="teacher" nz-form [formGroup]="_form">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <div class="row">
+
+                <div class="col-7 pull-5 order-1">
+
+                    <div class="form-group row" *ngIf="isCreate">
+                        <label for="" class="col-form-label col-3">
+                <i class="fa fa-field-required"></i> 讲师姓名：</label>
+                        <div class="col-9">
+                            <spk-user-lookup mode="single" (ok)="doAfterUserSelected($event)"></spk-user-lookup>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="!isCreate">
+                        <label for="" class="col-form-label col-3">
+                <i class="fa fa-field-required"></i> 讲师姓名：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="name" [nzReadonly]="true"></nz-input>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">性别：</label>
+                        <div class="col-9">
+                            <nz-radio-group formControlName="sex">
+                                <label nz-radio [nzValue]="'MALE'" [nzDisabled]="true">
+                        <span>男</span>
+                      </label>
+                                <label nz-radio [nzValue]="'FAMALE'" [nzDisabled]="true">
+                        <span>女</span>
+                      </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+                <i class="fa fa-field-required"></i>邮箱：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="email" [nzReadonly]="true"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">出生日期：</label>
+                        <div class="col-9">
+                            <nz-datepicker name="birthday" formControlName="birthday" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">手机号：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="phoneNumber" [nzReadonly]="true"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">讲师编码：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="teacherNo" [nzReadonly]="true"></nz-input>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+                  <i class="fa fa-field-required"></i>讲师职级：</label>
+                        <div class="col-9">
+                            <nz-select class="width-100" formControlName="rank" nzAllowClear>
+                                <nz-option [nzLabel]="'预备讲师'" [nzValue]="'I'"></nz-option>
+                                <nz-option [nzLabel]="'助理讲师'" [nzValue]="'II'"></nz-option>
+                                <nz-option [nzLabel]="'中级讲师'" [nzValue]="'III'"></nz-option>
+                                <nz-option [nzLabel]="'高级讲师'" [nzValue]="'IV'"></nz-option>
+                            </nz-select>
+                            <div class="text-danger" *ngIf="getFormControl('rank').dirty&&getFormControl('rank').hasError('required')">讲师职级必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">所属组织：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="userGroupName" [nzReadonly]="true"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">岗位：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="post"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">入职时间：</label>
+                        <div class="col-9">
+                            <nz-datepicker name="inductionTime" formControlName="inductionTime" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">任教时间：</label>
+                        <div class="col-9">
+                            <nz-datepicker name="startDate" formControlName="startDate" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">累计学时数：</label>
+                        <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.classHour">
+                            <nz-input formControlName="classHour"></nz-input>
+                            <div class="text-danger" *ngIf="getFormControl('classHour').dirty&&getFormControl('classHour').hasError('pattern')">累计学时必须是大于0的自然数</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">平均估分：</label>
+                        <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.avgScore">
+                            <nz-input formControlName="avgScore"></nz-input>
+                            <div class="text-danger" *ngIf="getFormControl('avgScore').dirty&&getFormControl('avgScore').hasError('pattern')">平均估分必须是大于0的自然数</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">毕业学校：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="schoolName"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">毕业时间：</label>
+                        <div class="col-9">
+                            <nz-datepicker name="graduationTime" formControlName="graduationTime" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">所学专业：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="major"></nz-input>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3"> 
+                <i class="fa fa-field-required"></i>最高学历：</label>
+                        <div class="col-9">
+                            <nz-select class="width-100" formControlName="education" nzAllowClear>
+                                <nz-option [nzLabel]="'大专'" [nzValue]="'D'"></nz-option>
+                                <nz-option [nzLabel]="'本科'" [nzValue]="'B'"></nz-option>
+                                <nz-option [nzLabel]="'研究生'" [nzValue]="'Y'"></nz-option>
+                            </nz-select>
+                            <div class="text-danger" *ngIf="getFormControl('education').dirty&&getFormControl('education').hasError('required')">最高学历必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3"> 
+                <i class="fa fa-field-required"></i>学位：</label>
+                        <div class="col-9">
+                            <nz-select class="width-100" formControlName="degree" nzAllowClear>
+                                <nz-option [nzLabel]="'学士'" [nzValue]="'X'"></nz-option>
+                                <nz-option [nzLabel]="'硕士'" [nzValue]="'S'"></nz-option>
+                                <nz-option [nzLabel]="'博士'" [nzValue]="'B'"></nz-option>
+                            </nz-select>
+                            <div class="text-danger" *ngIf="getFormControl('degree').dirty&&getFormControl('degree').hasError('required')">学位必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-3 col-form-label">工作小结：</label>
+                        <div class="col-9">
+                            <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'5'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-7">
+                    <div class="form-group row">
+                        <div class="col-9 offset-3">
+                            <button nz-button [nzType]="'primary'" (click)="onSubmit(teacherForm)" [disabled]="!_form.valid" [nzLoading]="loading">保存</button>
+                            <button nz-button [nzType]="'default'" [routerLink]="[isCreate ? '..' : '../..']">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</form>

@@ -1,0 +1,180 @@
+<form nz-form #courseForm="ngForm" *ngIf="course" [formGroup]="_form" class="form-horizontal">
+    <h5 class="my-3">基本信息</h5>
+    <div class="row">
+        <div class="col-5 push-7 order-2">
+            <div class="">
+                <cui-fileupload name="file" mode="image" accept=".jpg,.bmp,.png" url="/api/upload/file" [auto]="true" (uploadComplete)="getFormControl('imageUrl').setValue($event['relativePath'])"
+                    [imageHolder]="getFormControl('imageUrl').value"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                    <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。</span>
+            </div>
+        </div>
+        <div class="col-7 pull-5 order-1">
+            <div class="form-group row">
+                <label for="code" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 课程编码</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.code">
+                    <nz-spin nzSize="small" [nzSpinning]="spinning">
+                        <nz-input [nzDisabled]="true" formControlName="code" [nzPlaceHolder]="'请输入课程名称'"></nz-input>
+                        <div class="text-danger" *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('required')">课程编码必填</div>
+                    </nz-spin>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 课程名称</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.name">
+                    <nz-input formControlName="name" [nzPlaceHolder]="'请输入课程名称'" maxlength="40"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">课程名称必填</div>
+                    <div class="text-danger" *ngIf="getFormControl('name').hasError('maxlength')">课程名称不得超过40个字符</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 所属分类</label>
+                <div class="col-9">
+                    <spk-category-select name="category.id" formControlName="category" identifier="common" (ngModelChange)="logSelectCategory($event)"></spk-category-select>
+                    <div class="text-danger" *ngIf="categoryType">所属分类必填</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 所属组织</label>
+                <div class="col-9">
+                    <spk-user-group-select name="userGroup.id" formControlName="userGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+                    <div class="text-danger" *ngIf="userGroupType">所属组织必填</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 内容类型</label>
+                <div class="col-5">
+                    <nz-select formControlName="courseType">
+                        <nz-option *ngFor="let item of _courseTypes" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 课程时长(分钟)</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.duration">
+                    <nz-input formControlName="duration"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('duration').dirty&&getFormControl('duration').hasError('required')">课程时长必填</div>
+                    <div class="text-danger" *ngIf="getFormControl('duration').dirty&&getFormControl('duration').hasError('pattern')">课程时长必须是大于0的自然数</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">学时</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.period">
+                    <nz-input formControlName="period"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('period').dirty&&getFormControl('period').hasError('pattern')">学时必须是大于0的自然数或1位小数</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">学分</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.point">
+                    <nz-input formControlName="point"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('point').dirty&&getFormControl('point').hasError('pattern')">学分必须是大于0的自然数</div>
+                </div>
+            </div>
+            <div *ngIf="coursecategory" class="form-group row">
+                <label for="value" class="col-form-label col-3">课程大小类</label>
+                <div class="col-9 cascader" nz-form-control [nzValidateStatus]="_form.controls.value">
+                    <nz-cascader [nzOptions]="_options" [nzPlaceHolder]="'请选择课程大小类！'"  formControlName="value" (ngModelChange)="_console($event)" (nzChange)="_clearn($event)">
+                    </nz-cascader>
+                    <span *ngIf="showCascaderSpan" class="cascader-span" (click)="cascaderCancel()">x</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">是否授权</label>
+                <div class="col-5">
+                    <select #authorization name="authorization" name="authorization" class="form-control" formControlName="authorization">
+                        <option value="Y">是</option>
+                        <option value="N">否</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row" *ngIf="getFormControl('authorization').value =='Y'">
+                <label for="" class="col-form-label col-3">允许转授权</label>
+                <div class="col-5">
+                    <select #authorization name="turnAuthorization" name="turnAuthorization" formControlName="turnAuthorization" class="form-control">
+                        <option value="Y">是</option>
+                        <option value="N">否</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row" *ngIf="getFormControl('courseType').value!='OFFLINE'">
+                <label for="" class="col-form-label col-3">播放终端</label>
+                <div class="col-9 pt-1">
+                    <nz-radio-group formControlName="platform">
+                        <label nz-radio [nzValue]="'ALL'">
+                            <span>通用</span>
+                        </label>
+                        <label nz-radio [nzValue]="'PC'">
+                            <span>电脑端</span>
+                        </label>
+                        <label nz-radio [nzValue]="'MOBILE'">
+                            <span>移动端</span>
+                        </label>
+                    </nz-radio-group>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="getFormControl('courseType').value!='OFFLINE'">
+                <label class="col-form-label col-3">浏览器要求</label>
+                <div class="col-9 pt-1">
+                    <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+                        <label nz-checkbox [(ngModel)]="allChecked" [ngModelOptions]="{standalone: true}" (ngModelChange)="updateAllChecked($event)"
+                            [nzIndeterminate]="indeterminate" [nzDisabled]="course && course.sourceType == 'REFERENCED'">
+                            全选
+                        </label>
+                    </div>
+                    <br>
+                    <nz-checkbox-group formControlName="_browsers" name="brower" (ngModelChange)="updateSingleChecked($event)"></nz-checkbox-group>
+
+                </div>
+                <br>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">关键字</label>
+                <div class="col-9">
+                    <cui-chips formControlName="_keywords" (ngModelChange)="keywordsChange($event)"></cui-chips>
+                    <span>输入完敲回车开始下一个关键字输入。</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-form-label col-3">内容描述</label>
+                <div class="col-9">
+                    <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'3'" [nzPlaceHolder]="''"></nz-input>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="my-3 d-none">可配置属性</h5>
+    <span class="d-none">此站点没有内容的任何可配置属性。可以从站点的“管理可配置属性”页创建可配置属性。</span>
+
+    <div class="row my-3">
+        <div class="col-7">
+            <div class="form-group row">
+                <div class="col-9 offset-3">
+                    <ng-container [ngTemplateOutlet]="actionsViewRef || defaultActions"></ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<ng-template #defaultActions>
+    <!-- [disabled]="!_form.valid" -->
+    <button nz-button [nzType]="'primary'" (click)="onSubmit($event)" [nzLoading]="loading">保存</button>
+    <ng-container *ngIf="isCreate">
+        <button nz-button [nzType]="'primary'" (click)="onSubmit($event, 'addNext')" [nzLoading]="loading">保存并添加下一条</button>
+        <button nz-button [nzType]="'primary'" (click)="onSubmit($event, 'toDetail')" [nzLoading]="loading">保存并进入管理</button>
+        <button nz-button [nzType]="'default'" (click)="doCancel($event)">取消</button>
+    </ng-container>
+</ng-template>

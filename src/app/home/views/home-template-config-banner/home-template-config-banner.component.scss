@@ -1,0 +1,75 @@
+:host ::ng-deep {
+    .ant-form-item {
+        margin-bottom: 10px;
+    }
+    .site {
+        padding: 10px 20px;
+        .save-btn {
+            margin-top: 24px;
+            text-align: center;
+        }
+    }
+    .itemFg {
+        position: relative;
+        padding: 10px 10px 0;
+        margin: 15px 0;
+        border: 1px solid #e6e6e6;
+        .delete {
+            cursor: pointer;
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 20px;
+        }
+    }
+    .cui-fileupload-choose {
+        width: 100% !important;
+        height: 140px !important;
+        margin: 0 auto;
+        span {
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .image-holder {
+            width: 100% !important;
+            height: 100% !important;
+            line-height: 140px !important;
+        }
+        input {
+            height: 100% !important;
+        }
+    }
+    .banner-modal {
+        .imgTpl {
+            width: 150px;
+            height: 80px;
+        }
+        .ant-modal-close {
+            outline: none;
+        }
+    }
+    .input-color-choose {
+        position: relative;
+        height: 32px;
+        .left-bac {
+            position: absolute;
+            left: 10px;
+            width: 164px;
+            .example-lcolor {
+                line-height: 16px;
+                width: 100%;
+            }
+        }
+        .right-bac {
+            position: absolute;
+            right: 0px;
+            width: 164px;
+            .example-rcolor {
+                line-height: 16px;
+                width: 100%;
+            }
+        }
+    }
+}

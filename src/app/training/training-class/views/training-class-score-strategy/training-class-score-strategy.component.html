@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">{{trainingName}}: 成绩策略 <small>编辑成绩策略</small></h3>
+      <!--
+       <div class="actions pull-right">
+        <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button>
+      </div>-->
+    </div>
+    <div class="page-body">
+      <div class="container">
+        <div class="card">
+          <div class="card-body">
+              <spk-strategy strategyType="training" [objectId]="classId"></spk-strategy>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

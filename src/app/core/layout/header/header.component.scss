@@ -1,0 +1,145 @@
+.navbar {
+    padding: 0;
+    .borderRight {
+        font-style: normal;
+        width: 2px;
+        height: 28px;
+        background: #b0b0b0;
+        position: absolute;
+        right: -8px;
+        top: 8px;
+    }
+    a.nav-link {
+        color: #666;
+        font-weight: bold;
+    }
+    a.nav-link:hover {
+        color: #007bbf;
+    }
+    .navbar-brand {
+        color: #101010;
+        position: relative;
+        left: 0px;
+        top: 0px;
+    }
+    .logo {
+        height: 56px;
+        position: relative;
+        line-height: 56px;
+        padding-left: 24px;
+        -webkit-transition: all .3s;
+        transition: all .3s; // background: #002140;
+        overflow: hidden; // box-shadow: 2px 0 6px rgba(0,21,41,.35);
+        min-width: 220px;
+        background: #f8fbfd;
+        box-shadow: 2px 0 6px rgba(142, 166, 179, 0.35);
+        >a {
+            >img {
+                height: 42px;
+                vertical-align: middle;
+            }
+            >h1 {
+                // color: #fff;
+                color: #001529;
+                font-size: 20px;
+                margin: 0 0 0 12px;
+                font-family: Myriad Pro, Helvetica Neue, Arial, Helvetica, sans-serif;
+                font-weight: 600;
+                display: inline-block;
+                height: 42px;
+                vertical-align: middle;
+                line-height: 42px;
+            }
+        }
+    }
+    .nav-item {
+        padding: 15px 16px;
+        .logo-out-style {
+            display: block;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            &:hover {
+                color: red;
+            }
+        }
+    }
+    &.main-navbar {
+        box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    }
+    .anticon.trigger {
+        padding: 0 24px;
+        &:hover {
+            background: #e6f7ff;
+        }
+    }
+    .navbar-nav {
+        .nav-item {
+            &.user-avatar {
+                padding: 8px 16px;
+                >a {
+                    padding: 0;
+                    margin: 0;
+                    height: 40px;
+                    line-height: 40px;
+                    &:after {
+                        content: unset;
+                    }
+                }
+            }
+        }
+    }
+    .account-menu-new {
+        overflow: hidden;
+        >a {
+            margin: 0;
+            padding: 1.25rem 0;
+            color: #666;
+            &:hover {
+                background: #f8f9fa;
+            }
+        }
+        .text-secondary-new {
+            float: left;
+            width: 33%;
+        }
+    }
+    .show {
+        right: 0px !important;
+    }
+}
+
+:host ::ng-deep .ant-avatar-image {
+    position: relative;
+    >img {
+        position: absolute;
+        top: 0;
+        display: block;
+    }
+}
+
+:host ::ng-deep .navbar {
+    .left-open {
+        cursor: pointer;
+        font-size: 26px;
+        &:hover {
+            color: #007bbf;
+        }
+    }
+    .right-open {
+        font-size: 26px;
+        cursor: pointer;
+        -o-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+        &:hover {
+            color: #007bbf;
+        }
+    }
+}
+
+.activeNav {
+    border-bottom: 2px solid #6897d8;
+    .nav-link {
+        color: #6897d8 !important;
+    }
+}

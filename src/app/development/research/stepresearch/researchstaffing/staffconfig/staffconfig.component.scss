@@ -1,0 +1,38 @@
+:host::ng-deep{
+    .select-body{
+        .form-group{
+            input{
+                margin-right: 4px;
+            }
+        }
+        .btn-group{
+            button{
+                margin-right: 8px;
+            }
+        }
+    }
+    .add-modal{
+        .cancel-btn{
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            cursor: pointer;
+            background: #e6e6e6;
+            border-radius: 6px;
+        }
+        .ant-row,.ant-form-item{
+            width:100%;
+        }
+        .user-edit{
+            position:absolute;
+            top:0;
+            right:-66px;
+            i{
+                color:#007bbf;
+                cursor: pointer;
+            }
+        }
+    }
+}

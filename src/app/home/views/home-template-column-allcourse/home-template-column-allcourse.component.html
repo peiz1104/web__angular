@@ -1,0 +1,50 @@
+<div class="course-body">
+  <div class="show-content"><i class="anticon anticon-bars float-logo"></i>全部课程</div>
+  <div class="floating-layer">
+    <div class="float_box">
+      <div *ngIf="courseTree?.length < 7">
+        <div class="float_list" *ngFor="let trees of courseTree | slice:0:6;let i= index">
+          <div class="float_left" [class.float-left-last]="i == 5">
+            <div class="title" [routerLink]="['/opencourse', {parentId: trees?.id}]" title={{trees.name}}>{{trees.name}}</div>
+            <ul class="course_name">
+              <li *ngFor="let items of trees?.children | slice:0:2" [routerLink]="['/opencourse', {parentId: trees?.id, childId: items?.id}]"
+                title={{items.name}}>{{items.name}}</li>
+            </ul>
+          </div>
+          <div class="float_right" *ngIf="trees.children?.length > 0">
+            <div class="course" *ngFor="let item of trees.children | slice:0:5;">
+              <div class="course_title" [routerLink]="['/opencourse', {parentId: trees?.id, childId: item?.id}]" title={{item.name}}>{{item.name}}</div>
+              <div class="course_box" *ngIf="item.children?.length > 0">
+                <a *ngFor="let itm of item.children" [routerLink]="['/opencourse', {parentId: trees?.id, childId: item?.id, grandsonId: itm?.id}]"
+                  title={{itm.name}}>{{itm.name}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="courseTree?.length > 6">
+        <div class="float_list" *ngFor="let trees of courseTree | slice:0:6;let i= index">
+          <div class="float_left" [class.special-single]="i == 5" *ngIf="i == 5" [routerLink]="['/opencourse']">
+            更多分类
+          </div>
+          <div class="float_left" *ngIf="i != 5">
+            <div class="title" [routerLink]="['/opencourse', {parentId: trees?.id}]" title={{trees.name}}>{{trees.name}}</div>
+            <ul class="course_name">
+              <li *ngFor="let items of trees?.children | slice:0:2" [routerLink]="['/opencourse', {parentId: trees?.id, childId: items?.id}]"
+                title={{items.name}}>{{items.name}}</li>
+            </ul>
+          </div>
+          <div class="float_right" *ngIf="trees.children?.length > 0 && i !=5">
+            <div class="course" *ngFor="let item of trees.children | slice:0:5;">
+              <div class="course_title" [routerLink]="['/opencourse', {parentId: trees?.id, childId: item?.id}]" title={{item.name}}>{{item.name}}</div>
+              <div class="course_box" *ngIf="item.children?.length > 0">
+                <a *ngFor="let itm of item.children" [routerLink]="['/opencourse', {parentId: trees?.id, childId: item?.id, grandsonId: itm?.id}]"
+                  title={{itm.name}}>{{itm.name}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

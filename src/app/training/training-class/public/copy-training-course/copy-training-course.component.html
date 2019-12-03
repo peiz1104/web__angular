@@ -1,0 +1,147 @@
+<ng-container *ngIf="echoTplCopy" [ngTemplateOutlet]="echoTplCopy"></ng-container>
+<ng-template #lookupDialog>
+    <div>
+        <div style="width:34%;float:left;" class="train-left">
+            <div style="height:73px;" class="search-box">
+                <form nz-form [formGroup]="searchForm" (ngSubmit)="_submitSearchForm($event, searchForm.value)" [nzLayout]="'inline'">
+                    <div nz-form-item>
+                        <div style="margin-bottom:4px;" class="form-group">
+                            <div nz-form-control>
+                                <label class="sr-only">年份</label>
+                                <nz-select style="width: 120px;" formControlName="planYear" [nzPlaceHolder]="'请选择年份'" nzAllowClear [nzShowSearch]="true">
+                                    <nz-option [nzLabel]="nowYear-2" [nzValue]="nowYear-2">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="nowYear-1" [nzValue]="nowYear-1">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="nowYear" [nzValue]="nowYear">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="nowYear+1" [nzValue]="nowYear+1">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="nowYear+2" [nzValue]="nowYear+2">
+                                    </nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:4px;" class="form-group">
+                            <div nz-form-control>
+                                <label for="" class="sr-only">执行人</label>
+                                <input type="text" nz-input formControlName="performerSearch" placeholder="请输入执行人工号或姓名">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-form-item>
+                        <div style="width:130px" class="form-group">
+                            <div nz-form-control>
+                                <label for="" class="sr-only">名称</label>
+                                <input type="text" nz-input formControlName="name" placeholder="请输入培训班名称">
+                            </div>
+                        </div>
+
+                        <div *ngIf="false" class="form-group">
+                            <div nz-form-control>
+                                <label for="" class="sr-only">组织</label>
+                                <input type="text" nz-input formControlName="groupName" placeholder="请输入组织名称">
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="button" class="btn btn-primary" (click)="_submitSearchForm($event, searchForm.value)"> 搜 索 </button>
+                </form>
+            </div>
+            <div style="overflow:auto;overflow-x:hidden;height:300px;border:1px solid #e5e5e5;" class="train-list">
+                <nz-spin [nzSpinning]="spinning">
+                    <div *ngIf="trainList.length">
+                        <div *ngFor="let item of trainList;let m=index" style="height:44px;border-bottom:1px solid #efefef;position:relative" (click)="getCourserListData(item)">
+                            <div [ngStyle]="{'color':activeId==item.id?'red':'#007bbf'}" [title]="item.name" class="item-box" style="padding-left:2px;color:#007bbf;width:100%;line-height:22px;font-size:12px;cursor:pointer;position:absolute;left:0px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+                                <span>培训班名称：</span>
+                                {{item?.name}}</div>
+                            <div style="width:66%;font-size:12px;position:absolute;top:22px;left:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"
+                                class="group">
+                                <span>所属组织：</span>
+                                {{getPathName(item?.userGroup?.namePath)}}
+                            </div>
+                            <div class="item-box" style="width:30%;font-size:12px;top:22px;position:absolute;right:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+                                <span>执行人：</span>
+                                {{item?.performer?.displayName||'暂无'}}</div>
+                        </div>
+                    </div>
+                    <div style="text-align:center;line-height:250px;min-height:250px" *ngIf="trainList.length==0">
+                        <span style="color:#28a745;font-size:14px" class="fa fa-lg fa-info-circle text-success"></span>
+                        <span style="font-size:12px">没有查询到符合条件的记录</span>
+                    </div>
+                </nz-spin>
+            </div>
+        </div>
+        <div style="width:65%;float:left;margin-left:10px;min-height:320px;position:relative" class="course-right">
+            <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="loading">
+                <div style="min-height:14px">
+                    <nz-alert [nzType]="'info'">
+                        <span alert-body>
+                            <h5>{{trainName}}
+                                <b style="font-size:12px">有 {{ courseList.length}} 个课程</b>
+                            </h5>
+                        </span>
+                    </nz-alert>
+                </div>
+                <div style="height:34px;position:absolute;right:4px;top:38px;" class="btn-opear">
+                    <button (click)="copyCourse()" nz-button [nzType]="'primary'">
+                        <span>复制课程</span>
+                    </button>
+                    <!-- <button (click)="copyCourseTeacher()" nz-button [nzType]="'primary'">
+                        <span>复制课程和讲师</span>
+                    </button> -->
+                </div>
+                <div class="checked-all" style="position:absolute;top:8px;left:0px;">
+                </div>
+                <div style="margin-top:34px;">
+                    <div class="list-title" style="overflow:hidden;;background:#f8fbfd;height:34px;line-height:34px;border:1px solid #e5e5e5;border-left:none;border-right:none;">
+                        <div style="padding-left:10px;float:left;width:30%;font-weight:bold;" class="every-item">
+                            <span>
+                                <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+                                </label>
+                            </span>
+                            名称</div>
+                        <div style="float:left;width:20%;font-weight:bold;" class="every-item">编码</div>
+                        <div style="float:left;width:20%;font-weight:bold;" class="every-item">类型</div>
+                        <div style="float:left;width:8%;font-weight:bold;" class="every-item">学时</div>
+                        <div style="float:left;width:20%;font-weight:bold;" class="every-item">所属分类</div>
+                        <!-- <div style="float:left;width:24%;font-weight:bold;" class="every-item">讲师</div> -->
+                    </div>
+                    <div *ngIf="courseList.length" style="overflow:auto;overflow-x:hidden;height:310px;">
+                        <div *ngFor="let item of courseList" style="overflow:hidden;height:30px;line-height:30px;border-bottom:1px solid #e5e5e5"
+                            class="list-item">
+                            <div [title]="item.name" style="min-height:30px;width:30%;padding-left:10px;float:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"
+                                class="item-course-box">
+                                <span style="margin-right:4px;">
+                                    <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="singlechecked($event,item)"></label>
+                                </span>
+                                {{item.name}}
+                            </div>
+                            <div style="min-height:30px;float:left;width:20%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.code}}</div>
+                            <div style="min-height:30px;float:left;width:20%;">{{getCourseTypeText(item.courseType)}}</div>
+                            <div style="min-height:30px;float:left;width:8%;text-align:center">{{item.period}}</div>
+                            <div style="min-height:30px;float:left;width:20%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.category?.name}}</div>
+                            <!-- <div [title]="item.teacherNames" style="float:left;width:24%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{item.teacherNames}}</div> -->
+                        </div>
+                    </div>
+
+                    <div style="text-align:center;line-height:250px;min-height:250px" *ngIf="courseList.length==0">
+                        <span style="color:#28a745;font-size:1.33em" class="fa fa-lg fa-info-circle text-success"></span>
+                        <span style="font-size:1.25em">没有查询到符合条件的记录</span>
+                    </div>
+                </div>
+            </nz-spin>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+
+    <div class="customize-footer" style="text-align:right;margin-top:14px;">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="ok($event)">
+            确 定
+        </button>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="cancel($event)">
+            取 消
+        </button>
+    </div>
+</ng-template>

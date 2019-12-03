@@ -1,0 +1,240 @@
+/* You can add global styles to this file, and also import other style files */
+
+$comColor:hsl(211, 100%, 50%);
+.top-bread {
+    .bread {
+        background: #f2f0f0;
+        line-height: 46px;
+        padding: 0 15px;
+    }
+    .page-header {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    .page-title {
+        border-left-color: $comColor !important;
+    }
+}
+
+:host {
+    .ant-btn-primary {
+        background: $comColor;
+        border-color: $comColor;
+    }
+}
+
+// modalgunabi
+.ant-modal-wrap .ant-modal .ant-modal-content .ant-modal-close .ant-modal-close-x::before {
+    content: '×';
+    display: block;
+    color: #aaa;
+    position: absolute;
+    top: 0px;
+    right: 16px;
+    font-size: 16px;
+}
+
+.ant-modal-wrap .ant-modal .ant-modal-content .ant-modal-body .ant-select .ant-select-selection .ant-select-arrow::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    top: 0px;
+    right: 1px;
+    line-height: 10px;
+    color: #bbb;
+    border: 1px solid #aaa;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    font-size: 14px;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.ant-modal-wrap .ant-modal .ant-modal-content .ant-modal-body .ant-select-open .ant-select-arrow:before {
+    top: 4px !important;
+    transform: rotate(225deg) !important;
+    -ms-transform: rotate(225deg) !important;
+    -webkit-transform: rotate(225deg) !important;
+    -o-transform: rotate(225deg) !important;
+}
+
+.ant-modal-wrap .ant-modal .ant-modal-content .ant-modal-body .ant-pagination .ant-pagination-prev a::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px !important;
+    border: 1px solid #aaa;
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    font-size: 20px !important;
+    position: relative;
+    top: 8px;
+    left: 8px;
+}
+
+.ant-modal-wrap .ant-modal .ant-modal-content .ant-modal-body .ant-pagination .ant-pagination-next a::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px !important;
+    border: 1px solid #aaa;
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    font-size: 20px !important;
+    position: relative;
+    top: 8px;
+    left: 8px;
+}
+
+// 层叠卡
+.ant-cascader-menus>.ant-cascader-menu>.ant-cascader-menu-item-expand::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: 1px solid #aaa;
+    border-left: 1px solid transparent;
+    border-top: 1px solid transparent;
+    transform: scale(1) rotate(-45deg);
+    -ms-transform: scale(1) rotate(-45deg);
+    -webkit-transform: scale(1) rotate(-45deg);
+    -o-transform: scale(1) rotate(-45deg);
+    zoom: 1;
+    color: rgba(0, 0, 0, 0.43);
+    position: absolute;
+    right: 8px;
+    top: 14px;
+}
+
+.ant-cascader-menus>.ant-cascader-menu>.ant-cascader-menu-item-loading::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border: 1px dashed #aaa;
+    border-radius: 50%;
+    position: absolute;
+    right: 8px;
+    top: 14px;
+}
+
+// 全局提示
+.ant-message-notice.ng-trigger.ng-trigger-enterLeave>.ant-message-notice-content>.ant-message-warning>.anticon::before {
+    content: '！';
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ffbf00;
+    color: #fff;
+    text-align: center;
+    padding-left: 3px;
+}
+
+.ant-message-notice.ng-trigger.ng-trigger-enterLeave>.ant-message-notice-content>.ant-message-success>.anticon::before {
+    content: '✔';
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #00a854;
+    color: #fff;
+    text-align: center;
+    padding-top: 2px;
+}
+
+.ant-message-notice.ng-trigger.ng-trigger-enterLeave>.ant-message-notice-content>.ant-message-error>.anticon::before {
+    content: '×';
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #f04134;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+}
+
+.ant-message-notice.ng-trigger.ng-trigger-enterLeave>.ant-message-notice-content>.ant-message-info>.anticon::before {
+    content: 'Ⅰ';
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #108ee9;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+.ant-modal-wrap>.ant-confirm>.ant-modal-content>.ant-modal-body .ant-confirm-body>.anticon::before {
+    content: '?';
+    display: block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #ffbf00;
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    padding-top: 3px;
+}
+
+.colpick,
+.colpick_full {
+    z-index: 1200;
+}
+
+.cui-overlay-container {
+    .cui-global-overlay-wrapper {
+        .cui-overlay-backdrop {
+            z-index: auto !important;
+        }
+    }
+}
+
+body {
+    overflow-y: hidden !important;
+}
+
+.jq-toast-wrap {
+    width: auto !important;
+    .jq-toast-loader {
+        display: none !important;
+    }
+    .jq-icon-warning {
+        background-color: #ffbf00 !important;
+        color: #fff;
+    }
+    .jq-icon-error {
+        background-color: #f04134 !important;
+        color: #fff;
+    }
+    .jq-icon-success {
+        background-color: #00a854 !important;
+        color: #fff;
+    }
+} // .page-antd-index-show-modal {
+//     z-index: 1013 !important;
+// }
+.ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content-animated {
+    display: block !important;
+    transition: opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+    margin-left: auto !important;
+}
+
+:not(.ant-tabs-vertical).ant-tabs>.ant-tabs-content>.ant-tabs-tabpane-inactive {
+    display: none !important;
+}

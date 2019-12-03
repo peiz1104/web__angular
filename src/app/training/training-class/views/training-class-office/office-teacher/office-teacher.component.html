@@ -1,0 +1,94 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">{{trainingName}}: 
+            <small>授课讲师</small>
+        </h5>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="page-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selection"
+            [loading]="loading" (reload)="loadData($event)">
+
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="rank" let-row="row">
+                <span >
+                    <ng-container *ngIf="row.rank == 'I'">预备讲师</ng-container>
+                    <ng-container *ngIf="row.rank  == 'II'">助理讲师</ng-container>
+                    <ng-container *ngIf="row.rank  == 'III'">中级讲师</ng-container>
+                    <ng-container *ngIf="row.rank  == 'IV'">高级讲师</ng-container>
+                </span>
+            </ng-template>
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <div>
+                    <a class="text-primary" [routerLink]="[row.id]">查看</a>
+                    <!-- <span nz-table-divider></span>
+                    <a class="text-danger" (click)="deleteTrainingTeacher(row.id)">删除</a> -->
+                </div>
+            </ng-template>
+
+            <!-- <ng-template #actionGroup>
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-outline-primary" (click)="deleteTrainingTeacher()">
+                      <span>批量删除</span>
+                  </button>
+                </div>
+            </ng-template> -->
+        </cui-data-table>
+
+        <ng-template #simpleSearchBox>
+            <form nz-form [formGroup]="_searchForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                <div nz-row class="cui-data-table-form-body">
+                    <div nz-form-control>
+                        <nz-input formControlName="teacherName" [nzPlaceHolder]="'请输入讲师姓名'"> </nz-input>
+                    </div>
+                    <div class='simple-search-bar-search-box'>
+                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn' (click)="_submitForm($event, _searchForm.value)">
+                            搜索</button>
+                        <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级搜索</button>
+                    </div>
+                </div>
+            </form>
+        </ng-template>
+
+        <ng-template #complexSearchBox>
+            <form nz-form [formGroup]="_searchForm" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                <div nz-row class="cui-data-table-form-body">
+                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label for="teacherName">讲师姓名</label>
+                            </div>
+                            <div nz-col [nzSpan]="18">
+                                <nz-input formControlName="teacherName" [nzPlaceHolder]="'请输入讲师姓名'"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label for="organizeId">所属组织</label>
+                            </div>
+                            <div nz-col [nzSpan]="18">
+                                <spk-user-group-select formControlName="organizeId"></spk-user-group-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button nz-button [nzType]="'primary'" class='search-btn' (click)="_submitForm($event, _searchForm.value)">
+                        搜索</button>
+                    <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=false">普通搜索</button>
+                </div>
+            </form>
+        </ng-template>
+    </div>
+</div>

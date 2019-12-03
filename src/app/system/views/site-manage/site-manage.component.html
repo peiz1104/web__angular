@@ -1,0 +1,19 @@
+<div class="px-4"  *spkAuthzIf="{hasPermission: 'SETTINGS:SITE'}">
+  <div class="page-header">
+    <h5 class="page-title">站点维护</h5>
+  </div>
+  <div class="page-body">
+    <div class="row">
+      <div class="col-4">
+        <a (click)="addSite()" *spkAuthzIf="{hasPermission: 'SETTINGS:SITE:ADD'}">添加站点</a>
+        <a [hidden]="!selection || selection.id == 1" (click)="delSite()" *spkAuthzIf="{hasPermission: 'SETTINGS:SITE:REMOVE'}">删除站点</a>
+
+        <cui-tree #siteTree [config]="treeConf" selectionMode="single" (nodeSelect)="onSelect($event)"></cui-tree>
+      </div>
+      <div class="col-8">
+        <div *ngIf="isCreate">父级站点: {{selection?.name}}</div>
+        <spk-site-form *ngIf="siteEdit" [site]="siteEdit" (save)="onSave($event)" (cancel)="onCancel($event)"></spk-site-form>
+      </div>
+    </div>
+  </div>
+</div>

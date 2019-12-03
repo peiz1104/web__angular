@@ -1,0 +1,45 @@
+<form #logicGroupLookUpForm="ngForm" *ngIf="logicGroup" class="form-horizontal">
+    <div class="form-group row">
+        <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i> 用户组名称</label>
+        <div class="col-9">
+            <nz-input #name="ngModel" name="name" [nzPlaceHolder]="'请输入用户组名称'" [(ngModel)]="logicGroup.name"></nz-input>
+            <span class="form-control-feedback text-danger" *ngIf="(name.dirty || name.touched) && name.errors?.required">用户组名称必填</span>
+        </div>
+    </div>
+
+    <div class="form-group row" *ngIf="isCreate || logicGroup?.editSettig">
+      <label for="" class="col-form-label col-3">
+        <i class="fa fa-field-required"></i> 所属组织</label>
+      <div class="col-9">
+        <spk-user-group-select name="userGroup.id"  [(ngModel)]="logicGroup.userGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+        <span class="form-control-feedback text-danger" *ngIf="userGroupType">所属组织必填</span>
+      </div>
+    </div>
+<!--
+    <div class="form-group row">
+        <label for="" class="col-form-label col-3">
+            <span class="text-danger">*</span>是否私有</label>
+        <div class="col-8">
+            <nz-radio-group name="isPrivate" [(ngModel)]="logicGroup.isPrivate" #isPrivate="ngModel">
+                <label nz-radio [nzValue]="'Y'">
+                    <span>是</span>
+                </label>
+                <label nz-radio [nzValue]="'N'">
+                    <span>否</span>
+                </label>
+            </nz-radio-group>
+        </div>
+    </div>-->
+    <div class="form-group row">
+        <label for="" class="col-form-label col-3"> 用户组描述</label>
+        <div class="col-8">
+            <nz-input  name="description" [nzType]="'textarea'" [nzRows]="'3'" [(ngModel)]="logicGroup.description"></nz-input>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button nz-button [nzType]="'primary'" [disabled]="!logicGroupLookUpForm.valid" (click)="onSubmit($event)" [nzLoading]="loading">保存</button>
+        <button nz-button [nzType]="'default'" (click)="closeLookUp($event)">取消</button>
+    </div>
+</form>

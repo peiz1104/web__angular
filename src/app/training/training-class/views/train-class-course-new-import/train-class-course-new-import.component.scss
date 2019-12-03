@@ -1,0 +1,17 @@
+:host::ng-deep {
+    .container-fluid {
+        .page-header {
+            position: relative;
+            .class-btn {
+                position: absolute;
+                right: 0;
+                top: 12px;
+            }
+        }
+    }
+    .import-course-teacher {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 14px;
+    }
+}

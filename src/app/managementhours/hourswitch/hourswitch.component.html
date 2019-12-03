@@ -1,0 +1,169 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 年度学时开关管理列表</small>
+        </h3>
+    </div>
+</div>
+<div class="hour-switch-box">
+    <!-- <div class="top-bread">
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                学时管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="color-active">年度学时管理开关</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>学员学时开关管理列表</small>
+            </h5>
+        </div>
+    </div> -->
+    <div class="select-body">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" [(selection)]="selection"
+                (reload)="loadData($event)">
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div style="width:150px" nz-col [nzSpan]="18">
+                                    <nz-select formControlName="year" [nzPlaceHolder]="'请选择年份'" nzAllowClear>
+                                        <nz-option [nzLabel]="nowDate-5" [nzValue]="nowDate-5">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate-4" [nzValue]="nowDate-4">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate-3" [nzValue]="nowDate-3">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate-2" [nzValue]="nowDate-2">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate-1" [nzValue]="nowDate-1">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate" [nzValue]="nowDate">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate+1" [nzValue]="nowDate+1"></nz-option>
+                                        <nz-option [nzLabel]="nowDate+2" [nzValue]="nowDate+2"></nz-option>
+                                        <nz-option [nzLabel]="nowDate+3" [nzValue]="nowDate+3"></nz-option>
+                                        <nz-option [nzLabel]="nowDate+4" [nzValue]="nowDate+4"></nz-option>
+                                        <nz-option [nzLabel]="nowDate+5" [nzValue]="nowDate+5"></nz-option>
+                                    </nz-select>
+                                    <span *ngIf="!_searchForm.value.year" class="placehoder-show">请选择年份</span>
+                                </div>
+                                <div class='simple-search-bar-search-box'>
+                                    <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+                <ng-template #listTools>
+                    <div class="btn-group">
+                        <button nz-button [nzType]="'primary'" *spkAuthzIf="{hasPermission: 'PERIOD:SWITCH:ADD'}" (click)="addyear($event,'add')">
+                            <i class="iconfont icon-tianjia" style="font-size:12px;"></i> 添加</button>
+                        <!--<button nz-button [nzLoading]="addbtnstate" (click)="addyear($event,'add')" [nzType]="'primary'" [nzSize]="'large'">添加</button>-->
+                    </div>
+                </ng-template>
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <span *spkAuthzIf="{hasPermission: 'PERIOD:SWITCH:CARRYOVER'}">
+                        <i *ngIf="row.isCarryover=='false'" title="结转" style="font-size:16px;cursor:pointer;color:#007fbb" (click)="isCarryover(row)"
+                            class="iconfont icon-qimojiezhuan-selected"></i>
+                        <i *ngIf="row.isRunable=='true'" title="正在结转" style="font-size:16px;cursor:pointer;color:#007fbb" class="iconfont icon-weibiaoti525"></i>
+                        <i *ngIf="row.isCarryover=='true'" title="已结转" style="font-size:16px;cursor:pointer;color:#888" class="iconfont icon-weibiaoti525"></i>
+                    </span>
+                    <span *spkAuthzIf="{hasPermission: 'PERIOD:SWITCH:EDIT'}">
+                        <i *ngIf="row.isOpen=='false'" title="开启" style="font-size:16px;cursor:pointer;color:#007bbf" (click)="isOpen(row)" class="iconfont icon-mima"></i>
+                    </span>
+
+                    <i *ngIf="row.isOpen=='true'" title="已开启" style="font-size:16px;cursor:pointer;color:#888" (click)="isClose(row)" class="iconfont icon-mima"></i>
+                </ng-template>
+
+                <ng-template cuiColTpl="isCarryover" let-row="row">
+                    <span [title]="row.isCarryover=='true'?'已结转':'结转中'" *ngIf="row.isCarryover=='true'|| row.isRunable==true">
+                        <nz-switch [nzDisabled]="true" [(ngModel)]="!row.isCarryover"></nz-switch>
+                    </span>
+                    <!-- <span *ngIf="" style="color:rgb(238, 255, 0)">正在结转</span> -->
+                    <span *ngIf="row.isCarryover=='false'&&!row.isRunable">
+                        <span *ngIf="row.isOpen=='true'">
+                            <nz-switch [nzDisabled]="true" [ngModel]="row.isCarryover" title="关闭后才可结转"></nz-switch>
+                        </span>
+                        <span *ngIf="row.isOpen=='false'">
+                            <nz-switch [ngModel]="row.isCarryover" (ngModelChange)="isCarryover($event,row)"></nz-switch>
+                        </span>
+                    </span>
+                </ng-template>
+
+                <ng-template cuiColTpl="isOpen" let-row="row">
+                    <span *ngIf="row.isOpen=='true'">
+                        <nz-switch [ngModel]="true" (click)="isClose(row)"></nz-switch>
+                    </span>
+                    <span *ngIf="row.isOpen=='false'">
+                        <span [title]="row.isRunable==true?'正在结转不可重复操作':'已经结转不能再开启'" *ngIf=" row.isRunable==true||row.isCarryover=='true'">
+                            <nz-switch [nzDisabled]="true" [ngModel]="false"></nz-switch>
+                        </span>
+                        <span *ngIf=" !row.isRunable&&row.isCarryover=='false'">
+                            <nz-switch [nzDisabled]="false" [ngModel]="false" (click)="isOpen(row)"></nz-switch>
+                        </span>
+                    </span>
+                </ng-template>
+            </cui-data-table>
+        </nz-spin>
+    </div>
+</div>
+<nz-modal *ngIf="isVisible" [nzVisible]="isVisible" [nzZIndex]="1002" [nzFooter]="false" [nzTitle]="'添加年度学时开关'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+            <!-- <div class="card"> -->
+            <div class="card-body">
+                <h5 class="card-title">选择年份</h5>
+                <div class="row">
+                    <div class="col-12 push-4 order-1">
+                        <div class="form-group row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>学时年份</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.year">
+                                    <nz-select nzAllowClear formControlName="year" [nzPlaceHolder]="'请选择培训形式'">
+                                        <nz-option [nzLabel]="nowDate" [nzValue]="nowDate">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate + 1" [nzValue]="nowDate + 1">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate + 2" [nzValue]="nowDate + 2">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate + 3" [nzValue]="nowDate + 3">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="nowDate + 4" [nzValue]="nowDate + 4">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-col [nzOffset]="16" [nzSpan]="10" nz-form-control>
+                                        <span (click)="submitform()" [ngClass]="btnsubmit? 'not-allowed cancel-btn':'cancel-btn'">提交</span>
+                                        <button [nzLoading]="addbtnstate" nz-button [nzType]="'primary'" [disabled]="!_form.valid">保存并开启</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+        </form>
+    </ng-template>
+</nz-modal>

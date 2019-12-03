@@ -1,0 +1,45 @@
+<div class="teacher-qualification">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data"  [(selection)]="selection"
+            (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="teacherType" let-row="row">
+                <span>{{getCourseTypeText(row.courseType)}}</span>
+            </ng-template>
+            <!-- <ng-template cuiColTpl="img" let-row="row">
+                <span>
+                    <img width="40" [src]="row.imageUrl" alt="">
+                </span>
+            </ng-template> -->
+            <ng-template cuiColTpl="group" let-row="row">
+                {{row.userGroup?.name}}
+            </ng-template>
+            <ng-template cuiColTpl="categr" let-row="row">
+                {{row.category?.name}}
+            </ng-template>
+
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-input formControlName="name" [nzPlaceHolder]="'名称'"> </nz-input>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #theListTools>
+    <!-- <button type="button" class="btn btn-primary" [routerLink]="['../',13]">红班详情</button> -->
+</ng-template>

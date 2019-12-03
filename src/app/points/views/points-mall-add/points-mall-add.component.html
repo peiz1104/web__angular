@@ -1,0 +1,20 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">添加商城</h3>
+    
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../', 'list']">返回商城列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+          <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+
+          <spk-mall-add-form [isCreate]="true" (save)="onSave($event)"></spk-mall-add-form>
+         
+    </div>
+  </div>
+</div>

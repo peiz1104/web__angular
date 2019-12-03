@@ -1,0 +1,117 @@
+<div class="period-department">
+    <div class="select-body">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadData($event)">
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form nz-form>
+                            <nz-input name="search" [(ngModel)]="search" [nzPlaceHolder]="'请输入名称'"></nz-input>
+                            <button (click)="loadData()" nz-button [nzType]="'primary'">
+                                <i class="iconfont icon-chaxun"></i>
+                                <span>查询</span>
+                            </button>
+                        </form>
+                    </ng-container>
+                </ng-template>
+                <ng-template #listTools>
+                    <button (click)="addDepartmentHour()" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia-copy"></i>添加</button>
+                    <button (click)="mutipleDelete()" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-shanchu"></i>删除</button>
+                </ng-template>
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <button [routerLink]="['./',row.id,'list']" [nzSize]="'small'" nz-button [nzType]="'primary'" [disabled]="row.staus">进入</button>
+                    <button (click)="editDepartment(row.id)" [nzSize]="'small'" nz-button [nzType]="'primary'" [disabled]="row.status">编辑</button>
+                    <button [nzSize]="'small'" nz-button [nzType]="'danger'" [disabled]="row.hasCount" (click)="singleDelete([row.id])">删除</button>
+                </ng-template>
+
+                <ng-template cuiColTpl="displayName" let-row="row">
+                    <span>{{row.createdBy?.displayName}}</span>
+                </ng-template>
+
+                <ng-template cuiColTpl="createdDate" let-row="row">
+                    <span>{{row.createdDate|date:'yyyy-MM-dd'}}</span>
+                </ng-template>
+            </cui-data-table>
+        </nz-spin>
+    </div>
+</div>
+<!-- 添加编辑modal -->
+<nz-modal class="form-modal-assit" [nzZIndex]="1002" [nzWidth]="900" [nzFooter]="false" *ngIf="isVisible" [nzVisible]="isVisible"
+    [nzTitle]="editperiodId?'编辑部门学时':'添加部门学时'" [nzContent]="modalContent" [nzZIndex]="1000" [nzMaskClosable]="false" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+            <div class="form-name-box">
+                <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 push-6 order-1">
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>培训名称</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.name">
+
+                                                <nz-input [nzPlaceHolder]="'请输培训名称'" type="text" name="trainDays" class="form-control" formControlName="name"></nz-input>
+
+                                                <div nz-form-explain *ngIf="_form.controls.name.dirty&&_form.controls.name.hasError('required')">请输入天数!</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 pull-6 order-2">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label for="">上传附件</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <cui-fileupload accept="image/*,application/zip,application/vnd.ms-powerpoint,application/msword,application/vnd.ms-excel,text/*"
+                                                    mode="file" name="file" url="/api/upload/file" [auto]="true" [multiple]="true"
+                                                    (uploadComplete)="onFileUpload($event)" class="upload-file"></cui-fileupload>
+                                                <ul *ngIf="files.length" class="file-list-upload">
+                                                    <li *ngFor="let item of files" class="file-item upload-success">
+                                                        <span class="show-item">
+                                                            <a [href]="item.relativePath" [download]="item.originFileName">
+                                                                <strong>{{item.originFileName}}</strong>
+                                                            </a>
+                                                        </span>
+                                                        <span></span>
+                                                        <div class="progress" style="height: 3px;">
+                                                            <div class="progress-bar progress-bar-striped bg-success" style="width: 100%;"></div>
+                                                        </div>
+                                                        <span (click)="removeUploadfile(item.relativePath)" class="item-remove">✕</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group row">
+                                        <div style="width:100%" nz-form-item nz-row>
+                                            <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                                                <button [nzLoading]="btnstate" nz-button [nzType]="'primary'" [disabled]="!_form.valid">保存</button>
+                                                <span (click)="goBack()" class="cancel-btn">取消</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,15 @@
+:host::ng-deep{
+    .attchment-list-box{
+        .active{
+            color:#007eff;
+        }
+        .cui-data-table-form-box{
+            width:900px;
+           
+        }
+        button{
+            cursor: pointer;
+            margin-right:2px;
+        }
+    }
+}

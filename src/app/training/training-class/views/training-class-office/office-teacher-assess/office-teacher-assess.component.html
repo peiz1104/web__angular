@@ -1,0 +1,86 @@
+<div class="certificate-edit-box">
+    <div class='top-bread'>
+        <div class="page-header">
+            <h5 class="page-title">讲师评估:
+                <small>讲师评估信息</small>
+            </h5>
+            <button type="button" class="btn btn-secondary pull-right" [routerLink]="['../../']">返回授课列表
+        <i class="fa fa-level-up"></i>
+      </button>
+        </div>
+    </div>
+    <div class="page-body" *ngIf="assesses">
+        <div class="container">
+            <cui-data-table [columns]="columns" [data]="assesses" [loading]="loading" (reload)="loadData($event)">
+                <ng-template cuiColTpl="statusTpl" let-row="row">
+                    <a (click)="confirmPublish(row);" *ngIf="!row.isPublished" class="badge badge-secondary text-light">未发布</a>
+                    <a (click)="onPublish(row);" *ngIf="row.isPublished" class="badge badge-success text-light">已发布</a>
+                </ng-template>
+                <ng-template #rowActions let-row="row">
+                    <a href="javascript:;" class="text-success" (click)="showModal(row)">管理</a>
+                    <span>|</span>
+                    <a href="javascript:;" class="text-success" (click)="toAnalysis(row)">统计分析</a>
+                    <span>|</span>
+                    <a href="javascript:;" class="text-danger" *ngIf="!row.isPublished" (click)="delete(row)">删除</a>
+                    <a href="javascript:;" class="text-secondary" *ngIf="row.isPublished" disabled>删除</a>
+                </ng-template>
+                <ng-template #listTools>
+                    <div class="clearfix" *ngIf="!assesses.length">
+                        <div class="pull-left" style="font-weight: 800">温馨提示：只能创建或者引用一个评估</div>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-primary" (click)="showSourse()">
+                                <i class="fa fa-copy"></i>从模板库中复制</button>
+                            <button type="button" class="btn btn-primary" (click)="showModal()">
+                                <i class="fa fa-plus"></i>创建评估</button>
+                        </div>
+                    </div>
+                    <div class="clearfix" *ngIf="assesses.length">
+                        <div class="pull-left" style="font-weight: 800">温馨提示：只能创建或者引用一个评估</div>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-primary" (click)="showSourse(true)">
+                                <i class="fa fa-copy"></i>重新从模板库中复制</button>
+                            <button type="button" class="btn btn-primary" (click)="showModal(true)">
+                                <i class="fa fa-plus"></i>重新创建评估</button>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template cuiColTpl="start-date" let-row="row">
+                    <span>{{row.startDate | date: 'yyyy-MM-dd' }}</span>
+                </ng-template>
+                <ng-template cuiColTpl="end-date" let-row="row">
+                    <span>{{row.endDate | date: 'yyyy-MM-dd' }}</span>
+                </ng-template>
+            </cui-data-table>
+        </div>
+        <nz-modal [nzWidth]="1000" [nzVisible]="isVisible" [nzFooter]="false" [nzTitle]="'评估信息'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+            <ng-template #modalContent>
+                <div *ngIf="isVisible">
+                    <spk-assess-detail *ngIf="showEdie" [outSide]="'CLASSROOM_TEACHER'" [paperId]="paperId" [assessId]="assessId"></spk-assess-detail>
+                    <spk-assess-edit *ngIf="!showEdie" (closeModal)="closeModal()" [trainingId]="offeringId" [courseId]="courseId" [teacherId]="teacherId" [outSide]="'SELF_CLASSROOM_TEACHER'"></spk-assess-edit>
+                </div>
+            </ng-template>
+        </nz-modal>
+        <nz-modal [nzWidth]="1000" [nzVisible]="isShowSourse" [nzFooter]="false" [nzTitle]="'评估模板'" [nzContent]="sourseContent" (nzOnCancel)="closeSourse($event)">
+            <ng-template #sourseContent>
+                <div *ngIf="isShowSourse">
+                    <cui-data-table [columns]="sourseColumns" [data]="allPapers" [loading]="loading" (reload)="loadSourse($event)" [pagination]="pagination" selectType="radio" [(selection)]="sourseSelected">
+                        <ng-template #simpleSearch>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <nz-input [nzSize]="'large'" [(ngModel)]="sourseText" name="searchtext" [nzPlaceHolder]="'请输入模板名称'"> </nz-input>
+                                </div>
+                                <div class="form-group ml-2">
+                                    <button type="button" class="btn btn-primary" (click)="loadSourse()">搜索</button>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </cui-data-table>
+                    <div class="text-right" *ngIf="allPapers?.length>0">
+                        <button nz-button [nzType]="'primary'" (click)="saveSourse()" [nzLoading]="bLoading">保存</button>
+                    </div>
+                </div>
+            </ng-template>
+        </nz-modal>
+    </div>
+</div>

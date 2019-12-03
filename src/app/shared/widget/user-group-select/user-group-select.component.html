@@ -1,0 +1,148 @@
+<ng-container *ngIf="controlType=='dropdown'">
+    <!-- 下拉选择组织 -->
+    <cui-tree-select [config]="_defaultTreeConfig" [(ngModel)]="_value" (change)="onChange($event)"></cui-tree-select>
+</ng-container>
+
+<ng-container *ngIf="controlType=='modal'">
+    <!-- 弹框选择组织 -->
+    <div *ngIf="!echoTpl" class="ant-select ant-select-show-search2" [ngClass]="{'ant-select-enabled': !isDisabled, 'ant-select-disabled': isDisabled}"
+        [style]="style" [style.width]="'100%'">
+        <div class="ant-select-selection" [ngClass]="{'ant-select-selection--multiple': mode=='multiple', 'ant-select-selection--single': mode=='single'}"
+            (click)="!isDisabled && openLookup()">
+            <div class="ant-select-selection__rendered">
+                <div *ngIf="!_value || _value?.length == 0" class="ant-select-selection__placeholder">{{placeholder}}</div>
+                <div *ngIf="overflow && _value?.length > overflow" class="ant-select-selection__placeholder text-secondary">您已选择{{_value.length}}个组织</div>
+                <ul *ngIf="isMultiple && (!overflow || _value?.length <= overflow)">
+                    <li *ngFor="let ug of _value" class="ant-select-selection__choice ng-trigger ng-trigger-tagAnimation">
+
+                        <div class="ant-select-selection__choice__content">{{ug.name}}</div>
+                        <span class="ant-select-selection__choice__remove" (click)="removeValue($event,ug)" style="top: 0;"></span>
+                    </li>
+                    <!-- <li class="ant-select-search ant-select-search--inline">
+                        <div class="ant-select-search__field__wrap">
+                            <input type="text" class="ant-select-search__field ng-pristine ng-valid ng-touched">
+                            <span class="ant-select-search__field__mirror"></span>
+                        </div>
+                    </li> -->
+                </ul>
+                <div *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__placeholder text-secondary">{{_value[0].name}}</div>
+            </div>
+            <span class="ant-select-arrow"></span>
+        </div>
+    </div>
+
+    <ng-container *ngIf="echoTpl">
+        <ng-container *ngTemplateOutlet="echoTpl; context: {value: _value}"></ng-container>
+    </ng-container>
+
+    <ng-template #modalTitle>
+        <div class="text-center">选择部门</div>
+    </ng-template>
+    <ng-template #modalContent>
+        <div class="row px-4">
+            <div class="col">
+                <h5 class="mb-2">选择</h5>
+                <div class="card" style="height: 360px; background-color: #f4f6f8; overflow: auto;">
+                    <div class="card-body">
+                        <nz-input [nzType]="'text'" [nzPlaceHolder]="'搜索'" [(ngModel)]="ugSearchText" (ngModelChange)="onUserGroupSearch($event)">
+                            <ng-template #prefix>
+                                <i class="anticon anticon-search"></i>
+                            </ng-template>
+                        </nz-input>
+
+                        <cui-tree #tree [hidden]="ugSearchText" [value]="roots" [config]="_defaultTreeConfig" [selectionMode]="mode=='multiple' ? 'checkbox' : 'single'"
+                            [propagateSelectionDown]="true" [propagateSelectionUp]="true" (nodeSelect)="onNodeSelect($event)"
+                            (nodeUnselect)="onNodeUnselect($event)">
+                            <ng-template #nodeTemplate let-node="node" let-me="me">
+                                <spk-user-group-popover *ngIf="node.data.type == 'USER_GROUP'" [userGroup]="node.data" [echoTpl]="echoTpl" placement="right">
+                                </spk-user-group-popover>
+                                <ng-container *ngIf="node.data.type != 'USER_GROUP'" [ngTemplateOutlet]="echoTpl"></ng-container>
+                                <ng-template #echoTpl>
+                                    <div class="text-truncate">
+                                        <span class="cui-treenode-toggler fa fa-fw" [ngClass]="{'fa-caret-right': node.hasChildren, 'fa-rotate-45': node.expanded}"
+                                            (click)="me.toggle($event)"></span>
+                                        <span class="cui-treenode-chkbox" *ngIf="me.tree.selectionMode == 'checkbox'">
+                                            <div class="cui-chkbox-box">
+                                                <span class="cui-chkbox-icon fa" [ngClass]="{'fa-check': isSelected(node), 'fa-minus': node.partialSelected}"></span>
+                                            </div>
+                                        </span>
+                                        <span class="ug-tree-item">
+                                            <i *ngIf="!node.icon" class="fa fa-fw" [ngClass]="{'fa-folder': !node.expanded, 'fa-folder-open': node.expanded}"></i>
+                                            <i *ngIf="node.icon" [class]="'fa fa-fw ' + node.icon"></i>
+                                            {{node.label}}
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </cui-tree>
+
+                        <div *ngIf="ugSearchText">
+                            <div class="mb-2">
+                                <div style="float: right;">
+                                    <a *ngIf="isMultiple" (click)="freeSelectAll()">选择全部</a>
+                                </div>
+                                <h5 class="d-inline">部门</h5>
+                                <p [ngClass]="{'d-inline': !searchLoading, 'd-none': searchLoading}">共筛选出 {{ugSearchResult?.totalElements || 0}} 个部门</p>
+                                <p [ngClass]="{'d-inline': searchLoading, 'd-none': !searchLoading}">正在搜索...</p>
+                            </div>
+                            <ul>
+                                <li class="ug-item" *ngFor="let ug of ugSearchResult?.content" (click)="onFreeSelect(ug)">
+                                    <spk-user-group-popover [userGroup]="ug">
+                                        <ng-template #echoTpl>
+                                            <div style="margin: -6px 0; line-height: 32px;">
+                                                <i class="fa fa-folder"></i>
+                                                {{ug.name}}
+                                            </div>
+                                        </ng-template>
+                                    </spk-user-group-popover>
+                                </li>
+                            </ul>
+                            <div *ngIf="ugSearchResult?.totalPages > 1" class="m-2">
+                                <span>精确搜索条件 或者</span>
+                                <a class="text-primary">展开其余 {{ ugSearchResult?.totalElements - ugSearchResult?.numberOfElements }} 条</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div style="float: right;">
+                    <a *ngIf="isMultiple" (click)="clearAllSelection()">清空</a>
+                </div>
+                <h5 class="mb-2">已选 ({{_value?.length || 0}})</h5>
+                <div class="card" style="height: 360px; background-color: #f4f6f8; overflow: auto;">
+                    <div class="card-body">
+                        <ul>
+                            <li class="ug-item" *ngFor="let ug of _value">
+                                <spk-user-group-popover [userGroup]="ug" placement="left">
+                                    <ng-template #echoTpl>
+                                        <i class="fa fa-folder"></i> {{ug.name}}
+                                        <span class="pull-right" (click)="unselect(ug)">
+                                            <i class="fa fa-close text-secondary"></i>
+                                        </span>
+                                    </ng-template>
+                                </spk-user-group-popover>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button type="button" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="handleOk($event)" [nzLoading]="isConfirmLoading">
+            <span>确 定</span>
+        </button>
+        <!-- <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="handleCancel($event)">
+        <span>取 消</span>
+        </button> -->
+    </ng-template>
+</ng-container>
+
+<ng-container *ngIf="controlType=='inline'">
+    <!-- 行内选择组织 -->
+
+</ng-container>
+
+<!-- <nz-select [nzMode]="'multiple'" [nzPlaceHolder]="''" [nzAllowClear]="true" [hidden]="true">
+</nz-select> -->

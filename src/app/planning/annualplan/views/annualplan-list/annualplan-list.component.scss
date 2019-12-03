@@ -1,0 +1,104 @@
+:host ::ng-deep {
+    .main {
+        width: 100%;
+        margin: 0 auto;
+        .search {
+            width: 100%;
+            height: 50px;
+            margin: 0 auto;
+            line-height: 50px;
+            overflow: hidden;
+            .nameOfTheYearValue {
+                display: block;
+                float: left;
+            }
+            .examine {
+                display: block;
+                float: left;
+                margin-left: 50px;
+            }
+            .examineSelect {
+                width: 140px;
+                float: right;
+            }
+            .searchContent {
+                display: block;
+                margin-left: 30px;
+                float: left;
+                margin-top: 12px;
+            }
+        }
+        .operation {
+            width: 100%;
+            height: 50px;
+            margin: 0 auto;
+            line-height: 50px;
+            text-align: right;
+        }
+        .page {
+            width: 978px;
+            margin: 20px auto;
+            text-align: right;
+            .ant-pagination {
+                .ant-pagination-item-active {
+                    color: #ffff;
+                }
+            }
+        }
+        .ContentOfTheAnnualPlan {
+            width: 100%;
+            height: 118px;
+            background: #f7fbfe;
+            border: 1px solid #bebfbf;
+            border-radius: 5px;
+            margin-top: 20px;
+            .checkbox {
+                width: 40px;
+                height: 118px;
+                display: block;
+                float: left;
+                line-height: 118px;
+                text-align: center;
+            }
+            .AnnualPlanDetail {
+                width: calc(100% - 40px);
+                height: 118px;
+                float: left;
+                .title {
+                    font-size: 16px;
+                    color: #232323;
+                    line-height: 50px;
+                    height: 50px;
+                    cursor: pointer;
+                }
+                .content {
+                    width: 100%;
+                    height: 68px;
+                    overflow: hidden;
+                    span {
+                        width: 142px;
+                        height: 68px;
+                        display: block;
+                        float: left;
+                        font-size: 12px;
+                        color: #888888;
+                        p {
+                            line-height: 26px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            i {
+                                font-style: normal;
+                                color: #232323;
+                            }
+                            .anticon {}
+                            .anticon-delete {
+                                color: #f00000;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

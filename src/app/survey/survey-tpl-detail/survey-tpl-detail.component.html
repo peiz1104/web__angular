@@ -1,0 +1,24 @@
+
+<cui-layout>
+  <cui-layout-sider width="160" style="background:#f8f8fa">
+      <div style="background: #f0f3fa;">
+          <a class="text-center d-block p-4" [routerLink]="['../']">
+              <i class="fa fa-angle-left"></i>
+          </a>
+      </div>
+      <ul nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+          <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+              <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">属性</a>
+          </li>
+          <li nz-menu-item [nzSelected]="rlaPaper.isActive">
+              <a [routerLink]="['./', 'paper']" routerLinkActive #rlaPaper="routerLinkActive">编辑问卷</a>
+          </li>
+          <li nz-submenu class="d-none"><!-- 修复缩进 --></li>
+      </ul>
+  </cui-layout-sider>
+  <cui-layout>
+      <cui-layout-content>
+          <router-outlet></router-outlet>
+      </cui-layout-content>
+  </cui-layout>
+</cui-layout>

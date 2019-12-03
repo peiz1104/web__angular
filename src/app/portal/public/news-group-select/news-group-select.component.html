@@ -1,0 +1,7 @@
+<nz-select *ngIf="groups && groups.length > 0" [(ngModel)]="_value" name="newsGroupSelect" (ngModelChange)="onChange($event)" [nzPlaceHolder]="''" [nzAllowClear]="true" >
+    <nz-option 
+        *ngFor="let group of groups" 
+        [nzLabel]="group.name"
+        [nzValue]="group.id">
+    </nz-option>
+</nz-select>

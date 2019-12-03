@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{course.code}}]{{course.name}}: 资料
+      <small></small>
+    </h3>
+  </div>
+
+  <div class="page-body">
+    <ng-container *ngIf="!course?.materialGroupId">
+      <p class="text-secondary mb-2">
+        <i class="fa fa-info-circle fa-lg text-info"></i> 该课程的资料管理功能没有初始化，请点击下面的按钮初始化课程资料管理。</p>
+      <button type="button" class="btn btn-secondary" (click)="initGroup()">初始化课程资料</button>
+    </ng-container>
+
+    <ng-container *ngIf="!!course?.materialGroupId">
+    <spk-materials-list [materialGroupId]="course?.materialGroupId" [editable]="editable"></spk-materials-list>
+    </ng-container>
+  </div>
+</div>

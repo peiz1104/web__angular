@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small [routerLink]="['../../../','list']">| 指定年度计划</small>
+            <small>| 指定培训计划</small>
+            <small>| 导入指定计划</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                基础配置
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">指定年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../', 'list']">指定培训计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                导入指定计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+    </div>
+    <!-- <div class="page-body">
+        <div>第一步：<a>下载指定计划模板</a></div>
+        <div>第二步：
+            <div class="col-6">
+                <cui-fileupload mode="video" name="file" url="/api/upload/file" [auto]="true" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+            </div>
+        </div>
+        <div>第三步：<button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="import()">导入计划</button></div>
+        <div><button nz-button [nzType]="'default'" [nzSize]="'large'" [routerLink]="['../list']">返回</button></div>
+    </div> -->
+    <div class="page-body">
+        <div class="plan-template">
+            <div class="plan-template-li">
+                <div class="plan-template-li-title">
+                    <h3> 第一步</h3>
+                </div>
+                <div class="plan-template-li-input-box">
+                    <div class='input-box'>下载指定计划模板</div>
+                    <button type="button" class="btn btn-primary btn-box" (click)="download()">下载</button>
+                </div>
+            </div>
+            <div class="plan-template-li">
+                <div class="plan-template-li-title">
+                    <h3>第二步</h3>
+                </div>
+                <div class="" style="width: 500px; margin-left: 200px;">
+                    <cui-fileupload mode="file" name="file" url="/api/upload/file" [auto]="true" (uploadComplete)="onUploadComplete($event)"
+                        class="btn-box"></cui-fileupload>
+                </div>
+            </div>
+            <div class="plan-template-li noborder">
+                <div class="plan-template-li-input-box">
+                    <!-- <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'validating'" [nzLoading]="true">
+                        <span>解析中</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'importing'" [nzLoading]="true">
+                        <span>导入中</span>
+                    </button> -->
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'before'" (click)="import()">导入计划</button>
+                    <span *ngIf="status == 'after'">导入完成</span>
+                    <button nz-button [nzType]="'default'" [nzSize]="'large'" [routerLink]="['../list']">返回</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错误信息展示 -->
+        <div class="box-center" nz-row *ngIf="messageShow == true">
+            <h3>导入模板中可能存在以下错误，除此以外，均导入成功(若无，则全部导入成功)</h3>
+            <br>
+
+            <cui-data-table [columns]="messageColumns" [data]="message">
+                <ng-template cuiColTpl="colsheet" let-row="row">
+                    <div>{{row.sheet}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colnumber" let-row="row">
+                    <div>{{row.number}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="colmessage" let-row="row">
+                    <div>
+                        <ul>
+                            <li *ngFor="let it of row.errorList;let i = index"> {{(i+1)+'、'+it}}；</li>
+                        </ul>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </div>
+</div>

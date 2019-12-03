@@ -1,0 +1,53 @@
+:host::ng-deep{
+    .cui-data-table-wrap{
+        clear: both;
+    }
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+}
+:host ::ng-deep{
+    .ant-modal{
+        width: 800px!important;
+    }
+    .input{
+        width: 314px;
+        float: left;
+        margin-right: 20px;
+    }
+  }
+.dropdown-show-btn{
+    float:right;
+    .show-btn-index{
+        z-index: 9999!important;
+        display: none;
+    }
+    .hover-box-show:hover .show-btn-index{
+      display: block;
+    }
+}
+.form-box {
+    .form-body {
+        margin-top: 20px;
+    }
+}
+
+:host ::ng-deep {
+    .rejectBtn {
+        position: absolute;
+        bottom: 10px;
+        left:16px;
+    }
+}
+
+.changeModal{
+    width: 110px;
+}
+.hiddenWord{
+    overflow:hidden; 
+    text-overflow:ellipsis;
+    display:-webkit-box; 
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; 
+}

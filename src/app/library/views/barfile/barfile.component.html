@@ -1,0 +1,13 @@
+<div class="bar-file-box">
+    <div class="bar-file-top">
+        <ng-container *ngFor="let item of routeLinkActive">
+            <div  (click)="goActiveRoute(item)" *spkAuthzIf="item.hasPermission" [ngClass]="url==item.route? 'active antd-tab':'antd-tab'" >
+                    {{item.name}}
+            </div>
+        </ng-container>
+
+    </div>
+    <div class="bar-content-main">
+        <router-outlet></router-outlet>
+    </div>
+</div>

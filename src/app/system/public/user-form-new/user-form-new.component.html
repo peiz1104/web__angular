@@ -1,0 +1,429 @@
+<!-- <div class="alert alert-info">
+    创建或编辑用户帐户的个人详细资料。在“可配置属性”字段中输入值以存储每个用户特定于站点的信息。可在站点级别创建其它可配置属性。
+    <br> 此信息会显示在个人资料页面上。 部分设置对于 接入 账号无效。
+</div> -->
+<form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_save($event,_form.value,'s2')">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <div class="row">
+                <div class="col-5 push-7 order-2">
+                    <!-- <div class="">
+                            <img [src]="relativePath" alt="" width="160" height="160" style="vertical-align:text-bottom;">
+                            <br>
+                            <i>
+                                <cui-fileupload class="custom-upload" name="image" mode="image" url="/api/images/upload" [auto]="true" (uploadComplete)="getfile($event)">
+                                </cui-fileupload>
+                                <span class="word-des">请选择文件</span>
+                            </i>
+                            <br>
+                            <span class="text-muted">
+                                <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, GIF 或 PNG, 大小不能超过 1MB。</span>
+                        </div> -->
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>姓名</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.displayName">
+                                <nz-input [nzPlaceHolder]="'请输入姓名'" type="text" name="displayName" class="form-control" formControlName="displayName"></nz-input>
+                                <div nz-form-explain *ngIf="_form.controls.displayName.dirty&&_form.controls.displayName.hasError('required')">请输入姓名！</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>出生日期</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-datepicker (ngModelChange)="changeDate($event)" formControlName="birthday" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">性别</label>
+                        <div class="col-9 rheight">
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input rposition" type="radio" id="sex-mail" value="MALE" name="sex" formControlName="sex"> 男
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input rposition" type="radio" id="sex-famail" value="FAMALE" name="sex" formControlName="sex"> 女
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>办公电话</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入座机号'" (blur)="changeofficenumber($event)" type="text" name="officePhoneNumber" class="form-control"
+                                    formControlName="officePhoneNumber"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>所属组织</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.userGroup">
+                                <spk-user-group-select (ngModelChange)="logSelectGroup($event)" name="userGroup" formControlName="userGroup"></spk-user-group-select>
+                                <div nz-form-explain *ngIf="_form.controls.userGroup.dirty&&_form.controls.userGroup.hasError('required')">请选择组织！</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7 pull-5 order-1">
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>用户名</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.username">
+                                <nz-input [nzPlaceHolder]="'请输入用户名'" type="text" name="username" class="form-control" formControlName="username"></nz-input>
+                                <div nz-form-explain *ngIf="_form.controls.username.dirty&&_form.controls.username.hasError('required')">请输入用户名！</div>
+                                <div nz-form-explain *ngIf="_form.controls.username.dirty&&_form.controls.username.hasError('pattern')">用户名无效！</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>身份证号</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.iDCardNumber">
+                                <input placeholder="请输入身份证号" type="text" name="iDCardNumber" class="form-control" formControlName="iDCardNumber" (blur)="updateBithday($event)">
+                                <div nz-form-explain *ngIf="_form.controls.iDCardNumber.dirty&&_form.controls.iDCardNumber.hasError('required')">请输入身份证号！</div>
+                                <div nz-form-explain *ngIf="_form.controls.iDCardNumber.dirty&&_form.controls.iDCardNumber.hasError('pattern')">身份证号不符合要求！</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row">
+                        <label for="" class="col-form-label col-3">用户状态</label>
+                        <div class="col-9 rheight">
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input rposition" type="radio" id="sex-mail" value="ACTIVE" name="status" formControlName="status"> 正常
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input rposition" type="radio" id="sex-famail" value="LOCKED" name="status" formControlName="status"> 锁定
+                                </label>
+                            </div>
+                        </div>
+                    </div> -->
+
+
+                    <!--<div class="form-group row">
+                <label for="" class="col-form-label col-3">所属组织</label>
+                <div class="col-9">
+                  <spk-user-group-select name="userGroup" formControlName="userGroup"></spk-user-group-select>
+                </div>
+              </div>-->
+
+
+
+                    <!-- <div class="form-group row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label>性别</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.sex">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" id="sex-mail" value="MALE" name="sex" formControlName="sex"> 男
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" id="sex-famail" value="FAMALE" name="sex" formControlName="sex"> 女
+                                        </label>
+                                    </div>
+                                </div>
+                            </div> -->
+                    <!-- <label for="" class="col-form-label col-3">性别</label> -->
+                    <!-- <div class="col-9">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" id="sex-mail" value="MALE" name="sex" formControlName="sex"> 男
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" id="sex-famail" value="FAMALE" name="sex" formControlName="sex"> 女
+                                        </label>
+                                    </div>
+                                </div> -->
+                    <!-- </div> -->
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>民族</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入名族'" type="text" name="userAttribute.nationalMz" class="form-control" formControlName="nationalMz"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>手机号</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.phoneNumber">
+                                <nz-input [nzPlaceHolder]="'请输入手机号'" type="text" name="phoneNumber" class="form-control" formControlName="phoneNumber"></nz-input>
+                                <div nz-form-explain *ngIf="_form.controls.phoneNumber.dirty&&_form.controls.phoneNumber.hasError('required')">请填写手机号！</div>
+                                <div nz-form-explain *ngIf="_form.controls.phoneNumber.dirty&&_form.controls.phoneNumber.hasError('pattern')">无效手机号!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>邮箱</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.email">
+                                <nz-input [nzPlaceHolder]="'请输入邮箱'" type="text" name="email" class="form-control" formControlName="email"></nz-input>
+                                <!-- <div nz-form-explain *ngIf="_form.controls.email.dirty&&_form.controls.email.hasError('required')">请填写邮箱！</div> -->
+                                <div nz-form-explain *ngIf="_form.controls.email.dirty&&_form.controls.email.hasError('pattern')">无效邮箱!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end col-7 -->
+            </div>
+            <!-- end .row -->
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">其他信息</h5>
+            <div class="row">
+                <div class="col-6 push-6 order-1">
+
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label nz-form-item-required>人员类型</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="12">
+                            <nz-select (ngModelChange)="chooseuserTye($event)" formControlName="userTypesId" [nzSize]="'large'" [nzPlaceHolder]="'请选择培训分类'"
+                                [nzShowSearch]="true">
+
+                                <nz-option *ngFor="let it of userTypess" [nzLabel]="it.name" [nzValue]="it.id"></nz-option>
+                            </nz-select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>政治面貌</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <!-- <input type="text" name="politicalFeatures" class="form-control" formControlName="politicalFeatures"> -->
+                                <nz-select formControlName="politicalFeatures" nzAllowClear>
+                                    <nz-option [nzLabel]="'党员'" [nzValue]="'党员'"></nz-option>
+                                    <nz-option [nzLabel]="'群众'" [nzValue]="'群众'"></nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>岗位</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入岗位'" type="text" name="position" class="form-control" formControlName="position"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>最高学历</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'最高学历'" type="text" name="education" class="form-control" formControlName="education"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>所学专业一</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入专业'" type="text" name="firstSpecialty" class="form-control" formControlName="firstSpecialty"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>从事寿险行业年限</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入从事寿险行业年限'" type="text" name="cupluralityoNumber" class="form-control" formControlName="cupluralityoNumber"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">语言</label>
+                        <div class="col-9">
+                            <select style="height:30px;width:100px!important" name="language" class="form-control w-25" formControlName="language">
+                                <option value="zh_CN">简体中文</option>
+                                <option value="en_US">English</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 pull-6 order-2">
+
+
+
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label nz-form-item-required>状态</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <!-- <input type="text" name="politicalFeatures" class="form-control" formControlName="politicalFeatures"> -->
+                                <nz-select [nzPlaceHolder]="'请选择状态'" formControlName="status" nzAllowClear [nzShowSearch]="true">
+                                    <nz-option *ngFor="let option of optiontype" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>职级</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入职级'" type="text" name="jobs" class="form-control" formControlName="jobs"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>毕业学校</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入毕业院校'" type="text" name="graduatedSchool" class="form-control" formControlName="graduatedSchool"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>所学专业二</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入专业'" type="text" name="secondSpecialty" class="form-control" formControlName="secondSpecialty"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>从事培训工作年限</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-input [nzPlaceHolder]="'请输入从事培训工作年限'" type="text" name="cupluralityPname" class="form-control" formControlName="cupluralityPname"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>生效时间</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                <span>不填写表示即时生效</span>
+                            </div>
+                        </div>
+                        <!-- <label for="" class="col-form-label col-3">生效时间</label>
+                                <div class="col-9">
+                                    <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                    <span>不填写表示即时生效</span>
+                                </div> -->
+                    </div>
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>到期时间</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                <span>不填写表示永不到期</span>
+                            </div>
+                        </div>
+                        <!-- <label for="" class="col-form-label col-3">到期时间</label>
+                                <div class="col-9">
+                                    <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                    <span>不填写表示永不到期</span>
+                                </div> -->
+                    </div>
+                    <!-- <input  type="hidden" name="id" class="form-control" formControlName="id" > -->
+                    <input type="hidden" name="userAttributeId" class="form-control" formControlName="userAttributeId">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">可配置属性</h5>
+            <p>此站点没有用户的任何可配置属性。可以从站点的“管理可配置属性”页创建可配置属性。</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-7">
+                    <div class="form-group row">
+                        <div nz-form-item nz-row>
+                            <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                                <button [nzLoading]="loading" nz-button [nzType]="'primary'" [disabled]="!_form.valid" *spkAuthzIf="{hasPermission: ['SYSTEM:USER:EDIT', 'SYSTEM:USER:ADD']}">保存</button>
+                                <ng-container *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}">
+                                    <span  [ngClass]="(!btnstatego&&!!_form.valid)? 'go-on-add-btn' : 'go-on-add-btn no-btn-allow'" *ngIf="isCreate&&(!btnstatego&&!!_form.valid)"
+                                        (click)="_save($event,_form.value,'goon')">保存并继续</span>
+                                    <span [ngClass]="(!btnstatego&&!!_form.valid)? 'go-on-add-btn' : 'go-on-add-btn no-btn-allow'" *ngIf="isCreate&&(btnstatego||!_form.valid)">保存并继续</span>
+                                </ng-container>
+                                <button nz-button [nzType]="'default'" [routerLink]="[isCreate ? '../list' : '../../list']" (click)="_cancel($event)">取消</button>
+                            </div>
+                        </div>
+                        <!-- <div class="col-9 offset-3">
+                                <button type="button" class="btn btn-primary" [disabled]="_form.invalid" (click)="_save($event,_form.value)">保存</button>
+                               <button type="button" class="btn btn-info" *ngIf="isCreate" [disabled]="_form.invalid">保存并继续</button>
+                                <button type="button" class="btn btn-secondary" [routerLink]="[isCreate ? '../list' : '../../list']" (click)="_cancel($event)">取消</button>
+                            </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

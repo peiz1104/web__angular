@@ -1,0 +1,36 @@
+<div class="login-wrapper d-flex flex-column justify-content-center align-items-center bg-faded">
+  <!-- <div class="logo mb-4">
+    <img src="./favicon.ico" alt="">
+  </div> -->
+
+  <h3 class="login-title text-center mb-4">登录系统</h3>
+
+  <div class="login-box">
+    <div class="alert alert-danger" *ngIf="error">用户名或密码错误{{error}}</div>
+
+    <div class="card">
+      <div class="card-body">
+        <form action="">
+          <div class="form-group">
+            <label for="_username" class="font-weight-bold">用户名</label>
+            <input type="text" name="_username" value="" class="form-control" [(ngModel)]="user.username">
+          </div>
+          <div class="form-group">
+            <!-- <a href="javascript:;" class="pull-right">忘记密码？</a> -->
+            <label for="_password" class="font-weight-bold">密码</label>
+            <input type="password" name="_password" value="" class="form-control" [(ngModel)]="user.password">
+          </div>
+          <button type="button" class="btn btn-success btn-block" (click)="login()">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-3" *ngIf="_isDevMode">
+      <div class="card-body bg-faded text-center">
+        <span>开发人员快速登录，</span> <a href="javascript:;" (click)="supperuser()" >超级管理员</a> <span>|</span>
+        <a href="javascript:;" (click)="guest()" >普通学员</a>
+        <!--<span>|</span> <a href="javascript:;" >联系管理员</a>-->
+      </div>
+    </div>
+  </div>
+</div>

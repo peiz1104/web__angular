@@ -1,0 +1,131 @@
+<div class="train-class-courselist">
+    <div class="planing-box">
+        <div class="top-bread">
+            <div class="page-header">
+                <h5 class="page-title">
+                    <small>考勤信息课程列表</small>
+                </h5>
+            </div>
+        </div>
+        <div class="form-box">
+            <div class="select-body">
+                <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                    <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                        [(selection)]="selection" (reload)="loadData($event)">
+
+                        <ng-template #simpleSearch>
+                            <ng-container>
+                                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                    <div nz-row class="cui-data-table-form-body">
+                                        <div nz-form-control>
+                                            <nz-input formControlName="name" [nzPlaceHolder]="'课程名称...'"> </nz-input>
+                                        </div>
+                                        <div class='simple-search-bar-search-box'>
+                                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-container>
+                        </ng-template>
+
+                        <ng-template #complexSearch>
+                            <ng-container>
+                                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                    <div nz-row class="cui-data-table-form-body">
+                                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                            <div nz-form-item nz-row>
+                                                <div nz-form-label nz-col [nzSpan]="6">
+                                                    <label for="name">课程名称</label>
+                                                </div>
+                                                <div nz-col [nzSpan]="18">
+                                                    <nz-input formControlName="name" [nzPlaceHolder]="'请输入课程名称'"></nz-input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                            <div nz-form-item nz-row>
+                                                <div nz-form-label nz-col [nzSpan]="6">
+                                                    <label for="courseCode">课程编码</label>
+                                                </div>
+                                                <div nz-col [nzSpan]="18">
+                                                    <nz-input formControlName="courseCode" [nzPlaceHolder]="'请输入课程名称'"></nz-input>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="">培训方式</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-select nzAllowClear [nzPlaceHolder]="'请选择培训方式'" formControlName="courseType" nzShowSearch>
+                                                    <nz-option [nzLabel]="'在线培训'" [nzValue]="'ONLINE'"></nz-option>
+                                                    <nz-option [nzLabel]="'面授培训'" [nzValue]="'OFFLINE'"></nz-option>
+                                                    <nz-option [nzLabel]="'混合培训'" [nzValue]="'MIXED'"></nz-option>
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                        <!-- <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                                            <div nz-form-item nz-row>
+                                                                <div nz-form-label nz-col [nzSpan]="6">
+                                                                    <label for="excuteStatus">创建时间</label>
+                                                                </div>
+                                                                <div nz-col [nzSpan]="18">
+                                                                    <nz-datepicker style="width: 48%;" formControlName="creatTimeStart" [nzDisabledDate]="_disabledStartDate" [nzShowTime]="true"
+                                                                        [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
+                                                                    <nz-datepicker style="width: 48%;float:right" formControlName="creatTimeEnd" [nzDisabledDate]="_disabledEndDate" [nzShowTime]="_endTime"
+                                                                        [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'"></nz-datepicker>
+                                                                </div>
+                                                            </div>
+                                                        </div> -->
+                                        <div class="cui-data-table-form-row">
+                                            <div class='complex-search-bar-search-box'>
+                                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                                    <i class="fa fa-search"></i>查询</button>
+                                                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-container>
+                        </ng-template>
+                        <ng-template #listTools>
+                            <div class="btn-group min-height">
+                                <!-- <button (click)="viewdetail(13)" type="button" class="btn btn-primary">
+                                    <i class="anticon anticon-download"></i> 导入</button> -->
+                            </div>
+                        </ng-template>
+                        <ng-template cuiColTpl="courseType" let-row="row">
+                            <span>{{row.courseType=='ONLINE'?'在线培训':(row.courseType=='OFFLINE'?'面授培训':(row.courseType=='MIXED'?'混合培训':'其他'))}}</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="courseTime" let-row="row">
+                            <span>{{row.courseTime|date:'yyyy-MM-dd HH:mm'}}</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="period" let-row="row">
+                            <span>{{row.period|| '--'}}</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="actions" let-row="row">
+                            <i title="查看" (click)="viewdetail(row.id)" class="anticon anticon-eye" style="cursor:pointer;font-size:16px;color:#007bbf;"></i>
+                        </ng-template>
+                        <!-- <ng-template #actionGroup>
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                        <span>批量操作</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item">批量删除</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item">批量创建</a>
+                                        <a class="dropdown-item">批量导入</a>
+                                    </div>
+                                </div>
+                            </ng-template> -->
+
+                    </cui-data-table>
+                </nz-spin>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+
+
+<div class="btn-group" role="group">
+  <button type="button" class="btn btn-secondary active">平表</button>
+  <button type="button" class="btn btn-secondary">分组</button>
+  <button type="button" class="btn btn-secondary">图视</button>
+</div>
+
+<div class="mb-3"></div>
+
+<cui-data-table [columns]="columns" [data]="authorizations?.content" [pagination]="authorizations"
+ [loading]="loading">
+
+  <ng-template cuiColTpl="account" let-row="row">
+      {{row.userUsername}}
+  </ng-template>
+  <ng-template cuiColTpl="site" let-row="row">
+      {{row.siteName}}
+  </ng-template>
+  <ng-template cuiColTpl="target" let-row="row">
+      {{row.targetName}}
+  </ng-template>
+  <ng-template cuiColTpl="authorization" let-row="row">
+      {{row.privilegeName?row.privilegeName+'(操作权限)':row.roleName+'(角色)'}}
+  </ng-template>
+  <ng-template cuiColTpl="created" let-row="row">
+      {{row.createdByUsername}}
+  </ng-template>
+
+</cui-data-table>

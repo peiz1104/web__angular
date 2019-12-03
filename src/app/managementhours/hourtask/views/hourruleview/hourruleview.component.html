@@ -1,0 +1,141 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| {{nowYear}}年度学时规则人员查看添加</small>
+        </h3>
+        <div class="class-btn">
+            <button type="button" class="btn btn-light" [routerLink]="['../../../','rulelist']">返回列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="hour-rule-view">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <button [disabled]="isRunable||isCarryover" *spkAuthzIf="{hasPermission: 'PERIOD:USER:ADD'}" [routerLink]="['../','ruleimport']"
+                    nz-button [nzType]="'primary'">
+                    <i class="iconfont icon-daoru1"></i> 批量导入规则人员
+                </button>
+                <spk-houruserlookup #hourUserLookup [api]="api" [modalTitle]="'未分配学时任务人员列表'" (ok)="refreshHourUser($event)">
+                    <ng-template #echoTpl>
+                        <button [disabled]="isCarryover||isRunable" *spkAuthzIf="{hasPermission: 'PERIOD:USER:ADD'}" (click)="hourUserLookup.openLookup()"
+                            nz-button [nzType]="'primary'">
+                            <i class="iconfont icon-tianjia" style="font-size:12px"></i> 添加规则人员</button>
+                    </ng-template>
+                </spk-houruserlookup>
+                <!-- <button *spkAuthzIf="{hasPermission: 'PERIOD:TASK:ADD'}" nz-button [nzType]="'primary'">
+                    <i class="iconfont icon-tianjia" style="font-size:12px"></i> 添加规则人员</button> -->
+                <button [disabled]="isCarryover||isRunable" *spkAuthzIf="{hasPermission: 'PERIOD:USER:REMOVE'}" type="button" nz-button [nzType]="'primary'"
+                    (click)="mutipledelete($event)">
+                    <i class="iconfont icon-shanchu"></i> 删除</button>
+            </ng-template>
+            <ng-template cuiColTpl="group" let-row="row">
+                <span>{{getUserPath(row?.namePath)}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span *ngIf="!isCarryover&&!isRunable">
+                    <i class="iconfont icon-shanchu" style="color:red;cursor:pointer" (click)="singleDelete([row.id])"></i>
+                </span>
+                <span *ngIf="isCarryover||isRunable">
+                    <i title="不可删除" class="iconfont icon-shanchu" style="color:#aaa;cursor:pointer"></i>
+                </span>
+            </ng-template>
+            <ng-template cuiColTpl="sex" let-row="row">
+                <span *ngIf="row.sex=='MALE'" style="color:blue">男</span>
+                <span *ngIf="row.sex=='FAMALE'" style="color:red">女</span>
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"> </nz-input>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #complexSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+        <div class="cui-data-table-form-body">
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="teacherNo">姓名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="userName">用户名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="userGroup">组织</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <spk-user-group-select mode="multiple" formControlName="userGroupId"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="teacherNo">邮箱</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="email" [nzPlaceHolder]="'请输入邮箱'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="phoneNumber">手机号</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="phoneNumber" [nzPlaceHolder]="'请输入手机号'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cui-data-table-form-row">
+                <div class='complex-search-bar-search-box'>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                        <i class="fa fa-search"></i>查询
+                    </button>
+                    <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

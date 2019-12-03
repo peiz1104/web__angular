@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">创建证书类型</h3>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../list']">返回证书类型列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container">
+            <div class="card-body">
+                <spk-cert-type-form *ngIf="certType" [loading]="loading" [certType]="certType" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)">
+                </spk-cert-type-form>
+            </div>
+        </div>
+    </div>
+</div>

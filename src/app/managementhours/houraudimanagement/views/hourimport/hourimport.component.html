@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 学员学时申报列表</small>
+            <small>| 学员学时批量导入</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../','hourauditdeclarelist']">返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="hour-import-box">
+    <div class="top-bread">
+
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                学时管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../', 'hourdeclarationlist']">学员学时申报列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="active">学员学时批量导入</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+    </div>
+    <div class="import-from-box">
+        <div class="import-user">
+            <div class="page-body">
+                <div class="plan-template">
+                    <div class="plan-template-li">
+                        <div class="plan-template-li-title">
+                            <h3> 第一步</h3>
+                        </div>
+                        <div class="plan-template-li-input-box">
+                            <div class='input-box'>点击下载模板</div>
+                            <a class="hour-template-import" href="./assets/Hourfile/period-import-template.xls" target="_blank" download="导入学时模板.xls">模板</a>
+                            <!-- <button type="button" class="btn btn-primary btn-box" (click)="download()">下载</button> -->
+                        </div>
+                    </div>
+                    <div class="plan-template-li">
+                        <div class="plan-template-li-title">
+                            <h3>第二步</h3>
+                        </div>
+                        <div class="input-cui">
+                            <cui-fileupload mode="file" name="file" url="/api/period/active/validImportFile" [auto]="true" (uploadComplete)="onUploadComplete($event)"
+                                class="btn-box"></cui-fileupload>
+                        </div>
+                    </div>
+                    <div class="plan-template-li noborder">
+                        <div class="plan-template-li-input-box">
+                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'validating'" [nzLoading]="true">
+                                <span>解析中</span>
+                            </button>
+                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'importing'" [nzLoading]="true">
+                                <span>导入中</span>
+                            </button>
+                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'before'" (click)="import()">导入</button>
+                            <!-- <span *ngIf="status == 'after'">导入完成</span> -->
+                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'after'">导入失败</button>
+                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'success'">导入成功</button>
+                            <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="toList()">返回</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 错误信息展示 -->
+                <div class="box-center" nz-row *ngIf="messageShow == true">
+                    <h3 class="error-tip">导入模板中可能存在以下错误，除此以外，均导入成功(若无，则全部导入成功)</h3>
+
+                    <cui-data-table [columns]="messageColumns" [data]="message">
+                        <ng-template cuiColTpl="colsheet" let-row="row">
+                            <div>{{row.sheet}}</div>
+                        </ng-template>
+                        <ng-template cuiColTpl="colnumber" let-row="row">
+                            <div>{{row.number}}</div>
+                        </ng-template>
+                        <ng-template cuiColTpl="colmessage" let-row="row">
+                            <div>
+                                <ul>
+                                    <li *ngFor="let it of row.errorList;let i = index"> {{(i+1)+'、'+it}}；</li>
+                                </ul>
+                            </div>
+                        </ng-template>
+                    </cui-data-table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

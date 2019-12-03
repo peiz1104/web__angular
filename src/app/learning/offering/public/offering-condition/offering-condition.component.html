@@ -1,0 +1,45 @@
+<nz-tabset *ngIf="!getOnlyType()">
+    <nz-tab *ngIf="hasType('required')">
+        <ng-template #nzTabHeading>
+            <span>必修</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="conditionTpl; context: {type: 'required', condition: offering.requiredCondition}"></ng-container>
+    </nz-tab>
+    <nz-tab *ngIf="hasType('open')">
+        <ng-template #nzTabHeading>
+            <span>选修</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="conditionTpl; context: {type: 'open', condition: offering.openCondition}"></ng-container>
+    </nz-tab>
+    <nz-tab *ngIf="hasType('closed')">
+        <ng-template #nzTabHeading>
+            <span>审批</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="conditionTpl; context: {type: 'closed', condition: offering.closedCondition}"></ng-container>
+    </nz-tab>
+    <nz-tab *ngIf="promotionState">
+        <ng-template #nzTabHeading>
+            <span>授权注册</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="authorizedreg">
+
+        </ng-container>
+    </nz-tab>
+</nz-tabset>
+
+<ng-container *ngIf="getOnlyType()">
+    <ng-container *ngTemplateOutlet="conditionTpl; context: {type: getOnlyType(), condition: getCondition(getOnlyType())}"></ng-container>
+</ng-container>
+
+<ng-template #conditionTpl let-type="type" let-condition="condition">
+    <div *ngIf="!condition">
+        <p class="text-secondary">
+            <i class="fa fa-info-circle fa-lg text-info"></i> 注册条件没有初始化，请点击下面的按钮初始化注册条件</p>
+        <button type="button" class="btn btn-primary mt-3" (click)="initCondition(type)">初始化注册条件</button>
+    </div>
+    <spk-condition [trainingClass]="offering" [promotionState]="promotionState&&type=='required'" *ngIf="condition" [matchLogicalGroup]="true"
+        [condition]="condition"></spk-condition>
+</ng-template>
+<ng-template #authorizedreg>
+    <spk-offering-reglist [trainingClass]="offering"></spk-offering-reglist>
+</ng-template>

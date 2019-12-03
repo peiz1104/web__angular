@@ -1,0 +1,10 @@
+<nz-spin [nzTip]="'努力加载中...'" [nzSpinning]="loading">
+  <div class="docment-main">
+      <h3 class="page-title">{{documentInfo?.originFileName}}</h3>
+      
+        <div  class="page-body" >
+          <iframe id="iframeB" [src] ="getPreviewPath()"></iframe>
+        </div>
+    
+  </div>
+</nz-spin>

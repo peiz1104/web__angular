@@ -1,0 +1,192 @@
+<div class="exam-home-body">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                {{target?.name}} :
+                <small>考试列表</small>
+            </h5>
+            <div class="actions pull-right">
+                <button type="button" class="btn btn-light" [routerLink]="['../../../../']">返回培训班列表
+                    <i class="fa fa-level-up"></i>
+                </button>
+            </div>
+        </div>
+        <!-- <div class="page-header page-info">
+            <h5 class="page-title">
+                <small>组织机构</small>
+            </h5>
+            <div class="page-info-select select-box">
+                <spk-user-group-select [(ngModel)]="managerGroup" (ngModelChange)="changeSite($event)"></spk-user-group-select>
+            </div>
+        </div> -->
+    </div>
+    <div class="select-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" selectType="checkbox" [(selection)]="selection"
+            [loading]="loading" (reload)="loadData($event)">
+
+            <ng-template #complexSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="examName">考试名称</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="examName" [nzPlaceHolder]="'请输入考试名称'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="createdUserName">创建人</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="createdUserName" [nzPlaceHolder]="'请输入创建人名称'"></nz-input>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="isPutout">发布状态</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-select formControlName="isPutout">
+                                            <nz-option [nzLabel]="'全部'" [nzValue]=""></nz-option>
+                                            <nz-option [nzLabel]="'是'" [nzValue]="1"></nz-option>
+                                            <nz-option [nzLabel]="'否'" [nzValue]="0"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="startTime">考试时间</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-qm-datepicker style="width: 48%;" formControlName="startTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'" [nzPlaceHolder]="'开始时间'"></spk-qm-datepicker>
+                                        <spk-qm-datepicker style="width: 48%;float:right" formControlName="enterExamTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                            [nzPlaceHolder]="'结束时间'"></spk-qm-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="createdDate">创建时间</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <spk-qm-datepicker style="width: 48%;" formControlName="createdDate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                            [nzPlaceHolder]="'开始时间'"></spk-qm-datepicker>
+                                        <spk-qm-datepicker style="width: 48%;float:right" formControlName="createdEndDate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                            [nzPlaceHolder]="'结束时间'"></spk-qm-datepicker>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="cui-data-table-form-row">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button [nzType]="'primary'" (click)="_submitForm($event, _searchForm.value)">
+                                        搜索</button>
+                                    <button type="button" nz-button [nzType]="'primary'" (click)="resetForm($event);tableHandle.isComplexSearch=false">普通搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="examName" [nzPlaceHolder]="'考试名称...'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button nz-button [nzType]="'primary'" (click)="_submitForm($event, _searchForm.value)">
+                                    搜索</button>
+                                <button nz-button [nzType]="'primary'" type="button" nz-button [nzType]="'default'" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div>
+                    <button nz-button [nzType]="'primary'" [routerLink]="['../add']" *ngIf="isCreate">
+                        <i class="iconfont icon-tianjia-copy"></i> 创建</button>
+                    <button nz-button [nzType]="'primary'" (click)="mutiplePublish()">
+                        <i class="iconfont icon-jsontijiao"></i> 发布</button>
+                    <button nz-button [nzType]="'primary'" (click)="mutipleCancel()">
+                        <i class="iconfont icon-xuqiaofahu"></i> 取消发布</button>
+                    <button nz-button [nzType]="'primary'" (click)="mutipleDelete()">
+                        <i class="iconfont icon-shanchu"></i> 删除</button>
+
+                </div>
+                <!-- <button nz-button [nzType]="'primary'" type="button" class="btn btn-outline-primary" (click)="moveExam($event)">迁移考试</button> -->
+                <!-- <button nz-button [nzType]="'primary'" type="button" class="btn btn-outline-primary" (click)="ifPublishExam(selection, true)">发布</button>
+                <button nz-button [nzType]="'primary'" type="button" class="btn btn-outline-primary" (click)="ifPublishExam(selection, false)">取消发布</button> -->
+                <!-- <nz-modal [nzConfirmLoading]="moveStateLoading" *ngIf="isVisibleMove" [nzVisible]="isVisibleMove" [nzTitle]="'迁移考试'" [nzContent]="modalContent"
+                    (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+                    <ng-template #modalContent>
+                        <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+                    </ng-template>
+                </nz-modal> -->
+            </ng-template>
+
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                <div>{{(row.createdDate | dateMoment) || '未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="startTime" let-row="row">
+                <div>{{(row.startTime | dateMoment)||'未定'}}</div>
+            </ng-template>
+
+            <ng-template cuiColTpl="enterExamTime" let-row="row">
+                <div>{{(row.enterExamTime | dateMoment)||'未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="isPutout" let-row="row">
+                <div>{{row.isPutout == '1' ? '是' : '否'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="examName" let-row="row">
+                <div class="exam-casual">{{row.examName}}</div>
+            </ng-template>
+            <!-- <ng-template cuiColTpl="actions3" let-row="row">
+                <div>{{row.actions3 == 'T' ? '是' : '否'}}</div>
+            </ng-template> -->
+            <ng-template cuiColTpl="editactions" let-row="row">
+                <a [routerLink]="['../', row.examId]">
+                    <i title="修改考试" style="cursor: pointer" class="iconfont icon-bianji-copy"></i>
+                </a>
+            </ng-template>
+            <ng-template cuiColTpl="examId" let-row="row">
+                <!-- <a class="text-primary" [routerLink]="['../', row.examId]">管理</a> -->
+                <!-- <span nz-table-divider></span>
+                <a class="text-primary" (click)="copyExam(row.offeringId)"> 复制考试 </a> -->
+                <nz-dropdown [nzPlacement]="'bottomRight'" [nzTrigger]="'click'">
+                    <a class="ant-dropdown-link" nz-dropdown>
+                        更多
+                        <i class="anticon anticon-down"></i>
+                    </a>
+
+                    <ul nz-menu>
+                        <li nz-menu-item>
+                            <a class="text-primary" (click)="deleteExamination(row,row.examId)"> 删除考试 </a>
+                        </li>
+                        <li nz-menu-item>
+                            <a class="text-primary" (click)="ifPublishExam(row,row.examId,true)"> 发布 </a>
+                        </li>
+                        <li nz-menu-item>
+                            <a class="text-primary" (click)="ifPublishExam(row,row.examId,false)"> 取消发布 </a>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</div>

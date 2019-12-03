@@ -1,0 +1,246 @@
+$comcolor: #0569b5;
+.site{
+    padding: 10px 20px;
+    .course-style{
+        li{
+            float: left;
+            width: 140px;
+            position: relative;
+            border: 1px solid #d3d3d3;
+            border-radius: 3px;
+            transition: opacity .4s ease;
+            margin-bottom: 10px;
+            cursor: pointer;
+            img{
+                width: 100%;
+            }
+            &:nth-of-type(2n){
+                float: right;
+            }
+            &:hover{
+                box-shadow: 0 5px 20px rgba(0,0,0,.3);
+            }
+            i{
+                position: absolute;
+                color: #388ecb;
+                right: 5px;
+                bottom: 5px;
+                display: none;
+            }
+            &.active{
+                i{
+                    display: block;
+                }
+            }
+        }
+    }
+    .course-mod{
+        display: flex;
+        flex-wrap: wrap;
+        .mod-one{
+            flex: 1;
+            width: 20%;
+            min-width: 20%;
+            max-width: 20%;
+            padding: 3px;
+            text-align: center;
+            color: #888;
+            font-size: 22px;
+            cursor: pointer;
+            .one-content{
+                border: 1px solid #ccc;
+                background: #eee;
+                width: 100%;
+                height: 50px;
+                line-height: 50px;
+                vertical-align: text-bottom;
+                position: relative;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    vertical-align: baseline;
+                }
+                &.active{
+                    border-color: $comcolor;
+                }
+                i{
+                    font-size: 22px;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translateX(-50%) translateY(-50%);
+                }
+            }
+        }
+        &.course-mod3{
+            .mod-one{
+                &:nth-of-type(1),&:nth-of-type(8){
+                    width: 40%;
+                    min-width: 40%;
+                    max-width: 40%;
+                }
+            }
+        }
+    }
+    .course-mod4{
+        overflow: hidden;
+        .mod-le{
+            float: left;
+            width: 40%;
+            text-align: center;
+            color: #888;
+            font-size: 22px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #eee;
+            height: 106px;
+            line-height: 106px;
+            margin: 3px 0;
+        }
+        .mod-ri{
+            float: left;
+            width: 60%;
+            padding-left: 3px;
+            .mod-tr{
+                display: flex;
+                .mod-one{
+                    height: 50px;
+                    line-height: 50px;
+                    flex: 1;
+                    margin: 3px;
+                    text-align: center;
+                    color: #888;
+                    font-size: 22px;
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    background: #eee;
+                }
+            }
+            
+        }
+        .one-com{
+            .one-content{
+                width: 100%;
+                height: 100%;
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                vertical-align: baseline;
+            }
+            &.active{
+                border-color: $comcolor !important;
+            }
+        }
+    }
+    .course-mod5{
+        overflow: hidden;
+        .mod-le,.mod-ri{
+            width: 20%;
+            border: 1px solid #ccc;
+            background: #eee;
+            margin: 3px 0;
+            height: 106px;
+            line-height: 106px;
+            float: left;
+            font-size: 22px;
+            text-align: center;
+        }
+        .mod-mid{
+            float: left;
+            width: 60%;
+            .mod-tr{
+                display: flex;
+                padding: 0 3px;
+                .mod-one{
+                    height: 50px;
+                    line-height: 50px;
+                    flex: 1;
+                    margin: 3px;
+                    text-align: center;
+                    color: #888;
+                    font-size: 22px;
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    background: #eee;
+                }
+            }
+        }
+        .one-com{
+            .one-content{
+                width: 100%;
+                height: 100%;
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                vertical-align: baseline;
+            }
+            &.active{
+                border-color: $comcolor !important;
+            }
+        }
+    }
+    .course-mod6{
+        .mod-one{
+            &:nth-of-type(1){
+                flex: 2 !important;
+            }
+        }
+    }
+    .course-mod7{
+        .mod-le{
+            width: 20%;
+        }
+        .mod-ri{
+            width: 80%;
+        }
+    }
+    .select-box{
+        margin: 5px 0 0 80px;
+        color: rgba(0, 0, 0, 0.85);
+    }
+
+}
+:host ::ng-deep{
+    .ant-form-item{
+        margin-bottom: 5px;
+    }
+    
+    .select-course{
+        overflow: hidden;
+        margin-left: 80px;
+        .but{
+            margin-top: 10px;
+            width: 100%;
+        }
+        .ant-input-group-addon{
+            background: $comcolor;
+            width: 50px;
+            border-color: $comcolor;
+            color: #fff;
+        }
+        label{
+            width: 100%;
+            float: left;
+            margin:10px 0 0 0;
+            span{
+                cursor: pointer;
+            }
+        }
+    }
+    .course-modal{
+        .off-w{
+            width: 200px;
+        }
+        .imgTpl{
+            width: 110px;
+            height: 66px;
+            overflow: hidden;
+        }
+        .ant-modal-close{
+            outline: none;
+        }
+    }
+    
+}

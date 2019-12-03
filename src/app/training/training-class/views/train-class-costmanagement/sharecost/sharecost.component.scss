@@ -1,0 +1,97 @@
+:host::ng-deep {
+    .share-box-cost {
+        button {
+            cursor: pointer;
+            margin-right: 4px;
+        }
+        .complex-search-bar-search-box {
+            // margin-left:60px;
+        }
+        .simple-search-bar-search-box {
+            position: relative;
+            top: -10px;
+        }
+        .data-top {
+            color: red;
+            position: absolute;
+            top: -41px;
+            right: 130px;
+        }
+        .no-data {
+            font-size: 24px;
+            text-align: center;
+            font-weight: bold;
+            i {
+                color: #007bbf;
+            }
+            span {
+                font-size: 16px;
+                color: #666;
+            }
+        }
+        .cost-table-list {
+            table {
+                min-width: 100%;
+                border: 1px solid #ddd;
+                border-right: none;
+                border-bottom: none;
+                border-spacing: 0;
+                thead {
+                    background: #e9ecef;
+                }
+                tr {
+                    background: #f9f9f9;
+                }
+                td {
+                    height: 34px;
+                    text-align: center;
+                    border-right: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    margin: 0;
+                    padding: 0 10px;
+                }
+            }
+        }
+    }
+    .share-modal {
+        .ant-modal-body {
+            padding: 0px 16px;
+        }
+        .no-data {
+            font-size: 18px;
+            line-height: 36px;
+            text-align: center;
+            i {
+                color: #007bbf;
+                font-size: 22px;
+            }
+            span {
+                color: #aaa;
+            }
+        }
+        .cost-table-list {
+            margin-bottom: 14px;
+            table {
+                min-width: 100%;
+                border: 1px solid #ddd;
+                border-right: none;
+                border-bottom: none;
+                border-spacing: 0;
+                thead {
+                    background: #e9ecef;
+                }
+                tr {
+                    background: #f9f9f9;
+                }
+                td {
+                    height: 34px;
+                    text-align: center;
+                    border-right: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    margin: 0;
+                    padding: 0 10px;
+                }
+            }
+        }
+    }
+}

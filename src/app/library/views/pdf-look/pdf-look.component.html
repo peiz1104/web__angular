@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div *ngIf="!documentInfoId" class="page-header">
+        <h3 class="page-title">{{documentInfo?.originFileName}} 预览
+            <small></small>
+        </h3>
+
+        <!-- <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../']">返回列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div> -->
+    </div>
+
+    <div class="page-body">
+        <iframe id="iframeB" class="main-frame" [src]="getPreviewPath()" height="100%" width="100%" style="border: 0px"></iframe>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="sprk-body-theme">
+    <div class="new-page-header clearfix">
+        <div class="logo">
+            <img [title]="site?.name ? site.name : '国寿E学'" [src]="site?.logo" onerror="this.src='./assets/images/app_logo_chinalife.png'"
+                [alt]="site?.name ? site.name : '国寿E学'">
+        </div>
+        <div class="left-selection">
+            <a (click)="goApplicationAll($event)" class="select-item"> 控制台
+            </a>
+            <!-- 工作台应用 宽度160-->
+
+
+            <div style="min-width:160px" [ngClass]="showProductDrop?'select-item select-item-drop open':'select-item select-item-drop select-item-active'">
+                <div class="mask" (click)="toggleClick()"></div>
+                <div class="drop-title" (click)="toggleClick()">
+                    <i [ngClass]="'iconfont '+ dropIconAndName.icon"></i>
+                    <span class="text">{{dropIconAndName.name}}</span>
+                    <i style="display:inline-block;font-size:17px" class="iconfont icon-drop-down arrow"></i>
+                </div>
+                <div class="drop-container">
+                    <div class="product-block">
+                        <div *ngIf="!parentId" class="block-title"> 全部菜单 </div>
+                        <div *ngIf="parentId" class="block-title">
+                            <span style="cursor:pointer" (click)="goUpperLevel()">
+                                <i class="iconfont icon-fanhui1"></i> {{dropIconAndName.name}}</span>
+                        </div>
+                        <div class="block-content">
+                            <div *ngFor="let item of currentApplication">
+                                <div *ngIf="item.requirePermission">
+                                    <div *spkAuthzIf="item.requirePermission" (click)="showApplication(item)" class="product-item">
+                                        <img src="./assets/images/all_app1.png" alt="">
+                                        <a [ngClass]="item.id==currentId?'current':''">{{item.name}}</a>
+                                    </div>
+                                </div>
+                                <div *ngIf="!item.requirePermission">
+                                    <div (click)="showApplication(item)" class="product-item">
+                                        <img src="./assets/images/all_app1.png" alt="">
+                                        <a [ngClass]="item.id==currentId?'current':''">{{item.name}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="right-selection">
+            <div class="select-item" (click)="goHome($event)">
+                <i class="iconfont icon-shouye"></i>
+                <span>学员首页</span>
+            </div>
+            <!-- 用户登录信息 -->
+            <div class="userinfo clearfix">
+                <div class="userimg">
+                    <img [src]="user?.avatar" onerror="this.src='./assets/images/header.png'" alt="用户">
+
+                </div>
+                <div class="userdesc clearfix">
+                    <span class="name desc">Welcome</span>
+                    <span class="job desc">{{user?.username}}</span>
+                </div>
+                <div class="listicon">
+                    <i class="iconfont icon-drop-down"></i>
+                </div>
+                <!-- 登录用户操作 -->
+                <div class="drop-container" style="z-index:1006">
+                    <div class="drop-item" [routerLink]="['/account/info']">
+                        <i class="fa fa-lg fa-id-card-o p-2"></i>
+                        <span>基本资料</span>
+                    </div>
+                    <div class="drop-item" [routerLink]="['/account/secure']">
+                        <i class="fa fa-lg fa-lock p-2"></i>
+                        <span>账户安全</span>
+                    </div>
+                    <div class="drop-item" [routerLink]="['/account/preference']">
+                        <i class="fa fa-lg fa-rocket p-2"></i>
+                        <span>偏好设置</span>
+                    </div>
+                    <div class="drop-item" [routerLink]="['/account/authorization']">
+                        <i class="fa fa-lg fa-list-alt p-2"></i>
+                        <span>账户许可</span>
+                    </div>
+                    <div class="drop-item" (click)="logout()">
+                        <i class="iconfont icon-guanbi p-2"></i>
+                        <span>退出系统</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

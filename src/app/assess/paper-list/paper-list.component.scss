@@ -1,0 +1,11 @@
+:host ::ng-deep {
+    .badge-success {
+        color: #fff !important;
+    }
+    .badge-secondary {
+        color: #fff !important;
+    }
+    .list-tool-bar {
+        z-index: 99 !important;
+    }
+}

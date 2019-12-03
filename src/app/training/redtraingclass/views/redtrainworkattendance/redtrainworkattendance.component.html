@@ -1,0 +1,141 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">红班管理
+            <small>| 红班人员考勤列表</small>
+        </h3>
+    </div>
+    <div class="pull-right back">
+        <!-- <button [routerLink]="['../../','redlist']" nz-button [nzType]="'primary'">
+            <i class="iconfont icon-fanhui"></i>
+            <span>返回红班列表</span>
+        </button> -->
+    </div>
+</div>
+<div class="red-attendance">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selection"
+            (reload)="loadData($event)">
+
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="username" let-row="row">
+                <span>{{row?.user.username}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="displayName" let-row="row">
+                <span>{{row?.user.displayName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="phoneNumber" let-row="row">
+                {{row?.user?.phoneNumber}}
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <i (click)="viewsDetail(row.user.id)" class="iconfont icon-chakan1" title="查看" style="color:#007bff;cursor:pointer"></i>
+            </ng-template>
+
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-input formControlName="coursename" [nzPlaceHolder]="'课程名称'"> </nz-input>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #complexSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+        <div class="cui-data-table-form-body">
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="coursename">课程名称</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="coursename" [nzPlaceHolder]="'请输入课程名称'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="coursecode">课程编码</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="coursecode" [nzPlaceHolder]="'请输入课程编码'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="trainForm">培训方式</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-select nzAllowClear formControlName="trainForm" [nzPlaceHolder]="'请选择培训形式'" [nzShowSearch]="true">
+                                <nz-option [nzLabel]="'面授'" [nzValue]="'FACE_TO_FACE'">
+                                </nz-option>
+                                <nz-option [nzLabel]="'在线'" [nzValue]="'ONLINE'">
+                                </nz-option>
+                                <nz-option [nzLabel]="'混合'" [nzValue]="'BLEND'">
+                                </nz-option>
+                                <nz-option [nzLabel]="'其他'" [nzValue]="'OTHER'">
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="phoneNumber">手机号</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="phoneNumber" [nzPlaceHolder]="'请输入手机号'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cui-data-table-form-row">
+                <div class='complex-search-bar-search-box'>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                        <i class="fa fa-search"></i>查询</button>
+                    <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=false">简单查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<nz-modal *ngIf="isVisible" class="modal-traiffic" [nzWidth]="900" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'考勤详情列表'"
+    [nzContent]="modalContent" [nzZIndex]="999" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="spinningAttendce" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="attendanceColumns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selectionAttendce" (reload)="loadDataAttendance($event)">
+                <!-- <ng-template cuiColTpl="actions" let-row="row">
+                    <i title="查看" (click)="viewpersondetail(row.id)" class="anticon anticon-eye" style="cursor:pointer;font-size:16px;color:#007bbf;"></i>
+                </ng-template> -->
+
+            </cui-data-table>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,14 @@
+[[tutorial]]
+= 示例教程
+
+[partintro]
+--
+通过一个示例讲述开发流程和常规功能模块的开发过程
+--
+
+
+include::step-0-intro.adoc[leveloffset=+1]
+include::step-1-create-module.adoc[leveloffset=+1]
+include::step-2-create-domain.adoc[leveloffset=+1]
+include::step-3-create-views.adoc[leveloffset=+1]
+include::step-4-summary.adoc[leveloffset=+1]

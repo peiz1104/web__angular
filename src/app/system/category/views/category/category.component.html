@@ -1,0 +1,73 @@
+<div class="main">
+    <div class="container-fluid" *spkAuthzIf="{hasPermission: 'SETTINGS'}">
+      <div class="page-header">
+        <h3 class="page-title">{{categoryGroup?.name}}管理 <small></small></h3>
+        
+        <div class="actions pull-right">
+        </div>
+      </div>
+      
+        <div class="page-body">
+            <div class="card mb-3" *ngIf="activeCategory">
+                <div class="card-body">
+                    <h5 class="card-title d-inline-block">{{activeCategory?.name}}</h5>
+                    <a class="d-inline-block ml-3" [routerLink]="['../',activeCategory.id, 'edit', {parentId: activeCategory?.parent?.id || ''}]">
+                        <i class="fa fa-pencil"></i> 修改</a>
+                    <a class="d-inline-block ml-3 text-danger" href="javascript:;" (click)="delete(activeCategory?.id)">
+                        <i class="fa fa-trash"></i> 删除</a>
+                    <p class="mb-0">{{activeCategory?.description || '暂无描述'}}</p>
+                </div>
+            </div>
+            <ul class="nav nav-tabs mt-4 mb-3" id="pills-tab" role="tablist">
+                <!-- <li class="nav-item">
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-expanded="true">属性</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-expanded="true">子级分类</a>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+          
+          <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+            <cui-data-table [columns]="columns" [data]="subCategories" [loading]="loading" selectType="checkbox" (select)="onSelect($event)">
+              <ng-template #simpleSearch>
+                <form class="form-inline">
+                  <div class="form-group">
+                    <nz-input name="searchText" [nzPlaceHolder]="'请输入分类名称'" [(ngModel)]="searchText"></nz-input>
+                  </div>
+                  <div class="form-group ml-2">
+                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                  </div>
+                </form>
+              </ng-template>
+              <ng-template #listTools>
+                <button type="button" class="btn btn-primary" [routerLink]="['../add', {parentId: activeCategory?.id || ''}]"><i class="fa fa-plus"></i> 创建分类</button>
+                <button class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+              </ng-template>
+              
+              <ng-template cuiColTpl="displaySort" let-row="row">
+                <a href="javascript:;" *ngIf="row.up" (click)="move(row.id,'up')">上移</a>
+                <span>|</span>
+                <a href="javascript:;" *ngIf="row.down" (click)="move(row.id,'down')">下移</a>
+              </ng-template>
+              <ng-template cuiColTpl="actions" let-row="row">
+                <div class="text-right">
+                  <a [routerLink]="['../', row.id, 'edit', {parentId: activeCategory?.parent?.id || ''}]">编辑</a>
+                  <span>|</span>
+                  <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)">
+                      <a nz-popconfirm class="text-danger">删除</a>
+                  </nz-popconfirm>
+                  <!-- <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a> -->
+                </div>
+              </ng-template>
+              <ng-template #actionGroup>
+                <button class="btn btn-outline-danger" (click)="delete(null, false)">批量删除</button>
+              </ng-template>
+            </cui-data-table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /.with-side .main -->

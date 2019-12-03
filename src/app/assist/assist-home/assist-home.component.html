@@ -1,0 +1,81 @@
+<div *ngIf="false" style="background: #fff; padding: 16px 24px;">
+  <nz-breadcrumb *ngIf="false">
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/']">首页</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <!-- <a [routerLink]="['/dashboard/workspace']">工作台</a> -->
+      <span>工作台</span>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div nz-row style="margin-top: 16px;" *ngIf="false">
+    <div nz-col [nzSpan]="16" style="display: flex;">
+      <nz-avatar nzIcon="user" [nzSrc]="user?.avatar" style="width: 64px; height: 64px; border-radius: 50%;"></nz-avatar>
+      <div style="margin-left: 24px;">
+        <h2 style="line-height: 40px;">你好，{{user?.displayName || user?.firstName}}，祝你开心每一天！</h2>
+        <p>{{user?.username || user?.firstName}} | {{user?.userGroup?.namePath || user?.userGroup?.name}}</p>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <div style="display: flex; justify-content: flex-end; text-align: center;">
+        <span style="margin: 0 24px;">
+          <div>课程数</div>
+          <span style="font-size: 32px;">56</span>
+        </span>
+        <span style="margin: 0 24px;">
+          <div>考试数</div>
+          <span style="font-size: 32px;">8</span>
+          <!-- <span style="font-size: 18px; color: #aaa;">/24</span> -->
+        </span>
+        <span style="margin: 0 24px;">
+          <div>培训班数</div>
+          <span style="font-size: 32px;">5,689</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin: 1.75rem;">
+  <div class="row">
+    <div class="col-8">
+      <nz-card [nzLoading]="false" class="d-none mb-5">
+        <ng-template #title>
+          我的授课
+        </ng-template>
+        <ng-template #body>
+          <ng-container *ngFor="let i of [1, 2, 3]" [ngTemplateOutlet]="courseListItem"></ng-container>
+        </ng-template>
+      </nz-card>
+      
+      <spk-assist-exam-list class="mb-5"></spk-assist-exam-list>
+    </div>
+    <div class="col-4">
+      <spk-assist-tbc-list class="mb-5"></spk-assist-tbc-list>
+
+      <!-- <nz-card [nzLoading]="true" class="mb-5">
+        <ng-template #title>
+          2344 名学员参加了我的授课
+        </ng-template>
+        <ng-template #body>
+          Whatever content
+        </ng-template>
+      </nz-card> -->
+    </div>
+  </div>
+
+</div>
+
+<!-- 讲师：我的授课 -->
+
+<!-- 培训班执行人：我管理的培训班 -->
+
+<!-- 考试管理员：监考、阅卷、复评、报名审批、考试安排 -->
+
+<ng-template #courseListItem>
+  <img src="" alt="" />
+  <div>这是一个课程标题：还有正事</div>
+  <span>讲师</span>
+  <span>状态</span>
+</ng-template>

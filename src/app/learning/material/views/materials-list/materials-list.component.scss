@@ -1,0 +1,9 @@
+:host ::ng-deep {
+    .overflow-text {
+        max-width: 200px;
+        word-break: break-all;
+    }
+    .list-tool-bar {
+        z-index: 13 !important;
+    }
+}

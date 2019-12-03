@@ -1,0 +1,167 @@
+.player-wrap {
+    overflow: hidden;
+}
+
+.player-body {
+    flex: 1 1 auto;
+    position: relative;
+    height: 100%;
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: medium none;
+        bottom: 0;
+        position: absolute;
+        top: 0;
+        background: #fff;
+    }
+}
+
+.player-slider {
+    width: 360px;
+    background: url(/assets/images/bg_sectionlist.png) repeat-x #14191e;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    &.fold {
+        transition: .5s;
+        width: 0px;
+    }
+    &.unfold {
+        transition: .5s;
+        width: 360px;
+    }
+    .operator {
+        position: absolute;
+        top: 50%;
+        left: -50px;
+        margin-top: -92px;
+        width: 50px;
+        z-index: 1900;
+        .op {
+            position: relative;
+            height: 60px;
+            line-height: 82px;
+            font-size: 12px;
+            text-align: center;
+            color: #B5B9BC;
+            background-color: #363C40;
+            cursor: pointer;
+            margin: 2px 0;
+            i {
+                position: absolute;
+                left: 0;
+                top: 12px;
+                width: 50px;
+                font-size: 16px;
+            }
+            &.light {
+                // background-color: #f01400;
+                background-color: #108ee9;
+                color: #fff;
+            }
+        }
+    }
+    h3 {
+        color: #b5b9bc;
+        line-height: 20px;
+        font-size: 16px;
+        text-align: left;
+        margin-top: 20px;
+        margin-right: 30px; // margin-left: 2.5rem;
+    }
+    .outline {
+        padding: 1.5rem 2.5rem;
+        margin-right: -2rem; // margin-left: 1.5rem;
+        overflow-y: auto; // line-height: 2em;
+        ul {
+            // padding-left: 1.5rem;
+            margin-left: 30px;
+            position: relative;
+            &::before {
+                display: inline-block;
+                content: "";
+                position: absolute;
+                z-index: 1;
+                top: -12px;
+                bottom: 12px;
+                left: -14px;
+                border: 1px dotted rgba($color: #67B2DD, $alpha: 0.5);
+                border-width: 0 0 0 1px;
+            }
+            li {
+                position: relative;
+                line-height: 1;
+                >div {
+                    position: relative;
+                    line-height: 2;
+                    height: 2rem;
+                    z-index: 10;
+                    &::before {
+                        display: inline-block;
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: -13px;
+                        width: 13px;
+                        height: 0;
+                        border-top: 1px dotted rgba($color: #67B2DD, $alpha: 0.5);
+                        z-index: 1;
+                        line-height: 1;
+                    }
+                }
+                &:last-child>div::before {
+                    left: -14px;
+                    width: 14px;
+                    height: 50%;
+                    background: #14191e;
+                }
+                &:last-child::before {
+                    display: inline-block;
+                    content: "";
+                    position: absolute;
+                    top: 2rem;
+                    left: -15px;
+                    width: 15px;
+                    height: 100%; // border-top: 1px dotted #67B2DD;
+                    z-index: 1;
+                    background: #14191e;
+                }
+            }
+            li.rco-item {
+                .rco-title {
+                    color: #787d82;
+                    margin-left: 0.75rem;
+                    max-width: 18rem;
+                }
+                .rco-topic-group {
+                    cursor: default;
+                    font-size: 1.125rem;
+                }
+                .rco-topic {
+                    cursor: pointer;
+                    &:hover>.rco-title {
+                        color: green;
+                        font-weight: bold;
+                    }
+                }
+                &.active {
+                    .rco-topic .rco-title {
+                        color: green;
+                        font-weight: bold;
+                    }
+                }
+                /* &.disabled {
+                    .rco-topic {
+                        cursor: default;
+    
+                        &:hover > .rco-title {
+                            color: #787d82;
+                            font-weight: normal;
+                        }
+                    }
+                }*/
+            }
+        }
+    }
+}

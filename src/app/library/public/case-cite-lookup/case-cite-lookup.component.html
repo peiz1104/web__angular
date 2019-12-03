@@ -1,0 +1,104 @@
+<!-- <ng-container *ngIf="echoTpl || inputControlEchoTpl" [ngTemplateOutlet]="echoTpl || inputControlEchoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container> -->
+<ng-container *ngIf="echoTpl" [ngTemplateOutlet]="echoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container>
+
+<ng-template #lookupModalContent>
+  <div class="page-body">
+    <cui-data-table #dataTable [columns]="columns" [data]="caseInfos" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+      (select)="onSelect($event)" [loading]="loading">
+
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <nz-input name="name" [nzPlaceHolder]="'请输入案例名称'" [(ngModel)]="searchText.name"></nz-input>
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+            <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();dataTable.isComplexSearch=true">高级搜索</a>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template #complexSearch>
+        <form class="search-bar">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">案例名称</label>
+                <div class="col-9">
+                  <nz-input name="name" [nzPlaceHolder]="'请输入案例名称'" [(ngModel)]="searchText.name"></nz-input>
+                </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-form-label col-3">案例编号</label>
+                  <div class="col-9">
+                    <nz-input name="caseCode" [nzPlaceHolder]="'请输入案例编号'" [(ngModel)]="searchText.caseCode"></nz-input>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-form-label col-3">所属组织</label>
+                  <div class="col-9">
+                    <spk-user-group-select name="userGroup" [(ngModel)]="searchText.userGroup"></spk-user-group-select>
+                  </div>
+              </div>
+              
+            </div>
+            <div class="col-md-4">
+              
+              <div class="form-group row">
+                <label class="col-form-label col-3">经典案例</label>
+                <div class="col-6">
+                  <nz-select class="w-100" name="isClassic" [(ngModel)]="searchText.isClassic">
+                      <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                      <nz-option [nzLabel]="'经典案例'" [nzValue]="'Y'"></nz-option>
+                      <nz-option [nzLabel]="'普通案例'" [nzValue]="'N'"></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-form-label col-3">案例来源</label>
+                  <div class="col-6">
+                    <nz-select class="w-100" name="source" [(ngModel)]="searchText.source" nzAllowClear>
+                      <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                      <nz-option [nzLabel]="'自主开发'" [nzValue]="'AUTONOMY'"></nz-option>
+                      <nz-option [nzLabel]="'合作开发'" [nzValue]="'COOPERATION'"></nz-option>
+                      <nz-option [nzLabel]="'外购'" [nzValue]="'OUTSOURCING'"></nz-option>
+                    </nz-select>
+                  </div>
+                </div>              
+            </div>
+            <div class="col-12">
+              <div class="form-group row mb-0">
+                <div class="col-3 offset-1">
+                  <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                  <button type="reset" class="btn btn-primary" (click)="clearSearchText()">清空</button>
+                  <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();dataTable.isComplexSearch=false">普通搜索</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template cuiColTpl="caseTypeClassic" let-row="row">
+        <span class="text-success" *ngIf="row.isClassic == 'Y'">经典</span>
+        <span class="text-info" *ngIf="row.isClassic == 'N'">普通</span>
+      </ng-template>
+      <ng-template cuiColTpl="caseTypeRelease" let-row="row">
+        <span class="text-success" *ngIf="row.isPublished == 'Y'">发布</span>
+        <span class="text-warning" *ngIf="row.isPublished == 'N'">未发布</span>
+      </ng-template>
+      <ng-template cuiColTpl="caseTypeSource" let-row="row">
+        <span class="text-success" *ngIf="row.source=='AUTONOMY'">自主开发</span>
+        <span class="text-success" *ngIf="row.source=='COOPERATION'">合作开发</span>
+        <span class="text-success" *ngIf="row.source=='OUTSOURCING'">外购</span>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</ng-template>
+
+<ng-template #lookupModalFooter>
+  <div class="text-right">
+    <button type="button" class="btn btn-primary" (click)="_ok()"> 确 定 </button>
+    <button type="button" class="btn btn-light" (click)="_cancel()"> 取 消 </button>
+  </div>
+</ng-template>

@@ -1,0 +1,245 @@
+.group-add {
+    padding: 15px;
+    .add-top {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 15px;
+    }
+    .group-from {
+        margin: 10px auto;
+    }
+    .ant-form-item-with-help {
+        margin-bottom: 12px;
+    }
+    .header-new-plan {
+        width: 580px;
+        height: 50px;
+        overflow: hidden;
+        margin: 0 auto;
+        .left {
+            width: 254px;
+            background: #f6f6f6;
+            line-height: 50px;
+            float: left;
+            text-align: center;
+            border: 1px solid #afafaf;
+            height: 50px;
+        }
+        .middle {
+            width: 70px;
+            height: 50px;
+            float: left;
+            border-right: 1px solid #afafaf;
+        }
+        .right {
+            line-height: 50px;
+            background: #f6f6f6;
+            float: left;
+            width: 254px;
+            text-align: center;
+            height: 50px;
+            border-bottom: 1px solid #afafaf;
+            border-right: 1px solid #afafaf;
+            border-top: 1px solid #afafaf;
+            .clearDataRight {
+                padding: 5px;
+                display: block;
+                float: right;
+                margin-top: 18px;
+                margin-right: 4px;
+            }
+        }
+    }
+}
+
+:host::ng-deep {
+    .AddingTissue {
+        margin-left: 240px;
+    }
+    .groups {
+        .ant-select {
+            display: none !important;
+        }
+    }
+    /* 穿梭框 */
+    .ShuttleFrame {
+        margin: 6px auto;
+        width: 658px;
+        height: 540px; // background: pink;
+        overflow: hidden;
+        .ShuttleFrameLeft {
+            width: 582px;
+            // height: 310px;
+            float: left;
+            .DistributionOrganization {
+                width: 254px;
+                float: left;
+                border-right: 1px solid #afafaf;
+                height: 280px;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                border-left: 1px solid #afafaf;
+                border-bottom: 1px solid #afafaf;
+                border-top: 1px solid #afafaf;
+            }
+            .borderLeft {
+                border-left: 3px solid #388ecb;
+            }
+            .organizationOne {
+                width: 254px;
+                height: 40px;
+                line-height: 40px;
+                padding-left: 6px;
+                margin-top: 4px;
+                cursor: pointer;
+                .close {
+                    float: right;
+                    margin-top: 10px;
+                    margin-right: 26px;
+                    color: #f94445;
+                    cursor: pointer;
+                }
+            }
+            .Organization {
+                width: 70px;
+                float: left;
+                border-right: 1px solid #afafaf;
+                height: 280px;
+                .icon-angledoubleright {
+                    display: block;
+                    margin: 92px auto;
+                    font-size: 16px;
+                    margin-bottom: 0px;
+                    cursor: pointer;
+                    padding: 2px;
+                    width: 24px;
+                    border: 1px solid #b3b3b3;
+                    &:hover {
+                        color: #f94445
+                    }
+                }
+                .icon-icon-- {
+                    display: block;
+                    margin: 34px auto;
+                    font-size: 16px;
+                    margin-bottom: 0px;
+                    cursor: pointer;
+                    padding: 2px;
+                    width: 24px;
+                    border: 1px solid #b3b3b3;
+                    &:hover {
+                        color: #f94445
+                    }
+                }
+                .anticon-arrow-left {
+                    display: block;
+                    margin: 14px auto;
+                    font-size: 24px;
+                    margin-bottom: 0px;
+                    cursor: pointer;
+                    &:hover {
+                        color: #f94445
+                    }
+                }
+                .anticon-double-left {
+                    display: block;
+                    margin: 14px auto;
+                    font-size: 24px;
+                    margin-bottom: 0px;
+                    cursor: pointer;
+                    &:hover {
+                        color: #f94445
+                    }
+                }
+            }
+            .PreferentialAllocation {
+                width: 254px;
+                float: left;
+                height: 280px;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                border-right: 1px solid #afafaf;
+                border-bottom: 1px solid #afafaf;
+                border-top: 1px solid #afafaf;
+            }
+        }
+        .ShuttleFrameRight {
+            width: 40px;
+            height: 280px;
+            float: left;
+            .anticon-up-square-o {
+                display: block;
+                margin: 128px auto;
+                font-size: 24px;
+                margin-bottom: 0px;
+                width: 24px;
+                border: 1px solid #adadad;
+                padding: 2px;
+                cursor: pointer;
+                transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                /* IE 9 */
+                -moz-transform: rotate(180deg);
+                /* Firefox */
+                -webkit-transform: rotate(180deg);
+                /* Safari 和 Chrome */
+                -o-transform: rotate(180deg);
+                &:hover {
+                    border-color: #f94445
+                }
+            }
+            .icon-shangyi {
+                display: block;
+                margin: 14px auto;
+                font-size: 16px;
+                margin-bottom: 0px;
+                cursor: pointer;
+                width: 24px;
+                border: 1px solid #adadad;
+                padding: 2px;
+                &:hover {
+                    color: #f94445
+                }
+            }
+            .down-show {
+                display: block;
+                margin: 14px auto;
+                font-size: 16px;
+                margin-bottom: 0px;
+                width: 24px;
+                padding: 2px;
+                border: 1px solid #adadad;
+                cursor: pointer;
+                transform: rotate(-180deg);
+                &:hover {
+                    color: #f94445
+                }
+            }
+            .anticon-down-square-o {
+                display: block;
+                margin: 14px auto;
+                font-size: 24px;
+                margin-bottom: 0px;
+                width: 24px;
+                border: 1px solid #adadad;
+                padding: 2px;
+                cursor: pointer;
+                &:hover {
+                    border-color: #f94445
+                }
+            }
+        }
+        .bottomShuttle {
+            width: 580px;
+            height: 68px;
+            clear: both;
+            text-align: center;
+            .cancel {
+                margin-top: 10px;
+            }
+            .confirm {
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+        }
+    }
+}

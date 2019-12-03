@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">{{subjectActivity?.name}}: 课程列表</h5>
+    </div>
+  
+    <div class="page-body">
+  
+      <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox" [(selection)]="selection"
+        (reload)="loadData($event)">
+        <ng-template #simpleSearch>
+          <ng-container [ngTemplateOutlet]="simpleSearchForm"></ng-container>
+        </ng-template>
+        <ng-template #listTools>
+          <button type="button" class="btn btn-primary" [routerLink]="['group']"><i class="fa fa-plus"></i> 管理分组</button>
+          <spk-course-lookup #courseLookup [multiple]="true" [echoTpl]="echoTpl" (afterSelected)="refreshCourse($event)">
+            <ng-template #echoTpl>
+              <button type="button" class="btn btn-primary" (click)="courseLookup.openLookup()"><i class="fa fa-plus"></i> 从课程库添加课程</button>
+            </ng-template>
+          </spk-course-lookup>
+          <button type="button" class="btn btn-danger" (click)="delete(null,false)">批量删除</button>
+        </ng-template>
+  
+        <ng-template cuiColTpl="thumbnail" let-row="row">
+            <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+        </ng-template>
+        <ng-template cuiColTpl="name" let-row="row">
+            <h5>{{row.name}}</h5>
+            <span>{{row.code}}</span>
+        </ng-template>
+        <ng-template cuiColTpl="type" let-row="row">
+            <div>{{getCourseTypeText(row.courseType)}}</div>
+            <div>学时: {{row.period}}</div>
+        </ng-template>
+        <ng-template cuiColTpl="cate" let-row="row">
+            <div>{{row.category?.name}}</div>
+        </ng-template>
+        <ng-template cuiColTpl="courseExam" let-row="row">
+          <a [routerLink]="[row.id, 'exam']">课程考试</a>
+        </ng-template>
+        <ng-template cuiColTpl="courseForum" let-row="row">
+          <a [routerLink]="[row.id, 'forum']">课程讨论</a>
+        </ng-template>
+        <ng-template cuiColTpl="courseGroup" let-row="row">
+            <nz-select style="width: 150px;" [nzSize]="default" [(ngModel)]="row.groupId" (ngModelChange)="selectGroup($event, row.id)" >
+                <nz-option
+                    *ngFor="let courseGroup of courseGroups"
+                    [nzLabel]="courseGroup.name"
+                    [nzValue]="courseGroup.id">
+                </nz-option>
+            </nz-select>
+        </ng-template>
+        <ng-template cuiColTpl="rowActions" let-row="row">
+          <a [routerLink]="[row.id]">管理</a>
+          <span nz-table-divider></span>
+          <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)">
+              <a nz-popconfirm class="text-danger">删除</a>
+          </nz-popconfirm>
+        </ng-template>
+        <ng-template #actionGroup>
+            <button  class="btn btn-outline-danger" (click)="delete(null,false)">批量删除</button>
+        </ng-template>
+      </cui-data-table>
+    </div>
+  </div>
+  
+  <ng-template #simpleSearchForm>
+    <form nz-form *ngIf="_searchForm" [formGroup]="_searchForm" [nzLayout]="'inline'">
+      <div nz-form-item>
+        <div nz-form-control>
+          <input nz-input formControlName="searchText" type="text" placeholder="请输入课程名称搜索">
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="loadData()"> 搜 索 </button>
+    </form>
+  </ng-template>
+      

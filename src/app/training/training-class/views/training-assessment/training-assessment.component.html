@@ -1,0 +1,53 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">评估列表
+            <small>查看培训班中现有的评估</small>
+        </h3>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-primary" (click)="add()">创建评估</button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="papers" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入评估名">
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template cuiColTpl="statusTpl" let-row="row">
+                <a (click)="onPublish(row);" *ngIf="row.status=='DRAFT'" class="badge badge-secondary">未发布</a>
+                <a (click)="onPublish(row);" *ngIf="row.status=='RUNNING'" class="badge badge-success">已发布</a>
+            </ng-template>
+            <ng-template #rowActions let-row="row">
+                <a href="javascript:;" class="text-info" (click)="add(row.id)">评估管理</a>
+                <span>|</span>
+                <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <nz-modal [nzWidth]="'80%'" [nzVisible]="isVisible" [nzTitle]="'评估信息'" [nzContent]="modalContent" (nzOnCancel)="handleCancel()">
+        <ng-template #modalContent>
+            <nz-tabset [nzTabPosition]="'left'">
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        基本信息
+                    </ng-template>
+                    <spk-assess-edit></spk-assess-edit>
+                </nz-tab>
+                <nz-tab>
+                    <ng-template #nzTabHeading>
+                        评估设置
+                    </ng-template>
+                    <!-- <spk-questions></spk-questions> -->
+                </nz-tab>
+            </nz-tabset>
+
+        </ng-template>
+    </nz-modal>
+</div>

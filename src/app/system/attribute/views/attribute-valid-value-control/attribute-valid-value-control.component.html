@@ -1,0 +1,20 @@
+<div nz-row>
+  <div nz-col [nzSpan]="4" class="text-center">
+    <strong>键</strong>
+  </div>
+  <div nz-col [nzSpan]="8" class="text-center">
+    <strong>值</strong>
+  </div>
+</div>
+<div nz-form-item nz-row *ngFor="let val of _value; let index = index;">
+    <div nz-form-control nz-col [nzSpan]="4" class="pr-2 pl-4">
+        <input nz-input [(ngModel)]="val.value" (ngModelChange)="valueChange()" [name]="'value' + index">
+    </div>
+    <div nz-form-control nz-col [nzSpan]="8">
+        <input nz-input [(ngModel)]="val.label" (ngModelChange)="valueChange()" [name]="'label' + index">
+    </div>
+    <div nz-form-control nz-col [nzSpan]="2">
+      <a class="ml-2"><i class="fa fa-plus"></i></a>
+      <a class="ml-2">✕</a>
+    </div>
+</div>

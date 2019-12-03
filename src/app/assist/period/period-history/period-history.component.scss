@@ -1,0 +1,66 @@
+:host ::ng-deep {
+    .period-history {
+        padding: 0px 10px;
+        .complex-search-bar-search-box {
+            margin-left: 30px;
+        }
+        .list-search-bar {
+            padding-bottom: 6px;
+        }
+        .simple-search-bar {
+            width: 42%;
+        }
+        .table {
+            thead {
+                background: #efef;
+            }
+        }
+        .list-tool-bar {
+            overflow: hidden;
+            .btn-group {
+                float: right;
+                top: 0px;
+            }
+        }
+    }
+    .modal-list-user {
+        .table {
+            thead {
+                background: #efef;
+            }
+        }
+        .fixwidth {
+            width: 400px;
+        }
+        .list-tool-bar {
+            // overflow: hidden;
+            .btn-group {
+                float: right;
+                top: -10px;
+            }
+        }
+        .form-group {
+            .select-box {
+                background: transparent;
+                height: 28px;
+                padding: 2px 4px;
+                font-size: 12px;
+                width: 160px;
+                border: 1px solid #aaa;
+                -webkit-appearance: none;
+                border-radius: 4px;
+            }
+            .search-name {
+                background: transparent;
+                height: 28px;
+                padding: 2px 4px;
+                font-size: 12px;
+                width: 160px;
+                border: 1px solid #aaa;
+                -webkit-appearance: none;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+        }
+    }
+}

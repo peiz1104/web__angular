@@ -1,0 +1,44 @@
+.question-one {
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    margin-bottom: 20px;
+}
+.card-title {
+    padding: 0 50px;
+    min-height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    background: #f9f9f9;
+    position: relative;
+}
+.card-answer {
+    margin: 10px 70px 50px;
+}
+.que-box {
+    overflow: hidden;
+}
+.questions {
+    min-height: 100px;
+    width: 100%;
+}
+.fill-blank{
+    .my-dis{
+        display: inline-block;
+    }
+    .answer-one{
+        padding: 5px 0;
+        span{
+            line-height: 30px;
+            padding-right: 10px;
+            float: left;
+            font-size: 14px;
+        }
+        div{
+            float: left;
+        }
+    }
+}
+.matrix-css{
+    font-size: 14px !important;
+    color: #495057 !important;
+}

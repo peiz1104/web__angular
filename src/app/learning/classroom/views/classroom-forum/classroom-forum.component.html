@@ -1,0 +1,68 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">{{classroom?.name}}: 讨论管理
+      <small>管理该课程可用的论坛。</small>
+    </h3>
+
+    <div class="actions pull-right">
+    </div>
+  </div>
+  <div class="page-body">
+    <ng-container *ngIf="!forum">
+      <p class="text-secondary mb-3">
+        <i class="fa fa-info-circle fa-lg text-info"></i> 该活动还没有初始化论坛功能，请点击下面的按钮初始化论坛</p>
+      <button type="button" class="btn btn-secondary" (click)="initCondition('required')">初始化论坛</button>
+    </ng-container>
+    <ng-container *ngIf="forum">
+      <router-outlet></router-outlet>
+    </ng-container>
+  </div>
+
+  <!-- 
+  <div class="page-body">
+    <ng-container *ngIf="!forum">
+      <p class="text-secondary mb-3">
+        <i class="fa fa-info-circle fa-lg text-info"></i> 该活动还没有初始化论坛功能，请点击下面的按钮初始化论坛</p>
+      <button type="button" class="btn btn-secondary" (click)="initCondition('required')">初始化论坛</button>
+    </ng-container>
+
+    <ng-container *ngIf="forum">
+      <nz-tabset>
+        <nz-tab>
+          <ng-template #nzTabHeading>
+            讨论区管理
+          </ng-template>
+          <div>
+            <router-outlet></router-outlet>
+          </div>
+        </nz-tab>
+        <nz-tab>
+          <ng-template #nzTabHeading>
+            基本设置
+          </ng-template>
+          <div>
+            <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="true">
+                      <div alert-body>
+                          管理与此教程相关的论坛属性。要使学员可以在他们的张贴内容中附加文档, 请选中“允许附件”。
+                          要使学员和教师可以私下个别交流, 请选中“允许私人消息”。要使所有参与者可以共享消息, 请选中“允许公共消息”。
+                          要在同一个论坛中同时支持私人消息和公共消息, 必须同时选中这两个复选框。
+                          要在默认情况下打开所有用户的电子邮件通知功能, 请选中“自动通知”。
+                          要允许学员利用标记设置讨论文本的格式, 请将标记类型设置为 IFF 或 HTML。
+                      </div>
+                      <div alert-description></div>
+                  </nz-alert>
+
+            <h3>TODO: 这里需求要处理的问题有：</h3>
+                  <ul>
+                    <li>offring 挂 forum 还是 boardGroup</li>
+                    <li>功能设置是挂在board上还是forum上或者boardGroup上（如果有的话），还是都挂。</li>
+                    <li>如果都挂，是挂相同的配置项，用默认 - 覆盖的方式；还是挂不同的配置项突出侧重点</li>
+                    <li>论坛帖子的维护，是在后台可维护还是设置版主到前台维护。</li>
+                    <li>如果设置版主，课程管理员和讲师是否直接具有版主角色，系统是否自动处理，前台如何判断（区分教员和学员，当教员不是学员的时候如何处理）。【延伸】是否需要有单独设置教员的功能？</li>
+                  </ul>
+          </div>
+        </nz-tab>
+      </nz-tabset>
+    </ng-container>
+  </div> -->
+</div>

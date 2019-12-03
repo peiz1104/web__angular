@@ -1,0 +1,39 @@
+<div style="background: #fff; padding: 16px 24px;">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/']">首页</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <!-- <a [routerLink]="['/dashboard/workspace']">工作台</a> -->
+      <span>工作台</span>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div nz-row style="margin-top: 16px;">
+    <div nz-col [nzSpan]="16" style="display: flex;">
+      <nz-avatar nzIcon="user" [nzSrc]="user?.avatar" style="width: 64px; height: 64px; border-radius: 50%;"></nz-avatar>
+      <div style="margin-left: 24px;">
+        <h2 style="line-height: 40px;">你好，{{user?.displayName || user?.firstName}}，祝你开心每一天！</h2>
+        <p>{{user?.username || user?.firstName}} | {{user?.userGroup?.namePath || user?.userGroup?.name}}</p>
+      </div>
+    </div>
+    <!-- <div nz-col [nzSpan]="8">
+      <div style="display: flex; justify-content: flex-end; text-align: center;">
+        <span style="margin: 0 24px;">
+          <div>项目数</div>
+          <span style="font-size: 32px;">56</span>
+        </span>
+        <span style="margin: 0 24px;">
+          <div>团队内排名</div>
+          <span style="font-size: 32px;">8</span>
+          <span style="font-size: 18px; color: #aaa;">/24</span>
+        </span>
+        <span style="margin: 0 24px;">
+          <div>项目访问</div>
+          <span style="font-size: 32px;">5,689</span>
+        </span>
+      </div>
+    </div> -->
+  </div>
+</div>
+

@@ -1,0 +1,20 @@
+
+<button class="btn btn-primary" (click)="openLookup(surveyLookupContent)">从模板库复制</button>
+
+<ng-template #surveyLookupContent>
+    <cui-data-table [columns]="columns" [data]="tpls?.content" [loading]="loading" (reload)="loadData($event)" [pagination]="tpls" selectType="checkbox" [(selection)]="selection">
+        <ng-template #simpleSearch>
+            <form class="form-inline">
+                <div class="form-group">
+                    <nz-input [(ngModel)]="searchtext" name="searchtext" [nzPlaceHolder]="'请输入调查名'"></nz-input>
+                </div>
+                <div class="form-group ml-2">
+                    <button type="button" class="btn btn-primary" (click)="loadData({page: 0})">搜索</button>
+                </div>
+            </form>
+        </ng-template>
+    </cui-data-table>
+
+    <button nz-button nzType="primary" (click)="onOk()">确定</button>
+    <button nz-button (click)="close()">取消</button>
+</ng-template>

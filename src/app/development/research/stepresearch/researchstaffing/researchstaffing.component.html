@@ -1,0 +1,28 @@
+<div class="staff-box">
+    <div class="btn-import">
+        <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" [routerLink]="['import']" nz-button [nzType]="'primary'">
+            <i class="iconfont icon-daoru1"></i>
+            <span>批量导入</span>
+        </button>
+    </div>
+    <nz-tabset (nzSelectChange)="changetable($event)" [nzTabPosition]="'top'" [nzType]="'card'">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                研发人员配置
+            </ng-template>
+            <spk-staffconfig *ngIf="tableIndex==0"></spk-staffconfig>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                讲师配置
+            </ng-template>
+            <spk-teacherconfig *ngIf="tableIndex==1"></spk-teacherconfig>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                课时量复核
+            </ng-template>
+            <spk-courseconfig *ngIf="tableIndex==2"></spk-courseconfig>
+        </nz-tab>
+    </nz-tabset>
+</div>

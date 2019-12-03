@@ -1,0 +1,67 @@
+<div class="tarin-regadd-box">
+    <div class="top-bread">
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                培训管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../','registrationlist']">代理注册</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="active">培训班添加授权注册人</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>培训班添加授权注册人</small>
+            </h5>
+        </div>
+    </div>
+    <div class="form-box">
+        <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+            <h5 class="my-3">人员信息</h5>
+            <div class="row">
+                <div class="col-8 pull-7 order-1">
+                    <div nz-form-item nz-row class="text-center">
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label nz-form-item-required>人员</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18" [nzValidateStatus]="validateForm.controls.userID">
+                            <spk-user-lookup formControlName="userID" placeholder="请选择班级负责人"></spk-user-lookup>
+                            <div nz-form-explain *ngIf="validateForm.controls.userID.dirty&&validateForm.controls.userID.hasError('required')">班级负责人不能为空</div>
+                            <!-- <nz-select [(ngModel)]="selectUser" nzReadonly="readonly" [nzMode]="'multiple'" [nzPlaceHolder]="'请选择人员'" formControlName="userID"
+                                [nzNotFoundContent]="'无法找到'">
+                                <nz-option *ngFor="let option of searchOptions" [nzLabel]="option.label" [nzValue]="option.value">
+                                </nz-option>
+                            </nz-select> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-4 pull-5 order-2">
+                    <!-- <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>协办单位</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="18">
+                                <spk-user-group-select formControlName="organizer"></spk-user-group-select>
+                            </div>
+                        </div> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 pull-7 order-1">
+                    <div nz-form-item nz-row class="text-center">
+                        <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                            <button [nzLoading]="loading" nz-button [nzType]="'primary'" (click)="_save($event)">保存</button>
+                            <button nz-button (click)="cancel($event)">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

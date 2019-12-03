@@ -1,0 +1,11 @@
+dt {
+  text-align: right;
+  width: 8rem;
+  flex: none;
+}
+
+dt,
+dd {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px dashed rgba($color: #3366aa, $alpha: 0.5);
+}

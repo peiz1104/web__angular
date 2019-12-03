@@ -1,0 +1,65 @@
+<form [formGroup]="_formGroup" class="form-horizontal" nz-form>
+    <h5>基本信息</h5>
+    <div class="form-group row" *ngIf="isNew()">
+        <label for="file" class="col-form-label col-2">
+            <i class="fa fa-field-required"></i>文件</label>
+        <div class="col-9">
+            <cui-fileupload #fileUpload mode="file" name="file" url="/api/upload/file" [auto]="true" (uploadComplete)="onUploadComplete($event)"
+                [maxFileSize]="1024*1024*20" accept=".ppt,.pptx,.doc,.docx,.xls,.xlsx,.pdf,.zip,.rar,"></cui-fileupload>
+            <div class="text-danger" *ngIf="fileType">请上传文件</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="name" class="col-form-label col-2">
+            <i class="fa fa-field-required"></i>名称</label>
+        <div class="col-9" nz-form-control [nzValidateStatus]="_formGroup.controls.name">
+            <nz-input formControlName="name"></nz-input>
+            <div class="text-danger" *ngIf="getFormControl('name').dirty && getFormControl('name').hasError('required')">名称必填</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="description" class="col-form-label col-2">描述</label>
+        <div class="col-9">
+            <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'5'"></nz-input>
+        </div>
+    </div>
+
+    <ng-container *ngIf="isNew()">
+        <h5>资料入库</h5>
+        <p style="padding-left: 54px;color: #aaa;">资料内容是文档时（PPT,PPTX,DOC,DOCX,XLS,XLSX,PDF,ZIP,RAR不能超过20M）,可以选择是否将此文档存入资源库中。</p>
+        <div class="form-group row">
+            <label for="entryOnOff" class="col-form-label col-2">是否入库</label>
+            <div class="col-9">
+                <cui-input-switch name="entryOnOff" onLabel='是' offLabel="&nbsp;否&nbsp;" formControlName="entryOnOff"></cui-input-switch>
+            </div>
+        </div>
+
+        <ng-container *ngIf="getFormControl('entryOnOff').value">
+            <div class="form-group row">
+                <label for="cate" class="col-form-label col-2">
+                    <i class="fa fa-field-required"></i>所属分类
+                </label>
+                <div class="col-9">
+                    <spk-category-select formControlName="category"></spk-category-select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cate" class="col-form-label col-2">
+                    <i class="fa fa-field-required"></i>所属组织
+                </label>
+                <div class="col-9">
+                    <spk-user-group-select formControlName="userGroup"></spk-user-group-select>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <div class="row mt-4">
+        <div class="col-3"></div>
+        <div class="col-9">
+            <button nz-button [nzType]="'primary'" (click)="_save($event)" [nzLoading]="loading" [disabled]="!_formGroup.valid">保存</button>
+            <button nz-button [nzType]="'primary'" *ngIf="isNew()" (click)="_saveAndNext($event)" [nzLoading]="loading" [disabled]="!_formGroup.valid">保存并继续</button>
+            <button nz-button [nzType]="'default'" (click)="_cancel($event)">取消</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,15 @@
+nz-card {
+    
+    .action-delete {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.6rem;
+        display: none;
+    }
+
+    &:hover {
+        .action-delete {
+            display: block;
+        }
+    }
+}

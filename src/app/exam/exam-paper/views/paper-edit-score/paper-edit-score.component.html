@@ -1,0 +1,76 @@
+<div class="paper-edit-score">
+    <div class="paper-header">
+        <div class="paper-title">
+            <h4>{{queryParams.epName}}</h4>
+            <div class="paper-status">状态：
+                <span class="color-publish">
+                    {{queryParams.isPutout == 'true' ? '已发布' : '未发布'}}
+                </span>
+            </div>
+            <div class="paper-score">
+                <span *ngIf="queryParams.sumScore != 0">
+                        已抽题分数：<span class="color-publish">{{queryParams.examScore + '/' + queryParams.sumScore}}</span>
+                </span>
+                <span *ngIf="queryParams.sumScore == 0">
+                        已抽题分数：<span class="color-publish">{{queryParams.examScore}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="paper-content">
+        <div class="paper-table">
+            <cui-data-table [loading]="nzSpinning" #tableHandle [data]="testListData" [pagination]="" [columns]="columns" selectType="checkbox" [(selection)]="selection" (reload)="loadData()">
+                <ng-template cuiColTpl="casual" let-row="row">
+                    <nz-tooltip [nzPlacement]="'right'">
+                        <span nz-tooltip class='ques-casual' (click)="previewQuesFunction(row.queId)">
+                            {{(row.casual||row.clobCasual)|getText}}
+                        </span>
+                        <ng-template #nzTemplate>
+                            <p>预览试题</p>
+                        </ng-template>
+                    </nz-tooltip>
+                </ng-template>
+                <ng-template cuiColTpl="createdDate" let-row="row">
+                    {{row.createdDate | dateMoment: 'YYYY-MM-DD HH:mm'||'--'}}
+                </ng-template>
+                <ng-template #listTools>
+                    <div class="add-tools">
+                        <button nz-button [nzType]="'primary'" (click)="showModal('S')">
+                            <i class="anticon anticon-plus"></i>批量修改试题分数
+                        </button>
+                        <button nz-button [nzType]="'primary'" (click)="showModal('T')">
+                            <i class="anticon anticon-plus"></i>批量修改答题时长
+                        </button>
+                        <button nz-button type="primary" class="btn btn-outline-primary" (click)="goBack()">
+                            返回上一页
+                        </button>
+                        <nz-modal class="add-tools-title" [nzMaskClosable]="false" [nzVisible]="isVisible" [nzTitle]="inputType=='S' ? '提示针对阅读理解题，修改分值不修改此题型，需要在组卷中，单个修改子题分值' : '修改时长'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+                            <ng-template #modalContent>
+                                <div nz-row>
+                                    <div *ngIf="inputType=='S'" class="label" nz-col [nzOffset]="2" [nzSpan]="6">请修改试题分数：</div>
+                                    <div *ngIf="inputType=='T'" class="label" nz-col [nzOffset]="2" [nzSpan]="6">请修改试题时长：</div>
+                                    <div nz-col [nzSpan]="12">
+                                        <nz-input-number *ngIf="inputType=='S'" class="num-input" [(ngModel)]="value" [nzMin]="0" [nzMax]="99" [nzStep]="0.5">
+                                        </nz-input-number>
+                                        <nz-input-number *ngIf="inputType=='T'" class="num-input" [(ngModel)]="value" [nzMin]="0" [nzMax]="999999">
+                                        </nz-input-number>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </nz-modal>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </div>
+        <div class="edit-save">
+            <button nz-button [nzType]="'primary'" (click)="submitData()" [nzLoading]="isLoading">
+                    <span>保存</span>
+                </button>
+        </div>
+        <nz-modal class="preview-class" [nzVisible]="previewQuesModel" [nzWidth]="900" [nzTitle]="'预览试题'" [nzContent]="modalContent10" (nzOnCancel)="handleCancelPreviewModel()" (nzOnOk)="handleOkPreviewModel()">
+            <ng-template #modalContent10>
+                <spk-test-view *ngIf="previewQuesModel" [view]="previewQuesModel" [url]="'/api/exam/question/preview'" [params]="previewIds"></spk-test-view>
+            </ng-template>
+        </nz-modal>
+    </div>
+</div>

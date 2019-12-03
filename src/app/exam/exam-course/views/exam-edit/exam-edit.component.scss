@@ -1,0 +1,19 @@
+.edit-body {
+    width: 100%;
+    .edit-left {
+        float: left;
+        width: 160px;
+        height: 100%;
+        .edit-nav {
+            height: 100%;
+            .active {
+                background-color: #ecf6fd;
+                border-right: 2px solid #388ecb;
+            }
+        }
+    }
+    .edit-right {
+        float: left;
+        width: calc(100% - 160px);
+    }
+}

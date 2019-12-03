@@ -1,0 +1,120 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">活动列表</h5>
+    </div>
+</div>
+
+
+<div class="px-4">
+    <div class="page-body">
+        <!-- <nz-alert *ngIf="selection && selection.length" [nzType]="'info'" [nzMessage]="'您已选择 ' + selection.length + ' 项，请选择列表工具栏中的 “批量操作” 完成您的操作。'"
+            [nzShowIcon]="true" class="mb-3"></nz-alert> -->
+
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData()">
+
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="title" let-row="row">
+                <a class="text-primary">{{row.title}}</a>
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                {{row.startDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">
+                {{row.endDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="leaders" let-row="row">
+                <span *ngFor="let one of row.leaders; let i = index">
+                    {{one.displayName ? one.displayName : one.username}}
+                    <ng-container *ngIf="i < row.leaders.length-1">
+                        ,</ng-container>
+                </span>
+            </ng-template>
+
+
+
+
+
+            <ng-template cuiColTpl="enrollmentCount" let-row="row">
+
+                {{row.enrollmentCount ? row.enrollmentCount : 0}}
+            </ng-template>
+            <ng-template cuiColTpl="workCount" let-row="row">
+
+                {{row.workCount ? row.workCount : 0}}
+            </ng-template>
+            <ng-template cuiColTpl="isPublished" let-row="row">
+                <nz-popconfirm *ngIf="row.isPublished == false" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="publish([row],false)">
+                    <a nz-popconfirm class="text-secondary">未发布</a>
+                </nz-popconfirm>
+                <nz-popconfirm *ngIf="row.isPublished == true" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="cancel([row],false)">
+                    <a nz-popconfirm class="text-success">已发布</a>
+                </nz-popconfirm>
+                <!-- <a *ngIf="row.isPublished == false" (click)="publish([row])" class="text-secondary">未发布</a>
+                <a *ngIf="row.isPublished == true" (click)="cancel([row])" class="text-success">已发布1</a> -->
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+            </ng-template>
+            <ng-template #actionGroup>
+                    <button class="btn btn-outline-primary" (click)="publish(null,true)">发布</button>
+                    <button class="btn btn-outline-info" (click)="cancel(null,true)">撤销发布</button>
+                    <button class="btn btn-outline-danger" (click)="delete(null,true)">批量删除</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-item>
+                <div nz-form-control>
+                    <nz-input formControlName="title" [nzPlaceHolder]="'活动标题'"> </nz-input>
+                </div>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #theListTools>
+    <button type="button" class="btn btn-primary" [routerLink]="['../add']">
+        <i class="fa fa-plus"></i> 创建活动</button>
+
+    <div class="btn-group">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            批量操作
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="publish(null,true)">发布</a>
+            <a class="dropdown-item" (click)="cancel(null,true)">撤销发布</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="delete(null,true)">批量删除</a>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #colRowActions let-row="row">
+    <a [routerLink]="['../', row.id]">管理</a>
+    <span nz-table-divider></span>
+    <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete([row],false)">
+        <a nz-popconfirm class="text-danger">删除</a>
+    </nz-popconfirm>
+    <!-- <a (click)="delete([row])" class="text-danger">删除</a> -->
+</ng-template>

@@ -1,0 +1,180 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:VIEW'}">
+    <div class="page-header">
+        <h3 class="page-title">文档列表
+            <small>管理文档库</small>
+        </h3>
+        <div class="actions pull-right">
+            <div class="btn-group">
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table #documentTable [columns]="columns" [data]="documents?.content" [pagination]="documents" [loading]="loading"
+            selectType="checkbox" (reload)="reload($event)" [(selection)]="checkDocuments">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="name" [(ngModel)]="document.name" placeholder="请输入文档名称">
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="searchDocument()">搜索</button>
+                        <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();documentTable.isComplexSearch=true">高级搜索</a>
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template #complexSearch>
+                <form class="search-bar">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">文档名称</label>
+                                <div class="col-9">
+                                    <nz-input name="name" [nzPlaceHolder]="'请输入文档名称'" [(ngModel)]="document.name"></nz-input>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">是否发布</label>
+                                <div class="col-9">
+                                    <!-- <nz-select class="w-100" name="isPublished" [(ngModel)]="document.isPublished">
+                      <nz-option [nzLabel]="'全部'" [nzValue]=""></nz-option>
+                      <nz-option [nzLabel]="'已发布'" [nzValue]="true"></nz-option>
+                      <nz-option [nzLabel]="'未发布'" [nzValue]="false"></nz-option>
+                  </nz-select> -->
+                                    <nz-select class="w-100" name="isPublished" [(ngModel)]="document.isPublished">
+                                        <nz-option [nzLabel]="'全部'" [nzValue]="null"></nz-option>
+                                        <nz-option [nzLabel]="'已发布'" [nzValue]="true"></nz-option>
+                                        <nz-option [nzLabel]="'未发布'" [nzValue]="false"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- <div class="form-group row">
+                <label class="col-form-label col-3">是否精品</label>
+                <div class="col-9">
+                  <nz-select class="w-100" name="isExcellent" [(ngModel)]="document.isExcellent">
+                      <nz-option [nzLabel]="'全部'" [nzValue]="null"></nz-option>
+                      <nz-option [nzLabel]="'精品'" [nzValue]="true"></nz-option>
+                      <nz-option [nzLabel]="'普通'" [nzValue]="false"></nz-option>
+                  </nz-select>
+                </div>
+              </div> -->
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">转码状态</label>
+                                <div class="col-9">
+                                    <nz-select class="w-100" name="transcodeStatus" [(ngModel)]="documentInfo.transcodeStatus">
+                                        <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                        <nz-option [nzLabel]="'无须转码'" [nzValue]="'NEEDLESS'"></nz-option>
+                                        <nz-option [nzLabel]="'未开始'" [nzValue]="'NOT_START'"></nz-option>
+                                        <nz-option [nzLabel]="'等待转码'" [nzValue]="'WAITING'"></nz-option>
+                                        <nz-option [nzLabel]="'转码中'" [nzValue]="'TRANSCODING'"></nz-option>
+                                        <nz-option [nzLabel]="'转码完成'" [nzValue]="'COMPLETE'"></nz-option>
+                                        <nz-option [nzLabel]="'转码失败'" [nzValue]="'FAILED'"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">分类</label>
+                                <div class="col-9">
+                                    <spk-category-select name="category" [(ngModel)]="category" placeholder="按分类搜索"></spk-category-select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">组织</label>
+                                <div class="col-9">
+                                    <spk-user-group-select name="userGourp" [(ngModel)]="userGroup" placeholder="按组织搜索"></spk-user-group-select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group row mb-0">
+                            <div class="col-3 offset-1">
+                                <button type="button" class="btn btn-primary" (click)="searchDocument()">搜索</button>
+                                <button type="reset" class="btn btn-primary" (click)="clearSearchText()">清空</button>
+                                <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();documentTable.isComplexSearch=false">普通搜索</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template cuiColTpl="nameCol" let-row="row">
+                <i *ngIf="row.format=='doc' || row.format=='docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='ppt' || row.format=='pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='xls' || row.format=='xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                <span>{{row.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="convertStatusCol" let-row="row">
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NEEDLESS'">无须转码</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NOT_START'">未开始</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'WAITING'">等待转码</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'TRANSCODING'">转码中</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'COMPLETE'">转码完成</span>
+                <span class="text-danger" *ngIf="row.documentInfo.transcodeStatus == 'FAILED'">转码失败</span>
+            </ng-template>
+            <ng-template cuiColTpl="excellentCol" let-row="row">
+                <span class="text-success" *ngIf="row.isExcellent">精品</span>
+                <span class="text-info" *ngIf="!row.isExcellent">普通</span>
+            </ng-template>
+            <ng-template cuiColTpl="publishCol" let-row="row">
+                <div *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}; else elseBlock">
+                    <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="publish(row,true)">
+                        <a nz-popconfirm class="text-secondary">未发布</a>
+                    </nz-popconfirm>
+                    <nz-popconfirm *ngIf="row.isPublished" [nzTitle]="'确定要撤销发布吗？'" (nzOnConfirm)="disPublish(row,true)">
+                        <a nz-popconfirm class="text-success">已发布</a>
+                    </nz-popconfirm>
+                </div>
+                <ng-template #elseBlock>
+                    <span class="text-success" *ngIf="row.isPublished">已发布</span>
+                    <span class="text-secondary" *ngIf="!row.isPublished">未发布</span>
+                </ng-template>
+            </ng-template>
+
+            <ng-template #rowActions let-row="row">
+                <ng-container *ngIf="row.documentInfo.isPreview && row.documentInfo.transcodeStatus == 'COMPLETE'">
+                    <a href="javascript:;" (click)="preview(row.documentInfo.id)" class="text-info">查看</a>
+                    <span>|</span>
+                </ng-container>
+
+                <a href="javascript:;" [routerLink]="['../', row.id, 'edit']" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">编辑</a>
+                <nz-popconfirm *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:REMOVE'}" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row, true)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+                <!-- <a href="javascript:;" class="text-danger" (click)="delete(row)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:REMOVE'}">删除</a> -->
+            </ng-template>
+            <ng-template #listTools>
+                <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']">
+                    <i class="fa fa-plus"></i> 上传文档</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                        <span>批量操作</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" (click)="publish(null,false)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}">发布</a>
+                        <a class="dropdown-item" (click)="disPublish(null,false)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}">撤销发布</a>
+                        <div class="dropdown-divider" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}"></div>
+                        <!-- <a class="dropdown-item" (click)="excellent()" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">设为精品</a>
+                  <a class="dropdown-item" (click)="disExcellent()" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">撤销精品</a> -->
+                        <div class="dropdown-divider" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}"></div>
+                        <a class="dropdown-item" (click)="delete(null,false)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:REMOVE'}">批量删除</a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #actionGroup>
+                <button class="btn btn-outline-primary" (click)="publish(null,false)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}">发布</button>
+                <button class="btn btn-outline-info" (click)="disPublish(null,false)" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:PUBLISH'}">撤销发布</button>
+                <!-- <button class="btn btn-outline-primary" (click)="excellent()" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">设为精品</button>
+                <button class="btn btn-outline-info" (click)="disExcellent()" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">撤销精品</button> -->
+                <button class="btn btn-outline-danger" (click)="delete(null,false)">批量删除</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

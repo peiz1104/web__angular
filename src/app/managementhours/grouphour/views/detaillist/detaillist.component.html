@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 机构年度学时详情列表</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../../../','grouphourlist']">返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="box-detail-hour-list">
+    <div class="top-bread">
+    </div>
+    <div class="list-form-detail">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" [(selection)]="selection"
+                    (reload)="loadData($event)" >
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                                   
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="searchName">机构名称</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="searchName" [nzPlaceHolder]="'请输入机构名称'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>    
+
+                                    <div class="cui-data-table-form-row">
+                                        <div class='simple-search-bar-search-box'>
+                                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                            <button *spkAuthzIf="{hasPermission: 'PERIOD:HISTORY:VIEW'}" [title]="testListData&&testListData.content.length==0?'无数据不可导':''"
+                                [disabled]="testListData&&testListData.content.length==0" (click)="export($event)" nz-button
+                                [nzType]="'primary'">
+                                <i class="iconfont icon-daochu"></i> 导出</button>
+                        </div>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="userGroup" let-row="row">
+                        <span>{{namePath(row.userGroupNamePath)}}</span> 
+                    </ng-template>
+                    <ng-template cuiColTpl="typeCol" let-row="row">
+                        <span *ngIf="row.type=='pt'">普通</span>
+                        <span *ngIf="row.type=='cj'">处级</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="totalCountCol" let-row="row">
+                        <span>{{row.totalCount}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="passCountCol" let-row="row">
+                        <span>{{row.passCount}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="failCountCol" let-row="row">
+                        <span>{{row.totalCount - row.passCount}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="qualifieRateCol" let-row="row">
+                        <span>{{qualifieRate(row.passCount,row.totalCount)}} %</span>
+                    </ng-template>
+
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

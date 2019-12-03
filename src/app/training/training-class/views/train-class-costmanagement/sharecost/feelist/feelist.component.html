@@ -1,0 +1,26 @@
+<div class="fee-list-box">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <div class="no-data" *ngIf="(feeListData.length==0)">
+            <i class="iconfont icon-frowno"></i>
+            <span>暂无数据！</span>
+        </div>
+        <div *ngIf="feeListData&&feeListData.length" class="cost-table-list">
+            <table>
+                <thead>
+                    <tr>
+                        <td>培训班名称</td>
+                        <td>组织名称</td>
+                        <td>费用（元）</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of feeListData;let i = index">
+                        <td>{{item?.offering.name}}</td>
+                        <td>{{item?.userGroup.name}}</td>
+                        <td>{{item.fee}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </nz-spin>
+</div>

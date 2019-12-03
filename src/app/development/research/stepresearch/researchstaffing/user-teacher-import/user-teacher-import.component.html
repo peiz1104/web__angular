@@ -1,0 +1,88 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">人员配置
+            <small>| 导入人员讲师</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../']">返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+    <!-- <div class="page-header">
+      <nz-breadcrumb>
+        <nz-breadcrumb-item>
+          当前位置：
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          <a [routerLink]="['../']">人员配置</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          导入人员、讲师
+        </nz-breadcrumb-item>
+      </nz-breadcrumb>
+    </div> -->
+    <div class="page-body">
+        <div>
+            <span>说明：导入时，如果该人员为讲师时，只会将该人员导入至讲师配置中。</span>
+        </div>
+
+        <div class="plan-template" style="margin-top: 30px">
+            <div class="plan-template-li">
+                <div class="plan-template-li-title">
+                    <h3> 第一步</h3>
+                </div>
+                <div class="plan-template-li-input-box">
+                    <div class='input-box'>点击下载子计划模板</div>
+                    <button type="button" class="btn btn-primary btn-box" (click)="download()">下载</button>
+                </div>
+            </div>
+            <div class="plan-template-li">
+                <div class="plan-template-li-title">
+                    <h3>第二步</h3>
+                </div>
+                <div class="" style="width: 500px; margin-left: 200px;">
+                    <cui-fileupload mode="file" name="file" url="/api/phase/1/dev/person/validImportFile" [auto]="true" (uploadComplete)="onUploadComplete($event)"
+                        class="btn-box"></cui-fileupload>
+                </div>
+            </div>
+            <div class="plan-template-li noborder">
+                <div class="plan-template-li-input-box">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'validating'" [nzLoading]="true">
+                        <span>解析中</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'importing'" [nzLoading]="true">
+                        <span>导入中</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'before'" (click)="import()">导入计划</button>
+                    <span *ngIf="status == 'after'">导入完成</span>
+                    <button nz-button [nzType]="'default'" [nzSize]="'large'" [routerLink]="['../']">返回</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错误信息展示 -->
+        <div class="box-center" nz-row *ngIf="messageShow == true">
+            <h3>导入模板中可能存在以下错误，除此以外，均导入成功(若无，则全部导入成功)</h3>
+
+            <cui-data-table [columns]="messageColumns" [data]="message">
+                <ng-template cuiColTpl="colnumber" let-row="row">
+                    <div>{{row.number}}</div>
+                </ng-template>
+                <!-- <ng-template cuiColTpl="usernameCol" let-row="row">
+            <div>{{row.importDto.username}}</div>
+          </ng-template>
+          <ng-template cuiColTpl="lvCol" let-row="row">
+            <div>{{row.importDto.lv}}</div>
+          </ng-template> -->
+                <ng-template cuiColTpl="colmessage" let-row="row">
+                    <div>
+                        <ul>
+                            <li *ngFor="let it of row.errorList;let i = index"> {{(i+1)+'、'+it}}；</li>
+                        </ul>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </div>
+</div>

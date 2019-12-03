@@ -1,0 +1,68 @@
+<form #noticeForm="ngForm" (submit)="onSubmit(noticeForm)" class="form-horizontal" [formGroup]="_form" *ngIf="notice" nz-form>
+  <div class="row">
+    <div class="col-10">
+
+      <div class="form-group row">
+        <label for="title" class="col-form-label col-3">
+          <i class="fa fa-field-required"></i> 名称</label>
+        <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.title">
+          <nz-input formControlName="title" maxlength="40"></nz-input>
+          <div class="text-danger" *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">名称必填</div>
+          <div class="text-danger" *ngIf="getFormControl('title').hasError('maxlength')">名称不得超过40个字符</div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="" class="col-3 col-form-label"><i class="fa fa-field-required"></i>内容</label>
+        <div class="col-9">
+          <cui-ckeditor name="content"  formControlName="content"></cui-ckeditor>
+          <div class="text-danger" *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">名称必填</div>
+        </div>
+      </div>
+
+      <div class="form-group row" *ngIf="hasAttachements()">
+        <label for="" class="col-form-label col-3"> 文件列表</label>
+        <div class="col-9">
+          <cui-data-table #dataTable [data]="showAttachements" [loading]="attachementsLoading" [columns]="columns">
+            <ng-template cuiColTpl="downloadFile" let-row="row">
+              <a href="javascript:;" (click)="downloadFile(row.relativePath)">下载</a>
+            </ng-template>
+            <ng-template cuiColTpl="deleteFile" let-row="row">
+              <a href="javascript:;" (click)="deleteFile(row.id)">删除</a>
+            </ng-template>
+          </cui-data-table>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-form-label col-3"> 上传附件</label>
+        <div class="col-9">
+          <cui-fileupload mode="file" name="file" url="/api/upload/file" [auto]="true" [multiple]="true" (uploadComplete)="initDocument($event)"
+            [maxFileSize]="1024*1024*20" accept=".ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip,.pdf"></cui-fileupload>
+          <br>
+          <span class="text-muted">
+            <i class="fa fa-info-circle text-info"></i>可以在此处上传文件。格式应为PPT,PPTX,DOC,DOCX,XLS,XLSX,ZIP,PDF 大小不能超过20MB。</span>
+        </div>
+      </div>
+
+      <!-- <div class="form-group row" *ngIf="isSystem">
+        <label for="" class="col-3 col-form-label">登录前是否可见</label>
+        <div class="col-9">
+          <nz-radio-group formControlName="isPublished" >
+            <label nz-radio [nzValue]="true">
+              <span>是</span>
+            </label>
+            <label nz-radio [nzValue]="false">
+              <span>否</span>
+            </label>
+          </nz-radio-group>
+        </div>
+      </div> -->
+
+      <div class="form-group row">
+        <div class="col-9 offset-3">
+          <button nz-button [nzType]="'primary'" type="submit" [disabled]="!noticeForm.valid" [nzLoading]="loading">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

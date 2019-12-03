@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">创建类型</h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../list']">返回类型列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="applicable-objects-body">
+
+<!--        <spk-applicable-objects-form *ngIf="applicableObjects" [applicableObjects]="applicableObjects" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)">
+        </spk-applicable-objects-form>-->
+        <spk-type-management-form *ngIf="typeManagement" [typeManagement]="typeManagement" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)">
+        </spk-type-management-form>
+      </div>
+    </div>
+  </div>
+</div>

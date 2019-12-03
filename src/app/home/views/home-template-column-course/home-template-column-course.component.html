@@ -1,0 +1,179 @@
+<div class="home-course" *ngIf="courseInfo">
+  <div class="navigation-bar-box">
+    <div class="nav-name">{{itemConfig?.name||'暂无标题'}}</div>
+    <div class="nav-more" *ngIf="itemConfig?.moreArticle">
+      <span>更多</span>
+      <i class="anticon anticon-right-circle"></i>
+    </div>
+  </div>
+  <div class="courseList">
+    <div class="course-mod" *ngIf="courseStyle == 'tbl_1'">
+      <div class="mod-one" *ngFor="let one of courseInfo;let i = index;">
+        <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+      </div>
+    </div>
+    <div class="course-mod" *ngIf="courseStyle == 'tbl_2'">
+      <div class="mod-one" *ngFor="let one of courseInfo;">
+        <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+      </div>
+    </div>
+    <div class="course-mod course-mod3" *ngIf="courseStyle == 'tbl_3'">
+      <div class="mod-one">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row:courseInfo[0],type:'courseone'}"></ng-container>
+      </div>
+      <div class="mod-one" *ngFor="let one of courseInfo|slice:1:7;">
+        <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row:one}"></ng-container>
+      </div>
+      <div class="mod-one">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row:courseInfo[7],type:'courseone'}"></ng-container>
+      </div>
+    </div>
+    <div class="course-mod4" *ngIf="courseStyle == 'tbl_4'">
+      <div class="mod-le">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[0],type:'coursethree'}"></ng-container>
+      </div>
+      <div class="mod-ri">
+        <div class="mod-tr">
+          <div class="mod-one" *ngFor="let one of courseInfo | slice:1:4;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+          </div>
+        </div>
+        <div class="mod-tr">
+          <div class="mod-one one-content" *ngFor="let one of courseInfo | slice:4;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="course-mod5" *ngIf="courseStyle == 'tbl_5'">
+      <div class="mod-le">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[0],type:'coursetwo'}"></ng-container>
+      </div>
+      <div class="mod-mid">
+        <div class="mod-tr">
+          <div class="mod-one" *ngFor="let one of courseInfo | slice:1:4;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row:one}"></ng-container>
+          </div>
+        </div>
+        <div class="mod-tr">
+          <div class="mod-one" *ngFor="let one of courseInfo | slice:4:7;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row:one}"></ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="mod-ri">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[7],type:'coursetwo'}"></ng-container>
+      </div>
+    </div>
+
+    <div class="course-mod5 course-mod6" *ngIf="courseStyle == 'tbl_6'">
+      <div class="mod-le">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[0],type:'coursetwo'}"></ng-container>
+      </div>
+      <div class="mod-mid">
+        <div class="mod-tr">
+          <div class="mod-one">
+            <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row:courseInfo[1],type:'courseone'}"></ng-container>
+          </div>
+          <div class="mod-one">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row:courseInfo[2]}"></ng-container>
+          </div>
+        </div>
+        <div class="mod-tr">
+          <div class="mod-one">
+            <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row:courseInfo[3],type:'courseone'}"></ng-container>
+          </div>
+          <div class="mod-one">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row:courseInfo[4]}"></ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="mod-ri one-content">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[5],type:'coursetwo'}"></ng-container>
+      </div>
+    </div>
+
+    <div class="course-mod4 course-mod7" *ngIf="courseStyle == 'tbl_7'">
+      <div class="mod-le">
+        <ng-container [ngTemplateOutlet]="newCourse" [ngOutletContext]="{row: courseInfo[0],type:'coursetwo'}"></ng-container>
+      </div>
+      <div class="mod-ri">
+        <div class="mod-tr">
+          <div class="mod-one clearfix" *ngFor="let one of courseInfo | slice:1:5;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+          </div>
+        </div>
+        <div class="mod-tr">
+          <div class="mod-one one-content" *ngFor="let one of courseInfo | slice:5;">
+            <ng-container [ngTemplateOutlet]="childCourse" [ngOutletContext]="{row: one}"></ng-container>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #childCourse let-row="row">
+  <div class="course-box" *ngIf="row?.id">
+    <div class="transform-box" [ngSwitch]="row?.courseType" *ngIf="row?.courseType!='ONLINE'">
+      <!-- <div class="transform online" *ngSwitchCase="'ONLINE'">在线</div> -->
+      <div class="transform face-to-face" *ngSwitchCase="'OFFLINE'">面授</div>
+      <div class="transform live-stream" *ngSwitchCase="'LIVE'">直播</div>
+      <div class="transform online" *ngSwitchDefault>直播</div>
+    </div>
+    <div class="course-img">
+      <img [src]="row?.imgUrl||row?.imageUrl" onerror="this.src='assets/images/default/course.png'" />
+    </div>
+    <div class="course-info">{{row?.name || '暂未名称'}}</div>
+    <div class="course-bottom">
+      <span><i class="anticon anticon-like-o"></i> {{row?.likes||0}}</span><span class="pull-right"><i class="anticon anticon-user"></i> {{row?.learners||0}} 人</span>
+    </div>
+    <div class="box-mask" *ngIf="row?.isDeleted">
+      该课程已被删除
+    </div>
+    <div class="box-mask" *ngIf="!row?.isDeleted&&!row?.isPublished">
+      该课程已下架
+    </div>
+  </div>
+  <div *ngIf="!row?.id" class="course-box course-delete">
+    <div class="box-center">
+      <img src="assets/images/nodata.png" /><br/> 该课程已下架
+    </div>
+  </div>
+</ng-template>
+<ng-template #newCourse let-row="row" let-type="type">
+  <div class="course-box" *ngIf="row?.id">
+    <div class="transform-box" [ngSwitch]="row?.courseType" *ngIf="row?.courseType!='ONLINE'">
+      <!-- <div class="transform online" *ngSwitchCase="'ONLINE'">在线</div> -->
+      <div class="transform face-to-face" *ngSwitchCase="'OFFLINE'">面授</div>
+      <div class="transform live-stream" *ngSwitchCase="'LIVE'">直播</div>
+      <div class="transform online" *ngSwitchDefault>直播</div>
+    </div>
+    <div class="course-img">
+      <img *ngIf="type=='courseone'" [src]="row?.imgUrl||row?.imageUrl" onerror="this.src='assets/images/default/course-one.png'" />
+      <img *ngIf="type=='coursetwo'" [src]="row?.imgUrl||row?.imageUrl" onerror="this.src='assets/images/default/course-two.png'" />
+      <img *ngIf="type=='coursethree'" [src]="row?.imgUrl||row?.imageUrl" onerror="this.src='assets/images/default/course-three.png'" />
+    </div>
+    <div class="course-mask">
+      <div class="course-info">{{row?.name || '暂未名称'}}</div>
+      <div class="course-bottom">
+        <span><i class="anticon anticon-like-o"></i> {{row?.likes||0}}</span><span class="pull-right"><i class="anticon anticon-user"></i> {{row?.learners||0}} 人</span>
+      </div>
+    </div>
+    <div class="box-mask" *ngIf="row?.isDeleted">
+      该课程已被删除
+    </div>
+    <div class="box-mask" *ngIf="!row?.isDeleted&&!row?.isPublished">
+      该课程已下架
+    </div>
+  </div>
+  <div *ngIf="!row?.id" class="course-box course-delete">
+    <div class="box-center">
+      <img src="assets/images/nodata.png" /><br/> 该课程已下架
+    </div>
+  </div>
+</ng-template>

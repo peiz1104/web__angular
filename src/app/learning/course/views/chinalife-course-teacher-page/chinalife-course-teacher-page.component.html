@@ -1,0 +1,159 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">[{{course.code}}]{{course.name}}: 讲师
+            <small></small>
+        </h3>
+    </div>
+
+    <div class="page-body">
+        <nz-alert [nzType]="'info'">
+            <span alert-body>
+                <pre>指定能讲授该课程的讲师资源，在发布成课程学习活动后，可以选择该课程的讲师资源中的一个或多个作为实际讲授的讲师。</pre>
+            </span>
+        </nz-alert>
+        <ng-container>
+            <div>
+
+                <nz-alert *ngIf="selection && selection.length" [nzType]="'info'" [nzMessage]="'您已选择 ' + selection.length + ' 项，请选择列表工具栏中的 “批量操作” 完成您的操作。'"
+                    [nzShowIcon]="true" class="mb-3" style="margin-top:10px"></nz-alert>
+
+                <cui-data-table #tableHandle [columns]="columns" [data]="teachers?.content" [pagination]="teachers" [(selection)]="selection"
+                    selectType="checkbox" [loading]='spinning' (reload)="loadTeachers($event)">
+
+                    <ng-template #simpleSearch>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body" style="margin-top:10px">
+                                <div nz-form-control>
+                                    <nz-input formControlName="teacherNo" [nzPlaceHolder]="'讲师编号'"> </nz-input>
+                                </div>
+                                <div class='simple-search-bar-search-box'>
+                                    <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询</button>
+                                    <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+
+                    <ng-template #complexSearch>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                            <div class="cui-data-table-form-body" style="margin-top:10px">
+                                <div nz-row>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="teacherNo">讲师编号</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="teacherNo" [nzPlaceHolder]="'请输入讲师编号'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="name">讲师姓名</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="name" [nzPlaceHolder]="'请输入讲师姓名'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="teacherType">讲师类型</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-select formControlName="teacherType" [nzPlaceHolder]="'请选择'" nzAllowClear [nzShowSearch]="true">
+                                                    <nz-option [nzLabel]="'全部'" [nzValue]=""></nz-option>
+                                                    <nz-option [nzLabel]="'兼职讲师'" [nzValue]="'PARTTIME'"></nz-option>
+                                                    <nz-option [nzLabel]="'专职讲师'" [nzValue]="'FULLTIME'"></nz-option>
+                                                    <nz-option [nzLabel]="'外部讲师'" [nzValue]="'EXTERNAL'"></nz-option>
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div nz-row>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="publishStatus">发布状态</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-select formControlName="publishStatus" [nzPlaceHolder]="'请选择'" nzAllowClear [nzShowSearch]="true">
+                                                    <nz-option [nzLabel]="'全部'" [nzValue]=""></nz-option>
+                                                    <nz-option [nzLabel]="'已发布'" [nzValue]="'1'"></nz-option>
+                                                    <nz-option [nzLabel]="'未发布'" [nzValue]="'0'"></nz-option>
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="userGroup">所属机构</label>
+                                            </div>
+                                            <div nz-form-control [nzValidateStatus]="userGroup" nz-col [nzSpan]="18">
+                                                <spk-user-group-select mode="single" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="simple-search-bar-search-box">
+                                    <div style="bottom:-48px" class='complex-search-bar-search-box'>
+                                        <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询
+                                        </button>
+                                        <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=false">简单查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-template>
+
+
+
+
+                    <ng-template #listTools>
+                        <div *ngIf="isLook" style="z-index:13" class="actions pull-right" style="margin-top:10px">
+                            <button [disabled]="isArchived" nz-button [nzType]="'primary'" (click)="openLookup()">
+                                <i class="fa fa-plus"></i> 添加讲师</button>
+                        </div>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="teacherTypeCol" let-row="row">
+                        <span *ngIf="row.teacherType=='EXTERNAL'">外部讲师</span>
+                        <span *ngIf="row.teacherType=='FULLTIME'">专职讲师</span>
+                        <span *ngIf="row.teacherType=='PARTTIME'">兼职讲师</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="sexCol" let-row="row">
+                        <span *ngIf="row.sex=='FAMALE'">女</span>
+                        <span *ngIf="row.sex=='MALE'">男</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="userGroupCol" let-row="row">
+                        {{namePath(row.userGroup?.namePath)}}
+                    </ng-template>
+                    <ng-template cuiColTpl="publishStatusCol" let-row="row">
+                        <span>{{row.publishStatus?'已发布':'未发布'}}</span>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="rowAction" let-row="row">
+                        <div class="text-right">
+                            <a *ngIf="isLook" href="javascript:;" class="text-danger" (click)="confirmDelete([row.id])">删除</a>
+                            <a *ngIf="!isLook" href="javascript:;">删除</a>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #actionGroup>
+                        <button type="button" class="btn btn-danger" (click)="confirmDelete()">批量删除</button>
+                    </ng-template>
+
+                </cui-data-table>
+            </div>
+        </ng-container>
+    </div>
+</div>

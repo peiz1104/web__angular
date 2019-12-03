@@ -1,0 +1,25 @@
+<nz-tabset (nzSelectChange)="_tabChange($event)">
+  <nz-tab *ngFor="let es of _enrollStatus; index as i; ">
+    <ng-template #nzTabHeading>
+      {{es.label}}
+    </ng-template>
+
+    <ng-container *ngIf="offering && offering.id" [ngTemplateOutlet]="[enrolled, notEnrolled, applied, refused][i]"></ng-container>
+  </nz-tab>
+</nz-tabset>
+
+<ng-template #enrolled>
+  <spk-offering-enrollment-enrolled [offeringId]="offering?.id"></spk-offering-enrollment-enrolled>
+</ng-template>
+
+<ng-template #notEnrolled>
+  <spk-offering-enrollment-not-enrolled [offeringId]="offering?.id"></spk-offering-enrollment-not-enrolled>
+</ng-template>
+
+<ng-template #applied>
+  <spk-offering-enrollment-applied [offeringId]="offering?.id"></spk-offering-enrollment-applied>
+</ng-template>
+
+<ng-template #refused>
+  <spk-offering-enrollment-refused [offeringId]="offering?.id"></spk-offering-enrollment-refused>
+</ng-template>

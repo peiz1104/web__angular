@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">创建适用对象</h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../list']">返回适用对象列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="applicable-objects-body">
+        <spk-applicable-objects-form *ngIf="applicableObjects" [applicableObjects]="applicableObjects" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)">
+        </spk-applicable-objects-form>
+
+      </div>
+    </div>
+  </div>
+</div>

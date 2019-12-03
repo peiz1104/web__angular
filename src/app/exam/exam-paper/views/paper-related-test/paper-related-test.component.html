@@ -1,0 +1,46 @@
+<div class="releated-test-box">
+    <!-- <div class="top-bread">
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                在线考试
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/exam/exam-paper']" [queryParams]="link">试卷管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="color-active">对应考试</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div> -->
+    <div class="select-body">
+        <div class="create-list">已创建的考试列表</div>
+        <cui-data-table [loading]="spinning" #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [(selection)]="selection">
+            <!-- <ng-template cuiColTpl="epName" let-row="row">
+                    <nz-tooltip [nzPlacement]="'right'">
+                        <span (click)="preview([row])" nz-tooltip class='exam-casual'>{{row.epName | getText}}</span>
+                        <ng-template #nzTemplate>
+                            <p>预览试卷</p>
+                        </ng-template>
+                    </nz-tooltip>
+                </ng-template> -->
+            <ng-template cuiColTpl="examName" let-row="row">
+                <span nz-tooltip class='exam-casual'>{{row.examName | getText}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                {{row.createdDate | dateMoment: 'YYYY-MM-DD HH:mm'||'--'}}
+            </ng-template>
+            <ng-template cuiColTpl="startTime" let-row="row">
+                {{row.startTime | dateMoment: 'YYYY-MM-DD HH:mm'||'--'}}
+            </ng-template>
+            <ng-template cuiColTpl="enterExamTime" let-row="row">
+                {{row.enterExamTime | dateMoment: 'YYYY-MM-DD HH:mm'||'--'}}
+            </ng-template>
+            <ng-template cuiColTpl="isPutout" let-row="row">
+                {{row.isPutout ? '已发布': '未发布'}}
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

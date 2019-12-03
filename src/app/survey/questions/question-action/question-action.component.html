@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-end">
+  <div class="mr-auto p-2" [ngClass]="{'d-none': question.isEdit}">
+    <a (click)="onInsertQuestion();" class="text-danger">{{addHtml}}</a>
+  </div>
+  <div class="p-2">
+    <button (click)="onEdit();" type="button" class="btn btn-outline-success">编辑</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onCopy();" type="button" class="btn btn-outline-success">复制</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onDel();" type="button" class="btn btn-outline-success">删除</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onMoveUp();" type="button" class="btn btn-outline-success">上移</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onMoveDown();" type="button" class="btn btn-outline-success">下移</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onFirst();" type="button" class="btn btn-outline-success">最前</button>
+  </div>
+  <div class="p-2">
+    <button (click)="onLast();" type="button" class="btn btn-outline-success">最后</button>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="container-fluid1">
+
+    <div>
+        <!-- <div class="alert alert-info">
+            <span>指定能讲授该课程的讲师资源，在发布成课程学习活动后，可以选择该课程的讲师资源中的一个或多个作为实际讲授的讲师。</span>
+          </div> -->
+        <nz-alert [nzType]="'info'">
+            <span alert-body>
+                <pre>指定能讲授该课程的讲师资源，在发布成课程学习活动后，可以选择该课程的讲师资源中的一个或多个作为实际讲授的讲师。</pre>
+            </span>
+        </nz-alert>
+
+        <div class="mt-4">
+            <div nz-row [nzGutter]="8">
+                <div nz-col [nzSpan]="6" *ngFor="let teacher of teachers">
+                    <nz-card>
+                        <ng-template #body>
+                            <div class="d-flex">
+                  <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzSrc]="teacher?.imgUrl" [nzIcon]="'user'" class="mr-3"></nz-avatar>
+                                <div class="media-body">
+                                    <h5 class="mb-2">{{teacher?.name}}</h5>
+                    <p class="text-truncate"  *ngIf="teacher?.rank">
+                            <ng-container *ngIf="teacher.rank == 'I'">预备讲师</ng-container>
+                            <ng-container *ngIf="teacher.rank  == 'II'">助理讲师</ng-container>
+                            <ng-container *ngIf="teacher.rank  == 'III'">中级讲师</ng-container>
+                            <ng-container *ngIf="teacher.rank  == 'IV'">高级讲师</ng-container>
+                    </p>
+                    <p class="d-inline-block text-truncate" *ngIf="teacher?.userGroup">
+                        <spk-user-group-popover [userGroup]="teacher?.userGroup" placement="left"></spk-user-group-popover>
+                    </p>
+                    <p class="d-inline-block text-truncate" *ngIf="!teacher?.userGroup">暂无</p>
+                                </div>
+                                <nz-popconfirm [nzTitle]="'确定要删除这个讲师吗？'" (nzOnConfirm)="confirmDelete(teacher.id)">
+                                    <a nz-popconfirm class="action-delete" title="删除">
+                                        <i style="color:#aaa" class="iconfont icon-guanbi1"></i>
+                                    </a>
+                                </nz-popconfirm>
+                            </div>
+                        </ng-template>
+                    </nz-card>
+                </div>
+
+                <div nz-col [nzSpan]="6">
+                    <a href="javascript:;" (click)="openLookup()">
+                        <nz-card style="background: #eeeeee;">
+                            <ng-template #body>
+                                <div class="text-center">
+                                    <i class="anticon anticon-plus" style="font-size: 2rem; color: #fff; line-height: 3.33rem;"></i>
+                                </div>
+                            </ng-template>
+                        </nz-card>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

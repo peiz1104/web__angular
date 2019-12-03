@@ -1,0 +1,62 @@
+<form nz-form *ngIf="_form" [formGroup]="_form" [nzLayout]="'horizontal'">
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>标题</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <input nz-input formControlName="title" maxlength="50">
+    </div>
+  </div>
+  <div nz-form-item nz-row *ngIf="rco.contentType == 'TOPIC'">
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>起始地址</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <input nz-input formControlName="startingUrl" [nzDisabled]="!linkEditable" maxlength="200">
+    </div>
+  </div>
+  <div nz-form-item nz-row *ngIf="rco.contentType == 'TOPIC'">
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>跟踪类型</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <nz-radio-group formControlName="trackingType" [nzSize]="'large'">
+        <label nz-radio [nzValue]="'AUTO'" class="font-weight-bold">
+          <span>不跟踪</span>
+        </label>
+        <label nz-radio [nzValue]="'CMI'" class="font-weight-bold">
+          <span>SCORM 1.2</span>
+        </label>
+        <label nz-radio [nzValue]="'VIDEO'" class="font-weight-bold">
+          <span>视频</span>
+        </label>
+        <label nz-radio [nzValue]="'DOC'" class="font-weight-bold">
+          <span>文档</span>
+        </label>
+        <label nz-radio [nzValue]="'LIVE'" class="font-weight-bold">
+          <span>直播</span>
+        </label>
+
+        <div class="font-weight-light text-secondary" style="line-height: 1;">
+          <i class="fa fa-info text-info"></i> 此选项的值会影响章节播放器类型的选择和进度计算方式，如果您不确定该选项，请保持不变</div>
+      </nz-radio-group>
+    </div>
+  </div>
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label>描述</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <textarea nz-input formControlName="description" rows="4" nzPlaceHolder=""></textarea>
+    </div>
+  </div>
+
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" (click)="onOk($event)" [nzLoading]="submiting">
+      确 定
+    </button>
+    <button nz-button [nzType]="'default'" (click)="onCancel($event)">
+      取 消
+    </button>
+  </div>
+</form>

@@ -1,0 +1,10 @@
+:host ::ng-deep .vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 2px;
+  }
+
+  :host ::ng-deep .vertical-center-modal .ant-modal {
+    top: 0;
+  }

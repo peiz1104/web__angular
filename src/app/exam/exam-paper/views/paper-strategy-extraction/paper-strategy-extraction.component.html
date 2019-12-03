@@ -1,0 +1,143 @@
+<div class="random-strategy-extraction">
+    <div class="paper-header">
+        <div class="paper-title">
+            <h4>{{queryParams.epName}}</h4>
+            <div class="paper-status">状态：
+                <span class="color-publish">{{queryParams.isPutout == 'true' ? '已发布' : '未发布'}}</span>
+            </div>
+            <div class="paper-score">
+                <span *ngIf="queryParams.sumScore != 0">
+                    已抽题分数：<span class="color-publish">{{queryParams.examScore + '/' + queryParams.sumScore}}</span>
+                </span>
+                <span *ngIf="queryParams.sumScore == 0">
+                    已抽题分数：<span class="color-publish">{{queryParams.examScore}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="select-body">
+        <nz-spin [nzSpinning]="wholeSpinning">
+            <div class="parition-strategy">
+                抽题策略
+            </div>
+            <ng-container>
+                <form nz-form [formGroup]="_searchForm" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                    <div nz-row class="cui-data-table-form-body">
+                        <div nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>试题类型</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-select (ngModelChange)="typeCodeChange($event)" formControlName="typeCode">
+                                        <nz-option *ngFor="let option of searchOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>所属组织</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <spk-user-group-select formControlName="userGroupId" (selectOk)="logSelectGroup($event)">
+                                    </spk-user-group-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>试题难度</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-select (ngModelChange)="diffCodeChange($event)" formControlName="diffCode">
+                                        <nz-option *ngFor="let option of searchOptQuestion" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>试题分类</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-input [nzDisabled]="knowledgeIdVisabled" formControlName="knowledgeId" [nzReadonly]="true" (click)="showModel()" [nzPlaceHolder]="'选择试题分类'"></nz-input>
+                                </div>
+                            </div>
+                            <nz-modal [nzVisible]="isVisible" [nzTitle]="'试题分类'" [nzContent]="modalContent" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+                                <ng-template #modalContent>
+                                    <nz-spin [nzSize]="small" [nzSpinning]="treeSpinning">
+                                        <cui-tree #categoryTree [propagateSelectionUp]="false" [config]="treeConfig" selectionMode="checkbox" (selectionChange)="onSelectionChange($event)" [value]="nodesTree" (nodeSelect)="onNodeSelect($event)" (nodeUnselect)="onNodeUnselect($event)"></cui-tree>
+                                    </nz-spin>
+                                </ng-template>
+                            </nz-modal>
+                        </div>
+                        <div *ngIf="this.controlData.sonCount" nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>子题数量</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-input-number (ngModelChange)="sonCountChange($event)" formControlName="sonCount" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                                </div>
+                            </div>
+                        </div>
+                        
+        <div *ngIf="queryParams.titleCode !== 'RG'" nz-col [nzSpan]="12" class="cui-data-table-form-row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>试题分数</label>
+                </div>
+                <div nz-col [nzSpan]="18" class='rand-score'>
+                    <nz-input-number nzType formControlName="randScore" [nzMin]="0.5" [nzMax]="999" [nzStep]="0.5"></nz-input-number>
+                    <div nz-form-explain *ngIf="getFormControlByName('randScore').dirty&&getFormControlByName('randScore').hasError('notUnique')">试题分数必须能整除子题数量或等于0.5!</div>
+                    <div nz-form-explain *ngIf="getFormControlByName('randScore').dirty&&getFormControlByName('randScore').hasError('notPass')">试题分数必须被0.5的倍数!</div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="queryParams.titleCode !== 'RG'" nz-col [nzSpan]="12" class="cui-data-table-form-row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>答题时长</label>
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <nz-input-number formControlName="answerLength" [nzMin]="0" [nzMax]="900" [nzStep]="0.1"></nz-input-number>
+                    <span class="seconds">秒</span>
+                    <div nz-form-explain *ngIf="getFormControlByName('answerLength').dirty&&getFormControlByName('answerLength').hasError('isInt')">答题时长必须为整数!</div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isShowRandCount" nz-col [nzSpan]="12" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label nz-form-item-required>抽题数量</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input-number class="input-number" (ngModelChange)="testConsole($event)" formControlName="randCount" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                        <span style="display: inline-block !important">
+                        <nz-spin [nzSize]="small" [nzSpinning]="_isSpinning">
+                            <span>可以抽取{{questionNumber}}道题</span>
+                        </nz-spin>
+                        </span>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button (click)="_submitForm($event, _searchForm.value)" class="search-btn" nz-button [nzType]="'primary'" [disabled]="!_searchForm.valid" [nzLoading]="isLoading">
+                        <i class="fa fa-search"></i>
+                        <span>{{this.queryParams.plId?'修改':'生成'}}</span>
+                    </button>
+            <button (click)="goBack()" nz-button [nzType]="'default'">
+                        <span>返回</span>
+                    </button>
+        </div>
+        </form>
+        </ng-container>
+        </nz-spin>
+    </div>
+
+</div>

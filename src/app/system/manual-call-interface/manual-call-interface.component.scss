@@ -1,0 +1,18 @@
+:host::ng-deep {
+    .manual-call-interface-works {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 14px;
+        .form-horizontal {
+            width: 400px;
+            margin: 0 auto;
+            .ant-form-item {
+                width: 100%;
+                margin-bottom: 0px;
+                .ant-calendar-picker {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

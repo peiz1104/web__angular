@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">添加部门</h3>
+
+        <div class="actions pull-right">
+            <button class="btn btn-secondary" [routerLink]="['../']">返回部门列表
+        <i class="fa fa-level-up"></i>
+      </button>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="page-body">
+        <div class="container">
+            <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">基本信息</h5>
+                    <spk-user-group-form [isCreate]="true" [loading]="loading" [userGroup]="userGroup" (doSubmit)="onSubmit($event)"></spk-user-group-form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

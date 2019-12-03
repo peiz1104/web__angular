@@ -1,0 +1,34 @@
+<form #categoryForm="ngForm" (submit)="onSubmit(categoryForm)" class="form-horizontal" *ngIf="category">
+    <div class="row">
+        <div class="col-7">
+
+      <input type="hidden" class="form-control" name="categoryGroup.id" value="{{categoryGroup.id}}">
+      <div class="form-group row">
+        <label for="" class="col-3 col-form-label">
+          <i class="fa fa-field-required"></i> 名称</label>
+        <div class="col-9">
+          <nz-input #name="ngModel" name="name" [(ngModel)]="category.name" required></nz-input>
+          <span class="form-control-feedback text-danger" *ngIf="(name.dirty || name.touched) && name.errors?.required">名称必填</span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="" class="col-3 col-form-label">上级分类</label>
+        <div class="col-9">
+          <spk-category-select name="parent" [(ngModel)]="category.parent" [identifier]="categoryGroup.identifier"></spk-category-select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="" class="col-3 col-form-label">简介</label>
+        <div class="col-9">
+          <nz-input #description="ngModel" name="description" [(ngModel)]="category.description" [nzType]="'textarea'" [nzRows]="'5'"></nz-input>
+        </div>
+      </div>
+
+            <div class="form-group row">
+                <div class="col-9 offset-3">
+                    <button nz-button [nzType]="'primary'" [disabled]="!categoryForm.valid" [nzLoading]="loading">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

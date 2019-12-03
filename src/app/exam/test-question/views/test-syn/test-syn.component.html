@@ -1,0 +1,34 @@
+<nz-modal 
+  [nzWrapClassName]="'vertical-center-modal'" 
+  [nzContent]="modalJump" 
+  [nzVisible]="visible"
+  [nzWidth]='900' 
+  [nzTitle]="'同步试题到考试'"
+  (nzOnCancel)="handleVisible.emit();" 
+  [nzFooter]="modalFooter">
+  <ng-template #modalJump>
+    <cui-data-table #tableHandle
+    [loading]="nzSpinning" 
+    [columns]="columns" 
+    [(selection)]="selection"
+    selectType="checkbox"
+    [pagination]="examListData"
+    (reload)="loadData($event)"
+    [data]="examListData?.content">
+      <ng-template cuiColTpl="epType" let-row="row">
+         {{row.epType == 'PC' ? '网页端考试' : '移动端考试'}}
+      </ng-template>
+      <ng-template cuiColTpl="createdDate" let-row="row">
+        {{row.createdDate | dateMoment}}
+      </ng-template>
+    </cui-data-table>
+  </ng-template>
+  <ng-template #modalFooter>
+    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="handleVisible.emit();">
+      返 回
+    </button>
+    <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="btnLoading" (click)="synchroExam()">
+      同 步
+    </button>
+  </ng-template>
+</nz-modal>

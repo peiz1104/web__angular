@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="page-body">
+        <nz-spin [nzTip]="'正在读取策略...'" [nzSpinning]="initTip">
+            <!--未绑定策略递归寻找默认策略显示 -->
+            <div *ngIf="isInit">
+                <nz-alert style="margin-left:2%" *ngIf="!!message" [nzType]="'info'" [nzShowIcon]="true" [nzBanner]="true">
+                    <div alert-body>
+                        <span>{{message}}</span>
+                    </div>
+                </nz-alert>
+                <div style="margin-top:3%;margin-left:2%">
+                    <spk-strategy-form *ngIf="!!strategy" [strategy]="strategy" [used]="used.default" (toChoose)="chooseStrategy('选择策略',lookStrategies)"
+                        (toUse)="useStrategy()"></spk-strategy-form>
+                </div>
+            </div>
+
+            <!--已经绑定策略显示策略 -->
+            <nz-spin [nzTip]="'正在复制策略...'" [nzSpinning]="copyTip">
+                <div style="margin-top:2%;margin-left:2%">
+                    <spk-strategy-form *ngIf="!isInit && !!strategy" [strategy]="strategy" [used]="used.offering" (toChoose)="chooseStrategy('选择策略',lookStrategies)"
+                        (toUse)="useStrategy()"></spk-strategy-form>
+                </div>
+            </nz-spin>
+        </nz-spin>
+    </div>
+
+    <ng-template #lookStrategies>
+        <div cui-layer-content>
+            <cui-data-table style="width:100%" [columns]="columns" [data]="strategies?.content" [pagination]="strategies" selectType="radio"
+                [loading]="loading" [(selection)]="selection" (reload)="loadChooseStrategy($event)">
+                <ng-template #simpleSearch>
+                    <form class="form-inline">
+                        <div class="form-group ml-2">
+                            <label class="sr-only">默认状态:</label>
+                            <select style="height:31px;" name="isDefault" class="form-control" [(ngModel)]="searchBy.isDefault">
+                                <option value="">全部</option>
+                                <option value="1">默认</option>
+                                <option value="0">普通</option>
+                            </select>
+                        </div>
+                        <div class="form-group ml-2">
+                            <label class="sr-only">搜索关键字</label>
+                            <nz-input name="word" [nzPlaceHolder]="'请输入策略名称'" [(ngModel)]="searchBy.name"></nz-input>
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadChooseStrategy()">搜索</button>
+                        </div>
+                    </form>
+                </ng-template>
+
+                <ng-template cuiColTpl="typeCol" let-row="row">
+                    <span class="text-success" *ngIf="row.type == 'course'">课程</span>
+                    <span class="text-success" *ngIf="row.type == 'training'">培训班</span>
+                </ng-template>
+                <ng-template cuiColTpl="scopeTypeCol" let-row="row">
+                    <span class="text-success" *ngIf="row.scope == 'SITE'">站点策略</span>
+                    <span class="text-success" *ngIf="row.scope == 'USERGROUP'">组织策略</span>
+                </ng-template>
+                <ng-template cuiColTpl="userGroupTpl" let-row="row">
+                    {{row.userGroup?.name}}
+                </ng-template>
+
+                <ng-template cuiColTpl="defaultCol" let-row="row">
+                    <span class="text-success"> {{row.isDefault?'默认':'普通'}}</span>
+                </ng-template>
+                <!-- <ng-template cuiColTpl="rowAction" let-row="row">
+                <div class="text-right">
+                  <a class="text-info" (click)="edit(row.id)">编辑</a>
+                  <span>|</span>
+                   <a href="javascript:;" class="text-info" *ngIf="!row.isDefault" (click)="setDefault(row)" >设为默认</a>
+                  <span>|</span>
+                  <a href="javascript:;" class="text-danger" *ngIf="row.isDefault" (click)="cancelDefault(row)" >取消默认</a>
+                  <span>|</span>
+                  <ng-container *ngIf="!row.isDefault">
+                    <a href="javascript:;" class="text-info" (click)="setDefault(row)" >设为默认</a>
+                    <span>|</span>
+                  </ng-container>
+                 <ng-container *ngIf="row.isDefault">
+                    <a href="javascript:;" class="text-danger" (click)="cancelDefault(row)" >取消默认</a>
+                    <span>|</span>
+                 </ng-container> 
+                  <a href="javascript:;" class="text-danger" (click)="delete(row)" >删除</a>
+               </div>
+              </ng-template>
+                <ng-template #actionGroup>
+                <button type="button" class="btn btn-danger" (click)="delete()">批量删除</button>
+              </ng-template>
+            -->
+            </cui-data-table>
+        </div>
+        <div cui-layer-actions class="text-right">
+            <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="chooseInit($event)">确定</button>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="handleCancel($event)">取消</button>
+        </div>
+    </ng-template>
+</div>

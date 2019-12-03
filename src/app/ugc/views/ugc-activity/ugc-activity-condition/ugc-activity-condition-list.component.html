@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">{{ugcActivity?.title}}: 注册条件
+            <small></small>
+        </h3>
+
+        <div class="actions pull-right">
+            <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+        </div>
+    </div>
+
+    <div class="page-body">
+          <ng-container *ngTemplateOutlet="conditionTpl; context: {condition: ugcActivity.condition}"></ng-container>
+    </div>
+</div>
+
+<ng-template #conditionTpl let-condition="condition">
+    <div *ngIf="!condition">
+        <p class="text-secondary">
+            <i class="fa fa-info-circle fa-lg text-info"></i> 注册条件没有初始化，请点击下面的按钮初始化注册条件</p>
+        <button nz-button class="btn btn-primary mt-3" [nzLoading]="loading" (click)="initCondition()">初始化注册条件</button>
+    </div>
+    <spk-condition *ngIf="condition" [condition]="condition"  [matchLogicalGroup]='matchLogicalGroup' [matchImport]='matchImport'></spk-condition>
+</ng-template>

@@ -1,0 +1,20 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">添加专区</h3>
+  
+      <div class="actions pull-right">
+        <button class="btn btn-secondary" [routerLink]="['../']">返回列表
+          <i class="fa fa-level-up"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div>
+    <div class="page-body">
+      <div class="container">
+        <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+        <spk-subject-activity-form [loading]="loading" [isCreate]="true" (doSubmit)="onSubmit($event)"></spk-subject-activity-form>
+      </div>
+    </div>
+  </div>

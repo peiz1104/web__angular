@@ -1,0 +1,94 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">导入用户</h3>
+
+        <div class="actions pull-right">
+            <button class="btn btn-secondary" [routerLink]="['../', 'list']">返回用户列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-wizard (nextClick)="onPrevClick($event)" (finishClick)="goBack()" (cancelClick)="goBack()">
+            <cui-wizard-step #stepIntro label="导入用户说明" [valid]="true">
+                <div class="container">
+                    <ol>
+                        <li>导入用户需按照规定的模板导入：
+                            <a (click)="download()">
+                                <font color=blue>用户导入模板.xls</font>
+                            </a>
+                        </li>
+                        <li>注:导入过程中请注意如下提示
+                            <ol>
+                                <li>提示“
+                                    <span class="text-success">信息正确</span>”可以正常进行导入。</li>
+                                <li>提示“
+                                    <span class="text-danger">信息错误</span>”请按照提示修改后，在进行导入操作。</li>
+                                <li>如果既存在“
+                                    <span class="text-success">信息正确</span>”又存在“
+                                    <span class="text-danger">信息错误</span>”导入后只会将正确的导入，信息错误的请核对后再进行导入。</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+            </cui-wizard-step>
+            <cui-wizard-step #stepChooseFile label="选择Excel" [valid]="stepChooseFileValid">
+                <div class="container">
+                    <div>
+                        <span>选择已填写完成的信息模板，进行导入操作。</span>
+                    </div>
+                    <cui-fileupload mode="file" name="file" url="/api/user/expand/valid/import/file" [auto]="true" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+                </div>
+            </cui-wizard-step>
+            <cui-wizard-step #stepValidResult label="校验结果" [valid]="true">
+                <div>
+                    <cui-data-table [columns]="columns" [data]="parsedData"></cui-data-table>
+                    <nz-progress [ngModel]="progress" [nzStrokeWidth]="16" [nzStatus]="'success'" [nzShowInfo]="false"></nz-progress>
+                </div>
+            </cui-wizard-step>
+            <cui-wizard-step #stepDoImport label="执行导入" [valid]="stepDoImportValid">
+                <div class="container">
+                    <div class="alert alert-info" *ngIf="!stepDoImportValid">
+                        正在创建用户，操作完成后将自动更新状态，请稍候...
+                    </div>
+                    <div class="alert alert-success" *ngIf="stepDoImportValid">
+                        执行导入完成，如有错误信息，请将错误用户信息修改后重新导入(未报错用户信息已经成功导入)。
+                    </div>
+                </div>
+            </cui-wizard-step>
+        </cui-wizard>
+    </div>
+
+    <div class="right-btn" *ngIf="errorValid">
+        <button type="button" class="btn btn-primary" (click)="exportErro()">
+            <i class="iconfont icon-daochu1"></i>导出错误人员信息</button>
+    </div>
+
+    <div class="errorDetail" *ngIf="errorValid">
+        <div class="item">
+            <span style="width:30px">序号</span>
+            <span style="width:80px;">用户名</span>
+            <span style="width:70px;">姓名</span>
+            <span style="width:130px;">身份证号码</span>
+            <span style="width:120px;">人员类型</span>
+            <!-- <span style="width:70px;">用户来源</span> -->
+            <span style="width:90px;">手机号</span>
+            <!-- <span style="width:150px;">邮箱</span> -->
+            <span style="width:calc(100% - 520px);">错误信息</span>
+        </div>
+        <div class="itemm" *ngFor="let item of importedUsers">
+            <span style="width:30px;text-align:center;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.orderNumber?item.importUserDto.orderNumber:"无"}}</span>
+            <span style="width:80px;overflow:auto;overflow-x:hidden" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.username?item.importUserDto.username:"无"}}</span>
+            <span style="width:70px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.displayName?item.importUserDto.displayName:"无"}}</span>
+            <span style="width:130px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.cardNumbers?item.importUserDto.cardNumbers:"无"}}</span>
+            <span style="width:120px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.userTypes?item.importUserDto.userTypes:"无"}}</span>
+            <!-- <span style="width:70px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.type?item.importUserDto.type:"无"}}</span> -->
+            <span style="width:90px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.phoneNumber?item.importUserDto.phoneNumber:"无"}}</span>
+            <!-- <span style="width:150px;" [ngStyle]="{'height':item.errorList.length*20+'px'}">{{item.importUserDto.email?item.importUserDto.email:"无"}}</span> -->
+            <span style="width:calc(100% - 520px);overflow:auto;overflow-x:hidden" [ngStyle]="{'height':item.errorList.length*20+'px'}">
+                <p *ngFor="let ite of item.errorList">{{ite}}</p>
+            </span>
+        </div>
+    </div>
+</div>

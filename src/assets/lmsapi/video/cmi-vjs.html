@@ -1,0 +1,98 @@
+<!DOCTYPE html> 
+
+<html>  
+
+  <head>
+
+    <title>mp4_cmi.html</title>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=Yes">
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link type="text/css" rel="stylesheet" href="./videojs/video-js.css" />
+	<!--[if lt IE 8 ]><script type="text/javascript" src="../common/js/json2.js"></script><![endif]-->
+    <script type="text/javascript" src="../common/js/jquery1x.js"></script>
+    <script type="text/javascript" src="./videojs/videojs-ie8.min.js"></script>
+    <script type="text/javascript" src="./videojs/video.min.js"></script>
+    <script type="text/javascript" src="./videojs/videojs-flash.min.js"></script>
+	<style>
+		html,body{ margin:0px; height:100%;width: 100%;padding:0;}
+		.main-frame {
+		    border: medium none;
+		    bottom: 0;
+		    height: 100%;
+		    position: absolute;
+		    top: 0;
+		    width: 100%;
+		}
+		#video-js-player {
+		    position: fixed;
+		    left: 0;
+		    top: 0;
+		    min-width: 100%;
+		    min-height: 100%;
+		    width: auto;
+		    height: auto;
+		}
+	</style>
+
+
+  </head>
+
+  
+	<script type="text/javascript">
+		function GetQueryString(name){
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		    var r = window.location.search.substr(1).match(reg);
+		    if (r != null) return unescape(r[2]); 
+		    return null;
+		}
+		var content = GetQueryString("content");
+		console.log(content);
+		var position = GetQueryString("position");
+		console.log(position);
+		if(content!=null&&content!=''){
+			content = decodeURIComponent(content);
+			url = content;
+		}
+		var playType="";
+		$(window).on("message", function(e){
+			var message = $.parseJSON(e.originalEvent.data);
+			playType=message.playType;
+		});
+		/**
+		 * @remark 初始化数据
+		 */
+		function initCMIData(){
+			isInit = true; 
+			//send();
+		}
+		var thePlayer;  //保存当前播放器以便操作 
+		$(function() { 
+	        thePlayer = videojs('video-js-player',{
+	        	sources: [{
+	        	    src: content,
+	        	    type: 'video/mp4'
+	        	  }
+	        	],
+	        	controls : true
+	        });
+			thePlayer.ready(function(){
+				console.log("ready");
+				if(position){
+					thePlayer.currentTime(position);
+				}
+				thePlayer.play();
+			});
+		});
+	</script>
+
+  <body style="margin:0;padding:0;overflow:auto;" onload="initCMIData();">
+	<!-- 视频播放 -->
+    <video id="video-js-player" class="video-js">
+	</video>
+  </body>
+</html>
+

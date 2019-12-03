@@ -1,0 +1,212 @@
+<div class="course-config">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="displayName" placeholder="请输入姓名">
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="searchData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="fastgeneration($event)" nz-button [nzType]="'primary'">
+                        <span>快速生成</span>
+                    </button>
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="addstpcourse($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia" style="font-size:12px"></i>
+                        <span>添加</span>
+                    </button>
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="mutipledelete($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-shanchu"></i>
+                        <span>删除</span>
+                    </button>
+                    <!-- <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="coursereview($event)" nz-button [nzType]="'primary'">
+                        <span>课时量复核申请</span>
+                    </button> -->
+                </div>
+            </ng-template>
+
+            <ng-template cuiColTpl="teacherNo" let-row="row">
+                <span> {{row.teacher?.teacherNo}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="name" let-row="row">
+                <span>{{row.teacher?.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="sex" let-row="row">
+                <span style="color:#007bbf;" *ngIf="row.teacher.sex=='male'">男</span>
+                <span style="color:red;" *ngIf="row.teacher.sex=='Female'">女</span>
+            </ng-template>
+            <ng-template cuiColTpl="step" let-row="row">
+                <span>{{row?.developmentPhase?.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="teacherType" let-row="row">
+                <span>{{row.teacher.teacherType=='EXTERNAL'?'外部讲师':(row.teacher.teacherType=='FULLTIME'?'专职讲师':(row.teacher.teacherType=='PARTTIME'?'兼职讲师':''))}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="courseHour" let-row="row">
+                <span>{{row.courseHour}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span *ngIf="devStatus=='END'|| devStatus=='CANCEL'">
+                    <i title="不可编辑" style="color:#888;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+                </span>
+                <span *ngIf="devStatus!='END'&& devStatus!='CANCEL'">
+                    <i title="编辑" (click)="editCourse(row)" style="color:#007bbf;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+                </span>
+            </ng-template>
+
+        </cui-data-table>
+    </nz-spin>
+</div>
+<nz-modal *ngIf="isVisible" class="modal-course" [nzWidth]="900" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'添加'"
+    [nzContent]="modalContent" [nzZIndex]="999" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+            <div class="form-name-box">
+                <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 push-6 order-1">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>研发项目</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzDisabled]="true" [nzPlaceHolder]="'请输培训名称'" [nzDisabled]="true" formControlName="devname"></nz-input>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="!editId" class="form-group row ">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>选择老师</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.teacherIds">
+                                                <!-- <spk-user-group-select formControlName="teacher.id"></spk-user-group-select> -->
+                                                <spk-teacher-lookup [api]="api" (remove)="remove($event)" formControlName="teacherIds" placeholder="请选择讲师"></spk-teacher-lookup>
+                                                <div nz-form-explain *ngIf="_form.controls.teacherIds.dirty&&_form.controls.teacherIds.hasError( 'required') ">请选择老师！</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="editId" class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>讲师姓名</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请选择'" [nzDisabled]="true" formControlName="teachername"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="editId" class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>讲师编号</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请选择'" [nzDisabled]="true" formControlName="teacherNo"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label> 研发质量评估结果 </label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <textarea rows="3" cols="20" placeholder="请输入研发质量评估结果 " type="textarea" class="form-control textarea-control" formControlName="result">
+                                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 pull-6 order-2">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>项目主办单位</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请选择主办单位'" [nzDisabled]="true" formControlName="userGroup"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div *ngIf="editId" class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>讲师级别</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请选择'" [nzDisabled]="true" formControlName="teacherType"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>课时量</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.courseHour">
+                                                <input placeholder="请输入课时量" type="text" class="form-control period-number" formControlName="courseHour">
+                                                <!-- <nz-input [nzPlaceHolder]="'请输入课时量'" formControlName="courseHour"></nz-input> -->
+                                                <div nz-form-explain *ngIf="_form.controls.courseHour.dirty&&_form.controls.courseHour.hasError('required')">请输入课时量!</div>
+                                                <div nz-form-explain *ngIf="_form.controls.courseHour.dirty&&_form.controls.courseHour.hasError('pattern')">输入有误！</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>承担工作</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <textarea rows="3" cols="20" placeholder="请输入承担的工作" type="textarea" class="form-control textarea-control" formControlName="jobContent">
+                                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                                                <button [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存</button>
+                                                <span (click)="handleCancel($event)" class="cancel-btn">取消</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,58 @@
+:host::ng-deep{
+    .research-fee{
+        .select-body{
+            position: relative;
+            .base-cost-title{
+                position:absolute;
+                top:0px;
+                left:50%;
+                font-size: 16px;
+                .color{
+                    color:red;
+                }
+               
+            }
+            .btn-group{
+                button{
+                    margin-right: 6px;
+                }
+            }
+        }
+        .fee-message-detail{
+            margin-top:20px;
+            padding:0 10px 10px 10px;
+            .title{
+                font-size: 16px;
+                color:#007bbf;
+                font-weight: bold;
+                text-align: center;
+                line-height: 40px;
+            }
+            .detail{
+                table {
+                    min-width: 100%;
+                    border: 1px solid #ddd;
+                    border-right: none;
+                    border-bottom: none;
+                    border-spacing: 0;
+                   
+                    thead{
+                        background: #e9ecef;
+                    }
+                    tr {
+                        background: #f9f9f9;
+                    }
+                    td {
+                        height: 34px;
+                        text-align: center;
+                        border-right: 1px solid #ddd;
+                        border-bottom: 1px solid #ddd;
+                        margin: 0;
+                        padding: 0 10px;
+                    }
+                }
+            }
+           
+        }
+    }
+}

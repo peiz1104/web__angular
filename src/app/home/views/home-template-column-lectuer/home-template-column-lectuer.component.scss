@@ -1,0 +1,61 @@
+$comcolor: #0569b5;
+.home-lectuer{
+    .lectuer-ul{
+        overflow: hidden;
+        li{
+            float: left;
+            &:nth-of-type(4n) {
+                .teacher-single{
+                    margin-right: 0px;
+                }
+            }
+            .teacher-single {
+                float: left;
+                width: 285px;
+                // background: #fff;
+                margin: 10px 20px 10px 0;
+                padding: 10px;
+                border-radius: 5px;
+                // box-shadow:0 0 1px rgba(0,0,0,.2);
+                &:hover{
+                    background: #fff;
+                    box-shadow:0 0 15px rgba(0,0,0,.2);
+                }
+                .img-box {
+                    float: left;
+                    img{
+                        display:block; 
+                        height:100px; 
+                        width:100px; 
+                        border-radius: 50px
+                    }
+                }
+                .content-box {
+                    float: left;
+                    margin-left: 12px;
+                    width: 152px;
+                    .content-title {
+                        height: 40px;
+                        line-height: 40px;
+                        font-size: 14px;
+                        color: #333;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    .content-job {
+                        font-size: 12px;
+                        height: 26px;
+                        line-height: 26px;
+                        width: 100%;
+                        color: #999;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+    
+}

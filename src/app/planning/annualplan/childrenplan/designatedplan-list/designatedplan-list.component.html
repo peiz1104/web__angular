@@ -1,0 +1,95 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small [routerLink]="['../../../','list']">| 年度计划</small>
+            <small>| 引用指定计划</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../', 'list']">年度子计划列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                引用指定计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="search" style="overflow:hidden;height: 75px;
+        line-height: 93px;">
+            <div style="float:left;">计划名称：
+                <nz-input style="width:160px;" [(ngModel)]="inputSearchValue" [nzPlaceHolder]="'请输入计划名称'"></nz-input>
+            </div>
+            <div style="float:left;margin-left:20px;">
+                是否引用：
+                <nz-select style="width: 100px;" [(ngModel)]="selectedOption" [nzPlaceHolder]="'是否引用'" nzAllowClear>
+                    <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option" [nzDisabled]="option.disabled">
+                    </nz-option>
+                </nz-select>
+            </div>
+            <div style="float:left;margin-left:20px;">
+                <button nz-button type="button " (click)="_submitForm($event) " [nzSize]="'large' ">查询</button>
+            </div>
+        </div>
+    </div>
+    <div style="margin-bottom: 10px;overflow:hidden;">
+        <div style="float: right; ">
+            <button type="button " class="btn btn-primary " (click)="exportplan($event) "> 导出</button>
+            <button type="button " class="btn btn-primary " (click)="introduce() "> 引用</button>
+            <button type="button " class="btn btn-primary " [routerLink]="[ '../', 'list'] "> 返回</button>
+        </div>
+    </div>
+    <div class="page-body ">
+        <cui-data-table #tableHandle [columns]="columns2" [data]="annualSubPlans?.content" [pagination]="annualSubPlans" [(selection)]="selection"
+            selectType="checkbox" (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="colprojectnumber" let-row="row">
+                <div>{{row.projectNumber}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colname" let-row="row">
+                <div>{{row.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colplantype" let-row="row">
+                <span *ngIf="row.planType=='CT' ">境内内部</span>
+                <span *ngIf="row.planType=='CD' ">境内外部</span>
+                <span *ngIf="row.planType=='OT' ">境外内部</span>
+                <span *ngIf="row.planType=='OD' ">境外外部</span>
+                <span *ngIf="row.planType=='RE' ">课件研发</span>
+                <span *ngIf="row.planType=='EL' ">其它</span>
+            </ng-template>
+            <ng-template cuiColTpl="coltrainingbudget" let-row="row">
+                <div>{{row.trainingBudget}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colgroupname" let-row="row">
+                <div style="width:200px">
+                    <ul class="mb-4 d-flex">
+                        <li *ngFor="let it of getPath(row.userGroup)">/ {{it}} </li>
+                    </ul>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="coldisplayname" let-row="row">
+                <div>{{row.createdByDisplayName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colQuote" let-row="row">
+                <div>{{row.isQuote ? "是 " : "否 "}}</div>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</div>

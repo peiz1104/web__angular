@@ -1,0 +1,136 @@
+$radius: 5px;
+$comcolor: #0569b5; //主题颜色i*I
+$defaultColor: #666;
+$bodyWidth: 1200px; //页面内容部分最大宽度
+$bgColor: #f7f5f5; //页面背景色
+$size16: 16px;
+$size14: 14px;
+.question-box {
+        font-size: 14px;
+        border: 1px solid $comcolor;
+        padding: 50px 10px 10px;
+        margin: 10px 15px 0;
+        position: relative;
+        min-height: 100px;
+        background: #fff;
+        &.active {
+            border: 1px solid #f67920;
+        }
+        .question-body {
+            a {
+                display: block;
+            }
+        }
+        .que-type {
+            position: absolute;
+            top: 10px;
+            left: -10px;
+            .type-cn-name {
+                display: block;
+                z-index: 2;
+                position: relative;
+                width: 80px;
+                height: 30px;
+                text-align: center;
+                line-height: 30px;
+                color: #fff;
+                background: $comcolor;
+            }
+            i {
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-width: 10px;
+                border-style: solid;
+                border-color: transparent #053d6f transparent transparent;
+                left: -10px;
+                top: 20px;
+                z-index: 1;
+            }
+        }
+    }
+:host ::ng-deep {
+    .htmlInline{
+        &>p{
+            display: inline-block;
+        }
+        img{
+            max-width: 300px;
+            max-height: 300px;
+            cursor: pointer;
+        }
+    }
+    .viewImgModal,
+.ant-modal,
+.ant-modal-content,
+.ant-modal-body,
+.ant-modal-body .back {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.viewImgModal {
+    text-align: center;
+    z-index: 20;
+    .ant-modal {
+        top: 0;
+        .ant-modal-content {
+            background: none;
+        }
+        .ant-modal-body {
+            overflow: auto;
+            .modal-close {
+                position: fixed;
+                right: 20px;
+                top: 20px;
+                color: #fff;
+                font-size: 30px;
+                cursor: pointer;
+            }
+            .back {
+                background: #000;
+                opacity: .5;
+            }
+            .showImgBox {
+                width: 100%;
+                height: 100%;
+                text-align: center;
+            }
+            .showImg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 2;
+                margin: auto;
+                max-width: 90%;
+                max-height: 95%;
+                min-width: 20px;
+                transition: transform .5s;
+            }
+            .rotateImg {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                height: 40px;
+                width: 100%;
+                text-align: center;
+                font-size: 30px;
+                z-index: 3;
+                color: #fff; // border-top: 1px dashed #d8d8d8;
+                i {
+                    cursor: pointer;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
+}

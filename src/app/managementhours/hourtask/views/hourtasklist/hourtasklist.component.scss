@@ -1,0 +1,74 @@
+:host::ng-deep {
+    .hour-task-list-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 16px;
+        .active {
+            color: #108ee9;
+        }
+        .list-tool-bar {
+            margin-bottom: 12px;
+        }
+        .fix-width {
+            width: 250px;
+            word-break: break-all;
+        }
+        .select-box {
+            background: transparent;
+            height: 30px;
+            padding: 2px 4px;
+            font-size: 12px;
+            width: 154px;
+            cursor: pointer;
+            border: 1px solid #ccc; // -webkit-appearance: none;
+            border-radius: 4px;
+        }
+        .placehoder-show {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            color: #ccc;
+        }
+        .form-group {
+            position: relative;
+        }
+        .close-choose {
+            position: absolute;
+            top: 8px;
+            right: 2px;
+            background: #999;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            i {
+                color: #ccc;
+                font-size: 14px;
+                font-weight: 100;
+                position: absolute;
+                top: -2px;
+            }
+        }
+        .search-btn-margin {
+            margin-left: 26px !important;
+        }
+        .form-list-box {
+            button {
+                // cursor: pointer;
+                // margin-right: 6px;
+                // border-top-left-radius: 4px!important;
+                // border-top-right-radius: 4px!important;
+                // border-bottom-left-radius: 4px!important;
+                // border-bottom-right-radius: 4px!important;
+                // position: relative;
+                // padding-left: 22px;
+                // i {
+                //     position: absolute;
+                //     top: 2px;
+                //     left: 4px;
+                // }
+            }
+        }
+    }
+}

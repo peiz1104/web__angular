@@ -1,0 +1,31 @@
+:host::ng-deep{
+    .train-class-courselist{
+        padding:0px 4px;
+        button{
+            cursor: pointer;
+            margin-right: 2px;
+        }
+        .top-bread{
+            .active{
+                color: #007bbf;
+            }
+            a{
+                text-decoration: none;
+            }
+            
+        }
+        .form-box{
+            .select-body{
+                padding-top:10px;
+               .complex-search-bar-search-box{
+                   left:60px;
+               }
+            }
+           
+        }
+        .min-height{
+            height:36px;
+            width:100px;
+        }
+    }
+}

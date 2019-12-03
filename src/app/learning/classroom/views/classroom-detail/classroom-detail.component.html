@@ -1,0 +1,95 @@
+<!-- <cui-layout>
+    <cui-layout-sider width="140" style="background:#f8f8fa">
+        <div style="background: #f0f3fa;">
+            <a class="text-center d-block p-4" [routerLink]="['../list']">
+                <button type="button" class="btn btn-light">返回列表
+                    <i class="fa fa-level-up"></i>
+                </button>
+            </a>
+        </div>
+        <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+            <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                <a [routerLink]="['./edit']" routerLinkActive #rlaProperties="routerLinkActive">属性</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaCourseInfo.isActive">
+                <a [routerLink]="['./courseInfo']" routerLinkActive #rlaCourseInfo="routerLinkActive">课程信息</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                <a [routerLink]="['./condition']" routerLinkActive #rlaCondition="routerLinkActive">学员管理</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaEnrollment.isActive">
+                <a [routerLink]="['./enrollment']" routerLinkActive #rlaEnrollment="routerLinkActive">注册审批</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaPerformance.isActive">
+                <a [routerLink]="['./performance']" routerLinkActive #rlaPerformance="routerLinkActive">学习情况</a>
+            </li>
+            <li nz-submenu class="d-none">
+            </li>
+        </ul>
+    </cui-layout-sider>
+
+    <cui-layout>
+        <cui-layout-content>
+            <router-outlet></router-outlet>
+        </cui-layout-content>
+    </cui-layout>
+</cui-layout> -->
+<!-- ie10不支持cui-layout -->
+<div class="class-room-detail-box">
+    <div class="class-room-slider-left">
+        <cui-layout-sider width="140" style="background:#f8f8fa">
+            <div style="background: #f0f3fa;">
+                <a class="text-center d-block p-4" [routerLink]="['../list']">
+                    <button type="button" class="btn btn-light">返回列表
+                        <i class="fa fa-level-up"></i>
+                    </button>
+                </a>
+            </div>
+
+            <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+                <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                    <a [routerLink]="['./edit']" routerLinkActive #rlaProperties="routerLinkActive">属性</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaCourseInfo.isActive">
+                    <a [routerLink]="['./courseInfo']" routerLinkActive #rlaCourseInfo="routerLinkActive">课程信息</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                    <a [routerLink]="['./condition']" routerLinkActive #rlaCondition="routerLinkActive">学员管理</a>
+                </li>
+                <!-- <li nz-menu-item>
+                        <a [routerLink]="['./docs']">资料</a>
+                    </li>
+                    <li nz-menu-item>
+                        <a [routerLink]="['./test']">测试</a>
+                    </li>
+                    <li nz-menu-item>
+                        <a [routerLink]="['./tatic']" href="#">完成条件</a>
+                    </li> -->
+                <li nz-menu-item [nzSelected]="rlaEnrollment.isActive">
+                    <a [routerLink]="['./enrollment']" routerLinkActive #rlaEnrollment="routerLinkActive">注册审批</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaPerformance.isActive">
+                    <a [routerLink]="['./performance']" routerLinkActive #rlaPerformance="routerLinkActive">学习情况</a>
+                </li>
+                <!-- <li nz-menu-item>
+                        <a [routerLink]="['./comment']">评论</a>
+                    </li> -->
+                <!-- <li nz-menu-item [nzSelected]="rlaForum.isActive">
+                    <a [routerLink]="['./forum']" routerLinkActive #rlaForum="routerLinkActive">讨论管理</a>
+                </li> -->
+                <!-- <li nz-menu-item [nzSelected]="rlaNotice.isActive">
+                    <a [routerLink]="['./notice-box']" routerLinkActive #rlaNotice="routerLinkActive">公告管理</a>
+                </li>-->
+                <!-- <li nz-menu-item [nzSelected]="rlaCaseInfo.isActive">
+                    <a [routerLink]="['./', 'case']" routerLinkActive #rlaCaseInfo="routerLinkActive">课程培训案例</a>
+                </li> -->
+                <li nz-submenu class="d-none">
+                    <!-- 修复缩进 -->
+                </li>
+            </ul>
+        </cui-layout-sider>
+    </div>
+    <div class="class-room-detail-content-right">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+:host ::ng-deep .card-body {
+    .list-search-bar {
+        .simple-search-bar {
+            width: 100%;
+        }
+    }
+    .ant-select{
+        display: none;
+    }
+    .back-btn{margin-left:20px;}
+    .cui-data-table-wrap .table .align-middle {
+        text-overflow: inherit;
+    }
+    .primary {
+        color: #0062cc;
+    }
+    .warning {
+        color: #f04134;
+    }
+    .review {
+        cursor: pointer;
+    }
+    .btn-primary {
+        margin-left: 20px;
+        padding: 0 20px;
+    }
+    .search-btn {
+        margin-left: 20px;
+    }
+    .modal-left{
+        height:28px;
+        line-height: 28px;
+        padding-right: 20px;
+        text-align: right;
+    }
+    .line-block{
+        margin:20px 0;
+    }
+    .half{
+        float:left;
+        width:50%;
+    }
+    .pointer{
+        color:#0062cc;
+        cursor: pointer;
+    }
+}
+
+.cui-data-table-wrap {
+    th,
+    td {
+        word-break: break-all;
+    }
+}

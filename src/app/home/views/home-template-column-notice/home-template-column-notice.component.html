@@ -1,0 +1,15 @@
+<div class="box-notice">
+    <div class="notice">
+        <div class="title">
+            <span>公告</span>
+            <div>
+                <i (click)="goPrev()" class="iconfont icon-fanhui1" [ngClass]="{'active': hasPrev}"></i>
+                <i (click)="goNext()" class="iconfont icon-icon--" [ngClass]="{'active': hasNext}"></i>
+            </div>
+        </div>
+        <ul *ngIf="noticeList?.length >= 1">
+            <li *ngFor="let item of noticeList">{{item?.title || '暂无标题'}}</li>
+        </ul>
+        <spk-home-template-defaultbox *ngIf="noticeList?.length<1"></spk-home-template-defaultbox>
+    </div>
+</div>

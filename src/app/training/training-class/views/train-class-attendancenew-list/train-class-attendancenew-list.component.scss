@@ -1,0 +1,16 @@
+:host::ng-deep{
+    .train-class-attendance-list{
+        padding:0px 4px;
+        .active{
+            color:#007bbf;
+        }
+        button{
+            cursor: pointer;
+            margin-right: 2px;
+            
+        }
+        .complex-search-bar-search-box{
+            left:60px;
+        }
+    }
+}

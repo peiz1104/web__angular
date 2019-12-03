@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">培训管理
+            <small>| 计划实施列表 （同步审核状态为未提交且计划标识为分配计划的当前研修院计划）</small>
+        </h3>
+    </div>
+</div>
+<div class="main">
+    <div class="title contentMar">
+        <span style="text-align:left;padding-left:16px;">研修院名称</span>
+        <span style="text-align:left;padding-left:16px;">描述</span>
+        <span>单人往返交通费</span>
+        <span>操作</span>
+        <span>同步计划交通费</span>
+    </div>
+    <div class="title" *ngFor="let item of data">
+        <span style="text-align:left;padding-left:16px;">{{item.trainingSchoolName}}</span>
+        <span style="text-align:left;padding-left:16px;">{{item.trainingSchoolName}}
+            <i class="iconfont icon-wangfandijia" style="font-size:30px;position:relative;top:4px"></i> {{item.selfOrgName}}</span>
+        <span>{{item.trafficFee}}</span>
+        <span>
+            <a title="编辑" class="text-primary">
+                <i style="cursor:pointer;" class="iconfont icon-bianji-copy" (click)="handelEdit(item)"></i>
+            </a>
+        </span>
+        <span>
+            <a title="同步" class="text-primary">
+                <i style="cursor:pointer;" class="iconfont icon-fanhui" (click)="handelRefresh(item)"></i>
+            </a>
+        </span>
+    </div>
+    <nz-modal *ngIf="trainingSchoolData" [nzVisible]="isVisible" [nzOkText]="'保存'" [nzConfirmLoading]="isLoading" [nzTitle]="'修改费用'"
+        [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+        <ng-template #modalContent>
+            {{trainingSchoolData.trainingSchoolName}}：
+            <nz-input [(ngModel)]="inputValue" [nzPlaceHolder]="'输入单人往返交通费！'"></nz-input>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzVisible]="isVisibleRefresh" [nzOkText]="'同步'" [nzConfirmLoading]="isLoading" [nzTitle]="'同步计划交通费'" [nzContent]="modalContent"
+        (nzOnCancel)="handleRefreshCancel($event)" (nzOnOk)="handleRefreshOk($event)">
+        <ng-template #modalContent>
+            该操作将同步更新本组织下当年所有未提交的研修院分配计划的交通费，以及相关联的费用（包括已经修改过的）。确认同步吗？
+        </ng-template>
+    </nz-modal>
+</div>

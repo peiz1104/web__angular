@@ -1,0 +1,32 @@
+<nz-layout style="height: 100%;">
+    <nz-sider [nzCollapsible]="true" [nzWidth]="150" [nzCollapsedWidth]="0" [(nzCollapsed)]="isCollapsed" class="bg-white">
+      <div class="py-4 px-3 bg-secondary" [hidden]="isCollapsed"><strong>功能配置</strong></div>
+      <ul nz-menu [nzMode]="'inline'" [nzTheme]="'light'" style="height: 100%;">
+        <li nz-submenu [nzOpen]="true">
+            <span title>基础配置</span>
+            <ul>
+                <li nz-menu-item [routerLink]="['innerMsg/all']" routerLinkActive #rlaa="routerLinkActive" [nzSelected]="rlaa.isActive"><span>转码服务</span></li>
+                <li nz-menu-item [routerLink]="['subscribe']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><span>消息发送</span></li>
+            </ul>
+        </li>
+        <li nz-submenu [nzOpen]="true">
+            <span title>编码配置</span>
+            <ul>
+                <li nz-menu-item [routerLink]="['subscribe']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><span>课程编码</span></li>
+                <li nz-menu-item [routerLink]="['subscribe']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><span>考试编码</span></li>
+            </ul>
+        </li>
+        <li nz-submenu [nzOpen]="true">
+            <span title>主题配置</span>
+            <ul>
+                <li nz-menu-item [routerLink]="['subscribe']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><span>主题</span></li>
+            </ul>
+        </li>
+        <li nz-menu-item [routerLink]="['attribute']" routerLinkActive #rlaa="routerLinkActive" [nzSelected]="rlaa.isActive"><span>自定义属性</span></li>
+        
+      </ul>
+    </nz-sider>
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+  </nz-layout>

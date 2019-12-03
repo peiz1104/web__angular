@@ -1,0 +1,53 @@
+<form nz-form [formGroup]="_form" [nzLayout]="'horizontal'">
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>标题</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <input nz-input formControlName="title" required maxlength="50">
+    </div>
+  </div>
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>链接</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <input nz-input formControlName="startingUrl" required maxlength="200">
+    </div>
+  </div>
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label nz-form-item-required>跟踪类型</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <nz-radio-group formControlName="trackingType" [nzSize]="'large'">
+        <label nz-radio [nzValue]="'AUTO'" class="font-weight-bold">
+          <span>不跟踪</span>
+        </label>
+        <label nz-radio [nzValue]="'LIVE'" class="font-weight-bold">
+          <span>直播</span>
+        </label>
+
+        <div class="font-weight-light text-secondary" style="line-height: 1;">
+          <i class="fa fa-info text-info"></i> 跟踪类型为直播时，系统将调用相应的适配播放器，如果您不确定该选项，请保持默认</div>
+      </nz-radio-group>
+    </div>
+  </div>
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSpan]="4">
+      <label>描述</label>
+    </div>
+    <div nz-form-control nz-col [nzSpan]="18">
+      <textarea nz-input formControlName="description" rows="4" nzPlaceHolder=""></textarea>
+    </div>
+  </div>
+
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" (click)="onOk($event)" [nzLoading]="submiting">
+      确 定
+    </button>
+    <button nz-button [nzType]="'default'" (click)="onCancel($event)">
+      取 消
+    </button>
+  </div>
+</form>

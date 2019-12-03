@@ -1,0 +1,33 @@
+.question-list-body{
+    .select-body{
+        margin-top: -50px;
+        padding: 0 15px;
+        position: relative;
+    }
+    .m-r{
+        margin-right: 10px;
+    }
+}
+:host ::ng-deep{
+    .cui-data-table-wrap{
+        th,td{
+            word-break: break-all;
+        }
+    }
+    .type-desc{
+        white-space: initial !important;
+        >div{
+            width: 100%;
+            //word-break: break-all;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    // .ant-spin-nested-loading{
+    //     position: absolute;
+    //     top: 50%;
+    //     left: 50%;
+    //     z-index: 99;
+    // }
+}

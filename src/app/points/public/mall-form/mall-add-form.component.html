@@ -1,0 +1,64 @@
+<div class="alert alert-info">
+ 
+</div>
+<form [formGroup]="_form" class="form-horizontal">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">基本信息</h5>
+      <div class="row">
+        <div class="col-5 push-7 order-2">
+       
+        </div>
+        <div class="col-7 pull-5 order-1">
+          <div class="form-group row">
+            <label for="" class="col-form-label col-3">
+              <i class="fa fa-field-required"></i> 商城名称</label>
+            <div class="col-9">
+              <input type="text" name="name" class="form-control" formControlName="name">
+               
+            </div>
+          </div>
+     
+        
+
+          <div class="form-group row">
+            <label for="" class="col-form-label col-3">生效时间</label>
+            <div class="col-9">
+              <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+              <span>不填写表示即时生效</span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="" class="col-form-label col-3">到期时间</label>
+            <div class="col-9">
+              <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+              <span>不填写表示永不到期</span>
+            </div>
+          </div>
+        
+        </div>
+        <!-- end col-7 -->
+      </div>
+      <!-- end .row -->
+    </div>
+
+    <div class="card-body">
+     
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-7">
+          <div class="form-group row">
+            <div class="col-9 offset-3">
+              <button type="button" class="btn btn-primary" [disabled]="_form.invalid" (click)="_save($event)" >保存</button>
+            
+              <button type="button" class="btn btn-secondary" [routerLink]="[isCreate ? '../list' : '../../list']" (click)="_cancel($event)">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</form>

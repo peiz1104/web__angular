@@ -1,0 +1,89 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 分类维护</small>
+            <small>| 培训级别</small>
+        </h3>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                基础配置
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                分类维护
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                培训级别
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="OrganizationClassificationMenu">
+            <span class="PersonnelClassification" (click)="handlePersonnel()">人员分类</span>
+            <span class="classificationBank"></span>
+            <span class="TrainingClassification" (click)="handleTrainingClass()">培训分类</span>
+            <span class="classificationBanks"></span>
+            <span class="TrainingLevel" (click)="handleTrainingLevel()">培训级别</span>
+            <div class="classificationBankRight"></div>
+        </div>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="form-box">
+            <div nz-row class="form-row">
+                <div nz-form-item nz-col [nzSpan]="8">
+                    <div nz-form-label nz-col [nzSpan]="10">
+                        <label for="name">名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name" [nzType]="'name'" [nzPlaceHolder]="'请输入名称'" [nzSize]="'large'"></nz-input>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-col [nzSpan]="8">
+                    <div nz-form-label nz-col [nzSpan]="10">
+                        <label for="trainingClassification">培训分类</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingClassification" nz-col [nzSpan]="12">
+                        <nz-select formControlName="trainingClassification" [nzSize]="'large'" [nzPlaceHolder]="'请选择培训分类'" [nzShowSearch]="true">
+                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                            <nz-option *ngFor="let it of trainingClassifications" [nzLabel]="it.name" [nzValue]="it"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="3">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'">查询</button>
+                </div>
+            </div>
+        </form>
+        <div>
+            <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']"> 创建培训级别</button>
+            <button type="button" class="btn btn-primary" (click)="delete()"> 删除</button>
+        </div>
+    </div>
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="trainingLevels?.content" [pagination]="trainingLevels" [(selection)]="selection"
+            selectType="checkbox" (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="colname" let-row="row">
+                <div style="text-align:left;">{{row.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="coltrainingclassification" let-row="row">
+                <div>{{row.trainingClassification.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd hh:mm'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreatedbydisplayname" let-row="row">
+                <div style="text-align:left;">{{row.createdByDisplayName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="rowAction" let-row="row">
+                <div class="text-center">
+                    <a title="编辑" class="text-primary" [routerLink]="['../', row.id]">
+                        <i style="font-size:16px" class="iconfont icon-bianji-copy"></i>
+                    </a>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

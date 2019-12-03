@@ -1,0 +1,19 @@
+:host ::ng-deep {
+    .cui-fileupload-choose {
+        width: 500px !important;
+        height: 160px !important;
+    }
+}
+
+.ant-btn-primary {
+    color: #108ee9;
+    background-color: rgba(0,0,0,0);
+    border-color: #108ee9;
+    min-width: 65px;
+}
+.ant-btn-danger {
+    color: #f04134;
+    background-color: rgba(0,0,0,0);
+    border-color: #f04134;
+    min-width: 65px;
+}

@@ -1,0 +1,56 @@
+<ng-container>
+  <div>
+    <div class="mt-3"></div>
+
+    <cui-data-table #topicTable [columns]="columns" [data]="impeachs?.content" [pagination]="impeachs" [loading]="loading" selectType="checkbox"
+      (reload)="loadData($event)" [(selection)]="checkImpeach">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group ml-2">
+            <input nz-input type="text" name="title" [(ngModel)]="searhText" placeholder="请输入帖子标题">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="searchImpeach()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template #listTools>
+        <button type="button" class="btn btn-success" (click)="handled()">标记为已处理</button>
+        <button type="button" class="btn btn-info" (click)="unhandled()">标记为未处理</button>
+        <button type="button" class="btn btn-danger" (click)="deleteImpeach()">批量删除</button>
+      </ng-template>
+
+      <ng-template cuiColTpl="state" let-row="row">
+        <span class="text-primary" *ngIf="row.state == 'HANDLED'">已处理</span>
+        <span class="text-warning" *ngIf="row.state == 'UNHANDLED'">未处理</span>
+        <span class="text-success" *ngIf="row.state == 'DELETED'">删除</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="createdDate" let-row="row">
+        <span>{{row.createdDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="topicTitle" let-row="row">
+        <a href="javascript:;" (click)="showModal(row)" *ngIf="row.replyId">{{row.topic.title}}(回复)</a>
+        <a href="javascript:;" (click)="showModal(row)" *ngIf="!row.replyId">{{row.topic.title}}(帖子)</a>
+      </ng-template>
+
+      <ng-template #actionGroup let-row="row">
+        <button type="button" class="btn btn-outline-success" (click)="handled()">标记为已处理</button>
+        <button type="button" class="btn btn-outline-info" (click)="unhandled()">标记为未处理</button>
+        <button type="button" class="btn btn-outline-danger" (click)="deleteImpeach()">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</ng-container>
+
+<nz-modal *ngIf="modelLoad" [nzWidth]="1000" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'编辑'" [nzContent]="modalContent"
+  (nzOnCancel)="handleCancel($event)">
+  <ng-template #modalContent>
+    <div *ngIf="isVisible">
+      <spk-impeach-show-info [type]="type" [info]="info" [impeachId]="impeachId" (closeModal)="closeModel()">
+      </spk-impeach-show-info>
+    </div>
+  </ng-template>
+</nz-modal>

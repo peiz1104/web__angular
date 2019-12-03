@@ -1,0 +1,13 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{course.code}}] {{course.name}}: 课程试看
+      <small></small>
+    </h3>
+  </div>
+
+  <div class="page-body">
+    <div class="container" *ngIf="trial">
+      <spk-course-trial-form [course]="course" [trial]="trial" [editable]="editable"></spk-course-trial-form>
+    </div>
+  </div>
+</div>

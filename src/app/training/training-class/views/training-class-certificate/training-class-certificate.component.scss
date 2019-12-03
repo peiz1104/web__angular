@@ -1,0 +1,81 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-21 15:21:51
+ * @Last Modified by: mozhengqian
+ * @Last Modified time: 2017-11-30 15:19:20
+ */
+
+:host::ng-deep {
+    .certificate-body {
+        .ant-modal {
+            width: 70%!important;
+        }
+        .cui-data-table-wrap {
+            margin: 10px;
+        }
+        .certificate-title {
+            height: 35px;
+            line-height: 35px;
+            border: 1px solid #ecf6fd;
+            padding-left: 10px;
+            background: #ecf6fd;
+            margin: 10px;
+            font-size: 16px;
+            button {
+                float: right;
+                height: 25px;
+                line-height: 25px;
+                padding: 0px 8px;
+                margin-right: 10px;
+                margin-top: 5px;
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+        }
+        .certificate-left-body {
+            .cui-data-table-form-body {
+                height: 70px;
+                .ant-form-item-control {
+                    line-height: 80px!important;
+                    text-align: center;
+                }
+            }
+            .certificate-card-box {
+                overflow: auto;
+                height: 500px;
+                .certificate-card {
+                    margin: 10px;
+                    .active {
+                        border-color: #007bff;
+                    }
+                    .card-i {
+                        font-size: 16px;
+                        cursor: pointer;
+                        &:hover {
+                            color: #007bff;
+                        }
+                    }
+                }
+            }
+            .certificate-left-li {
+                margin-left: 10px;
+                margin-top: 5px;
+                line-height: 30px;
+            }
+            .simple-search-bar-search-box {
+                margin: 0 0 0 10px;
+            }
+        }
+        .certificate-right-body {
+            .certificate-right-top {
+                height: 60px;
+                margin: 10px;
+                .certificate-right-top-li {
+                    color: #666;
+                    font-size: 13px;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+}

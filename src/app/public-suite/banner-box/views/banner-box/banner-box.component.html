@@ -1,0 +1,10 @@
+<div *ngIf="!bannerBox?.id">
+    <p class="text-secondary">
+        <i class="fa fa-info-circle fa-lg text-info"></i> Banner组件没有初始化，请点击下面的按钮初始化</p>
+    <button type="button" class="btn btn-secondary" (click)="initBox()">初始化Banner组件</button>
+</div>
+
+<div *ngIf="bannerBox?.id">
+    <spk-banner-list [box]="bannerBox"></spk-banner-list>
+</div>
+

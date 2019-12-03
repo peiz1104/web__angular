@@ -1,0 +1,82 @@
+<h6 class="config-title">
+    讲师设置
+    <div class="item" (click)="onBack()">
+        返回</div>
+    <div class="item" (click)="save()" *ngIf="!saveLoading">保存</div>
+    <div class="item" *ngIf="saveLoading">正在保存</div>
+</h6>
+<div class="site" *ngIf="moduleInfo&&lectuerInfo">
+    <!-- <div>
+    <label for="" class="col-form-label">
+        <span class="text-danger">*</span>Tips:点击更多查看其他更多信息。
+    </label>
+  </div> -->
+    <form nz-form [formGroup]="validateForm">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="5">
+                <label for="name" nz-form-item-required>模块名称</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="19">
+                <nz-input formControlName="name"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">模块名称不能为空</div>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="5">
+                <label for="moreArticle" nz-form-item-required>更多链接</label>
+            </div>
+            <div class="clearfix" nz-form-control [nzValidateStatus]="getFormControl('moreArticle')" nz-col [nzSpan]="19">
+                <nz-radio-group formControlName="moreArticle">
+                    <label nz-radio [nzValue]="false">不显示"更多"链接</label>
+                    <label nz-radio [nzValue]="true">链接到"讲师中心"</label>
+                </nz-radio-group>
+            </div>
+            <div nz-form-explain *ngIf="getFormControl('moreArticle').dirty&&getFormControl('moreArticle').hasError('required')">必填</div>
+        </div>
+    </form>
+
+    <div class="teacher-tab clearfix" *ngIf="lectuerInfo?.length > 0">
+        <div class="teacher-one" *ngFor="let item of lectuerInfo;let i = index;">
+            <img [src]="item?.imgUrl" class="rounded-circle" onerror="this.src='./assets/images/default/head.png'">
+            <div class="teacher-ri">
+                <span>{{item?.name||'暂无'}}</span>
+                <span>{{rankFn(item?.rank)}}</span>
+                <span>{{item?.userGroup?.name||'暂无'}}</span>
+            </div>
+            <i class="anticon anticon-close-circle" (click)="deleteTeacher(i)"></i>
+        </div>
+    </div>
+    <div nz-form-item class="text-center mt-3">
+        <div nz-form-control>
+            <button nz-button [nzType]="'dashed'" [nzSize]="'large'" style="width:100%" (click)="selectTeacher();">
+                <i class="iconfont icon-tianjia-copy"></i>
+                <span>选择讲师</span>
+            </button>
+        </div>
+    </div>
+</div>
+<nz-modal class="lectuer-modal" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'选择讲师'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <cui-data-table selectType="checkbox" [columns]="columns" [data]="teacherData?.content" [pagination]="teacherData" [loading]="loading"
+            (reload)="loadData($event)" (select)="onSelect($event)" [(selection)]="selection">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input name="searchtext" [nzPlaceHolder]="'请输入讲师名称'" [(ngModel)]="searchtext"></nz-input>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template cuiColTpl="descriptionTpl" let-row="row">
+                <div> {{row.description}}</div>
+            </ng-template>
+        </cui-data-table>
+
+        <div class="clearfix">
+            <button class="pull-right" nz-button [nzType]="'primary'" (click)="handleOk(e)">确定</button>
+        </div>
+    </ng-template>
+</nz-modal>

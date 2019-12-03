@@ -1,0 +1,19 @@
+:host::ng-deep {
+    .train-class-detail {
+        .train-left {
+            height: 100%;
+            overflow: auto;
+            overflow-x: hidden;
+            float: left;
+        }
+        .train-content {
+            float: left;
+            width: calc(100% - 140px);
+        }
+        .ant-menu-root {
+            .ant-menu-item {
+                text-align: center;
+            }
+        }
+    }
+}

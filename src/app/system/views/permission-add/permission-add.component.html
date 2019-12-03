@@ -1,0 +1,83 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">授权功能 </h3>
+    </div>
+    <div class="page-body">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <label class="col-form-label col-md-3 text-right">授权用户：</label>
+                        <div class="col-md-9">
+                            <!-- <div class="input-group">
+                <input type="text" placeholder="请输入用户账号或用户姓名查询" class="form-control input-lg dropdown-toggle" name="searchText" [(ngModel)]="searchText"
+                  data-toggle="dropdown" (keyup)="searchUsers()" autocomplete="off">
+                  <span class="input-group-btn">
+                  <button class="btn btn-secondary" type="button">搜索</button>
+                </span>
+                <ul class="dropdown-menu w-100">
+                  <li *ngFor="let item of searchUsersList" (click)="onSelectUser(item)">{{item.displayName}}</li>
+                </ul>
+              </div> -->
+                            <spk-user-lookup (ok)="onSelectUser($event)"></spk-user-lookup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <label class="col-form-label col-md-3 text-right">管理范围：</label>
+                        <div class="col-md-9">
+                            <spk-user-group-select mode="multiple" [overflow]="0" [(ngModel)]="userGroups" [siteSelectable]="true" [showSubSite]="true"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <label class="col-form-label col-md-3 text-right">角色/权限：</label>
+                        <div class="col-md-9">
+                            <nz-tabset [nzType]="'card'" [nzSize]="'small'" [nzTabPosition]="'top'">
+                                <nz-tab>
+                                    <ng-template #nzTabHeading>
+                                        角色
+                                    </ng-template>
+                                    <ul class="list-group role-list">
+                                        <li *ngFor="let item of roleList" class="list-group-item">
+                                            <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="roleSelect($event, item)">
+                                                <span>{{item.name}}</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </nz-tab>
+                                <nz-tab *ngIf="false">
+                                    <ng-template #nzTabHeading>
+                                        权限
+                                    </ng-template>
+                                    <div>
+                                        <spk-privilege-form-control [(ngModel)]="privileges"></spk-privilege-form-control>
+                                    </div>
+                                </nz-tab>
+                            </nz-tabset>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9 ml-auto">
+                            <button nz-button [nzType]="'primary'" [disabled]="!((roleIds.length || privileges.length) && userGroups?.length && users?.length)"
+                                (click)="save()" *spkAuthzIf="{hasPermission: 'SYSTEM:PERMISSION:ADD'}" [nzLoading]="loading">
+                                <i class="fa fa-save "></i> 保 存 </button>
+                            <button nz-button [nzType]="'default'" [routerLink]="['../']"> 返 回
+                                <i class="fa fa-level-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-->card end</!-->
+        </div>
+    </div>
+</div>

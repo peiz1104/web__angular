@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">站点配置
+            <small>| 报表查看</small>
+        </h3>
+    </div>
+</div>
+<div class="report-form-works">
+    <nz-spin nzTip='正在初始化数据...' [nzSize]="'large'" [nzSpinning]="spinning">
+        <div class="content-report">
+            <div class="descript-message">
+                <i class="iconfont icon-baobiaofenxi"></i> 点击查看按钮进行报表查看
+            </div>
+            <button (click)="reportformview()" style="cursor:pointer" nz-button [nzType]="'primary'">查看报表</button>
+        </div>
+    </nz-spin>
+</div>

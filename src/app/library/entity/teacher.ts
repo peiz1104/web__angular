@@ -1,0 +1,32 @@
+import { UserGroup } from 'app/system/entity/user-group';
+import { User } from 'app/system/entity/user';
+export class Teacher {
+   id?: number;
+   userGroup?: UserGroup;
+   teacherNo?: String;
+   user?: User;
+   name?: String;
+   email?: String;
+   phoneNumber?: String;
+   sex?: String;
+   birthday?: Date;
+   teacherType?: String;
+   rank?: String;
+   dept?: String;
+   post?: String;
+   star?: String;
+   qualifications?: String;
+   inductionTime?: Date;
+   startDate?: Date;
+   classHour?: String;
+   avgScore?: String;
+   schoolName?: String;
+   graduationTime?: Date;
+   major?: String;
+   education?: String;
+   degree?: String;
+   url?: String;
+   description?: String;
+   userGroupName?: String;
+   fileName?: String;
+ }

@@ -1,0 +1,164 @@
+<ng-container *ngIf="echoTpl || inputControlEchoTpl" [ngTemplateOutlet]="echoTpl || inputControlEchoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container>
+<ng-template #inputControlEchoTpl>
+    <div *ngIf="!echoTpl" class="ant-select ant-select-show-search2" [ngClass]="{'ant-select-enabled': !disabled, 'ant-select-disabled': disabled}"
+        [style]="style" [style.width]="'100%'">
+        <div class="ant-select-selection" [ngClass]="{'ant-select-selection--multiple': mode=='multiple', 'ant-select-selection--single': mode=='single'}"
+            (click)="!disabled && openLookup()">
+            <div class="ant-select-selection__rendered">
+                <div *ngIf="!_value || _value?.length == 0" class="ant-select-selection__placeholder">{{placeholder}}</div>
+                <div *ngIf="overflow && _value?.length > overflow" class="ant-select-selection__placeholder text-secondary">您已选择{{_value.length}}个用户</div>
+                <ul *ngIf="isMultiple && (!overflow || _value?.length <= overflow)">
+                    <li *ngFor="let u of _value" class="ant-select-selection__choice ng-trigger ng-trigger-tagAnimation">
+                        <div class="ant-select-selection__choice__content">{{u.displayName}}</div>
+                        <span *ngIf="!hideDelete" class="ant-select-selection__choice__remove" style="top: 0;" (click)="_remove($event,u,_value)"></span>
+                    </li>
+                    <!-- <li class="ant-select-search ant-select-search--inline">
+                      <div class="ant-select-search__field__wrap">
+                          <input type="text" class="ant-select-search__field ng-pristine ng-valid ng-touched">
+                          <span class="ant-select-search__field__mirror"></span>
+                      </div>
+                  </li> -->
+                </ul>
+                <div *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__placeholder text-secondary">{{_value[0].displayName}}</div>
+            </div>
+            <span *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__clear ng-star-inserted" (click)="clear($event)"></span>
+            <span class="ant-select-arrow"></span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #lookupModalTitle>
+    <h5>{{modalTitle?modalTitle:'选择用户'}}</h5>
+</ng-template>
+<ng-template #lookupModalContent>
+    <div>
+        <nz-tabset [nzSize]="small" [(nzSelectedIndex)]="currentTab" (nzSelectChange)="_tabChange($event)">
+            <nz-tab *ngIf="quickAddState">
+                <ng-template #nzTabHeading>
+                    快捷添加
+                </ng-template>
+                <ng-container [ngTemplateOutlet]="quickAdd"></ng-container>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    选择用户
+                </ng-template>
+                <ng-container [ngTemplateOutlet]="userSelect"></ng-container>
+            </nz-tab>
+            <ng-template #nzTabBarExtraContent>
+                <!-- <a> <i class="anticon anticon-solution"></i> 查看已选人员</a> -->
+            </ng-template>
+        </nz-tabset>
+    </div>
+</ng-template>
+<ng-template #lookupModalFooter>
+    <div class="text-right">
+        <button [disabled]="tableLoading" type="button" class="btn btn-primary" (click)="_ok()"> 确 定 </button>
+        <button type="button" class="btn btn-light" (click)="_cancel()"> 取 消 </button>
+    </div>
+</ng-template>
+
+<ng-template #quickAdd>
+    <div style="height: 480px; overflow: auto;">
+        <nz-input [(ngModel)]="inputUsernames" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+        <a class="text-primary my-4 d-inline-block" (click)="verifyUsernames()">开始校验</a>
+        <div *ngIf="!usernameVerifiedResults || usernameVerifiedResults.length == 0">
+            <nz-alert [nzType]="'info'" [nzMessage]="'请输入一组用户名'" [nzShowIcon]="true"></nz-alert>
+        </div>
+        <div *ngIf="usernameVerifiedResults?.length > 0">
+            <div>
+                <h5 class="text-success mb-3">
+                    <i class="anticon anticon-check-circle-o"></i> 正确的用户</h5>
+                <nz-tag *ngFor="let item of usernameVerifiedSuccess" [nzColor]="'green'">{{item.username}}</nz-tag>
+            </div>
+            <div class="mt-4">
+                <h5 class="text-danger mb-3">
+                    <i class="anticon anticon-close-circle-o"></i> 错误的用户</h5>
+                <nz-tag *ngFor="let item of usernameVerifiedError" [nzColor]="'red'">{{item.username}}</nz-tag>
+            </div>
+        </div>
+
+        <div>
+            <nz-alert class="mt-5" [nzType]="'warning'" [nzShowIcon]="true" [nzBanner]="true">
+                <div alert-body>
+                    <h5>注意事项</h5>
+                    <ul>
+                        <li>1. 该功能只支持按用户名添加</li>
+                        <li>2. 用户名可以用如下字符分割 ',' ';' ':'</li>
+                        <li>3. 不要输入大量的用户名，最好不要超过200条</li>
+                    </ul>
+                </div>
+            </nz-alert>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #userSelect>
+    <div style="overflow:hidden">
+        <div style="float:left;width:200px" class="left">
+            <cui-layout-sider style="background: #ffffff;">
+                <div style="height: 480px; overflow-y: auto;">
+                    <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+                </div>
+            </cui-layout-sider>
+        </div>
+        <div class="right" style="float:left;width:calc(100% - 200px)">
+            <ng-container [ngTemplateOutlet]="userSelectList"></ng-container>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #userSelectList>
+    <div style="min-height: 200px;">
+        <nz-alert *ngIf="selection && selection.length > 0" [nzType]="'info'">
+            <span alert-body>已选择 {{ selection.length}} 个用户，请点击确定按钮完成操作</span>
+            <span alert-description>
+                <ul *ngIf="selection && selection.length" class="d-flex">
+                    <li *ngFor="let sel of selection" class="user-list-choice">
+                        <span>{{sel.displayName}}</span>
+                        <span class="user-list-choice-remove">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </li>
+                </ul>
+            </span>
+        </nz-alert>
+
+        <cui-data-table #userTable [columns]="columns" [data]="users" [pagination]="pagination" [loading]="tableLoading" [selectType]="isMultiple ? 'checkbox' : 'radio'"
+            (reload)="loadData($event)" [(selection)]="selection" (selectionChange)="userSelectionChange($event)" [dynamicColumns]="false">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名、姓名或邮箱">
+                    </div>
+                    <div class="form-group ml-3">
+                        <label nz-checkbox [(ngModel)]="withChildGroup" name="withChildGroup">
+                            <span>包含子组织</span>
+                        </label>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button [disabled]="tableLoading" type="button" class="btn btn-primary" (click)="_ok()"> 确 定 </button>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="sex" let-row="row">
+                <span *ngIf="row.sex=='MALE'" style="color:blue">男</span>
+                <span *ngIf="row.sex=='FAMALE'" style="color:red">女</span>
+            </ng-template>
+            <ng-template cuiColTpl="statusCol" let-row="row">
+                <span class="text-success" *ngIf="row.status=='ACTIVE'">正常</span>
+                <span class="text-danger" *ngIf="row.status=='LOCKED'">锁定</span>
+            </ng-template>
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <span>{{getFullPath(row.userGroup?.namePath)}}</span>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</ng-template>
+
+<!-- <nz-select [nzMode]="'multiple'" [nzPlaceHolder]="''" [nzAllowClear]="true" [hidden]="true"></nz-select> -->

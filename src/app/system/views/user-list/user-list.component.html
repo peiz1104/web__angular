@@ -1,0 +1,139 @@
+
+
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{target?.code || target?.id}}] {{target?.name}}: 用户列表
+      <small>管理系统用户</small>
+    </h3>
+
+    <div class="actions pull-right">
+      
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <ul class="mb-4 d-flex">
+      <li *ngFor="let it of getPath(target)">/ {{it}} </li>
+    </ul>
+
+    <ul class="nav nav-tabs mt-4 mb-3 d-none" id="pills-tab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+          aria-expanded="true">部门成员</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+      <cui-data-table #userTable [columns]="columns" [data]="users" [pagination]="pagination" [loading]="loading" selectType="checkbox"
+        (reload)="loadData($event)" (select)="onSelect($event)">
+        <ng-template #complexSearch>
+          <form class="search-bar">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group row">
+                  <label class="col-form-label col-3">用户名</label>
+                  <div class="col-9">
+                    <nz-input name="username" [nzPlaceHolder]="'请输入用户名'" [(ngModel)]="searchUsers.username"></nz-input>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group row">
+                  <label class="col-form-label col-3">姓名</label>
+                  <div class="col-9">
+                    <nz-input name="displayName" [nzPlaceHolder]="'请输入姓名'" [(ngModel)]="searchUsers.displayName"></nz-input>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group row">
+                  <label class="col-form-label col-3">手机号</label>
+                  <div class="col-9">
+                    <nz-input name="phoneNumber" [nzPlaceHolder]="'请输入手机号'" [(ngModel)]="searchUsers.phoneNumber"></nz-input>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group row">
+                  <label class="col-form-label col-3">邮箱</label>
+                  <div class="col-9">
+                    <nz-input name="email" [nzPlaceHolder]="'请输入邮箱'" [(ngModel)]="searchUsers.email"></nz-input>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group row">
+                  <div class=" col-9 offset-3">
+                    <label nz-checkbox [(ngModel)]="withChildGroup" name="withChildGroup">
+                        <span>包含下级组织</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group row mb-0">
+                  <div class="col-3 offset-1">
+                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    <button type="reset" class="btn ">清空</button>
+                    <a href="javascript:;" class="btn btn-link" (click)="clearSearchText(false);userTable.isComplexSearch=false">普通搜索</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </ng-template>
+
+        <ng-template #simpleSearch>
+          <form class="form-inline">
+            <div class="form-group">
+              <nz-input style="width:200px;" name="searchtext" [nzPlaceHolder]="'请输入用户名、姓名或邮箱'" [(ngModel)]="searchtext"></nz-input>
+            </div>
+            <div class="form-group ml-2">
+              <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+              <a href="javascript:;" class="btn btn-link" (click)="clearSearchText(true);userTable.isComplexSearch=true">高级搜索</a>
+            </div>
+          </form>
+        </ng-template>
+
+        <ng-template #listTools>
+          <ng-container *ngTemplateOutlet="tableListTools;"></ng-container>
+        </ng-template>
+
+        <ng-template cuiColTpl="statusCol" let-row="row">
+          <span class="text-success" *ngIf="row.status!='LOCKED'">正常</span>
+          <span class="text-danger" *ngIf="row.status=='LOCKED'">锁定</span>
+        </ng-template>
+        <ng-template cuiColTpl="sex" let-row="row">
+          <span class="text-primary" *ngIf="row.sex=='MALE'">男</span>
+          <span class="text-danger" *ngIf="row.sex=='FAMALE'">女</span>
+        </ng-template>
+        <ng-template cuiColTpl="userGroup" let-row="row">
+          <spk-user-group-popover [userGroup]="row.userGroup" placement="left"></spk-user-group-popover>
+        </ng-template>
+
+        <ng-template #rowActions let-row="row">
+          <a href="javascript:;" [routerLink]="['../', row.id, 'edit']" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EDIT'}">编辑</a>
+          <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}">
+            <a nz-popconfirm href="javascript:;" class="text-danger">删除</a>
+          </nz-popconfirm>
+          <a href="javascript:;" class="text-danger" (click)="simulate(row.username)" *ngIf="isSystemUser()">模拟登录</a>
+        </ng-template>
+
+        <ng-template #actionGroup>
+          <button class="btn btn-outline-danger" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}" (click)="delete(null, false)">批量删除</button>
+        </ng-template>
+      </cui-data-table>
+    </div>
+  </div>
+</div>
+
+<ng-template #tableListTools>
+    <button class="btn btn-outline-primary" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}" [routerLink]="['../', 'add']">
+      <i class="fa fa-plus"></i> 创建用户</button>
+    <button class="btn btn-outline-primary" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}" [routerLink]="['../', 'import-wizard']">
+      <i class="fa fa-upload"></i> 批量导入</button>
+    <button class="btn btn-outline-primary" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EXPORT'}" (click)="userExport()" [disabled]="exportShow">
+      <i class="fa fa-download"></i> 导出用户</button>
+    <button class="btn btn-danger" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}" (click)="delete(null, false)">批量删除</button>
+</ng-template>

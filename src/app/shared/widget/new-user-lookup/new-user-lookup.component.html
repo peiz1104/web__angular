@@ -1,0 +1,68 @@
+<nz-modal [nzVisible]="showNewAdd" [nzWidth]="900" [nzZIndex]="3" [nzContent]="newAddUserContent" (nzOnOk)="_ok($event)"
+  (nzOnCancel)="showNewAdd=false" [nzClosable]="false" *ngIf="showNewAdd">
+  <ng-template #newAddUserContent>
+    <div>
+      <cui-layout>
+        <cui-layout-sider style="background: #ffffff;" [width]="" class="tree">
+          <div style="height: 480px; overflow-y: auto;">
+            <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+          </div>
+        </cui-layout-sider>
+        <cui-layout>
+          <cui-layout-content>
+            <div class="px-4">
+              <ng-container [ngTemplateOutlet]="userSelectList"></ng-container>
+            </div>
+          </cui-layout-content>
+        </cui-layout>
+      </cui-layout>
+    </div>
+
+
+
+    <ng-template #userSelectList>
+      <div style="min-height: 200px;">
+        <nz-alert *ngIf="selection && selection.length > 0" [nzType]="'info'">
+          <span alert-body>已选择 {{ selection.length}} 个用户，请点击确定按钮完成操作</span>
+          <span alert-description>
+            <ul *ngIf="selection && selection.length" class="d-flex">
+              <li *ngFor="let sel of selection" class="user-list-choice">
+                <span>{{sel.displayName}}</span>
+                <span class="user-list-choice-remove">
+                  <i class="fa fa-close"></i>
+                </span>
+              </li>
+            </ul>
+          </span>
+        </nz-alert>
+
+        <cui-data-table #userTable [columns]="columns" [data]="users" [pagination]="pagination" [loading]="tableLoading" [selectType]="'checkbox'"
+          (reload)="loadData($event)" [(selection)]="selection" (selectionChange)="userSelectionChange($event)" [dynamicColumns]="false">
+          <ng-template #simpleSearch>
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名、姓名或邮箱">
+              </div>
+              <div class="form-group ml-2">
+                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+              </div>
+            </form>
+          </ng-template>
+
+          <ng-template cuiColTpl="sex" let-row="row">
+            <span>{{row.sex == 'MALE' ? '男' : '女'}}</span>
+          </ng-template>
+          <ng-template cuiColTpl="statusCol" let-row="row">
+            <span class="text-success" *ngIf="row.status=='ACTIVE'">正常</span>
+            <span class="text-danger" *ngIf="row.status=='LOCKED'">锁定</span>
+          </ng-template>
+
+        </cui-data-table>
+      </div>
+    </ng-template>
+  </ng-template>
+</nz-modal>
+<button type="button" [nzType]="'primary'" nz-button class="btn btn-primary" [nzSize]="'large'" (click)="loadModal()" *ngIf="type!='text'">
+  {{btnText}}
+</button>
+<span (click)="loadModal()" *ngIf="type=='text'" class="pointer">{{btnText}}</span>

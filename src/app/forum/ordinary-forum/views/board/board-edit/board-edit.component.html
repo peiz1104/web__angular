@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">编辑讨论区信息</h3>
+        <div class="actions pull-right">
+            <button class="btn btn-secondary" [routerLink]="['../']">返回讨论区列表
+        <i class="fa fa-level-up"></i>
+      </button>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container">
+        <form nz-form [formGroup]="boardForm" *ngIf="loading">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+                    <label for="name" nz-form-item-required>名称</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('name')">
+                    <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">名称必填</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+                    <label for="cover">封面</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+                    <cui-fileupload name="file" mode="image" accept=".jpg,.bmp,.png" url="/api/images/upload" [auto]="true" (uploadComplete)="initImage($event)" [imageHolder]="getFormControl('cover').value"></cui-fileupload>
+                    <span class="text-muted">
+              <i class="fa fa-info-circle text-info"></i> 
+              可以在此处上传封面图片。
+              格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+              图片尺寸建议最小200*120，比例5:4</span>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+                    <label for="boardType">讨论区类型</label>
+                    <span>
+
+          </span>
+                </div>
+                <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+                    <nz-radio-group formControlName="boardType">
+                        <label nz-radio [nzValue]="'NORMAL'">
+              <span>普通讨论区</span>
+            </label>
+                        <label nz-radio [nzValue]="'QA'">
+              <span>问答讨论区</span>
+            </label>
+                    </nz-radio-group>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+                    <label for="isPublished">默认发布</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+                    <nz-switch formControlName="isPublished">
+                        <span checked>开</span>
+                        <span unchecked>关</span>
+                    </nz-switch>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+                    <label for="description">讨论区简介</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+                    <nz-input [nzRows]="4" [nzType]="'textarea'" formControlName="description" [nzPlaceHolder]="'请输入讨论区简介'"></nz-input>
+                </div>
+            </div>
+            <div nz-form-item nz-row style="margin-bottom:8px;">
+                <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+                    <button nz-button [nzType]="'primary'" (click)="onSubmit($event)" [nzLoading]="isLoading">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

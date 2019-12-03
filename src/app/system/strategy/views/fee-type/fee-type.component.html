@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="actions pull-right">
+    </div>
+    <div class="page-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+            [(selection)]="selection" [loading]="loading">
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="searchData($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="code" [nzPlaceHolder]="'请输入费用编码code'"> </nz-input>
+                            </div>
+                            <div nz-form-control>
+                                <nz-input formControlName="name" [nzPlaceHolder]="'请输入费用编码名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <button nz-button [nzType]="'primary'" (click)="add()" *spkAuthzIf="{hasPermission: 'SETTINGS:FEE_CODE:ADD'}">
+                    <i class="fa fa-plus"></i> 
+                    添加</button>
+                <button nz-button [nzType]="'primary'" (click)="deleteAll()">
+                    <i class="iconfont icon-shanchu"></i>
+                    批量删除</button>
+            </ng-template>
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <a href="javascript:;" (click)="edit(row.id)">编辑</a>
+                <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+
+
+<nz-modal *ngIf="isVisibleadd" [nzFooter]="false" [nzVisible]="isVisibleadd" [nzTitle]="'费用编码'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCanceladd($event)" (nzOnOk)="handleOkadd($event)">
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)">
+            <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>费用code</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.code">
+                        <nz-input formControlName="code" [nzType]="'text'" [nzPlaceHolder]="'请输入费用code'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.code.dirty&&validateForm.controls.code.hasError('required')">请输入费用code!</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>费用名称</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.name">
+                        <nz-input formControlName="name" [nzType]="'text'" [nzPlaceHolder]="'请输入费用名称'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入费用名称!</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                        <button [nzLoading]="addsubmitloading" nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!validateForm.valid" >提交</button>
+                    </div>
+                </div>
+            </nz-spin>
+        </form>
+    </ng-template>
+</nz-modal>

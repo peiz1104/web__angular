@@ -1,0 +1,21 @@
+:host::ng-deep {
+    .select-body {
+        padding: 4px;
+    }
+    .fix-width {
+        width: 58%;
+        word-break: break-all;
+    }
+    .fix-middle-width {
+        width: 20%;
+        word-break: break-all;
+    }
+    .fix-small-width {
+        width: 10%;
+        word-break: break-all;
+    }
+    button {
+        cursor: pointer;
+        margin-right: 4px;
+    }
+}

@@ -1,0 +1,28 @@
+<div>
+  <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selection"
+    [loading]="loading" (reload)="loadData()">
+    <ng-template #simpleSearch>
+      <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body" [nzGutter]="8">
+          <div nz-form-control nz-col [nzSpan]="6" class="gutter-row">
+            <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"> </nz-input>
+          </div>
+          <div nz-form-control nz-col [nzSpan]="6" class="gutter-row">
+            <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"> </nz-input>
+          </div>
+          <div nz-form-control nz-col [nzSpan]="8" class="gutter-row">
+            <spk-user-group-select formControlName="userGroupId"></spk-user-group-select>
+          </div>
+          <div class='simple-search-bar-search-box' nz-col [nzSpan]="4" class="gutter-row">
+            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'><i class="fa fa-search"></i>查询</button>
+            <!-- <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级查询</button> -->
+          </div>
+        </div>
+      </form>
+    </ng-template>
+    <!-- 自定义列显示 -->
+  </cui-data-table>
+  <div class="text-right">
+    <button nz-button [nzType]="'primary'" (click)="selectPerson()">确定</button>
+  </div>
+</div>

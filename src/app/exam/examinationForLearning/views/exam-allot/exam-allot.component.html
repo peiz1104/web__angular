@@ -1,0 +1,328 @@
+<div class="container-fluid">
+    <div class="page-header" *ngIf="createOrEditor">
+        <h3 class="page-title">创建考试
+            <small>分配管理员</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../', 'add']">返回考试列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="">
+            <!-- <div class="alert alert-info">
+              <span>输入此内容对象的属性 (元数据)。这些属性用来定义对象并帮助学员搜索和查看课程信息。请注意, 文本字段可以使用 HTML 标记进行格式化。如果此内容对象正由 Web 会议使用, 则不应将起始 URL 留空, 否则将无法召开会议。</span>
+          </div> -->
+            <div class="">
+                <div class="card-body">
+                    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                        <nz-tabset (nzSelectedIndexChange)="changeTabs($event)" [(nzSelectedIndex)]="selectedTabIndex">
+                            <nz-tab>
+                                <ng-template #nzTabHeading>监考人员</ng-template>
+                                <div class="tab-body" *ngIf="selectedTabIndex==0">
+                                    <form nz-form [formGroup]="validateForm" class="test-add-form-box">
+                                        <div nz-form-item nz-row class="proctor-line">
+                                            <div nz-form-label nz-col [nzSpan]="2" class="proctor-title">
+                                                <label for="userIds" nz-form-item-required>监考人员</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="13" nz-form-control [nzValidateStatus]="validateForm.controls.users">
+                                                <spk-user-lookup formControlName="users" placeholder="请输入监考人" (ok)="chooseJK($event)" (remove)="deleteJK($event)" [JK]="true"></spk-user-lookup>
+                                                <div nz-form-explain *ngIf="validateForm.controls.users.dirty&&validateForm.controls.users.hasError('required')">请输入监考人!</div>
+                                            </div>
+                                        </div>
+                                        <div nz-form-item nz-row class="proctor-line">
+                                            <div nz-form-label nz-col [nzSpan]="2" class="proctor-title">
+                                                <label for="startdate">监考时间</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="6" nz-form-control [nzValidateStatus]="validateForm.controls.startdate">
+                                                <spk-qm-datepicker class="w-100" formControlName="startdate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入监考开始时间'"></spk-qm-datepicker>
+                                            </div>
+                                            <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                                            <div nz-col [nzSpan]="6" nz-form-control [nzValidateStatus]="validateForm.controls.enddate">
+                                                <spk-qm-datepicker class="w-100" formControlName="enddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入监考结束时间'"></spk-qm-datepicker>
+                                            </div>
+                                        </div>
+                                        <div nz-form-item nz-row class="proctor-line">
+                                            <div nz-form-label nz-col [nzSpan]="2" class="proctor-title">
+                                                <label for="jkCode">监考码</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="13" nz-form-control [nzValidateStatus]="validateForm.controls.jkCode">
+                                                <nz-input [nzPlaceHolder]="'请输入监考码...'" formControlName="jkCode"></nz-input>
+                                                <div nz-form-explain *ngIf="validateForm.controls.jkCode.dirty&&validateForm.controls.jkCode.hasError('maxlength')">监考码不能超过50字符!</div>
+                                            </div>
+                                        </div>
+                                        <div nz-row>
+                                            <div nz-col [nzSpan]="15" class="ali-c">
+                                                <button nz-button [nzType]="'primary'" (click)="onSubmit($event,validateForm.value)" [nzLoading]="jkSubmitLoading">
+                                                    <span>保存</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </nz-tab>
+                            <nz-tab>
+                                <ng-template #nzTabHeading>阅卷人员</ng-template>
+                                <div class="tab-body" *ngIf="selectedTabIndex==1">
+                                    <div nz-row class="proctor-line">
+                                        <div nz-col [nzSpan]="2" class="proctor-title">
+                                            <label>阅卷时间：</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <spk-qm-datepicker class="w-100" [(ngModel)]="PJstartdate" (ngModelChange)="PJstartChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                                [nzDisabledDate]="_disabledStartDate" [nzPlaceHolder]="'请输入阅卷开始时间'"></spk-qm-datepicker>
+
+                                        </div>
+                                        <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                                        <div nz-col [nzSpan]="6">
+                                            <spk-qm-datepicker class="w-100" [(ngModel)]="PJenddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" (ngModelChange)="PJendChange($event)"
+                                                [nzDisabledDate]="_disabledStartDate" [nzPlaceHolder]="'请输入阅卷结束时间'"></spk-qm-datepicker>
+
+                                        </div>
+                                    </div>
+                                    <cui-data-table #tableHandle [columns]="columns2" [data]="columnsData2" (reload)="loadMarking('PJ')" [loading]="markingLoading">
+                                        <ng-template cuiColTpl="readType" let-row="row">
+                                            <nz-select style="width:100px;height:20px;" [(ngModel)]="row.readType" (ngModelChange)="readTypeChange(row,$event) ">
+                                                <nz-option [nzLabel]="'独立阅卷'" [nzValue]="'ALONE'"></nz-option>
+                                                <nz-option [nzLabel]="'交叉阅卷'" [nzValue]="'ACROSS'"></nz-option>
+                                            </nz-select>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="PJname" let-row="row">
+                                            <spk-user-lookup *ngIf="row.readType=='ALONE'" [(ngModel)]="row.PJlist" placeholder="请选择阅卷人" (ok)="choosePJ($event,row)"
+                                                (remove)="deleteZC($event,row,'PJ')"></spk-user-lookup>
+                                            <spk-user-lookup *ngIf="row.readType=='ACROSS'" [(ngModel)]="row.PJlist1" placeholder="请选择第一组阅卷人" (ok)="choosePJ($event,row,1)"
+                                                (remove)="deleteZC($event,row,'PJ')"></spk-user-lookup>
+                                            <spk-user-lookup *ngIf="row.readType=='ACROSS'" [(ngModel)]="row.PJlist2" placeholder="请选择第二组阅卷人" (ok)="choosePJ($event,row,2)"
+                                                (remove)="deleteZC($event,row,'PJ')"></spk-user-lookup>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdDate" let-row="row">
+                                            <nz-select style="width:100px;height:20px;" [(ngModel)]="row.zc" [nzDisabled]="row.readType!=='ACROSS'" (ngModelChange)="deleteZCAll(row)">
+                                                <nz-option [nzLabel]="'是'" [nzValue]="true"></nz-option>
+                                                <nz-option [nzLabel]="'否'" [nzValue]="false"></nz-option>
+                                            </nz-select>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="ZCname" let-row="row">
+                                            <spk-user-lookup *ngIf="row.zc&&row.readType=='ACROSS'" [(ngModel)]="row.ZClist" placeholder="请选择仲裁人" [ZC]="true" (ok)="chooseZC($event,row)"
+                                                (remove)="deleteZC($event,row,'ZC')"></spk-user-lookup>
+                                            <ul *ngIf="!row.zc||(row.zc&&row.readType!=='ACROSS')" class="ZC-box disable"></ul>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="score" let-row="row">
+                                            <nz-input-number [nzDisabled]="!row.zc" [(ngModel)]="row.score" [nzPlaceHolder]='' [nzMax]="100" [nzStep]="1" (nzBlur)="setScore(row)"></nz-input-number>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdSet" let-row="row">
+                                            <a class="text-primary" (click)="showCopyList(row,'PJ')">复制</a>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="casual" let-row="row">
+                                            <nz-tooltip [nzPlacement]="'right'">
+                                                <span nz-tooltip class='exam-casual'>{{row.casual | getText}}</span>
+                                                <ng-template #nzTemplate>
+                                                    <p>{{row.casual| getText}}</p>
+                                                </ng-template>
+                                            </nz-tooltip>
+                                        </ng-template>
+                                    </cui-data-table>
+                                </div>
+                            </nz-tab>
+                            <nz-tab>
+                                <ng-template #nzTabHeading>复评人员</ng-template>
+                                <div class="tab-body" *ngIf="selectedTabIndex==2">
+                                    <div nz-row class="proctor-line">
+                                        <div nz-col [nzSpan]="2" class="proctor-title">
+                                            <label>阅卷时间：</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <spk-qm-datepicker class="w-100" [(ngModel)]="FPstartdate" (ngModelChange)="FPstartChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                                [nzPlaceHolder]="'请输入复评开始时间'" [nzDisabledDate]="_disabledStartDate"></spk-qm-datepicker>
+
+                                        </div>
+                                        <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                                        <div nz-col [nzSpan]="6">
+                                            <spk-qm-datepicker class="w-100" [(ngModel)]="FPenddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'" [nzPlaceHolder]="'请输入复评结束时间'"
+                                                (ngModelChange)="FPendChange($event)" [nzDisabledDate]="_disabledStartDate"></spk-qm-datepicker>
+
+                                        </div>
+                                    </div>
+                                    <cui-data-table #tableHandle [columns]="FPcolumn" [data]="FPcolumnsData" (reload)="loadFPList('FP')" [loading]="FPListLoading">
+                                        <ng-template cuiColTpl="FPName" let-row="row">
+                                            <spk-user-lookup [(ngModel)]="row.FPlist" placeholder="请选择复评人" (ok)="chooseFP($event,row)" (remove)="deleteFP($event,row)"></spk-user-lookup>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="casual" let-row="row">
+                                            <nz-tooltip [nzPlacement]="'right'">
+                                                <span nz-tooltip class='exam-casual'>{{row.casual | getText}}</span>
+                                                <ng-template #nzTemplate>
+                                                    <p>{{row.casual| getText}}</p>
+                                                </ng-template>
+                                            </nz-tooltip>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdSet" let-row="row">
+                                            <a class="text-primary" (click)="showCopyList(row,'FP')">复制</a>
+                                        </ng-template>
+                                    </cui-data-table>
+                                </div>
+                            </nz-tab>
+                            <nz-tab>
+                                <ng-template #nzTabHeading>审核人员</ng-template>
+                                <div class="tab-body SH-box" *ngIf="selectedTabIndex==3">
+                                    <div nz-row class="proctor-line">
+                                        <div nz-col [nzSpan]="2" class="proctor-title">
+                                            <label>阅卷时间：</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-datepicker class="w-100" [(ngModel)]="SHstartdate" (ngModelChange)="SHstartdateChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                                [nzPlaceHolder]="'请输入复评开始时间'" [nzDisabledDate]="SHstartDisabledDate"></nz-datepicker>
+
+                                        </div>
+                                        <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-datepicker class="w-100" [(ngModel)]="SHenddate" (ngModelChange)="SHenddateChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                                [nzPlaceHolder]="'请输入复评结束时间'" [nzDisabledDate]="SHendDisabledDate"></nz-datepicker>
+
+                                        </div>
+                                        <button style="margin-left:30px;" nz-button [nzType]="'primary'" (click)="SHupdate()">
+                                            <span>指定阅卷时间</span>
+                                        </button>
+                                    </div>
+                                    <div class="queryTools-box">
+                                        <label for="userName" style="margin-left: 20px;">用户名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" [(ngModel)]="SHqueryValue.username"></nz-input>
+                                        <label for="name">姓名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" class="name-text" [(ngModel)]="SHqueryValue.displayName"></nz-input>
+                                        <button nz-button [nzType]="'primary'" (click)="SHloadList()">
+                                            <span>搜索</span>
+                                        </button>
+                                    </div>
+                                    <cui-data-table #tableHandle [(selection)]="SHselectData" [columns]="SHcolumns" [data]="SHcolumnsData" (reload)="SHloadList($event)"
+                                        [loading]="SHListLoading" [pagination]="SHpagination">
+                                        <!-- <ng-template #simpleSearch>
+                                            <ng-container>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-primary" (click)="skipAddExam()">
+                                                        <i class="fa fa-plus"></i> 导入分配</button>
+                                                </div>
+                                            </ng-container>
+                                        </ng-template> -->
+                                        <ng-template #listTools>
+                                            <button type="button" style="width:70px;" class="btn btn-outline-primary" (click)="SHaddList($event)">添加</button>
+                                            <spk-user-lookup [(ngModel)]="SHuserSelectData" (ok)="SHuserChangeHandler($event,row)"></spk-user-lookup>
+                                            <!-- <button type="button" class="btn btn-outline-primary" (click)="SHremoveLists(selection)">删除</button> -->
+                                        </ng-template>
+                                        <ng-template cuiColTpl="name" let-row="row">
+                                            <div>{{row.name?row.name:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="administrator" let-row="row">
+                                            <div>{{row.administrator?row.administrator:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdDate" let-row="row">
+                                            <div>{{row.createdDate|dateMoment:'YYYY-MM-DD hh:mm'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="startTime" let-row="row">
+                                            <div>{{row.startTime?(row.startTime|dateMoment:'YYYY-MM-DD hh:mm'):'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="endTime" let-row="row">
+                                            <div>{{row.endTime?(row.endTime|dateMoment:'YYYY-MM-DD hh:mm'):'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="actSet" let-row="row">
+                                            <a class="text-primary" (click)="SHrangeHandler(row)">审核范围</a>
+                                            <span nz-table-divider></span>
+                                            <a class="text-primary" (click)="SHremove(row)">删除</a>
+                                        </ng-template>
+                                    </cui-data-table>
+                                    <nz-modal [nzConfirmLoading]="SHmodalLoading" *ngIf="SHvisible" [nzVisible]="SHvisible" [nzTitle]="'选择范围'" [nzContent]="modalContent"
+                                        (nzOnCancel)="SHhandleCancel($event)" (nzOnOk)="SHhandleOk($event)">
+                                        <ng-template #modalContent>
+                                            <spk-user-group-tree (selectionChange)="SHSelectionChange($event)"></spk-user-group-tree>
+                                        </ng-template>
+                                    </nz-modal>
+                                </div>
+                            </nz-tab>
+                            <!-- <nz-tab>
+                                <ng-template #nzTabHeading>考场安排人员</ng-template>
+                                <div class="tab-body AP-box" *ngIf="selectedTabIndex==4">
+                                    <div nz-row class="proctor-line">
+                                        <div nz-col [nzSpan]="2" class="proctor-title">
+                                            <label>阅卷时间：</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-datepicker class="w-100" [(ngModel)]="APstartdate" (ngModelChange)="APstartdateChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                                [nzPlaceHolder]="'请输入复评开始时间'" [nzDisabledDate]="APstartDisabledDate"></nz-datepicker>
+
+                                        </div>
+                                        <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                                        <div nz-col [nzSpan]="6">
+                                            <nz-datepicker class="w-100" [(ngModel)]="APenddate" (ngModelChange)="APenddateChange($event)" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'"
+                                                [nzPlaceHolder]="'请输入复评结束时间'" [nzDisabledDate]="APendDisabledDate"></nz-datepicker>
+
+                                        </div>
+                                    </div>
+                                    <div class="queryTools-box">
+                                        <label for="userName" style="margin-left: 20px;">用户名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" [(ngModel)]="APqueryValue.username"></nz-input>
+                                        <label for="name">姓名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" class="name-text" [(ngModel)]="APqueryValue.displayName"></nz-input>
+                                        <button nz-button [nzType]="'primary'" (click)="APloadList()">
+                                            <span>搜索</span>
+                                        </button>
+                                    </div>
+                                    <cui-data-table #tableHandle [(selection)]="APselectData" [columns]="APcolumns" [data]="APcolumnsData" (reload)="APloadList($event)"
+                                        [loading]="APListLoading" [pagination]="APcolumnsData">
+                                        <ng-template #listTools>
+                                            <button type="button" style="width:70px;" class="btn btn-outline-primary" (click)="APaddList($event)">添加</button>
+                                            <spk-user-lookup [(ngModel)]="APuserSelectData" (ok)="APuserChangeHandler($event,row)"></spk-user-lookup>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="userGroupId" let-row="row">
+                                            <div>{{row.userGroupId?row.userGroupId:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="name" let-row="row">
+                                            <div>{{row.name?row.name:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdBy" let-row="row">
+                                            <div>{{row.createdBy?row.createdBy:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdDate" let-row="row">
+                                            <div>{{row.createdDate|date:'yyyy-MM-dd'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="actSet" let-row="row">
+                                            <a class="text-primary" (click)="APrangeHandler(row)">指定范围</a>
+                                            <span nz-table-divider></span>
+                                            <a class="text-primary" (click)="APremove(row)">删除</a>
+                                        </ng-template>
+                                    </cui-data-table>
+                                    <nz-modal [nzConfirmLoading]="APmodalLoading" *ngIf="APvisible" [nzVisible]="APvisible" [nzTitle]="'选择范围'" [nzContent]="modalContent"
+                                        (nzOnCancel)="APhandleCancel($event)" (nzOnOk)="APhandleOk($event)">
+                                        <ng-template #modalContent>
+                                            <spk-user-group-tree (selectionChange)="APSelectionChange($event)"></spk-user-group-tree>
+                                        </ng-template>
+                                    </nz-modal>
+                                </div>
+                            </nz-tab> -->
+                        </nz-tabset>
+                    </nz-spin>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出层选择待复制题目列表 -->
+<nz-modal [nzVisible]="copyListvisible" [nzTitle]="subjectTitle" [nzFooter]="subjectFooter" (nzOnCancel)="copyListvisible=false"
+    [nzWidth]="'80%'" [nzStyle]="{height:'80%',top:'20px'}">
+    <ng-template #subjectTitle>
+        <div class="text-center">选择题目</div>
+        <cui-data-table [columns]="CopyListColumns" [data]="CopyListColumnsData" selectType="checkbox" [(selection)]="markSlection"
+            [loading]="copyListLoading">
+            <ng-template cuiColTpl="casual" let-row="row">
+                <nz-tooltip [nzPlacement]="'right'">
+                    <span nz-tooltip class='exam-casual'>{{row.casual | getText}}</span>
+                    <ng-template #nzTemplate>
+                        <p>{{row.casual| getText}}</p>
+                    </ng-template>
+                </nz-tooltip>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+    <ng-template #subjectFooter>
+        <button nz-button [nzType]="'primary'" class="copy" (click)="sublimtCopy($event)">确 定</button>
+    </ng-template>
+</nz-modal>

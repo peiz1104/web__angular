@@ -1,0 +1,168 @@
+<div class="preview-paper-pratition">
+    <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="spinning">
+        <div class="test-box">
+            <div *ngIf="partitionData" class="partition-content">
+                <div class="content-header">
+                    <span class="question-type">{{partitionData.partitionName}}</span>
+                    <span class="question-method">出题方式： {{partitionData.titleCode=='H'?'手工':'随机'}}</span>
+
+                </div>
+                <div *ngFor="let value of partitionData.pqlist||partitionData.pllist; let i=index" class="question-categroy">
+                    <div class="question-type-score">
+                        <span class="question-order">{{i+1 +'、'}}{{value.typeName || value.typeCodeName}}</span>
+                        <span class="quesiton-score">（{{value.score||value.queScore}} 分）</span>
+                    </div>
+                    <div class="subject">
+                        <span class="htmlText" [innerHtml]="(value.casual || value.clobCasual)|innerHtmlPipe">{{value.casual || value.clobCasual}}</span>
+                    </div>
+                    <!-- typeCode:DANX单选题 -->
+                    <div *ngIf="value.typeCode=='DANX'" class="DANX">
+                        <div *ngFor="let singlechoose of value.answerList; let n=index " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                <input disabled type='radio' checked='checked' name={{singlechoose.examQueId}} />
+                                <span [innerHtml]="singlechoose.answerText | innerHtmlPipe">{{answerList[n]+'、'}} {{singlechoose.answerText}}</span>
+                            </span>
+                            <span *ngIf="singlechoose.isCorrect=='N'">
+                                <input disabled type='radio' name={{singlechoose.examQueId}} /> {{answerList[n]+'、'}} {{singlechoose.answerText}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- typeCode:DUOX多选题 -->
+                    <div *ngIf="value.typeCode=='DUOX'" class="DUOX">
+                        <div *ngFor="let singlechoose of value.answerList;let n=index " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                <input disabled type='checkbox' checked='checked' name={{singlechoose.examQueId}} /> {{answerList[n]+'、'}} {{singlechoose.answerText}}
+                            </span>
+                            <span *ngIf="singlechoose.isCorrect=='N'">
+                                <input disabled type='checkbox' name={{singlechoose.examQueId}} /> {{answerList[n]+'、'}} {{singlechoose.answerText}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--typeCode"PD"判断题  -->
+                    <div *ngIf="value.typeCode=='PD'" class="PD">
+                        <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                {{'正确'}}
+                            </span>
+                            <span *ngIf="singlechoose.isCorrect=='N'">
+                                {{'错误'}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- typeCode:"PP"匹配题 -->
+                    <div *ngIf="value.typeCode=='PP'" class="PP">
+                        <div *ngFor="let singlechoose of value.answerList; let s=index">
+                            <div>
+                                <span>{{s+1+'、'}}</span>
+                                <span [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span>
+                            </div>
+                        </div>
+                        <div class="pp-border">
+                            <span class="right-answer">参考答案：</span>
+                            <div *ngFor="let singleanswer of value.answerList; let s=index">
+                                <div>
+                                    <span>{{s+1+'、'}}</span>
+                                    <span>{{singleanswer.isCorrect}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- typeCode:"TK"填空题 -->
+                    <div *ngIf="value.typeCode=='TK'" class="TK">
+                        <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                {{singlechoose.answer+'、'+singlechoose.answerText}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- typeCode:"JD"简答题 -->
+                    <div *ngIf="value.typeCode=='JD'" class="JD">
+                        <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                {{' '+singlechoose.answerText}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- typeCode:"ALFX" 案例分析题 -->
+                    <div *ngIf="value.typeCode=='ALFX'" class="ALFX">
+                        <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                            <span *ngIf="singlechoose.isCorrect=='Y'">
+                                {{' '+singlechoose.answerText}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- typeCode:"YDLJ"阅读理解题 -->
+                    <div *ngIf="value.typeCode=='YDLJ'" class="YDLJ">
+                        <div *ngFor="let ydsingle of value.childQueList ;let i = index">
+                            <!-- 阅读理解题里有判断题填空题单选多选案例分析 -->
+                            <div class="question-type-score">
+                                <span class="question-order">{{i+1 +'、'}}{{ydsingle.typeName}}</span>
+                                <span class="quesiton-score">（{{ydsingle.score}} 分）</span>
+                            </div>
+                            <!-- DANX单选 -->
+                            <div *ngIf="ydsingle.typeCode=='DANX'">
+                                <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        <input disabled type='radio' checked='checked' name={{ydchoose.examQueId}} /> {{answerList[y]+'、'}} {{ydchoose.answerText}}
+                                    </span>
+                                    <span *ngIf="ydchoose.isCorrect=='N'">
+                                        <input disabled type='radio' name={{ydchoose.examQueId}} /> {{answerList[y]+'、'}} {{ydchoose.answerText}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- DUOX多选 -->
+                            <div *ngIf="ydsingle.typeCode=='DUOX'" class="DUOX">
+                                <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        <input disabled type='checkbox' checked='checked' name={{ydchoose.examQueId}} /> {{answerList[y]+'、'}} {{ydchoose.answerText}}
+                                    </span>
+                                    <span *ngIf="ydchoose.isCorrect=='N'">
+                                        <input disabled type='checkbox' name={{ydchoose.examQueId}} /> {{answerList[y]+'、'}} {{ydchoose.answerText}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- PD判断 -->
+                            <div *ngIf="ydsingle.typeCode=='PD'" class="PD">
+                                <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        {{'正确'}}
+                                    </span>
+                                    <span *ngIf="ydchoose.isCorrect=='N'">
+                                        {{'错误'}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!--  TK填空-->
+                            <div *ngIf="ydsingle.typeCode=='TK'" class="TK">
+                                <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        {{ydchoose.answer+'、'+ydchoose.answerText}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- 简单题JD -->
+                            <div *ngIf="ydsingle.typeCode=='JD'" class="JD">
+                                <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        {{' '+ydchoose.answerText}}
+                                    </span>
+                                </div>
+                            </div>
+                            <!--  ALFX案例分析题-->
+                            <div *ngIf="ydsingle.typeCode=='ALFX'" class="ALFX">
+                                <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                    <span *ngIf="ydchoose.isCorrect=='Y'">
+                                        {{' '+ydchoose.answerText}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!partitionData" class="no-data">
+                <i class="anticon anticon-frown-o"></i> 暂无数据！
+            </div>
+        </div>
+    </nz-spin>
+</div>

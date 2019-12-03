@@ -1,0 +1,13 @@
+:host ::ng-deep{
+    .ant-spin-nested-loading{
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        z-index: 99;
+    }
+}
+.input-tip{
+    color: #888888;
+    position: absolute;
+    right: 0;
+}

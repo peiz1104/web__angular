@@ -1,0 +1,51 @@
+<div class="px-4">
+  <div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" (reload)="loadData($event)">
+
+      <ng-template #complexSearch>
+        <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+      </ng-template>
+
+      <ng-template #simpleSearch>
+        <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+      </ng-template>
+      <ng-template cuiColTpl="col2-1" let-row="row">
+        <h5>{{row.name}}</h5>
+        <span>{{row.code}}</span>
+      </ng-template>
+      <ng-template cuiColTpl="col2-2" let-row="row">
+        <div>{{getCourseTypeText(row.courseType)}}</div>
+        <div>课时: {{row.period}}</div>
+      </ng-template>
+      <ng-template cuiColTpl="col2-3" let-row="row">
+        <div>{{row.userGroup?.name}}</div>
+        <div>{{row.category?.name}}</div>
+      </ng-template>
+      <ng-template #rowActions let-row="row">
+        <a *spkAuthzIf="{hasPermission: 'TEACHER:EMPOWERMENT:REMOVE'}; else delDisplay" href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a>
+        <ng-template #delDisplay>
+            <span>删除</span>
+        </ng-template>
+    </ng-template>
+    </cui-data-table>
+  </div>
+  <div class="clearfix">
+    <button class="pull-right" nz-button [nzType]="'primary'" (click)="ok()">确定</button>
+  </div>
+</div>
+
+
+<ng-template #simpleSearchBox>
+  <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+    <div nz-row class="cui-data-table-form-body">
+      <div nz-form-control>
+        <nz-input formControlName="name" [nzPlaceHolder]="'请输入关键词'"> </nz-input>
+      </div>
+      <div class='simple-search-bar-search-box'>
+        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+          <i class="fa fa-search"></i>查询
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,110 @@
+<div class="group-add">
+    <div class="page-header">
+        <h3 class="page-title">机构分组
+            <small>| {{status}}</small>
+        </h3>
+    </div>
+    <!-- <div class="add-top">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                机构分组
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{status}}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div> -->
+    
+    <form nz-form [formGroup]="validateForm" class="group-from">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="7">
+                <label nz-form-item-required for="name">分组名称</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="getFormControl('name')" nz-col [nzSpan]="8">
+                <nz-input formControlName="name" [nzType]="'name'" [nzPlaceHolder]="'请输入分组名称'" [nzSize]="'large'"></nz-input>
+                <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入分组名称</div>
+            </div>
+        </div>
+
+        <div nz-row nz-form-item>
+            <div nz-form-label nz-col [nzSpan]="7">
+                <label for="userGroup" nz-form-item-required>所属机构</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.userGroup" nz-col [nzSpan]="8">
+                <spk-user-group-select [isRegion]="true" formControlName="userGroup" [(ngModel)]="organizeGroup.userGroup"></spk-user-group-select>
+                <div nz-form-explain *ngIf="validateForm.controls.userGroup.dirty&&validateForm.controls.userGroup.hasError('required')">请选择机构！</div>
+            </div>
+        </div>
+
+
+        <div class="groups">
+            <spk-user-group-select [isRegion]="true" mode="multiple" #ugLookup [autoClear]="true" (selectOk)="logSelectGroup($event)"></spk-user-group-select>
+            <button nz-button [nzType]="'primary'" class="AddingTissue" (click)="ugLookup.openLookup()">
+                <span>添加组织</span>
+            </button>
+        </div>
+        <div class="ShuttleFrame">
+            <div class="ShuttleFrameLeft">
+                <div class="header-new-plan">
+                    <div class="left">
+                        分配组织
+                    </div>
+                    <div class="middle">
+            
+                    </div>
+                    <div class="right">
+                        剩余名额优先分配组织
+                        <button nz-button [nzType]="'primary'" class="clearDataRight" (click)="handelClearRightData()">
+                            <span>清空</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <!-- 左边组织 -->
+                    <div class="DistributionOrganization">
+                        <div *ngFor="let item of dataLeft">
+                            <div *ngIf="closeId.indexOf(item.org.id) !== -1" class="organizationOne" (click)="handleLeftClick(item)" [ngClass]="{'borderLeft': arrIdLeft.indexOf(item.org.id)!==-1}">
+                                {{item.org.name}}
+                                <i class="iconfont icon-2guanbi close" (click)="handleCloseLeft(item.org.id)"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- 中间 -->
+                    <div class="Organization">
+                        <i class="iconfont icon-angledoubleright " (click)="handleToRightAll()"></i>
+                        <i class="iconfont icon-icon--" (click)="handleToRightPart()"></i>
+                    </div>
+                    <!-- 右边组织 -->
+                    <div class="PreferentialAllocation">
+                        <div *ngFor="let item of dataRight">
+                            <div class="organizationOne" [ngClass]="{'borderLeft': arrIdRight.indexOf(item.org.id)!==-1}" (click)="handleRightClick(item.org.id,item)">
+                                {{item.org.name}}
+                                <i class="iconfont icon-2guanbi close" (click)="handleCloseRight(item.org.id)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ShuttleFrameRight">
+                <!-- <i class="anticon anticon-up-square-o" (click)="handleMoveUp()"></i> -->
+                <img src="./assets/images/u0.svg" alt="" class="anticon-up-square-o">
+                <i class="iconfont icon-shangyi" (click)="handleMoveUpOne()"></i>
+                <i class="iconfont icon-shangyi down-show" (click)="handleMoveDownOne()"></i>
+                <img src="./assets/images/u1.svg" alt="" class="anticon-down-square-o">
+                <!-- <i class="anticon anticon-down-square-o" (click)="handleMoveDown()"></i> -->
+            </div>
+            <div class="bottomShuttle">
+                <button nz-button [nzType]="'default'" class="cancel" (click)="handleCancel()">
+                    <span>取消</span>
+                </button>
+                <button [nzLoading]="submitLoading" nz-button [nzType]="'primary'" class="confirm" (click)="_submitForm($event,validateForm.value)">
+                    <span>保存</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

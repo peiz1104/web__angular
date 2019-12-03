@@ -1,0 +1,9 @@
+:host ::ng-deep {
+    .form-control,
+    .cui-dropdown,
+    .cui-tree-select {
+        .cui-dropdown-label {
+            // color: #aaa;
+        }
+    }
+}

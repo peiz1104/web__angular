@@ -1,0 +1,4 @@
+<nz-select style="width: 200px;" [nzPlaceHolder]="'选择讨论区'" [(ngModel)]="boardId" [nzSize]="'large'" nzSearchChange="doCommit()">
+  <nz-option *ngFor="let option of boards" [nzLabel]="option.name" [nzValue]="option.id">
+  </nz-option>
+</nz-select>

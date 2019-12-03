@@ -1,0 +1,15 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">
+  <div class="page-header">
+    <h3 class="page-title">{{document?.name}}: 注册
+      <small></small>
+    </h3>
+
+    <div class="actions pull-right">
+      <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+    </div>
+  </div>
+
+  <div class="page-body">
+    <spk-condition *ngIf="document?.requiredCondition" [condition]="document?.requiredCondition"></spk-condition>
+  </div>
+</div>

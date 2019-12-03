@@ -1,0 +1,10 @@
+<div class="px-4">
+  <div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" (reload)="loadData($event)">
+     <ng-template cuiColTpl="createdDate" let-row="row">
+        {{row.createdDate | date: 'yyyy-MM-dd'}}
+      </ng-template>
+
+    </cui-data-table>
+  </div>
+</div>

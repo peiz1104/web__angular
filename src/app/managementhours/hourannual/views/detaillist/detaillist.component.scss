@@ -1,0 +1,51 @@
+:host::ng-deep {
+    .container-fluid {
+        position: relative;
+        .actions {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+    }
+    .box-detail-hour-list {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 6px;
+        .simple-search-bar-search-box {
+            margin-top: 0px;
+            margin-left: 8px;
+        }
+        .simple-search-bar {
+            width: 90%!important;
+        }
+        .complex-search-bar-search-box {
+            margin-left: 40px;
+        }
+        .color-active {
+            color: #007bff;
+        }
+        button {
+            cursor: pointer;
+        }
+        .btn-group {
+            button {
+                cursor: pointer;
+                margin-right: 16px;
+                position: relative;
+                padding-left: 22px!important;
+                i {
+                    position: absolute;
+                    top: 2px;
+                    left: 4px;
+                }
+            }
+        }
+        .simple-search-bar {
+            float: left;
+            width: 100%;
+        }
+        .select-body {
+            padding: 10px;
+        }
+    }
+}

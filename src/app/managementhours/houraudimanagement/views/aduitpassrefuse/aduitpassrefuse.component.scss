@@ -1,0 +1,119 @@
+:host::ng-deep {
+    .container-fluid {
+        position: relative;
+        .actions {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+    }
+    .aduit-pass-refuse-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 16px;
+        .ant-form-item-control {
+            span {
+                display: inline-block;
+                width: 230px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #888;
+            }
+        }
+        .active {
+            color: #007eff;
+        }
+        .page-header {
+            position: relative;
+        }
+        .go-back-button {
+            position: absolute;
+            top: 10px;
+            right: 30px;
+        }
+        .detail-message {
+            overflow: hidden;
+            .card {
+                width: 900px;
+                margin: 0 auto;
+                background: #efef;
+                .form-group {
+                    margin-bottom: -10px;
+                }
+                .first-box {
+                    overflow: hidden;
+                    .show-name {
+                        float: left;
+                    }
+                    .show-content {
+                        float: left;
+                        margin-left: 12px;
+                    }
+                }
+                .ant-form-item {
+                    margin-bottom: 0px;
+                    .ant-form-item-control-wrapper {
+                        margin-left: 12px;
+                    }
+                }
+                .btn-group-pass-refuse {
+                    text-align: center;
+                }
+                .file-list-upload {
+                    .file-item,
+                    .upload-success {
+                        border: 1px dashed #28a745;
+                        margin: .225rem 0;
+                        border-radius: 2px;
+                        position: relative;
+                        height: 36px;
+                        .progress {
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            -moz-opacity: .5;
+                            opacity: .5;
+                            display: flex;
+                            overflow: hidden;
+                            font-size: 0.75rem;
+                            background-color: #e9ecef;
+                            border-radius: 0.25rem;
+                        }
+                        .item-remove {
+                            position: absolute;
+                            right: .75rem;
+                            top: .5rem;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+        .ant-row,
+        .ant-form-item {
+            width: 100%;
+        }
+        .ant-col-8 {
+            text-align: right;
+        }
+    }
+    .ant-modal {
+        #review {
+            width: 360px;
+            padding: 8px;
+            resize: none;
+        }
+    }
+    .user-list-modal {
+        .simple-search-bar {
+            width: 100%;
+        }
+        .butn-group {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+}

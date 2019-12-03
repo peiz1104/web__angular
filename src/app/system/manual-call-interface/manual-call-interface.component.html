@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">站点配置
+            <small>| 手动调用接口（不要随便使用哦）</small>
+        </h3>
+    </div>
+</div>
+<div class="manual-call-interface-works">
+    <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+        <div class="form-group row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="8">
+                    <label>培训类型</label>
+                </div>
+                <div [nzValidateStatus]="_form.controls.type" nz-form-control nz-col [nzSpan]="14">
+                    <nz-select formControlName="type" [nzShowSearch]="true" nzAllowClear [nzPlaceHolder]="'请选择类型'">
+                        <nz-option nzLabel="生成昨天的学时文件" nzValue="A"></nz-option>
+                        <nz-option nzLabel="生成昨天的人员文件" nzValue="B"></nz-option>
+                        <nz-option nzLabel="跟据培训班id推送授课记录" nzValue="C"></nz-option>
+                        <nz-option nzLabel="跟据讲师id推送授课记录" nzValue="D"></nz-option>
+                        <nz-option nzLabel="按培训班ID推送AMIS" nzValue="E"></nz-option>
+                        <nz-option nzLabel="按工号推送AMIS" nzValue="F"></nz-option>
+                        <nz-option nzLabel="推送昨天培训档案信息" nzValue="G"></nz-option>
+                        <nz-option nzLabel="更新培训班成绩" nzValue="H"></nz-option>
+                        <nz-option nzLabel="更新AMIS培训班成绩" nzValue="M"></nz-option>
+                        <nz-option nzLabel="测试推送AMIS成绩" nzValue="O"></nz-option>
+                        <nz-option nzLabel="按通过未通过培训班ID推送AMIS" nzValue="N"></nz-option>
+                        <nz-option nzLabel="按照老系统的方式传授课记录（根据培训班id）" nzValue="I"></nz-option>
+                        <nz-option nzLabel="按照老系统的方式传授课记录（每天推送前一天的）" nzValue="J"></nz-option>
+                      <nz-option nzLabel="按照老系统的方式传非制式授课记录(id)" nzValue="K"></nz-option>
+                      <nz-option nzLabel="按照老系统的方式传非制式授课记录（固定）" nzValue="L"></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="8">
+                    <label>开始时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="8">
+                    <label>结束时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="8">
+                    <label>培训班ID</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-input formControlName="trainclassId" [nzPlaceHolder]="'请输入培训班ID'"></nz-input>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="8">
+                    <label>讲师ID</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-input formControlName="teacherId" [nzPlaceHolder]="'请输入讲师ID'"></nz-input>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-7">
+                <div class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                            <button [nzLoading]="btnstate" nz-button [nzType]="'primary'">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

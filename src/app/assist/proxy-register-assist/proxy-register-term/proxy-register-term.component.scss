@@ -1,0 +1,70 @@
+:host::ng-deep {
+    .grantauthorization-box {
+        width: 100%;
+        margin: 15px auto;
+        padding: 4px 10px;
+        position: relative;
+        background: #fff;
+        .go-back {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .usernameWidth {
+            width: 200px;
+        }
+        .actionWidth {
+            width: 50px;
+        }
+        .cui-data-table-wrap {
+            .table {
+                thead {
+                    background: #efefef;
+                }
+            }
+        }
+        .modelName {
+            width: 76px;
+            display: block;
+            text-align: right;
+            float: left;
+            height: 28px;
+            line-height: 28px;
+        }
+        .inputModel {
+            width: 400px;
+            display: block;
+            float: left;
+        }
+        .header-box {
+            border-bottom: 1px solid #ccc;
+            h4 {
+                border-left: 2px solid green;
+                line-height: 30px;
+                padding-left: 10px;
+                margin-bottom: 6px;
+            }
+        }
+        .tab-select {
+            margin-top: 6px;
+            .list-tool-bar {
+                float: right;
+                position: relative;
+                bottom: 8px;
+            }
+            .ml-2 {
+                button {
+                    height: 31px;
+                }
+            }
+            .error-tip {
+                color: red;
+                font-size: 12px;
+                margin: 6px 0px;
+            }
+            .title-tip {
+                margin: 6px 0px;
+            }
+        }
+    }
+}

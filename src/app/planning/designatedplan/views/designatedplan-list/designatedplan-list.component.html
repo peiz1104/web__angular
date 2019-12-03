@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <!-- <h3 class="page-title">计划管理 <small>年度计划</small></h3> -->
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 指定年度计划</small>
+        </h3>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                基础配置
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                指定年度计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <form nz-form [formGroup]="validateForm" class="form-box">
+            <div nz-row class="form-row">
+                <div nz-form-item nz-col [nzSpan]="11">
+                    <div nz-form-label nz-col [nzSpan]="10">
+                        <label for="name">计划名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name" [nzType]="'name'" [nzPlaceHolder]="'请输入年度计划名称'" [nzSize]="'large'"></nz-input>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="userGroup">所属机构</label>
+                        </div>
+                        <div nz-form-control [nzValidateStatus]="validateForm.controls.userGroup" nz-col [nzSpan]="18">
+                            <spk-user-group-select [isRegion]="true" mode="multiple" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="3">
+                    <button (click)="_submitForm($event,validateForm.value)" nz-button type="button" [nzSize]="'large'">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="designatedPlans?.content" [pagination]="designatedPlans" [(selection)]="selection"
+            selectType="radio" (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="colname" let-row="row">
+                <div style="text-align:left;">
+                    <a *ngIf="row.publishStatus" [routerLink]="['../', row.id]">{{row.name}}</a>
+                    <span *ngIf="!row.publishStatus" class="text-secondary" title="该年度计划未发起填报，不能进行填报操作！">{{row.name}}</span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="colorgname" let-row="row">
+                <div style="text-align:left;">{{row.org.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colusername" let-row="row">
+                <div>{{row.createdByDisplayName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd hh:mm'}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

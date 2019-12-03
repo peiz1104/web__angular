@@ -1,0 +1,174 @@
+:host::ng-deep {
+    .complex-search-bar-search-box {
+        margin-left: 30px;
+    }
+    .list-search-bar {
+        display: none;
+    }
+    .checkedAll {
+        margin-left: 30px;
+        margin-top: 8px;
+    }
+    .bank {
+        width: 98%;
+        height: 1px;
+        margin: 0 auto;
+        background: #d6d6d6;
+        margin-bottom: 20px;
+    }
+    .page {
+        float: right;
+        margin-right: 20px;
+        .ant-pagination {
+            .ant-pagination-item-active {
+                a {
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .trainingClassContent {
+        width: 100%;
+        height: 90px;
+        overflow: hidden;
+        line-height: 90px;
+        .checkbox {
+            display: block;
+            float: left;
+            margin-left: 20px;
+        }
+        .img {
+            width: 120px;
+            height: 72px;
+            display: block;
+            float: left;
+            background: black;
+            margin-left: 20px;
+            border-radius: 6px;
+            img {
+                width: 100%;
+                height: 100%;
+                display: block;
+                border-radius: 6px;
+            }
+        }
+        .rightCon {
+            width: 70%;
+            margin-left: 20px;
+            height: 90px;
+            float: left;
+            .item {
+                width: 100%;
+                line-height: 22px;
+                height: 22px;
+                overflow: hidden;
+                .name {
+                    color: #000000;
+                    font-weight: bold;
+                    font-style: normal;
+                    font-size: 16px;
+                    &:hover {
+                        color: #1890ff;
+                        cursor: pointer;
+                    }
+                }
+                .detail {
+                    width: 30%;
+                    display: block;
+                    float: left;
+                    height: 35px;
+                }
+                span {
+                    display: block;
+                    float: left;
+                    width: 20%;
+                    height: 22px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap
+                }
+                span:first-child {
+                    display: block;
+                    float: left;
+                    width: 40%;
+                    height: 22px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap
+                }
+            }
+        }
+        .edit {
+            width: 9%;
+            float: left;
+            height: 90px;
+            line-height: 90px;
+            button {
+                width: 100%;
+            }
+        }
+    }
+    .listTab {
+        .ant-modal {
+            width: 1000px !important;
+        }
+        .information {
+            padding: 0px 14px;
+            .infor {
+                width: 100%;
+                overflow: hidden;
+                span {
+                    width: 50%;
+                    display: block;
+                    float: left;
+                    height: 30px;
+                    line-height: 30px;
+                    i {
+                        font-style: normal;
+                    }
+                }
+            }
+            .table-head {
+                background: #eee;
+                padding-left: 8px;
+            }
+            .title {
+                overflow: hidden;
+                .small-title {
+                    width: 6%;
+                    display: inline-block;
+                    line-height: 50px;
+                    height: 50px;
+                }
+                .big-title {
+                    width: 35%;
+                }
+                .big-title-td {
+                    width: 35%;
+                }
+                .middle-title {
+                    width: 20%;
+                }
+                .middle-title-td {
+                    width: 20%;
+                }
+                .small-title-td {
+                    text-align: center;
+                    width: 6%;
+                    display: block;
+                    float: left;
+                    line-height: 50px;
+                    height: 50px;
+                }
+                span {
+                    text-align: left;
+                    width: 30%;
+                    display: block;
+                    float: left;
+                    line-height: 50px;
+                    height: 50px;
+                }
+            }
+        }
+    }
+}

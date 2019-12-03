@@ -1,0 +1,27 @@
+<div class="input-group">
+  <input type="text" class="form-control" readonly [value]="value?.username">
+  <span class="input-group-addon" (click)="openLookup()">选择</span>
+</div>
+
+<ng-template #lookupDialog>
+  <h5 cui-layer-title>选择用户</h5>
+  <div cui-layer-content style="overflow:auto;">
+    <cui-data-table [columns]="columns" [data]="pagination?.content" [pagination]="pagination" selectType="radio" [(selection)]="selection"
+      [loading]="loading" (reload)="loadList($event)">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名称">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="loadList()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+    </cui-data-table>
+  </div>
+  <div cui-layer-actions class="text-right">
+    <button type="button" class="btn btn-primary" (click)="ok($event)">确定</button>
+    <button type="button" class="btn btn-secondary" (click)="cancel($event)">取消</button>
+  </div>
+</ng-template>

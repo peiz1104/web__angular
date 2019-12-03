@@ -1,0 +1,127 @@
+<div class="teacher-config">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" name="username" [(ngModel)]="username" placeholder="请输入讲师工号">
+                            <input style="margin-left:4px" type="text" class="form-control input-lg" name="nameBig" [(ngModel)]="nameBig" placeholder="请输入讲师姓名">
+                            <select style="margin-left:4px" class="select-box form-control input-lg" name="teacherTyeBig" [(ngModel)]="teacherTyeBig"
+                                placeholder="选择讲师类型">
+                                <option value='' disabled selected hidden>请选择讲师</option>
+                                <option value="">全部</option>
+                                <option value="EXTERNAL">外部讲师</option>
+                                <option value="FULLTIME">专职讲师</option>
+                                <option value="PARTTIME">兼职讲师</option>
+                            </select>
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="addstpteacher($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia" style="font-size:12px"></i>
+                        <span>添加</span>
+                    </button>
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="mutipledelete($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-shanchu"></i>
+                        <span>删除</span>
+                    </button>
+                </div>
+            </ng-template>
+
+            <ng-template cuiColTpl="teacherNo" let-row="row">
+                <span> {{row.teacher?.teacherNo}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="usernameCol" let-row="row">
+                <span> {{row.teacher?.username || '--'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="name" let-row="row">
+                <span>{{row.teacher?.name}}</span>
+            </ng-template>
+            <!-- <ng-template cuiColTpl="sex" let-row="row">
+                <span style="color:#007bbf;" *ngIf="row.teacher.sex=='male'">男</span>
+                <span style="color:red;" *ngIf="row.teacher.sex=='Female'">女</span>
+            </ng-template> -->
+            <ng-template cuiColTpl="teacherType" let-row="row">
+                <span>{{row.teacher.teacherType=='EXTERNAL'?'外部讲师':(row.teacher.teacherType=='FULLTIME'?'专职讲师':(row.teacher.teacherType=='PARTTIME'?'兼职讲师':''))}}</span>
+            </ng-template>
+
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <span>{{namePath(row.teacher?.userGroup?.namePath)}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="phone" let-row="row">
+                <span>{{row.teacher?.phoneNumber}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="startDateCol" let-row="row">
+                <span>{{(row.startDate | date:"yyyy-MM-dd") ||'---' }}</span>
+            </ng-template>
+            <ng-template cuiColTpl="endDateCol" let-row="row">
+                <span>{{(row.endDate | date:"yyyy-MM-dd") ||'---'}}</span>
+            </ng-template>
+
+        </cui-data-table>
+    </nz-spin>
+</div>
+
+<!-- 添加讲师列表 -->
+<nz-modal [nzZIndex]="1001" *ngIf="isVisible" [nzVisible]="isVisible" [nzConfirmLoading]="loadingstate" [nzWidth]="900" [nzTitle]="'添加讲师'"
+    [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)" class="teacher-modal">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="teacherspinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="teachercolums" [data]="teacherListData?.content" [pagination]="teacherListData" selectType="checkbox"
+                [(selection)]="teacherselection" (reload)="loadTeacherData($event)">
+
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" name="teacherNo" [(ngModel)]="teacherNo" placeholder="请输入讲师编号">
+                                <input style="margin-left:4px" type="text" class="form-control input-lg" name="name" [(ngModel)]="name" placeholder="请输入讲师姓名">
+                                <select style="margin-left:4px" class="select-box form-control input-lg" name="teacherType" [(ngModel)]="teacherType" placeholder="选择讲师类型">
+                                    <option value='' disabled selected hidden>请选择讲师</option>
+                                    <option value="">全部</option>
+                                    <option value="EXTERNAL">外部讲师</option>
+                                    <option value="FULLTIME">专职讲师</option>
+                                    <option value="PARTTIME">兼职讲师</option>
+                                </select>
+                            </div>
+                            <div class="form-group ml-2">
+                                <button type="button" class="btn btn-primary" (click)="searchTeacherData()">搜索</button>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template cuiColTpl="name" let-row="row">
+                    <span>{{row.teacherType=='EXTERNAL'?(row.name):(row.user ? row.user.displayName:'')}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="teacherType" let-row="row">
+                    <span>{{row.teacherType=='EXTERNAL'?'外部讲师':(row.teacherType=='FULLTIME'?'专职讲师':(row.teacherType=='PARTTIME'?'兼职讲师':''))}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="teacherLevel" let-row="row">
+                    <!-- 兼职 -->
+                    <span *ngIf="row.teacherType=='PARTTIME'">
+                        {{row.rank=='JUNIOR'?'初级讲师':(row.rank=='LECTURER'?'中级讲师':(row.rank=='SENIOR'?'高级讲师':''))}}
+                    </span>
+                    <!-- 专职讲师 -->
+                    <span *ngIf="row.teacherType=='FULLTIME'">
+                        {{row.rank=='PREPARATORY'?'预备讲师':(row.rank=='ASSISTANT'?'助理讲师':(row.rank=='SENIOR'?'高级讲师':(row.rank=='LECTURER'?'中级讲师':'')))}}
+                    </span>
+                    <!-- 外部讲师 -->
+                    <span *ngIf="row.teacherType=='EXTERNAL'">
+                        {{row.rank=='PREPARATORY'?'讲师':(row.rank=='ASSISTANT'?'副教授':(row.rank=='LECTURER'?'教授':('社会培训机构讲师')))}}
+                    </span>
+                </ng-template>
+
+            </cui-data-table>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

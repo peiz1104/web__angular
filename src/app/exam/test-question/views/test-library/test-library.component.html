@@ -1,0 +1,33 @@
+<div class="test-library-body">
+    <div class="top-bread">
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                在线考试
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a (click)="goback()">试题管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                试题分类
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>试题库</small>
+            </h5>
+        </div>
+    </div>
+    <div class="content-body" nz-row>
+        <div *ngFor="let data of questionTypeData">
+            <!-- *ngIf="data.isStart" -->
+            <div nz-col [nzSpan]="8" class='test-library-li'>
+                <button type="button" class="btn btn-outline-primary" (click)="goAdd(data)">
+                    <i class="fa fa-plus"></i> {{data.typeName}}</button>
+                <div class="test-library-info">{{data.typeDesc||'暂无描述'}}</div>
+            </div>
+        </div>
+    </div>
+</div>

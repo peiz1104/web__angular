@@ -1,0 +1,90 @@
+.site{
+    padding: 10px 20px;
+}
+.picture-tab {
+    overflow: hidden;
+    border: 1px solid #e6e6e6; 
+    .picture-tab-left {
+        float: left;
+        width: 150px;
+        background-color: #fff;
+        padding: 10px;
+        .picture-img-url {
+            display: block;
+            width: 100%;
+            height: 78px;
+        }
+        
+        .picture-title{
+            line-height: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            color: #333;
+        }
+        .picture-instruct {
+            height: 94px;
+            line-height: 18px;
+            overflow: hidden;
+            color:#999;
+        }
+    }
+    .picture-tab-right {
+        float: left;
+        width: 215px;
+        padding: 10px;
+        margin-left:3px;
+        background-color: #fff;
+        .picture-news-single {
+            border-bottom: 1px solid #e6e6e6;
+            &:nth-child(1){
+                padding-bottom: 5px;
+            }
+            &:nth-child(2) {
+                padding: 5px 0;
+            }
+            &:last-child {
+                padding-top: 5px;
+                border-bottom: none;
+            }
+            .single-img {
+                float: left;
+                img {
+                    float: left;
+                    width: 100px;
+                }
+            }
+            .single-content {
+                float: left;
+                width: 90px;
+                margin-left: 5px;
+                .single-title {
+                    font-size: 14px;
+                    height: 20px;
+                    line-height: 20px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .single-detail {
+                    height: 40px;
+                    line-height: 20px;
+                    overflow: hidden;
+                    color: #999;
+                }
+            }
+        }
+    }
+}
+:host ::ng-deep{
+    .ant-modal-footer{
+        border-top: none;
+    }
+    .ant-modal-close{
+        outline: none;
+    }
+    .ant-form-item{
+        margin-bottom: 0px;
+    }
+}

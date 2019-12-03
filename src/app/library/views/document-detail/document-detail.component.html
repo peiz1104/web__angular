@@ -1,0 +1,48 @@
+<!-- <cui-layout>
+    <cui-layout-sider width="160" style="background:#f8f8fa">
+        <div style="background: #f0f3fa;">
+            <a class="text-center d-block p-4" [routerLink]="['../','list']">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        </div>
+
+        <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+            <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">基本信息</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                <a [routerLink]="['./', 'condition']" routerLinkActive #rlaCondition="routerLinkActive">注册条件</a>
+            </li>
+        </ul>
+    </cui-layout-sider>
+
+    <cui-layout>
+        <cui-layout-content>
+            <router-outlet></router-outlet>
+        </cui-layout-content>
+    </cui-layout>
+</cui-layout> -->
+<div class="document-list-dom">
+    <div class="document-list-left">
+        <cui-layout-sider width="160" style="background:#f8f8fa">
+            <div style="background: #f0f3fa;">
+                <!-- <h5>{{trainingClass?.name}}</h5> -->
+                <a class="text-center d-block p-4" [routerLink]="['../','list']">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            </div>
+
+            <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+                <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                    <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">基本信息</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                    <a [routerLink]="['./', 'condition']" routerLinkActive #rlaCondition="routerLinkActive">注册条件</a>
+                </li>
+            </ul>
+        </cui-layout-sider>
+    </div>
+    <div class="document-list-right">
+        <router-outlet></router-outlet>
+    </div>
+</div>

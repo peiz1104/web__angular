@@ -1,0 +1,971 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="page-header">
+            <h3 class="page-title">计划管理
+                <small [routerLink]="['../../../../../','list']">| 年度计划</small>
+                <small>| 查看填报子计划</small>
+            </h3>
+            <div class="actions pull-right">
+                <button [routerLink]="['../../../','list']" type="button" class="btn btn-light">
+                    <span>
+                        返回列表
+                        <i class="fa fa-level-up"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../../../', 'list']">年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">年度子计划列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                查看填报子计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="page-body">
+            <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" class='tabs-box'>
+                <nz-tab *ngIf="type=='CT'">
+                    <ng-template #nzTabHeading>
+                        境内内部培训
+                    </ng-template>
+                    <div class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>基本信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="projectNumber">计划编号：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.projectNumber}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="name"> 计划名称：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.name}}</div>
+                                            <div style="color: #f04134;">注：计划名称也是培训班名称</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDate"> 培训时间：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingDate}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingPlace"> 培训地点：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingPlace}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDays"> 培训天数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingDays}}
+                                                <span>(天)</span>
+                                            </div>
+                                            <div style="color: #f04134;">注：报到与返程共计0.5天</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingNumber"> 培训人数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingNumber}}
+                                                <span>(人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="correspondingNumber"> 本级人数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.correspondingNumber}}
+                                                <span>(人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="quotaAllocation">培训名额分配情况：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box' [ngClass]="{'hiddenis': !isHidden}" class="up_down" style="cursor: pointer;">
+                                                <i *ngIf="InternalTrainingInData.quotaAllocation.length>0" class="anticon anticon-up up_up" [ngStyle]="{display:!isHidden ? 'none' : 'block'}"
+                                                    (click)="handelHidden()"></i>
+                                                <i *ngIf="InternalTrainingInData.quotaAllocation.length>0" class="anticon anticon-down down_down" [ngStyle]="{display:!isHidden ? 'block' : 'none'}"
+                                                    (click)="handelHidden()"></i>
+                                                <p *ngFor="let it of InternalTrainingInData.quotaAllocation">
+                                                    {{it.userGroup.name}} : {{it.quotaCount}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>培训信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingObject"> 培训对象：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingObject}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li' *ngIf="annualSubPlan.trainingLevel">
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="traininglevel">培训级别：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.personnelClassification.name}} / {{InternalTrainingInData.trainingClassification.name}}
+                                                / {{InternalTrainingInData.trainingLevel.name}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingContent">培训内容：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingContent}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>培训经费</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingCostPer">培训经费标准：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingCostPer}}
+                                                <span>(元/人/天)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="lectuerTransportationFee">讲师交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.lectuerTransportationFee}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="lectuerBoard">讲师食宿：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.lectuerBoard}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="outsideLectuerPretaxFee">外部讲师税前授课费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.outsideLectuerPretaxFee}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="commission">佣金：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.commission}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="wages">工资：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.wages}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="otherCosts">其它费用：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.otherCosts}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trafficFee">本级交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trafficFee}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li' *ngIf="InternalTrainingInData.quotaAllocation.length > 0">
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trafficFeeLower">下级交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trafficFeeLower}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingBudget">培训经费预算：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.trainingBudget}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="expenseLevel">本级公司承担费用：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.expenseLevel}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="expenseLower">下级公司承担费用：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.expenseLower}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="remark">备注：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InternalTrainingInData.remark}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li' *ngIf="isTypeOfZ">
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="remark">已添加课程：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <button nz-button [nzType]="'primary'" (click)="handelSee()">
+                                                <span>查看</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-row class='add-center add-btn-div'>
+                        <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="!queryParamsType&&(historyBackType == 0 || historyBackType == 1)"
+                            [routerLink]="['../../../list']">返回</button>
+                        <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="!queryParamsType&&(historyBackType == 2)" [routerLink]="['../../../copy']">返回</button>
+                        <button *ngIf="queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="goback($event)">返回</button>
+                        <!-- <button *ngIf="!queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" [routerLink]="['../../../list']">返回</button> -->
+                    </div>
+                </nz-tab>
+                <nz-tab *ngIf="type=='CD'">
+                    <ng-template #nzTabHeading>
+                        境内外部培训
+                    </ng-template>
+                    <div class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>基本信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="projectNumber">计划编号：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.projectNumber}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="name">计划名称：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.name}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDate">培训时间：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingDate}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingPlace">培训地点：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingPlace}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDays">培训天数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingDays}}
+                                                <span>(天)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingNumber">培训人数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingNumber}}
+                                                <span>(人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>培训信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingObject">培训对象：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingObject}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingContent">培训内容：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingContent}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class="tabs-title">
+                                        <h3> 培训经费</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trafficFee">本级交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trafficFee}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingCostPer">人均培训费用：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingCostPer}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingBudget">培训经费预算：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.trainingBudget}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="remark">备注：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{InExternalTrainingData.remark}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-row class='add-center add-btn-div'>
+                        <button *ngIf="!queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" [routerLink]="['../../../list']">返回</button>
+                        <button *ngIf="queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="goback($event)">返回</button>
+                    </div>
+                </nz-tab>
+                <nz-tab *ngIf="type=='OT' || type=='OD'">
+                    <ng-template #nzTabHeading>
+                        境外培训
+                    </ng-template>
+                    <div class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>基本信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="projectNumber">计划编号：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.projectNumber}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="name">计划名称：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.name}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDate">培训时间：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingDate}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingPlace">培训地点：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingPlace}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDays">培训天数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingDays}}
+                                                <span>(天)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingNumber">培训人数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingNumber}}
+                                                <span>(人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="planType">类型：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box' *ngIf="OverseasTrainingData.planType == 'OT'">境外内部培训</div>
+                                            <div class='input-box' *ngIf="OverseasTrainingData.planType == 'OD'">境外外部培训</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>培训信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingObject">培训对象：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingObject}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingContent">培训内容：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingContent}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class="tabs-title">
+                                        <h3> 培训经费</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingCostPer">培训经费标准：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingCostPer}}
+                                                <span>(元/人/天)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trafficFee">本级交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trafficFee}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingBudget">培训经费预算：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.trainingBudget}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="remark">备注：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{OverseasTrainingData.remark}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-row class='add-center add-btn-div'>
+                        <button *ngIf="!queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" [routerLink]="['../../../list']">返回</button>
+                        <button *ngIf="queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="goback($event)">返回</button>
+
+                    </div>
+                </nz-tab>
+                <nz-tab *ngIf="type=='RE'">
+                    <ng-template #nzTabHeading>
+                        课件研发
+                    </ng-template>
+                    <div class="childrenplan-form-box">
+                        <div class="childrenplan-form-body" nz-row>
+                            <div class="tabs-body">
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>基本信息</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="projectNumber">计划编号：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.projectNumber}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="name">计划名称：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.name}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDate">研发时间：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.trainingDate}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingPlace">研发地点：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.trainingPlace}}</div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingDays">研发天数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.trainingDays}}
+                                                <span>(天)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingNumber">研发人数：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.trainingNumber}}
+                                                <span>(人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="researchContent">研发内容：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.researchContent}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div class='tabs-title'>
+                                        <h3>研发经费</h3>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="meetingCosts">会议费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.meetingCosts}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="researchCost">研发费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.researchCost}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="transportCosts">交通费：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.transportCosts}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="trainingBudget">研发经费预算：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.trainingBudget}}
+                                                <span>(元)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="li">
+                                    <div nz-row class='input-box-li'>
+                                        <div nz-col [nzSpan]="layoutData.layout1">
+                                            <div class='lable-box'>
+                                                <label for="remark">备注：</label>
+                                            </div>
+                                        </div>
+                                        <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                            <div class='input-box'>{{ResearchDevelopmentCoursewareData.remark}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-row class='add-center add-btn-div'>
+                        <button *ngIf="!queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" [routerLink]="['../../../list']">返回</button>
+                        <button *ngIf="queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="goback($event)">返回</button>
+                    </div>
+                </nz-tab>
+                <nz-tab *ngIf="type=='EL'">
+                    <ng-template #nzTabHeading>
+                        其他
+                    </ng-template>
+                    <div class="childrenplan-form-box">
+                        <div class="childrenplan-form-body childrenplan-form-body2">
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="projectNumber">计划编号：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box'>{{OtherData.projectNumber}}</div>
+                                </div>
+                            </div>
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="name">计划名称：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box'>{{OtherData.name}}</div>
+                                </div>
+                            </div>
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="category">类型：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box' *ngIf="OtherData.category == 'PURCHASE'">购买培训教材</div>
+                                    <div class='input-box' *ngIf="OtherData.category == 'LECTURE'">讲座</div>
+                                    <div class='input-box' *ngIf="OtherData.category == 'OTHERS'">其他</div>
+                                </div>
+                            </div>
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="trainingBudget">培训经费预算：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box'>{{OtherData.trainingBudget}}
+                                        <span>(元)</span>
+                                        <span *ngIf="OtherData.isTrainingBudget">(占用培训预算)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="trainingContent">培训内容：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box'>{{OtherData.trainingContent}}</div>
+                                </div>
+                            </div>
+                            <div nz-row class='input-box-li'>
+                                <div nz-col [nzSpan]="layoutData.layout1">
+                                    <div class='lable-box'>
+                                        <label for="remark">备注：</label>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="layoutData.layout2" class='input-contoner'>
+                                    <div class='input-box'>{{OtherData.remark}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-row class='add-center add-btn-div'>
+                        <button *ngIf="queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="goback($event)">返回</button>
+                        <button *ngIf="!queryParamsType" nz-button [nzType]="'primary'" [nzSize]="'large'" [routerLink]="['../../../list']">返回</button>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </div>
+    <nz-modal *ngIf="isVisibleAddPlan" [nzVisible]="isVisibleAddPlan" [nzTitle]="'课程列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancelAdd($event)"
+        (nzOnOk)="handleOkAdd($event)">
+        <ng-template #modalContent>
+            <div>
+                <cui-data-table [columns]="column" [data]="dat?.content" [pagination]="dat" selectType="checkbox" [(selection)]="selectio"
+                    (reload)="loadDat($event)">
+
+                    <ng-template #simpleSearch>
+                        <ng-container [ngTemplateOutlet]="simpleSearchTpl"></ng-container>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="thumbnail" let-row="row">
+                        <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+                    </ng-template>
+                    <ng-template cuiColTpl="nameAndCode" let-row="row">
+                        <h5>{{row.name}}</h5>
+                        <span>{{row.code}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="typeAndDuration" let-row="row">
+                        <div>{{_getCourseTypeText(row.courseType)}}</div>
+                        <div>课时: {{row.period}}</div>
+                    </ng-template>
+                    <ng-template cuiColTpl="orgAndCate" let-row="row">
+                        <div>{{row.userGroup?.name}}</div>
+                        <div>{{row.category?.name}}</div>
+                    </ng-template>
+                </cui-data-table>
+            </div>
+        </ng-template>
+    </nz-modal>

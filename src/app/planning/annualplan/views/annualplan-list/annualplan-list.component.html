@@ -1,0 +1,194 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 年度计划</small>
+        </h3>
+    </div>
+    <!-- <div class="page-header">
+        <h3 class="page-title">计划管理 <small>年度计划</small></h3>
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                年度计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div> -->
+    <div class="main">
+        <div class="search">
+            <span class="nameOfTheYearValue">
+                年度计划名称：
+                <nz-input style="width:140px" [(ngModel)]="nameOfTheYearValue" [nzPlaceHolder]="'请输入年度计划名称'"></nz-input>
+            </span>
+            <span class="examine">
+                审核状态：
+                <nz-select style="width: 120px;" [(ngModel)]="selectedOption" [nzPlaceHolder]="'全部'" nzAllowClear>
+                    <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option">
+                    </nz-option>
+                </nz-select>
+            </span>
+            <span class="examine">
+                所属组织：
+                <div class="examineSelect">
+                    <spk-user-group-select [isRegion]="true" mode="multiple" [(ngModel)]="userGroup"></spk-user-group-select>
+                </div>
+            </span>
+            <button class="searchContent" nz-button [nzType]="'primary'" (click)="handelClickSeach()">
+                <i class="anticon anticon-search"></i>
+                <span>查询</span>
+            </button>
+        </div>
+        <div class="operation">
+            <button nz-button [nzType]="'primary'" [routerLink]="['../', 'add']" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:ADD'}">
+                <span>创建年度计划</span>
+            </button>
+            <button nz-button [nzType]="'primary'" (click)="publish()" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:PUBLISH'}">
+                <span>发起计划填报</span>
+            </button>
+            <button nz-button [nzType]="'primary'" (click)="disPublish()" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:PUBLISH'}">
+                <span>取消计划填报</span>
+            </button>
+            <button nz-button [nzType]="'primary'" (click)="commit()" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:SUBMIT'}">
+                <span>提交计划审核</span>
+            </button>
+            <button nz-button [nzType]="'primary'" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:REVIEW'}" (click)="approve()">
+                <span>审核</span>
+            </button>
+            <button nz-button [nzType]="'primary'" *spkAuthzIf="{hasPermission: 'PLANNING:ANNUAL_PLAN:REVIEW_CANCEL'}" (click)="revoke()">
+                <span>撤销审核</span>
+            </button>
+        </div>
+        <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="_isSpinning">
+            <div style="min-height:200px;">
+                <div class="ContentOfTheAnnualPlan" *ngFor="let item of annualPlans">
+                    <span class="checkbox">
+                        <label nz-checkbox [(ngModel)]="item.id == id" (ngModelChange)="handelChecked($event,item)">
+                        </label>
+                    </span>
+                    <div class="AnnualPlanDetail">
+                        <h4 class="title" *ngIf="item.publishStatus">
+                            <a [routerLink]="['../', item.id ,'childrenplan']" [queryParams]="{approvalStatus:item.approvalStatus}">{{item.name}}</a>
+                            <button style="float: right;margin-right: 50px;margin-top:10px;" [routerLink]="['../', item.id ,'childrenplan']" [queryParams]="{approvalStatus:item.approvalStatus}"
+                                nz-button [nzType]="'primary'">
+                                <span>进入填报</span>
+                            </button>
+                            <!-- <a [routerLink]="['../', item.id ,'childrenplan']" [queryParams]="{approvalStatus:item.approvalStatus}" style="float: right;margin-right: 50px;background:#007bff; border-radius:4px;color:#fff;padding: 0px 6px; font-size: 14px; height: 30px;line-height: 30px;margin-top: 6px;">进入填报</a> -->
+                        </h4>
+                        <h4 class="title" title="该年度计划未发起填报，不能进行填报操作！" *ngIf="!item.publishStatus">
+                            <a>{{item.name}}</a>
+                            <button [disabled]="true" style="float:right;margin-right:50px;margin-top:10px" nz-button [nzType]="primary">
+                                <span>进入填报</span>
+                            </button>
+                            <!-- <a style="float: right;margin-right: 50px;color:#fff;background:#e5e5e5;padding: 0px 6px; font-size: 14px; height: 30px;line-height: 30px;margin-top: 6px;">进入填报</a> -->
+                        </h4>
+                        <div class="content">
+                            <span style="width:20%">
+                                <p>培训预算：
+                                    <i>￥{{getMoneyType(item?.trainingBudget)}}</i>
+                                </p>
+                                <p>培训机动预算：
+                                    <i (click)="handelTrainingBudget(item.id)" style="cursor: pointer;" title="培训机动预算=年度培训预算-未执行计划预算（本级预算）-已执行但未结班培训班动支费用-已结班实际费用-本级交通费-其它费用中培训费用-考试费用（开始时间属于本年度）">点击查看</i>
+                                </p>
+                            </span>
+                            <span style="width:18%">
+                                <p>研发预算：
+                                    <i>￥{{getMoneyType(item?.researchBudget)}}</i>
+                                </p>
+                                <p>研发机动预算：
+                                    <i (click)="showResearchBudget(item.id)" style="cursor: pointer;" title="研发机动预算计算公式 ：研发机动预算=年度培训预算-未执行计划预算-已执行但未结项研发动支费用-已结项实际费用-本级交通费">点击查看</i>
+                                </p>
+                            </span>
+                            <span style="width:20%">
+                                <p>总预算：
+                                    <i>￥{{getMoneyType(item.researchBudget + item.trainingBudget)}}</i>
+                                </p>
+
+                                <p>创建日期：
+                                    <i>{{item.createdDate | date:'yyyy-MM-dd hh:mm'}}</i>
+                                </p>
+                            </span>
+                            <span style="width:15%">
+                                <p>发起人：
+                                    <i>{{item.createdByDisplayName}}</i>
+                                </p>
+                                <p>发布状态：
+                                    <i *ngIf="item.publishStatus">已发布</i>
+                                    <i *ngIf="!item.publishStatus">未发布</i>
+                                </p>
+                            </span>
+                            <span style="width:15%">
+                                <p>所属机构：
+                                    <i>{{item.org.name}}</i>
+                                </p>
+                                <p>审核状态：
+                                    <i *ngIf="item.approvalStatus == 'N'" class="text-success">未提交</i>
+                                    <i *ngIf="item.approvalStatus == 'A'" class="text-warning">待审核</i>
+                                    <i *ngIf="item.approvalStatus == 'P'" class="text-warning">已通过</i>
+                                    <i *ngIf="item.approvalStatus == 'R'" class="text-warning">已拒绝</i>
+                                </p>
+                            </span>
+                            <span style="width:10%">
+                                <p>操作：
+                                    <i *ngIf="!item.publishStatus" class="iconfont icon-bianji-copy" title="编辑" [routerLink]="['../', item.id]" style="cursor: pointer;color:#0343ff"></i>
+                                    <i *ngIf="item.publishStatus" title="已发布的年度计划不能编辑" style="color:#000000" class="iconfont icon-bianji-copy"></i>
+                                    &nbsp;&nbsp;
+                                    <i class="iconfont icon-shanchu" style="color: #ff3d3d;" (click)="delete(item)" style="cursor: pointer;"></i>
+                                </p>
+                                <p>审核意见：
+                                    <i class="iconfont icon-yanjing-tianchong" (click)="showApprovalInfo(item)" style="cursor: pointer;"></i>
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" *ngIf="annualPlans">
+                    <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="nzPageSize" [nzTotal]="total" (nzPageIndexChange)="handelChangePage($event)"></nz-pagination>
+                </div>
+            </div>
+        </nz-spin>
+    </div>
+
+</div>
+<nz-modal [nzVisible]="isVisibleApproval" [nzTitle]="'审批记录'" [nzContent]="approvalModalContent" (nzOnCancel)="handleCancelApproval($event)"
+    [nzWidth]="1000" [nzFooter]="false">
+    <ng-template #approvalModalContent>
+        <cui-data-table [columns]="approvalColumns" [data]="approvalInfos" [(selection)]="approvalInfoSelection">
+            <ng-template cuiColTpl="colcreatedbydisplayname" let-row="row">
+                <div>{{row.createdByDisplayName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colusergroupname" let-row="row">
+                <div>
+                    <ul class="mb-4 d-flex">
+                        <li *ngFor="let it of getPath(row.userGroup)">/ {{it}} </li>
+                    </ul>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colapprovalstatus" let-row="row">
+                <span *ngIf="row.approvalStatus == 'P'">通过</span>
+                <span *ngIf="row.approvalStatus == 'R'">拒绝</span>
+                <span *ngIf="row.approvalStatus == 'N'">撤销</span>
+            </ng-template>
+            <ng-template cuiColTpl="colcomments" let-row="row">
+                <div>{{row.comments}}</div>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+</nz-modal>
+
+<nz-modal [nzVisible]="isVisible" [nzTitle]="'审核'" [nzContent]="commitModalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)"
+    nzOkText="通过" nzCancelText="关闭">
+    <ng-template #commitModalContent>
+        审核意见：
+        <nz-input [(ngModel)]="message" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="''"></nz-input>
+        <button class='rejectBtn' nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="handleNO($event)">
+            拒绝
+        </button>
+    </ng-template>
+</nz-modal>

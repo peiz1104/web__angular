@@ -1,0 +1,83 @@
+:host::ng-deep {
+    .view-box {
+        position: absolute;
+        margin-bottom: 20px;
+    }
+    .default-box {
+        width: 85%;
+        margin: 20px auto;
+    }
+    img {
+        // width: 100%;
+    }
+    .lispan {
+        height: 30px;
+        width: 80px;
+        line-height: 30px;
+        // text-align: center;
+        // background: #eee;
+        // border: 1px solid #eee;
+    }
+    .handler {
+        background: #333;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .test {
+        width: 100%;
+        position: relative;
+        background-color: #ddd;
+        border: 1px solid #ddd;
+        overflow: auto;
+    }
+    .test i {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    .drag.on {
+        z-index: 9;
+    }
+    ul {
+        list-style: none;
+        li {
+            &:hover {
+                border: 1px solid #0e77ca;
+            }
+        }
+    }
+    .anticon {
+        color: white;
+        background-color: green;
+        border-radius: 50%;
+        position: absolute;
+        right: -5px;
+        top: -5px;
+    }
+    .ant-btn {
+        position: relative;
+    }
+    .drag-card-box {
+        margin: 0 auto;
+        width: 90%;
+        .ant-card {
+            .ant-card-body {
+                padding: 12px;
+                text-align: center;
+                .btnbox {
+                    display:block;
+                    margin-bottom: 15px;
+                    margin-right: 10px;
+                    button {
+                        width: 80px;
+                        height: 30px;
+                        line-height: 30px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<div class="train-class-person-message-list">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>考勤信息个人考勤列表</small>
+            </h5>
+        </div>
+    </div>
+    <div class="form-box">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                    [(selection)]="selection" (reload)="loadData($event)">
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                        </div>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <i title="查看" (click)="viewpersondetail(row.id)" class="anticon anticon-eye" style="cursor:pointer;font-size:16px;color:#007bbf;"></i>
+                    </ng-template>
+
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

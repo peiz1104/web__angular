@@ -1,0 +1,189 @@
+:host::ng-deep {
+    .import-box {
+        padding: 0 10px;
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+        }
+        .import-header {
+            overflow: hidden;
+            height: 140px;
+            .img {
+                float: left;
+                margin-right: 20px;
+            }
+            .paper-message {
+                float: left;
+                position: relative;
+                top: 40px;
+                .title {
+                    font-weight: bold;
+                }
+                .publish-status {
+                    margin-top: 14px;
+                    .publish-color {
+                        color: #dd5a43;
+                    }
+                }
+            }
+            border-bottom:1px solid #1b6aaa;
+        }
+        .import-content {
+            box-shadow: 0px 1px 3px;
+            background: #f9f9f9;
+            min-height: 200px;
+            margin-top: 10px;
+            padding: 22px 50px;
+            .operating-instructions {
+                color: #393939;
+                font-size: 14px;
+                a {
+                    color: #438eb9;
+                    text-decoration: none;
+                    margin-right: 18px;
+                }
+                .ant-modal {
+                    width: 800px;
+                    position: relative;
+                    width: auto;
+                    left: 50%;
+                    margin-left: -400px;
+                    top: 100px;
+                    padding-bottom: 24px;
+                    .ant-modal-content {
+                        width: 800px;
+                    }
+                    .modal-header-title {
+                        color: #888;
+                        font-size: 14px;
+                        font-weight: bold;
+                        line-height: 40px;
+                    }
+                    .matters-needing-attention {
+                        line-height: 26px;
+                        color: #333;
+                        padding-left: 20px;
+                        word-break: break-all;
+                        .sub-des {
+                            padding-left: 20px;
+                            word-break: break-all;
+                        }
+                    }
+                }
+            }
+            .import-from {
+                .upload-box {
+                    position: relative;
+                    margin-top: 12px;
+                    .header-introduce {
+                        font-size: 14px;
+                        color: #393939;
+                        margin-right: 14px;
+                    }
+                    .anticon,
+                    .anticon-upload {
+                        border: 1px dashed #d9d9d9;
+                        .word-des {
+                            color: #d9d9d9;
+                            position: relative;
+                            top: 4px;
+                            left: -164px;
+                        }
+                    }
+                    .anticon-upload:before {
+                        position: absolute;
+                        top: 30px;
+                        left: 244px;
+                        font-size: 25px;
+                        color: #b5b5b5;
+                    }
+                }
+                .show-upload-name {
+                    margin-top: 14px;
+                    overflow: hidden;
+                    position: relative;
+                    height: 36px;
+                    .upload-file-name {
+                        float: left;
+                        font-size: 14px;
+                        padding-top: 4px;
+                        color: #393939;
+                    }
+                    .ant-input-wrapper,
+                    .ng-pristine,
+                    .ng-valid,
+                    .ng-touched {
+                        position: absolute;
+                        left: 64px;
+                        width: 86%;
+                    }
+                }
+                .test-save {
+                    margin-top: 14px;
+                    .save-questions-name {
+                        font-size: 14px;
+                        color: #393939;
+                        margin-right: 12px;
+                    }
+                }
+                .affiliated-institution {
+                    margin-top: 14px;
+                    height: 36px;
+                    position: relative;
+                    .ant-input-wrapper,
+                    .ng-pristine,
+                    .ng-valid,
+                    .ng-touched {
+                        position: absolute;
+                        top: 2px;
+                        left: 66px;
+                        width: 78%;
+                    }
+                    .insitution {
+                        font-size: 14px;
+                        color: #393939;
+                        margin-right: 12px;
+                        position: relative;
+                        top: 4px;
+                    }
+                }
+                .test-publish {
+                    margin-top: 14px;
+                    .publish {
+                        font-size: 14px;
+                        color: #393939;
+                        margin-right: 64px;
+                    }
+                }
+                .submit-data {
+                    margin-top: 40px;
+                    position: relative;
+                    height: 40px;
+                    .btn {
+                        position: absolute;
+                        left: 50%;
+                        margin-left: -80px;
+                        button {
+                            margin-right: 12px;
+                        }
+                    }
+                }
+                .custom-upload {
+                    .btn,
+                    .btn-primary,
+                    .cui-fileupload-choose {
+                        opacity: 0;
+                        z-index: 10;
+                        width: 300px;
+                        height: 80px;
+                        border: 1px dashed #6c6c6c;
+                    }
+                }
+            }
+        }
+    }
+}

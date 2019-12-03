@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">接站地点
+      <small>| 查看接站地点列表</small>
+    </h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-primary" (click)="handelRouterLink()">
+        <i class="fa fa-plus"></i> 接站地点</button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <cui-data-table [columns]="columns" [data]="chaZhanLocation" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+      (select)="onSelect($event)" [loading]="loading">
+
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入接站地点名称">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+
+
+      <ng-template #rowActions let-row="row">
+        <a href="javascript:;" (click)="edit(row.id)">编辑</a>
+        <a href=" javascript:; " class="text-danger " (click)="delete(row.id) ">删除</a>
+      </ng-template>
+
+      <ng-template #actionGroup>
+        <button class="btn btn-danger " (click)="delete() ">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</div>
+
+<nz-modal [nzVisible]="isVisibile " [nzTitle]=" '添加接站地点' " [nzContent]="modalCon " (nzOnCancel)="handelCancel($event)
+          " (nzOnOk)="handleOk($event) ">
+  <ng-template #modalCon>
+    <div>
+      名称：
+      <nz-input style="display: inline-block; width: 400px; " [(ngModel)]="inputValue " [nzPlaceHolder]="'请输入名称！'" (ngModelChange)="_console($event) "></nz-input>
+    </div>
+  </ng-template>
+</nz-modal>

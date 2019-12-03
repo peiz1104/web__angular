@@ -1,0 +1,23 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">添加人员分类</h3>
+      
+      <div class="actions pull-right">
+        <button class="btn btn-secondary" [routerLink]="['../']">返回人员分类列表 <i class="fa fa-level-up"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <div>
+    <div class="page-body">
+      <div class="container">
+        <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <spk-person-classification-from [personClassification]="personClassification"  (doSubmit)="onSubmit($event)"></spk-person-classification-from>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

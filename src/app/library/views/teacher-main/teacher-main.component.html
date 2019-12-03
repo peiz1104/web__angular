@@ -1,0 +1,29 @@
+<div class="px-4 mt-2">
+  <nz-tabset [nzSelectedIndex]="curIndex">
+    <nz-tab (nzClick)="change('fulltime')">
+      <ng-template #nzTabHeading>
+        <span>专职讲师列表</span>
+      </ng-template>
+      <!-- <div>
+        <spk-teacher-fulltime></spk-teacher-fulltime>
+      </div> -->
+    </nz-tab>
+    <nz-tab (nzClick)="change('parttime')">
+      <ng-template #nzTabHeading>
+        <span>兼职讲师列表</span>
+      </ng-template>
+      <!-- <div>
+        <spk-teacher-parttime></spk-teacher-parttime>
+      </div> -->
+    </nz-tab>
+    <nz-tab (nzClick)="change('external')">
+      <ng-template #nzTabHeading>
+        <span>外部讲师列表</span>
+      </ng-template>
+      <!-- <div>
+        <spk-teacher-external></spk-teacher-external>
+      </div> -->
+    </nz-tab>
+  </nz-tabset>
+  <router-outlet></router-outlet>
+</div>

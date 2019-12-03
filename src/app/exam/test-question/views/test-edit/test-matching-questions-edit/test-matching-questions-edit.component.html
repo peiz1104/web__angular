@@ -1,0 +1,120 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="test-add-form-box">
+
+    <div class="test-add-content">
+        <nz-card>
+            <ng-template #title>
+                {{typeName}}[注：选项内容前的按钮用于标识正确选项]
+            </ng-template>
+            <ng-template #extra>
+                <button class="btn btn-outline-primary" type='button' (click)="addQuestion()">添加问题</button>
+                <button class="btn btn-outline-primary" type='button' (click)="adOption()">添加选项</button>
+            </ng-template>
+            <ng-template #body>
+                <div nz-row style="color:red;">
+                    注：切换文本模式会清空当前输入值!
+                </div>
+                <div nz-row class="test-add-form-row">
+                    <div nz-form-label nz-col [nzSm]="6" style="text-align: left;">
+                        <label for="typeCode" nz-form-item-required>试题题干</label>
+                    </div>
+                    <div nz-col [nzSpan]="4" nz-form-item style="float:right">
+                        <nz-select formControlName="isBigText" [(ngModel)]="selectTextType" (ngModelChange)="changeCausBigText()" [nzPlaceHolder]="'请选择文本模式'">
+                            <nz-option [nzLabel]="'文本模式'" [nzValue]="false"></nz-option>
+                            <nz-option [nzLabel]="'富文本模式'" [nzValue]="true"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div nz-row class="test-add-form-row">
+                    <div nz-form-item>
+                        <div nz-form-control [nzValidateStatus]="validateForm.controls.casual">
+                            <nz-input *ngIf="!selectTextType" [nzType]="'textarea'" [nzRows]="'6'" formControlName="casual" [nzPlaceHolder]="'试题题干(最多300字符)'"></nz-input>
+                            <cui-ckeditor *ngIf="selectTextType" formControlName="casual"></cui-ckeditor>
+                            <div nz-form-explain *ngIf="validateForm.controls.casual.dirty&&validateForm.controls.casual.hasError('required')">请输入试题题干!</div>
+                            <div nz-form-explain *ngIf="validateForm.controls.casual.dirty&&validateForm.controls.casual.hasError('error')">题干字数不能超过300字符!</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-row class="test-add-form-row">
+                    <div nz-form-label nz-col [nzSm]="6" style="text-align: left;">
+                        <label for="typeCode">试题解析</label>
+                    </div>
+                    <!-- <div nz-col [nzSpan]="4" nz-form-item style="float:right">
+                        <nz-select formControlName="isBigTextAnalysis" [(ngModel)]="selectTextAnalysisType" (ngModelChange)="changeCausBigTextAnalysis()" [nzPlaceHolder]="'请选择文本模式'">
+                            <nz-option [nzLabel]="'文本模式'" [nzValue]="false"></nz-option>
+                            <nz-option [nzLabel]="'富文本模式'" [nzValue]="true"></nz-option>
+                        </nz-select>
+                    </div> -->
+                </div>
+                <div nz-row class="test-add-form-row">
+                    <div nz-form-item>
+                        <div nz-form-control [nzValidateStatus]="validateForm.controls.queAnalysis">
+                            <nz-input *ngIf="!selectTextAnalysisType" [nzType]="'textarea'" [nzRows]="'6'" formControlName="queAnalysis" [nzPlaceHolder]="'试题解析(最多300字符)'"></nz-input>
+                            <cui-ckeditor *ngIf="selectTextAnalysisType"  style="width:100%" formControlName="queAnalysis"></cui-ckeditor>
+                            <!-- <div nz-form-explain *ngIf="validateForm.controls.queAnalysis.dirty&&validateForm.controls.queAnalysis.hasError('required')">请输入试题解析!</div> -->
+                            <div nz-form-explain *ngIf="validateForm.controls.queAnalysis.dirty&&validateForm.controls.queAnalysis.hasError('maxlength')">解析字数不能超过300字符!</div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-row class="test-add-form-row">
+                    <div nz-col [nzSpan]="12" nz-form-item>
+                        <div nz-row *ngFor="let question of answerquestionList;let i = index" class="label-box">
+                            <div nz-col [nzSpan]="3" class='label-title'>
+                                <span>问题{{i+1}}</span>
+                            </div>
+                            <div nz-col [nzSpan]="18" nz-form-control [nzValidateStatus]="validateForm.controls['question'+i]">
+                                <nz-input *ngIf="!bigQuestionStuts[i]" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="'请输入问题(最多300字符)'" [formControlName]="'question'+i"></nz-input>
+                                <cui-ckeditor *ngIf="bigQuestionStuts[i]" style="width:100%" [formControlName]="'question'+i"></cui-ckeditor>
+                                <div nz-form-explain *ngIf="validateForm.controls['question'+i].dirty&&validateForm.controls['question'+i].hasError('required')">请输入第{{i+1}}项!</div>
+                                <div nz-form-explain *ngIf="validateForm.controls['question'+i].dirty&&validateForm.controls['question'+i].hasError('error')">问题字数不能超过300字符!</div>
+                            </div>
+                            <div nz-col [nzSpan]="3" class='i-box'>
+                                <i class='fa fa-exchange blue' (click)="changeBigQuestion(i);"></i>
+                                <i class='fa fa-trash red' (click)="deleteQuestion(i)" *ngIf="answerquestionList.length>1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="12" nz-form-item>
+                        <!-- <nz-radio-group formControlName="radio_index"> -->
+                        <div nz-row *ngFor="let answer of answeroptionList;let j = index;" class="label-box">
+                            <div nz-col [nzSpan]="3" class='label-title'>
+                                <span>选项{{j+1}}</span>
+                            </div>
+                            <div nz-col [nzSpan]="18" nz-form-control [nzValidateStatus]="validateForm.controls['answer'+j]">
+                                <nz-input *ngIf="!bigOptionStuts[j]" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="'请输入选项(最多300字符)'" [formControlName]="'answer'+j"></nz-input>
+                                <cui-ckeditor *ngIf="bigOptionStuts[j]" style="width:100%" [formControlName]="'answer'+j"></cui-ckeditor>
+                                <div nz-form-explain *ngIf="validateForm.controls['answer'+j].dirty&&validateForm.controls['answer'+j].hasError('required')">请输入第{{j+1}}项!</div>
+                                <div nz-form-explain *ngIf="validateForm.controls['answer'+j].dirty&&validateForm.controls['answer'+j].hasError('error')">选项字数不能超过300字符!</div>
+                            </div>
+                            <div nz-col [nzSpan]="3" class='i-box'>
+                                <i class='fa fa-exchange blue' (click)="changeBigOption(j);"></i>
+                                <i class='fa fa-trash red' (click)="deleteOption(j);" *ngIf="answeroptionList.length>1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-row class="test-add-form-row center">
+                    <div *ngFor="let question of answerquestionList;let i = index" nz-form-item>
+                        <label>
+                            <span>第{{i+1}}问</span>
+                        </label>
+                        <span *ngFor="let option of answeroptionList;let j = index" class='radio-item'>
+                            <input (change)="radioChange(i,j)" [checked]="radioList[i] == j" type="radio">
+                            <span>{{j+1}}</span>
+                        </span>
+                    </div>
+                    <div class='has-error'>
+                        <div *ngIf="errorMsg" style="color:red;">{{errorMsg}}</div>
+                    </div>
+                </div>
+            </ng-template>
+        </nz-card>
+
+    </div>
+    <div class='test-add-btn-box'>
+        <!-- [disabled]="!validateForm.valid" -->
+        <button nz-button [nzType]="'primary'" class='search-btn' [nzLoading]="saveLoading">更新</button>
+        <button *ngIf="!isPaper && bool" nz-button [nzType]="'primary'" type='button' (click)="handleSynVisible();" [nzLoading]="saveLoading">更新并同步到考试</button>
+        <button type='button' nz-button [nzType]="'default'" (click)="returnFun.emit();">取消</button>
+    </div>
+</form>
+<spk-test-syn *ngIf="!isPaper && bool" [visible]="synVisible" [queId]="queId" (handleVisible)="handleSynVisible()"></spk-test-syn>

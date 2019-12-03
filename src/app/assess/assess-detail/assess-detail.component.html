@@ -1,0 +1,38 @@
+<div *spkAuthzIf="{hasPermission: ['ASSESS:ASSESS_PAPER:ADD','ASSESS:ASSESS_PAPER:EDIT']}">
+    <div class="assess-detail my-assess" *ngIf="outSide == 'TEMPLATE'">
+        <a class="back" (click)="backList()">
+            <i _ngcontent-c9="" class="fa fa-angle-left"></i>
+        </a>
+        <nz-tabset [nzTabPosition]="'left'" [nzShowPagination]="false">
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    基本信息
+                </ng-template>
+                <spk-assess-edit *ngIf="assessId" [outSide]="outSide" [assessId]="assessId"></spk-assess-edit>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    问卷设置
+                </ng-template>
+                <spk-questions *ngIf="assessId" [outSide]="outSide"></spk-questions>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+
+    <div class="assess-detail" *ngIf="outSide != 'TEMPLATE'">
+        <nz-tabset [nzTabPosition]="'left'" [nzShowPagination]="false">
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    基本信息
+                </ng-template>
+                <spk-assess-edit *ngIf="assessId" [outSide]="outSide" [assessId]="assessId"></spk-assess-edit>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    问卷设置
+                </ng-template>
+                <spk-questions *ngIf="paperId" [paperId]="paperId" [outSide]="outSide"></spk-questions>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

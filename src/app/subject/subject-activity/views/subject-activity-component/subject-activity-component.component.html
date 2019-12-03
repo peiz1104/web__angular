@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <!-- <div *ngIf="!hasComponent">
+        <p class="text-secondary"><i class="fa fa-info-circle fa-lg text-info"></i> 组件没有初始化，请点击下面的按钮初始化</p>
+        <button type="button" class="btn btn-secondary" (click)="initComponent()">初始化组件</button>
+    </div> -->
+
+    <div class="page-body">
+        <div class="page-header">
+            <h3 class="page-title">{{subjectActivity?.name}}: 组件管理
+                <small>| 查看组件列表</small>
+            </h3>
+        </div>
+        <cui-data-table #dataTable [columns]="columns" [data]="subjects" (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="coStatus" let-row="row">
+                <span [class.text-secondary]="!row.status" [class.text-success]="row.status">
+                    <nz-switch [(ngModel)]="row.status" (click)="updateStatus(row)"></nz-switch>
+                </span>
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                {{row.createdDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+<ng-template #colRowActions let-row="row">
+    <span *ngIf="row.isFixed">该组件位置固定，不支持调换顺序</span>
+    <div *ngIf="!row.isFixed">
+        <a *ngIf="row.upEnabled" href="javascript:;" disabled>上移</a>
+        <a *ngIf="!row.upEnabled" href="javascript:;" (click)="moveUp(row)">上移</a>
+        <span>|</span>
+        <a *ngIf="row.downEnabled" href="javascript:;" disabled>下移</a>
+        <a *ngIf="!row.downEnabled" href="javascript:;" (click)="moveDown(row)">下移</a>
+    </div>
+</ng-template>

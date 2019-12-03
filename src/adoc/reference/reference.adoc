@@ -1,0 +1,17 @@
+= 开发手册
+
+[partintro]
+--
+开发手册帮助你了解项目结构，掌握如何开发。
+--
+
+// 工程结构说明
+include::technology-selection.adoc[leveloffset=+1]
+include::project-structure.adoc[leveloffset=+1]
+include::build-and-release.adoc[leveloffset=+1]
+
+// 常规开发
+include::configuration.adoc[leveloffset=+1]
+
+// 常用工具
+include::common-utils.adoc[leveloffset=+1]

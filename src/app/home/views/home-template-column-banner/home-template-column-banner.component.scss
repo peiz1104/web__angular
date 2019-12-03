@@ -1,0 +1,89 @@
+$comcolor: #0569b5;
+:host ::ng-deep {
+    .ant-carousel {
+        .slick-slide {
+            height: 400px;
+            background: #fff;
+            color: #fff;
+            overflow: hidden;
+        }
+        .slick-dots {
+            bottom: 20px;
+            li {
+                margin: 0 6px;
+                button {
+                    width: 22px;
+                    height: 4px;
+                }
+            }
+            .slick-active {
+                button {
+                    width: 32px;
+                }
+            }
+        }
+    }
+    .banner-set-box {
+        &:hover {
+            .banner-i-left,
+            .banner-i-right {
+                display: block!important;
+            }
+        }
+    }
+}
+
+.home-box{
+    width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+.home-banner {
+    width: 960px;
+    position: relative;
+    float: left;
+    .banner-i-left {
+        position: absolute;
+        width: 40px;
+        height: 70px;
+        top: 50%;
+        left: 0px;
+        margin-top: -35px;
+        display: none;
+        cursor: pointer;
+        color: #999;
+    }
+    .banner-i-right {
+        position: absolute;
+        width: 40px;
+        height: 70px;
+        top: 50%;
+        right: 0;
+        margin-top: -35px;
+        display: none;
+        cursor: pointer;
+        color: #999;
+    }
+    .banner-box {
+        .banner-img {
+            display: block;
+            width: 100%;
+            height: 400px;
+            .img-url {
+                height: 100%;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
+    .banner-defor-box {
+        width: 100%;
+        height: 400px;
+        margin: 0 auto;
+    }
+}
+.home-notice{
+    width: 240px;
+    float: left;
+    height: 400px;
+}

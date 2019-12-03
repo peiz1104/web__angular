@@ -1,0 +1,58 @@
+:host::ng-deep {
+    .stage-add-box {
+        .add-stage-from {
+            width: 100%;
+            margin: 0 auto;
+            padding: 4px 18px;
+            .card {
+                .ant-row,
+                .ant-form-item {
+                    width: 100%;
+                }
+                .ant-input-number {
+                    width: 120px;
+                }
+                .cancel-btn {
+                    display: inline-block;
+                    width: 60px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    background: #e5e5e5;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    margin-left: 6px;
+                }
+                .step-target,
+                .step-plan,
+                .step-remark {
+                    padding: 2px 6px;
+                }
+                .rest-money {
+                    color: red;
+                    position: absolute;
+                    right: -100px;
+                    top: 0px;
+                }
+                .comment-day {
+                    color: green;
+                    position: absolute;
+                    right: -60px;
+                    top: 0px;
+                }
+                #plan {
+                    height: 60px;
+                    width: 100%;
+                }
+                #target {
+                    height: 60px;
+                    width: 100%;
+                }
+                #remark {
+                    height: 60px;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

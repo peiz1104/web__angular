@@ -1,0 +1,241 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:EDIT'}">
+  <div class="page-header">
+    <h3 class="page-title">编辑内部讲师</h3>
+
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../../']">返回列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container" *ngIf="teacher">
+        <spk-teacher-inner-form [loading]="loading" [teacher]="teacher" (doSubmit)="onSubmit($event)"></spk-teacher-inner-form>
+      <!-- <form #teacherForm="ngForm" (ngSubmit)="onSubmit(teacherForm)" class="form-horizontal" *ngIf="teacher">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <div class="row">
+
+              <div class="col-7 pull-5 order-1">
+
+                <div class="form-group row" style="display:none;">
+                  <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 讲师工号：</label>
+                  <div class="col-9">
+                    <input #user="ngModel" type="text" name="user" class="form-control" [(ngModel)]="teacher.user.username" disabled>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 讲师姓名：</label>
+                  <div class="col-9">
+                    <input #name="ngModel" type="text" name="name" class="form-control" [(ngModel)]="teacher.name" required disabled>
+                    <span class="form-control-feedback text-danger" *ngIf="(name.dirty || name.touched) && name.errors?.required">讲师姓名必填</span>
+                  </div>
+                </div>
+                <div class="form-group row" [ngClass]="{'has-danger': email.errors && (email.dirty || email.touched)}">
+                  <label for="" class="col-form-label col-3"> 邮箱：</label>
+                  <div class="col-9">
+                    <input #email="ngModel" type="text" name="email" class="form-control" [(ngModel)]="teacher.email" required email disabled>
+                    <span class="form-control-feedback text-danger" *ngIf="(email.dirty || email.touched) && email.errors?.required">邮箱必填</span>
+                    <span class="form-control-feedback text-danger" *ngIf="(email.dirty || email.touched) && email.errors?.email && !email.errors?.required">请输入正确格式的邮箱，如 zhangsan@163.com</span>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">性别：</label>
+                  <div class="col-9">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" id="sex-mail" value="MALE" name="sex" [(ngModel)]="teacher.sex" disabled> 男
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" id="sex-famail" value="FAMALE" name="sex" [(ngModel)]="teacher.sex" disabled> 女
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="radio" id="sex-famail" value="FAMALE" name="sex" [(ngModel)]="teacher.sex" disabled> 女
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">出生日期</label>
+                  <div class="col-9">
+                    <cui-calendar [showIcon]="true" name="birthday" dateFormat="yy-mm-dd" dataType="string" [(ngModel)]="teacher.birthday"></cui-calendar>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">手机号</label>
+                  <div class="col-9">
+                    <input type="text" name="phoneNumber" class="form-control" [(ngModel)]="teacher.phoneNumber" disabled>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">出生日期：</label>
+                  <div class="col-9">
+                    <nz-datepicker name="birthday" [(ngModel)]="teacher.birthday" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">手机号：</label>
+                  <div class="col-9">
+                    <input type="text" name="phoneNumber" class="form-control" [(ngModel)]="teacher.phoneNumber" disabled>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">讲师编码：</label>
+                  <div class="col-9">
+                    <input type="text" name="teacherNo" class="form-control" [(ngModel)]="teacher.teacherNo" disabled>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i>讲师职级：</label>
+                <div class="col-9">
+                    <select name="rank" #rank="ngModel" class="form-control w-25 s-height" [(ngModel)]="teacher.rank" required>
+                      <option value="">--请选择--</option>
+                      <option value="I">预备讲师</option>
+                      <option value="II">助理讲师</option>
+                      <option value="III">中级讲师</option>
+                      <option value="IV">高级讲师</option>
+                    </select>
+                    <span class="form-control-feedback text-danger" *ngIf="(rank.dirty || rank.touched) && rank.errors?.required">讲师职级必填</span>
+                </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">所属组织：</label>
+                  <div class="col-9" *ngIf="teacher.userGroup != null">
+                    <input type="text" name="userGroup" class="form-control" [(ngModel)]="teacher.userGroup.name" disabled>
+                  </div>
+                  <div class="col-9" *ngIf="teacher.userGroup == null">
+                    <input type="text" class="form-control" disabled>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">岗位：</label>
+                  <div class="col-9">
+                    <input type="text" name="post" class="form-control" [(ngModel)]="teacher.post">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">入职时间：</label>
+                  <div class="col-9">
+                    <nz-datepicker name="inductionTime" [(ngModel)]="teacher.inductionTime" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">任教时间：</label>
+                  <div class="col-9">
+                    <nz-datepicker name="startDate" [(ngModel)]="teacher.startDate" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">累计学时数：</label>
+                  <div class="col-9">
+                    <input type="text" name="classHour" class="form-control" [(ngModel)]="teacher.classHour">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">平均估分：</label>
+                  <div class="col-9">
+                    <input type="text" name="avgScore" class="form-control" [(ngModel)]="teacher.avgScore">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">毕业学校：</label>
+                  <div class="col-9">
+                    <input type="text" name="schoolName" class="form-control" [(ngModel)]="teacher.schoolName">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">毕业时间：</label>
+                  <div class="col-9">
+                    <nz-datepicker name="graduationTime" [(ngModel)]="teacher.graduationTime" [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">所学专业：</label>
+                  <div class="col-9">
+                    <input type="text" name="major" class="form-control" [(ngModel)]="teacher.major">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3"> 
+                      <i class="fa fa-field-required"></i>最高学历：</label>
+                  <div class="col-9">
+                    <select #education="ngModel" name="education" class="form-control w-25 s-height" [(ngModel)]="teacher.education" required>
+                        <option value="">--请选择--</option>
+                        <option value="N">大专</option>
+                        <option value="W">本科</option>
+                        <option value="W">研究生</option>
+                    </select>
+                    <span class="form-control-feedback text-danger" *ngIf="(education.dirty || education.touched) && education.errors?.required">最高学历必填</span>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 最高学位：</label>
+                  <div class="col-9">
+                    <select #degree="ngModel" name="degree" class="form-control w-25 s-height" [(ngModel)]="teacher.degree" required>
+                        <option value="">--请选择--</option>
+                        <option value="N">学士</option>
+                        <option value="W">硕士</option>
+                        <option value="W">博士</option>
+                    </select>
+                    <span class="form-control-feedback text-danger" *ngIf="(degree.dirty || degree.touched) && degree.errors?.required">学位必填</span>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-3 col-form-label">工作小结：</label>
+                  <div class="col-9">
+                    <textarea class="form-control" name="description" rows="5" [(ngModel)]="teacher.description"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-7">
+                <div class="form-group row">
+                  <div class="col-9 offset-3">
+                    <button nz-button [nzType]="'primary'" type="submit" [disabled]="!teacherForm.valid" [nzLoading]="loading">保存</button>
+                    <button nz-button [nzType]="'default'" type="button" [routerLink]="[isCreate ? '..' : '../..']">取消</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form> -->
+
+    </div>
+  </div>
+</div>

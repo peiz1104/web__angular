@@ -1,0 +1,143 @@
+:host ::ng-deep {
+    .page-body {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px 16px;
+        .btn-group {
+            width: 60px;
+            height: 40px;
+        }
+        .complex-search-bar-search-box {
+            margin-left: 60px;
+        }
+    }
+}
+
+
+
+:host::ng-deep {
+    .btn-group {
+        width: 60px;
+        height: 40px;
+    }
+    .page-body {
+        width: 100%;
+        padding: 4px 16px;
+        margin: 0 auto;
+    }
+    .complex-search-bar-search-box {
+        margin-left: 60px;
+    }
+    .content-modal-show {
+        .title-name {
+            height: 30px;
+            line-height: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: #007bff;
+        }
+        .top-tip {
+            font-size: 14px;
+            color: #007bbf;
+            padding-left: 10px;
+            border-bottom: 2px solid green;
+        }
+        .dev-detail {
+            padding-top: 14px;
+            overflow: hidden;
+            background: #eef6fb;
+            .left {
+                width: 433px;
+                border-right: 1px solid #e5e5e5;
+                float: left;
+                .single {
+                    height: 36px;
+                    position: relative;
+                    .label {
+                        position: absolute;
+                        right: 300px;
+                        font-size: 14px;
+                    }
+                    .content {
+                        position: absolute;
+                        left: 180px;
+                        font-size: 14px;
+                        width: 250px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
+            }
+            .right {
+                width: 434px;
+                float: left;
+                .single {
+                    height: 36px;
+                    position: relative;
+                    .label {
+                        position: absolute;
+                        right: 300px;
+                        font-size: 14px;
+                    }
+                    .content {
+                        position: absolute;
+                        left: 180px;
+                        font-size: 14px;
+                        width: 250px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+        .step-detail {
+            margin-top: 10px;
+            .step-title {
+                font-size: 14px;
+                color: #007bbf;
+                padding-left: 10px;
+                border-bottom: 2px solid green;
+            }
+            .list-content {
+                .no-data {
+                    font-size: 24px;
+                    text-align: center;
+                    font-weight: bold;
+                    i {
+                        color: #007bbf;
+                    }
+                    span {
+                        font-size: 16px;
+                        color: #666;
+                    }
+                }
+                .cost-table-list {
+                    table {
+                        min-width: 100%;
+                        border: 1px solid #ddd;
+                        border-right: none;
+                        border-bottom: none;
+                        border-spacing: 0;
+                        thead {
+                            background: #e9ecef;
+                        }
+                        tr {
+                            background: #f9f9f9;
+                        }
+                        td {
+                            height: 34px;
+                            text-align: center;
+                            border-right: 1px solid #ddd;
+                            border-bottom: 1px solid #ddd;
+                            margin: 0;
+                            padding: 0 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

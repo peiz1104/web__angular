@@ -1,0 +1,21 @@
+:host ::ng-deep {
+    .JKTable {
+        .ant-select {
+            display: none;
+        }
+    }
+    .JK-code-content {
+        padding: 20px 0;
+        .text-right {
+            height: 30px;
+            line-height: 30px;
+        }
+    }
+    .tips {
+        color: red;
+    }
+    .proctor-line{
+        height:30px;
+        line-height: 30px;
+    }
+}

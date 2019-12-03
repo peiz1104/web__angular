@@ -1,0 +1,19 @@
+:host::ng-deep {
+    .red-class-detail {
+        width: 100%;
+        .red-class-left {
+            height: 100%;
+            float: left;
+            width: 140px;
+        }
+        .red-content {
+            float: left;
+            width: calc(100% - 140px);
+        }
+        .ant-menu-root {
+            .ant-menu-item {
+                text-align: left;
+            }
+        }
+    }
+}

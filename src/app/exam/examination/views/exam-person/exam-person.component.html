@@ -1,0 +1,48 @@
+<div class="exam-person">
+
+    <div class="card-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [loading]="loading" (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="name">姓名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="userName">用户名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="userName" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row submit">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button type="button" [nzType]="'primary'" [nzSize]="'large'" class='search-btn' (click)="_submitForm($event, _searchForm.value)">
+                                        搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="examSeq" let-row="row">
+                <div>{{row.examSeq?row.examSeq:0}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="examStatusStr" let-row="row">
+                <div>{{row.examStatusStr?row.examStatusStr:'未参考'}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

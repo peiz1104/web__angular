@@ -1,0 +1,24 @@
+:host::ng-deep {
+    .add-train-box {
+        padding-top: 4px;
+    }
+    .fix-width {
+        width: 58%;
+        word-break: break-all;
+    }
+    .fix-middle-width {
+        width: 20%;
+        word-break: break-all;
+    }
+    .fix-small-width {
+        width: 10%;
+        word-break: break-all;
+    }
+    .select-body {
+        padding: 4px;
+    }
+    button {
+        cursor: pointer;
+        margin-right: 4px;
+    }
+}

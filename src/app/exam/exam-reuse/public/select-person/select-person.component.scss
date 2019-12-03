@@ -1,0 +1,64 @@
+:host ::ng-deep {
+    .ant-modal {
+        .ant-modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+    }
+     .cui-data-table-wrap .table .align-middle{
+         text-overflow: inherit;
+     }
+}
+.select-person {
+    width: 100%;
+    .select-person-box {
+        width: 100%;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+        box-sizing: border-box;
+        background-color: #fff;
+        border-radius: 4px;
+        border: 1px solid #d9d9d9;
+        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        &:hover {
+            border: 1px solid #007bff;
+        }
+        .show-box {
+            margin: 5px 6px;
+            .data-placeholder {
+                line-height: 18px;
+                color: #d9d9d9;
+            }
+            .data-list-box {
+                display: flex;
+                justify-content: flex-start;
+                width: 100%;
+                flex-wrap: wrap;
+                .data-single {
+                    padding: 3px 6px;
+                    margin-right: 5px;
+                    margin-bottom: 3px;
+                    background-color: #d1d1d1;
+                    line-height: 18px;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+}
+
+.select-person-matter {
+    width: 100%;
+    .select-person-left {
+        float: left;
+        width: 220px;
+        height: 500px;
+        overflow-y: auto;
+    }
+    .select-person-right {
+        float: left;
+        width: calc(100% - 220px);
+        padding: 0 10px;
+    }
+}

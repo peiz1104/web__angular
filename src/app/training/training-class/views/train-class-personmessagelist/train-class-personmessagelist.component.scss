@@ -1,0 +1,16 @@
+:host::ng-deep{
+    .train-class-person-message-list{
+        padding:0px 4px;
+        .active{
+            color:#007bbf;
+        }
+        .list-search-bar{
+            margin-bottom: 0rem; 
+             min-height: 0rem; 
+        }
+        button{
+            cursor: pointer;
+            margin-right: 2px;
+        }
+    }
+}

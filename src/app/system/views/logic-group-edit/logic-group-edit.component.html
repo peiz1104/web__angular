@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">
+            <span *ngIf="logicGroup">{{logicGroup.name}}</span>--用户管理
+            <small>管理此用户组上的用户</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <spk-user-lookup #userLookup *ngIf="matchUser" (ok)="userLookupOk($event)">
+                <ng-template #echoTpl>
+                    <button type="button" class="btn btn-outline-primary" (click)="userLookup.openLookup()">添加用户</button>
+                </ng-template>
+            </spk-user-lookup>
+            <button type="button" class="btn btn-primary" (click)="backGroup()">返回用户组列表</button>
+        </div>
+
+        <div class="page-body">
+            <cui-data-table *ngIf="logicGroupUsers" [data]="logicGroupUsers.content" [loading]="loading" [columns]="columns" [pagination]="logicGroupUsers"
+                selectType="checkbox" [(selection)]="selection" (reload)="loadData($event)">
+                <ng-template #rowActions let-row="row">
+                    <a href="javascript:;" (click)="delete(row)">
+                        <i title="删除" style="color:red" class="iconfont icon-shanchu"></i>
+                    </a>
+                </ng-template>
+                <ng-template #actionGroup let-row="row">
+                    <div class="action-group">
+                        <button class="btn btn-danger" (click)="delete()">批量删除</button>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </div>
+</div>

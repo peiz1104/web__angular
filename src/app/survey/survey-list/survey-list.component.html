@@ -1,0 +1,78 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:VIEW'}">
+    <div class="page-header">
+        <h3 class="page-title">问卷列表
+            <small>查看系统中现有的问卷</small>
+        </h3>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table selectType="checkbox" [columns]="columns" [data]="papers" [loading]="loading" (reload)="loadData($event)"
+            [pagination]="pagination" (select)="onSelect($event)">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input name="searchtext" [nzPlaceHolder]="'请输入问卷名称'" [(ngModel)]="searchtext"></nz-input>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <button type="button" class="btn btn-primary" [routerLink]="['add']" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:ADD'}">
+                    <i class="fa fa-plus"></i> 创建调查问卷</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                        <span>批量操作</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" (click)="publish()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}">发布</a>
+                        <a class="dropdown-item" (click)="disPublish()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}">撤销发布</a>
+                        <div class="dropdown-divider" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}"></div>
+                        <a class="dropdown-item" (click)="deleteBantch()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:REMOVE'}">批量删除</a>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="statusTpl" let-row="row" >
+                <span *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}; else textStatus">
+                <nz-popconfirm *ngIf="row.status=='DRAFT'" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="confirmPublish(row)">
+                    <a nz-popconfirm class="text-secondary">未发布</a>
+                </nz-popconfirm>
+                <nz-popconfirm *ngIf="row.status=='RUNNING'" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="onPublish(row)">
+                    <a nz-popconfirm class="text-success">已发布</a>
+                </nz-popconfirm>
+                <!-- <a (click)="confirmPublish(row);" *ngIf="row.status=='DRAFT'" class="badge badge-secondary">未发布</a>
+                <a (click)="onPublish(row);" *ngIf="row.status=='RUNNING'" class="badge badge-success">已发布</a> -->
+                </span>
+                <ng-template #textStatus>
+                    <span *ngIf="row.status=='DRAFT'" class="text-secondary">未发布</span>
+                    <span *ngIf="row.status=='RUNNING'" class="text-success">已发布</span>
+                </ng-template>
+            </ng-template>
+            <ng-template #rowActions let-row="row">
+                <span *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:EDIT'}">
+                    <a href="javascript:;" *ngIf="row.status=='DRAFT'" class="text-success" [routerLink]="[row.id, 'edit']">修改问卷名</a>
+                    <a href="javascript:;" *ngIf="row.status=='RUNNING'" class="text-secondary" disabled>修改问卷名</a>
+                    <span >|</span>
+                    <a href="javascript:;" *ngIf="row.status=='DRAFT'" class="text-success" [routerLink]="[row.id, 'questions']">问卷管理</a>
+                    <a href="javascript:;" *ngIf="row.status=='RUNNING'" class="text-secondary" disabled>问卷管理</a>
+                </span>
+                <span *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:EDIT'}">|</span>
+                <a href="javascript:;" class="text-info" [routerLink]="[row.id, 'view']">预览</a>
+                <span *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:REMOVE'}">|</span>
+                <span *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:REMOVE'}">
+                        <nz-popconfirm *ngIf="row.status=='DRAFT'" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,row)">
+                                <a nz-popconfirm class="text-danger">删除</a>
+                        </nz-popconfirm>
+                    <!-- <a href="javascript:;" *ngIf="row.status=='DRAFT'" class="text-danger" (click)="delete(row.id,row)">删除</a> -->
+                    <span title="已发布的问卷不允许删除" *ngIf="row.status=='RUNNING'" class="text-secondary">删除</span>
+                </span>
+            </ng-template>
+            <ng-template #actionGroup>
+                <button class="btn btn-outline-primary" (click)="publish()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}">发布</button>
+                <button class="btn btn-outline-info" (click)="disPublish()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:PUBLISH'}">撤销发布</button>
+                <button class="btn btn-outline-danger" (click)="deleteBantch()" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:REMOVE'}">批量删除</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

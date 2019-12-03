@@ -1,0 +1,22 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:EDIT'}">
+  <div class="page-header">
+    <h3 class="page-title">添加外部讲师</h3>
+
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../']">返回列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+      <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+      <!-- <spk-teacher-extend-form [loading]="loading" [isCreate]="true" (doSubmit)="onSubmit($event)"></spk-teacher-extend-form> -->
+      <spk-teacher-ext-from [loading]="loading" [isCreate]="true" (doSubmit)="onSubmit($event)"></spk-teacher-ext-from>
+      
+    </div>
+  </div>
+</div>

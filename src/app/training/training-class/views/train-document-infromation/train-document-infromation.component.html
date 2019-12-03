@@ -1,0 +1,31 @@
+<div class="train-cost-class-manage">
+    <!-- <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>费用管理</small>
+            </h5>
+        </div>
+    </div> -->
+    <nz-tabset [nzTabPosition]="'top'" (nzSelectChange)="changetabselect($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                班级文档
+            </ng-template>
+            <spk-documentmessage *ngIf="currentIndexTable==0"></spk-documentmessage>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                课程文档
+            </ng-template>
+            <spk-coursemessage *ngIf="currentIndexTable==1"></spk-coursemessage>
+        </nz-tab>
+
+<!--      <nz-tab>
+        <ng-template #nzTabHeading>
+          授课记录推送情况
+        </ng-template>
+        <spk-teaching-records-push *ngIf="currentIndexTable==2"></spk-teaching-records-push>
+      </nz-tab>-->
+
+    </nz-tabset>
+</div>

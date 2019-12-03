@@ -1,0 +1,138 @@
+<div class="grantauthorization-box">
+    <div class="header-box">
+        <h4>代理注册</h4>
+    </div>
+    <div class="go-back">
+
+    </div>
+    <div class="tab-select">
+        <nz-tabset (nzSelectChange)="selecttab($event)" [(nzSelectedIndex)]="tabIndex">
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    <span>必修</span>
+                </ng-template>
+                <ng-container *ngTemplateOutlet="conditionTpl">
+
+                </ng-container>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    <span>选修</span>
+                </ng-template>
+                <ng-container *ngTemplateOutlet="conditionTpl"></ng-container>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>
+<ng-template #conditionTpl let-type="type" let-condition="tabIndex">
+    <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="spinning">
+        <cui-data-table #tableHandle [columns]="columns" [data]="terms?.content" [pagination]="terms" selectType="checkbox" (reload)="loadTerms($event)"
+            [(selection)]="selection">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" name="name" [(ngModel)]="name" class="form-control" placeholder="请输入名称">
+                    </div>
+                    <div class="form-group ml-2">
+                        <button nz-button [nzType]="'primary'" (click)="search()">
+                            <span>搜索</span>
+                        </button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <!-- <button nz-button (click)="handelEstablish($event)" [nzType]="'primary'">
+          <span>创建并添加</span>
+        </button> -->
+                <spk-term-user-import #tuImport (ok)="userImport($event)" [condition]="tabIndex == 0?{id:requiredConditionId}:{id:openConditionId}"
+                    mode="multiple" style="display: inline-block;">
+                    <ng-template #echoTpl>
+                        <button nz-button [nzType]="'primary'" (click)="tuImport.openLookup()"> 导入用户</button>
+                    </ng-template>
+                </spk-term-user-import>
+
+                <button nz-button (click)="adduser($event)" [nzType]="'primary'">
+                    <span>添加用户</span>
+                </button>
+                <!-- <spk-term-user-import #tuImport (ok)="userImport($event)" *ngIf="matchUser && matchImport" [condition]="condition" mode="multiple"
+          style="display: inline-block;">
+          <ng-template #echoTpl>
+            <button type="button" class="btn btn-outline-primary" (click)="tuImport.openLookup()">导入用户</button>
+          </ng-template>
+        </spk-term-user-import> -->
+                <button nz-button [nzType]="'primary'" (click)="mutipuleDelete($event)">
+                    <span>
+                        <i class="anticon anticon-delete"></i> 删除</span>
+                </button>
+                <button [routerLink]="['../']" nz-button [nzType]="'primary'">
+                    <span>返回</span>
+                </button>
+                <!-- 创建并添加 modal -->
+                <nz-modal [nzVisible]="establishIsVisible" [nzTitle]="'创建并添加'" [nzContent]="modalCon" (nzOnCancel)="handleEstablishCancel($event)"
+                    (nzOnOk)="handleEstablishOk($event)">
+                    <ng-template #modalCon>
+                        <span class="modelName">姓名：</span>
+                        <nz-input [(ngModel)]="displayName" style="width:400px;display:block;float:left;" class="inputModel" [nzPlaceHolder]="'请输入姓名！'"
+                            (ngModelChange)="handelDisplayName($event)"></nz-input>
+                        <br/>
+                        <br/>
+                        <span class="modelName">身份证号：</span>
+                        <nz-input [(ngModel)]="userName" style="width:400px;display:block;float:left;" [nzPlaceHolder]="'请输入身份证号！'" (ngModelChange)="handelUserName($event)"></nz-input>
+                        <br/>
+                        <br/>
+                        <span class="modelName">手机号：</span>
+                        <nz-input [(ngModel)]="phoneNumber" style="width:400px;display:block;float:left;" [nzPlaceHolder]="'请输入手机号！'" (ngModelChange)="handelPhoneNumber($event)"></nz-input>
+                        <br/>
+                        <br/>
+                        <span class="modelName">所属组织：</span>
+                        <nz-cascader [(ngModel)]="organizationValue" [nzChangeOnSelect]="true" style="width:400px;display:block;float:left;" (ngModelChange)="handelOrganization($event)"
+                            (nzChange)="handelOrganization($event)" (nzLoad)="loadData($event)" [nzPlaceHolder]="'请选择组织！'">
+                        </nz-cascader>
+                        <br/>
+                        <br/>
+                        <!-- <span class="modelName">类型：</span>
+                        <nz-select style="width:400px;display:block;float:left;" [(ngModel)]="selectedOption" nzAllowClear (ngModelChange)="handelSelectChange($event)">
+                            <nz-option *ngFor="let option of options" [nzLabel]="option.label" [nzValue]="option">
+                                <ng-template #nzOptionTemplate>
+                                    <i class="anticon" [ngClass]="'anticon-'+option.label"></i> {{option.label}}</ng-template>
+                            </nz-option>
+                        </nz-select>
+                        <br/>
+                        <br/> -->
+                    </ng-template>
+                </nz-modal>
+
+            </ng-template>
+
+            <ng-template cuiColTpl="id" let-row="row">
+                {{row.user.id}}
+            </ng-template>
+            <ng-template cuiColTpl="username" let-row="row">
+                {{row.user.username}}
+            </ng-template>
+            <ng-template cuiColTpl="displayName" let-row="row">
+                {{row.user.displayName}}
+            </ng-template>
+            <ng-template cuiColTpl="usergroupName" let-row="row">
+                {{row.user.userGroup.name}}
+            </ng-template>
+            <ng-template cuiColTpl="colType" let-row="row">
+                {{(row.termType == 'USER'?'用户':(row.termType == 'USER_GROUP'?'组织':(row.termType == 'LOGIC_GROUP'?'用户组':(row.termType == 'SITE'?'站点':''))))
+                }}
+            </ng-template>
+            <ng-template cuiColTpl="colActions" let-row="row">
+                <i style="color:red;font-size:16px;cursor:pointer" (click)="delete(row)" class="anticon anticon-delete"></i>
+                <!-- <a class="text-danger" ></a> -->
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</ng-template>
+<!-- 创建并添加 modal -->
+<nz-modal [nzConfirmLoading]="isConfirmLoading" [nzZIndex]="1001" [nzVisible]="isVisible" [nzTitle]="'添加人员'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <!-- <h5 class="title-tip">代理注册</h5> -->
+        <nz-input style="width:400px" [(ngModel)]="inputValue" [nzPlaceHolder]="'请输入员工工号'" (ngModelChange)="_console($event)"></nz-input>
+        <div class="error-tip" *ngIf="inputTip">不能输入中文字符！</div>
+    </ng-template>
+</nz-modal>

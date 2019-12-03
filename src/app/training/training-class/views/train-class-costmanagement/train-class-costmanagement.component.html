@@ -1,0 +1,36 @@
+<div class="train-cost-class-manage">
+    <!-- <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>费用管理</small>
+            </h5>
+        </div>
+    </div> -->
+    <nz-tabset [nzTabPosition]="'top'" (nzSelectChange)="changetabselect($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                基本费用
+            </ng-template>
+            <spk-basecost (remove)="judgecando($event)" *ngIf="currentIndexTable==0"></spk-basecost>
+        </nz-tab>
+        <nz-tab [nzDisabled]="!candostatus">
+            <ng-template #nzTabHeading>
+                分摊费用
+            </ng-template>
+            <spk-sharecost *ngIf="currentIndexTable==1"></spk-sharecost>
+        </nz-tab>
+
+        <nz-tab [nzDisabled]="!candostatus">
+            <ng-template #nzTabHeading>
+                本级交通费
+            </ng-template>
+            <spk-localtraffic *ngIf="currentIndexTable==2"></spk-localtraffic>
+        </nz-tab>
+        <nz-tab [nzDisabled]="!candostatus">
+            <ng-template #nzTabHeading>
+                下级交通费
+            </ng-template>
+            <spk-lowerlevel *ngIf="currentIndexTable==3"></spk-lowerlevel>
+        </nz-tab>
+    </nz-tabset>
+</div>

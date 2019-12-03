@@ -1,0 +1,17 @@
+[[technology-selection]]
+= 技术选型
+
+
+.前端工程技术列表
+[width="100%",options="header"]
+|====================
+| 名称 | 版本 | 网站 | 说明 
+| Angular | 2/4 | https://angular.io/[Angular] https://angular.cn/[中文官网] |  
+| Bootstrap | v4.0.0-alpha.6 | https://v4-alpha.getbootstrap.com[Bootstrap] https://v4.bootcss.com/[中文官网] | Bootstrap 4 还没有发布正式版，但现在的版本已基于成熟 
+| FontAwesome | 4.7.0 | http://fontawesome.io[FontAwesom] | 此字体图标库可能不能满足所有需求，需要自定义的或者引入第三方的后续考虑 
+| TypeScript | 2.4 | https://www.typescriptlang.org/[TypeScript] https://www.tslang.cn/[中文官网] | 这是工程所用的编程语言
+| Node.JS | 6.10 | https://nodejs.org/en/[Node.JS] http://nodejs.cn/[Node.JS中文网] |  
+| Angular CLI | 1.* | https://github.com/angular/angular-cli[View On GitHub] |  
+| Mockjs | 1.* | http://mockjs.com/[mockjs] https://github.com/nuysoft/Mock[View On GitHub] | 用于模拟数据 
+|====================
+

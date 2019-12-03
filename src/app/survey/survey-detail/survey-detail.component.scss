@@ -1,0 +1,44 @@
+:host ::ng-deep {
+    .survey-detail {
+        min-height: 70%;
+        &.my-survey {
+            position: relative;
+            .ant-tabs-vertical.ant-tabs-left>.ant-tabs-bar {
+                background: #f8f8fa;
+                padding: 50px 0px 30px 0px;
+                width: 140px;
+            }
+            .ant-tabs-vertical.ant-tabs-left>.ant-tabs-bar .ant-tabs-tab {
+                text-align: center;
+            }
+            .ant-tabs-vertical.ant-tabs-left>.ant-tabs-content {
+                padding-top: 30px;
+            }
+            .back-box {
+                padding: 6px;
+                background: #f0f3fa;
+                position: absolute;
+                width: 140px;
+                .back {
+                    position: absolute;
+                    left: 36px;
+                    top: 10px;
+                    z-index: 99999;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+    .page-header {
+        padding-bottom: 10px;
+    }
+    nz-tab-body {
+        padding-bottom: 10px;
+    }
+    .ant-tabs-vertical.ant-tabs-left>.ant-tabs-content {
+        border-left: none;
+    }
+    .ant-tabs-vertical.ant-tabs-left>.ant-tabs-bar .ant-tabs-tab {
+        font-size: 12px;
+    }
+}

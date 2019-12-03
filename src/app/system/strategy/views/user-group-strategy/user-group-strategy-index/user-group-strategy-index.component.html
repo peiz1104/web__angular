@@ -1,0 +1,14 @@
+<div class="with-side" [class.fold]="isFold">
+  <div class="side">
+    <div class="side-body">
+      <div class="card rounded-0" style="height: 100%; background-color: #F4F6F8;">
+        <div class="card-body" style="height: 1000px; background-color: #F4F6F8; overflow: hidden;">
+          <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+        </div>
+      </div>
+    </div>
+  </div>
+ <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+label{
+    margin-bottom: 0rem;
+}
+span.disabled{
+	opacity: 0.5;
+}
+.dropdown-menu {
+    max-height: 300px;
+    overflow: auto;
+    li {
+        cursor: pointer;
+    }
+    li:hover {
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,38 @@
+<!-- <div class="container-fluid1">  -->
+    <!-- <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="true">
+        <div alert-body>
+            课程大纲是课程学习内容，可以是在线的学习资源，对于直播课程和面授课程，指课堂内容安排。
+            <br> 课程可以由多个章或节组成，其中一个章可以包括多个节，节可以包含课件内容。
+        </div>
+    </nz-alert> -->
+ <div >
+    <nz-spin nzTip="正在读取数据..." [nzSpinning]="loading" style="display: block;">
+        <spk-ugc-chapter-item *ngIf=" (rootChapter || (chapterIndex && chapterIndex.length > 0)); else blankOutlineInfo" [editable]='editable' [chapter]='rootChapter' [(chapters)]="chapterIndex" [start] ='true'[courseId]="course.id" [editable]="editable"></spk-ugc-chapter-item>
+        <ng-template #blankOutlineInfo>
+            <div *ngIf="!loading">
+                没有课程章节
+            </div>
+        </ng-template>
+  
+    </nz-spin>
+</div> 
+
+<div style="margin-top:50px">
+    <ng-container [ngTemplateOutlet]="actionsViewRef || defaultActions"></ng-container>
+</div>
+<!-- </div> -->
+<!-- <div>
+         没有课程章节
+<form>
+<div nz-form-item nz-row>
+    <div nz-form-control nz-col [nzSpan]="12" [nzOffset]="4">
+        <ng-container [ngTemplateOutlet]="actionsViewRef || defaultActions"></ng-container>
+    </div>
+</div>
+</form>
+
+</div> -->
+<ng-template #defaultActions>
+    <button  *ngIf="isCreate" nz-button [nzType]="'primary'" [disabled]="_form.invalid" (click)="_save($event)" [nzLoading]="loading"> 保 存 </button>
+    <button *ngIf="isCreates" nz-button [nzType]="'default'" (click)="_cancel($event)"> 取 消 </button>
+</ng-template>

@@ -1,0 +1,11 @@
+
+<ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'light'">
+  <li nz-menu-item [routerLink]="['info']" routerLinkActive #rlai="routerLinkActive" [nzSelected]="rlai.isActive"><i class="fa fa-id-card-o"></i> 基本资料</li>
+  <li nz-menu-item [routerLink]="['secure']" routerLinkActive #rlas="routerLinkActive" [nzSelected]="rlas.isActive"><i class="fa fa-lock"></i> 账户安全</li>
+  <li nz-menu-item [routerLink]="['preference']" routerLinkActive #rlap="routerLinkActive" [nzSelected]="rlap.isActive"><i class="fa fa-rocket"></i> 偏好设置</li>
+  <li nz-menu-item [routerLink]="['authorization']" routerLinkActive #rlaa="routerLinkActive" [nzSelected]="rlaa.isActive"><i class="fa fa-list-alt"></i> 账户许可</li>
+</ul>
+
+<div class="p-4">
+  <router-outlet></router-outlet>
+</div>

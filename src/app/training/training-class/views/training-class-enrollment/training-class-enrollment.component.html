@@ -1,0 +1,16 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">{{trainingClass?.name}}: 注册审批 <small></small></h3>
+  
+      <div class="actions pull-right">
+        <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+      </div>
+    </div>
+  
+    <div class="page-body">
+
+        <spk-offering-enrollment *ngIf="trainingClass" [offering]="trainingClass"></spk-offering-enrollment>
+  
+    </div>
+  </div>
+  

@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 人员分类</small>
+            <small>| 编辑人员分类</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <!-- <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            当前位置：
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>计划管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>基础管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../list']">人员分类</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            编辑
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <div class="page-header">
+        <h3 class="page-title">编辑人员分类
+            <small></small>
+        </h3>
+
+    </div> -->
+
+    <div class="page-body">
+        <div class="container">
+            <!-- <div class="card"> -->
+            <!-- <div class="card-body"> -->
+            <div nz-row class='add-center'>
+                带
+                <span class='add-red'>*</span>为必填项
+            </div>
+            <form nz-form [formGroup]="validateForm" class="add-form-box">
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name" nz-form-item-required> 名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入名称！</div>
+                    </div>
+                </div>
+                <div nz-row class='add-center add-btn-div'>
+                    <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                    <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,validateForm.value)" type="button" [nzSize]="'large'">确定</button>
+                    <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

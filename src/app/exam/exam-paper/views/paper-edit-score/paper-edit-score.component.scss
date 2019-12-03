@@ -1,0 +1,56 @@
+:host::ng-deep {
+    .paper-edit-score {
+        padding: 0 10px;
+        .preview-class {
+            .ant-btn-ghost {
+                display: none;
+            }
+        }
+        .ques-casual {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .paper-header {
+            padding: 20px 10px;
+            margin-bottom: 20px;
+            .paper-title {
+                h4 {
+                    font-weight: bold;
+                }
+                .paper-status {
+                    margin-top: 10px;
+                    .color-publish {
+                        color: #dc5943;
+                    }
+                }
+            }
+        }
+        .paper-table {
+            min-height: 150px;
+            .ant-modal-header{
+                .ant-modal-title{
+                    margin-right: 50px;
+                }
+            }
+        }
+        .edit-save {
+            width: 100%;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        .label {
+            font-size: 14px;
+            color: #000;
+        }
+        .num-input {
+            width: 100%;
+        }
+        
+    }
+}

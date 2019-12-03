@@ -1,0 +1,66 @@
+<h6 class="config-title">
+    页脚设置
+    <div class="item" (click)="onBack()"><i class="iconfont icon-fanhui1"></i>返回</div>
+    <div class="item" (click)="save()" *ngIf="!saveLoading">保存</div>
+    <div class="item" *ngIf="saveLoading">正在保存</div>
+</h6>
+<div class="config-footer" *ngIf="moduleInfo&&footerInfo">
+    <form nz-form [formGroup]="validateForm">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="8">
+                <label for="hotline" nz-form-item-required>服务热线</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.hotline" nz-col [nzSpan]="16">
+                <nz-input formControlName="hotline"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('hotline').dirty&&getFormControl('hotline').hasError('required')">服务热线不能为空</div>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="8">
+                <label for="wchart" nz-form-item-required>微信公众号名称</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.wchart" nz-col [nzSpan]="16">
+                <nz-input formControlName="wchart"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('wchart').dirty&&getFormControl('wchart').hasError('required')">名称不能为空</div>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="8">
+                <label for="wchartImg" nz-form-item-required>微信公众号二维码</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.wchartImg" nz-col [nzSpan]="16">
+                <cui-fileupload name="file" mode="image" [imageHolder]="getFormControl('wchartImg').value" url="/api/upload/file" [auto]="true" (uploadComplete)="onWechatUpload($event)"></cui-fileupload>
+                <span class="text-muted">
+                <i class="fa fa-info-circle text-info"></i> 可以在此处上传二维码。 格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。 图片尺寸建议最小200*120，比例5:4
+                </span>
+                <nz-input style="display:none;" formControlName="wchartImg">
+                </nz-input>
+                <div nz-form-explain *ngIf="getFormControl('wchartImg').dirty&&getFormControl('wchartImg').hasError('required')">二维码不能为空</div>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="8">
+                <label for="app" nz-form-item-required>APP名称</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.app" nz-col [nzSpan]="16">
+                <nz-input formControlName="app"></nz-input>
+                <div nz-form-explain *ngIf="getFormControl('app').dirty&&getFormControl('app').hasError('required')">名称不能为空</div>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="8">
+                <label for="appImg" nz-form-item-required>APP二维码</label>
+            </div>
+            <div nz-form-control [nzValidateStatus]="validateForm.controls.appImg" nz-col [nzSpan]="16">
+                <cui-fileupload name="file" mode="image" [imageHolder]="getFormControl('appImg').value" url="/api/upload/file" [auto]="true" (uploadComplete)="onApptUpload($event)"></cui-fileupload>
+                <span class="text-muted">
+              <i class="fa fa-info-circle text-info"></i> 可以在此处上传二维码。
+              格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+              图片尺寸建议最小200*120，比例5:4</span>
+                <nz-input style="display:none;" formControlName="appImg">
+                </nz-input>
+                <div nz-form-explain *ngIf="getFormControl('appImg').dirty&&getFormControl('appImg').hasError('required')">二维码不能为空</div>
+            </div>
+        </div>
+    </form>
+</div>

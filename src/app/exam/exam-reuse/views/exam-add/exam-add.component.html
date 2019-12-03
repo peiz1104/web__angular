@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="page-header" *ngIf="createOrEditor">
+        <h3 class="page-title">{{target?.name}} :
+            <small>创建考试</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回考试列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container">
+            <!-- <div class="alert alert-info">
+                <span>输入此内容对象的属性 (元数据)。这些属性用来定义对象并帮助学员搜索和查看课程信息。请注意, 文本字段可以使用 HTML 标记进行格式化。如果此内容对象正由 Web 会议使用, 则不应将起始 URL 留空, 否则将无法召开会议。</span>
+            </div> -->
+            <!-- <div class="">
+                <div class="card-body">
+                    <spk-exam-message [examDetail]="examDetail" (doSubmit)="doSubmit($event)" (cancel)="onCancel($event)" [createOrEditor]="createOrEditor" [submitLoading]="submitLoading"></spk-exam-message>
+                </div>
+            </div> -->
+
+            <spk-exam-form [targetInfo]="targetInfo" [exam]="examDetail" (save)="doSubmit($event)" (cancel)="onCancel($event)" [isCreate]="true"
+                [submitLoading]="submitLoading"></spk-exam-form>
+        </div>
+    </div>
+</div>

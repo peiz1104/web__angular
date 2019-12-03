@@ -1,0 +1,37 @@
+
+
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">{{exam?.examName}}: 考试信息 <small></small></h3>
+
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../']">返回考试列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <ng-container *ngIf="exam">
+      <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'light'">
+        <li nz-menu-item [routerLink]="['./']" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+          [nzSelected]="rla.isActive">
+          <span>考试信息</span>
+        </li>
+        <li nz-menu-item [routerLink]="[type=='chinalife'?'allot':'newAllot']" routerLinkActive #rla1="routerLinkActive" [nzSelected]="rla1.isActive">
+          <span>分配管理员</span>
+        </li>
+        <li nz-menu-item [routerLink]="['person']" routerLinkActive #rla2="routerLinkActive" [nzSelected]="rla2.isActive">
+          <span>全部考试人员</span>
+        </li>
+        <li nz-menu-item [routerLink]="['grade']" routerLinkActive #rla3="routerLinkActive" [nzSelected]="rla3.isActive">
+          <span>成绩管理</span>
+        </li>
+      </ul>
+    
+      <div class="mt-4">
+        <router-outlet></router-outlet>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+  

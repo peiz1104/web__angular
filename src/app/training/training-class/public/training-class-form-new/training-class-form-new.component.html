@@ -1,0 +1,573 @@
+<div class="main">
+    <form nz-form [formGroup]="validateForm">
+        <div (click)="stopProgation()" class="_main">
+            <div class="left">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="name" nz-form-item-required>班级名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="16">
+                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入班级名称'" [nzDisabled]="isDisabled"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">班级名称不能为空</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="code" nz-form-item-required title="培训班编号">班级编号</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.code" nz-col [nzSpan]="8">
+                        <nz-input formControlName="code" [nzPlaceHolder]="'请输入培训班编号'" [nzDisabled]="true"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.code.dirty&&validateForm.controls.code.hasError('required')">培训班编号不能为空</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label nz-form-item-required for="leaders">班级负责人</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="15">
+                        <div [ngClass]="searchOptionsLeaders.length?'select-selection':'select-selection has-error'">
+                            <div [ngClass]="searchOptionsLeaders.length>3? 'ant-select-selection__rendered selection_margin':'ant-select-selection__rendered'">
+                                <div *ngIf="searchOptionsLeaders.length==0&&!leadersHolder" class="select-selection__placeholder">请输入工号</div>
+                                <ul>
+                                    <li *ngFor="let item of searchOptionsLeaders" class="ant-select-selection__choice ng-tns-c18-26 ng-trigger ng-trigger-tagAnimation">
+                                        <div class="ant-select-selection__choice__content">{{item.displayName}}</div>
+                                        <span class="ant-select-selection__choice__remove" (click)="removeLeaders($event,item.id,item)">×</span>
+                                    </li>
+                                    <li class="ant-select-search ant-select-search--inline">
+                                        <div class="ant-select-search__field__wrap">
+                                            <input id="searchLeaders" (input)="searchChangeLeaders($event)" class="ant-select-search__field ng-valid ng-dirty ng-touched">
+                                            <span id="perLeader" class="ant-select-search__field__mirror"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <spk-user-lookup #userLookupLeaders (ok)="userLookupOkLeaders($event)">
+                                <ng-template #echoTpl>
+                                    <i title="添加" style="position:absolute;top:50%;right:-20px;margin-top:-14px;font-size:14px;cursor:pointer;color:#007bff;"
+                                        (click)="userLookupLeaders.openLookup()" class="iconfont icon-tianjia"></i>
+                                </ng-template>
+                            </spk-user-lookup>
+                        </div>
+
+                        <div *ngIf="leadersHolder" class="search-tip">
+                            <div style="overflow:auto">
+                                <ul *ngIf="searchTipLeaders.length" class="menu-tip-root">
+                                    <li (click)="toggleChooseLearders($event,item.id,item)" *ngFor="let item of searchTipLeaders" class="menu-tip-item-show">
+                                        {{item.displayName}}
+                                        <span [ngClass]="leaderToggle ? 'show-choose-or-no show-choose' :'show-choose-or-no'">
+                                            <i class="iconfont icon-iconfontcheck"></i>
+                                        </span>
+                                    </li>
+                                </ul>
+                                <ul *ngIf="searchTipLeaders.length==0" class="menu-tip-root">
+                                    <li class="menu-tip-item-show">
+                                        <span *ngIf="leaderStatus">
+                                            <i class="iconfont icon-loading"></i> 搜索中...</span>
+                                        <span *ngIf="!leaderStatus" class="no-data">无搜索结果</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <nz-select nzKeepUnListOptions [nzShowSearch]="true" formControlName="leaders" [nzMode]="'multiple'" [nzPlaceHolder]="'请输入工号'"
+                            (nzSearchChange)="searchChangeLeaders($event)" [nzNotFoundContent]="'无法找到'">
+                            <nz-option *ngFor="let option of searchOptionsLeaders" [nzLabel]="option.displayName" [nzValue]="option.id">
+                                <ng-template #nzOptionTemplate> {{option.displayName}}</ng-template>
+                            </nz-option>
+                        </nz-select> -->
+                        <!-- <spk-user-lookup selectionType="checkbox" formControlName="leaders" placeholder="请选择班级负责人"></spk-user-lookup> -->
+                        <div style="color:red" *ngIf="searchOptionsLeaders.length==0">班级负责人不能为空</div>
+                    </div>
+
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="performers" nz-form-item-required>班级执行人</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="15">
+
+                        <div [ngClass]="searchOptionsPerformers.length?'select-selection':'select-selection has-error'">
+                            <div class="ant-select-selection__rendered">
+                                <div *ngIf="searchOptionsPerformers.length==0&&!performersHolder" class="select-selection__placeholder">请输入工号</div>
+                                <ul>
+                                    <li *ngFor="let item of searchOptionsPerformers" class="ant-select-selection__choice ng-tns-c18-26 ng-trigger ng-trigger-tagAnimation">
+                                        <div class="ant-select-selection__choice__content">{{item.displayName}}</div>
+                                        <span class="ant-select-selection__choice__remove" (click)="removePerformers($event,item.id,item)">×</span>
+                                    </li>
+                                    <li class="ant-select-search ant-select-search--inline">
+                                        <div class="ant-select-search__field__wrap">
+                                            <input id="searchPerformers" (input)="searchChangePerformers($event)" class="ant-select-search__field ng-valid ng-dirty ng-touched">
+                                            <span class="ant-select-search__field__mirror"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <spk-user-lookup mode="single" #userLookupPerformers (ok)="userLookupOkPerformers($event)">
+                                <ng-template #echoTpl>
+                                    <i *ngIf="searchOptionsPerformers.length==0" title="添加" style="position:absolute;top:50%;right:-20px;margin-top:-14px;font-size:14px;cursor:pointer;color:#007bff;"
+                                        (click)="userLookupPerformers.openLookup()" class="iconfont icon-tianjia"></i>
+                                </ng-template>
+                            </spk-user-lookup>
+                            <i *ngIf="searchOptionsPerformers.length" title="已添加,删除人员后，可再次添加" style="position:absolute;top:50%;right:-20px;margin-top:-14px;font-size:14px;cursor:pointer;color:#aaa;"
+                                class="iconfont icon-tianjia"></i>
+                        </div>
+
+                        <div *ngIf="performersHolder" class="search-tip">
+                            <div style="overflow:auto">
+                                <ul *ngIf="searchTipPerformers.length" class="menu-tip-root">
+                                    <li (click)="toggleChoosePerformers($event,item.id,item)" *ngFor="let item of searchTipPerformers" class="menu-tip-item-show">
+                                        {{item.displayName}}
+                                        <span [ngClass]="performersToggle ? 'show-choose-or-no show-choose' :'show-choose-or-no'">
+                                            <i class="iconfont icon-iconfontcheck"></i>
+                                        </span>
+                                    </li>
+                                </ul>
+                                <ul *ngIf="searchTipPerformers.length==0" class="menu-tip-root">
+                                    <li class="menu-tip-item-show">
+                                        <span *ngIf="performerStatus">
+                                            <i class="iconfont icon-loading"></i> 搜索中...</span>
+                                        <span *ngIf="!performerStatus" class="no-data">无搜索结果</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <nz-select formControlName="performers" [nzMode]="'multiple'" [nzPlaceHolder]="'请输入工号'" (nzSearchChange)="searchChangePerformers($event)"
+                            [nzNotFoundContent]="'无法找到'">
+                            <nz-option *ngFor="let option of searchOptionsPerformers" [nzLabel]="option.displayName" [nzValue]="option.id">
+                            </nz-option>
+                        </nz-select> -->
+                        <!-- <spk-user-lookup selectionType="radio" formControlName="performers" placeholder="请选择班级执行人"></spk-user-lookup> -->
+                        <!-- <div nz-form-explain *ngIf="validateForm.controls.performers.dirty&&validateForm.controls.performers.hasError('required')">班级执行人不能为空</div> -->
+                        <div style="color:red" *ngIf="searchOptionsPerformers.length==0">班级执行人不能为空</div>
+                    </div>
+
+                </div>
+                <!-- 助教 -->
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="assistants">班级助教</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="15">
+                        <div class="select-selection">
+                            <div [ngClass]="searchOptionsAssistants.length>3? 'ant-select-selection__rendered selection_margin':'ant-select-selection__rendered'">
+                                <div *ngIf="searchOptionsAssistants.length==0&&!assistantsHolder" class="select-selection__placeholder">请输入工号</div>
+                                <ul>
+                                    <li *ngFor="let item of searchOptionsAssistants" class="ant-select-selection__choice ng-tns-c18-26 ng-trigger ng-trigger-tagAnimation">
+                                        <div class="ant-select-selection__choice__content">{{item.displayName}}</div>
+                                        <span class="ant-select-selection__choice__remove" (click)="removeAssistants($event,item.id,item)">×</span>
+                                    </li>
+                                    <li class="ant-select-search ant-select-search--inline">
+                                        <div class="ant-select-search__field__wrap">
+                                            <input id="searchAssistants" (input)="searchChangeAssistants($event)" class="ant-select-search__field ng-valid ng-dirty ng-touched">
+                                            <span class="ant-select-search__field__mirror"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <spk-chinalife-public-user-lookup #userLookupAssistants (ok)="userLookupOkAssistants($event)">
+                                <ng-template #echoTpl>
+                                    <i title="添加" style="position:absolute;top:50%;right:-20px;margin-top:-14px;font-size:14px;cursor:pointer;color:#007bff;"
+                                        (click)="userLookupAssistants.openLookup()" class="iconfont icon-tianjia"></i>
+                                </ng-template>
+                            </spk-chinalife-public-user-lookup>
+                        </div>
+                        <div *ngIf="assistantsHolder" class="search-tip">
+                            <div style="overflow:auto">
+                                <ul *ngIf="searchTipAssistants.length" class="menu-tip-root">
+                                    <li (click)="toggleChooseAssistants($event,item.id,item)" *ngFor="let item of searchTipAssistants" class="menu-tip-item-show">
+                                        {{item.displayName}}
+                                        <span [ngClass]="assistantsToggle ? 'show-choose-or-no show-choose' :'show-choose-or-no'">
+                                            <i class="iconfont icon-iconfontcheck"></i>
+                                        </span>
+                                    </li>
+                                </ul>
+                                <ul *ngIf="searchTipAssistants.length==0" class="menu-tip-root">
+                                    <li class="menu-tip-item-show">
+                                        <span *ngIf="assistantStatus">
+                                            <i class="iconfont icon-loading"></i>
+                                            搜索中...
+                                        </span>
+                                        <span *ngIf="!assistantStatus" class="no-data">无搜索结果</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <nz-select nzKeepUnListOptions formControlName="assistants" [nzMode]="'multiple'" [nzPlaceHolder]="'请输入工号'" (nzSearchChange)="searchChangeAssistants($event)"
+                            [nzNotFoundContent]="'无法找到'">
+                            <nz-option *ngFor="let option of searchOptionsAssistants" [nzLabel]="option.displayName" [nzValue]="option.id">
+                            </nz-option>
+                        </nz-select> -->
+                        <!-- <spk-user-lookup selectionType="checkbox" formControlName="assistants" placeholder="请选择班级助教"></spk-user-lookup> -->
+                        <!-- <div nz-form-explain *ngIf="validateForm.controls.assistants.dirty&&validateForm.controls.assistants.hasError('required')">班级负责人不能为空</div> -->
+                    </div>
+
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="trainingType" nz-form-item-required>培训方式</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="6">
+                        <nz-select formControlName="trainingType">
+                            <nz-option *ngFor="let item of _trainingTypes" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                            </nz-option>
+                        </nz-select>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingType.dirty&&validateForm.controls.trainingType.hasError('required')">培训方式不能为空</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label nz-form-item-required>培训时间</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <!-- 开始时间 -->
+                        <div nz-col [nzSpan]="11">
+                            <div nz-form-item>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.startDate">
+                                    <nz-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'" [ngModel]="_startDate" (ngModelChange)="_startDate=$event;_startValueChange()"
+                                        [nzDisabledDate]="_disabledStartDate" formControlName="startDate" style="width:100%;"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.startDate.dirty&&validateForm.controls.startDate.hasError('required')">开始时间不能为空</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="2">
+                            <p nz-form-split>-</p>
+                        </div>
+                        <!-- 结束时间 -->
+                        <div nz-col [nzSpan]="11">
+                            <div nz-form-item>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.endDate">
+                                    <nz-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm'" [ngModel]="_endDate" (ngModelChange)="_endDate=$event;_endValueChange()"
+                                        [nzDisabledDate]="_disabledEndDate" formControlName="endDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.endDate.dirty&&validateForm.controls.endDate.hasError('required')">结束时间不能为空</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="trainingBudget" nz-form-item-required>培训班预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingBudget" nz-col [nzSpan]="6">
+                        <nz-input formControlName="trainingBudget" [nzPlaceHolder]="'请输入培训班预算'" [nzDisabled]="isDisabled"></nz-input>
+                        <span style="position:absolute;top:0px;right:-22px">元</span>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingBudget.dirty&&validateForm.controls.trainingBudget.hasError('required')">培训预算不能为空</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingBudget.dirty&&validateForm.controls.trainingBudget.hasError('pattern')">输入预算有误</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="supportBudget" nz-form-item-required>动支预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.supportBudget" nz-col [nzSpan]="6">
+                        <nz-input formControlName="supportBudget" [nzPlaceHolder]="'请输入培训预算'" [nzDisabled]="budgetStatus"></nz-input>
+                        <span style="position:absolute;top:0px;right:-22px">元</span>
+                        <div nz-form-explain *ngIf="validateForm.controls.supportBudget.dirty&&validateForm.controls.supportBudget.hasError('required')">培训预算不能为空</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.supportBudget.dirty&&validateForm.controls.supportBudget.hasError('pattern')">输入预算有误</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="openCourse">开启培训班报名</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16" [nzValidateStatus]="validateForm.controls.openCourse">
+                        <nz-switch (click)="handelModelChange($event)" formControlName="openCourse"></nz-switch>
+                    </div>
+                </div>
+                <div nz-form-item nz-row *ngIf="switchValue">
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label nz-form-item-required>报名时间</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <!-- 开始时间 -->
+                        <div nz-col [nzSpan]="11">
+                            <div nz-form-item>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollStart">
+                                    <nz-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [ngModel]="_enrollStart" (ngModelChange)="_enrollStart=$event;_enrollStartValueChange()"
+                                        [nzDisabledDate]="_disabledenrollStart" formControlName="enrollStart" style="width:100%;"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.enrollStart.dirty&&validateForm.controls.enrollStart.hasError('required')">开始时间不能为空</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="2">
+                            <p nz-form-split>-</p>
+                        </div>
+                        <!-- 结束时间 -->
+                        <div nz-col [nzSpan]="11">
+                            <div nz-form-item>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollEnd">
+                                    <nz-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [ngModel]="_enrollEnd" (ngModelChange)="_enrollEnd=$event;_enrollEndValueChange()"
+                                        [nzDisabledDate]="_disabledenrollEnd" formControlName="enrollEnd" style="width:100%;"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.enrollEnd.dirty&&validateForm.controls.enrollEnd.hasError('required')">结束时间不能为空</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="address">培训地点</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <nz-input formControlName="address" [nzPlaceHolder]="'请输入培训地点'"></nz-input>
+                        <!-- <div nz-form-explain *ngIf="validateForm.controls.address.dirty&&validateForm.controls.address.hasError('required')">培训地点不能为空</div> -->
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="bank"></div>
+            <div class="right">
+                <div *ngIf="showTrainingLevel" nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="trainingLevel" nz-form-item-required>培训级别</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingLeve" nz-col [nzSpan]="16">
+                        <nz-cascader [nzAllowClear]="false" [ngModel]="_value" [nzPlaceHolder]="'请选择培训级别'" formControlName="trainingLeve" [nzOptions]="_options"
+                            (nzChange)="_console($event)" [nzDisabled]="isDisabledLeve">
+                        </nz-cascader>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingLeve.dirty&&validateForm.controls.trainingLeve.hasError('required')">培训级别不能为空</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="mobileStudy">是否推送移动学习</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.mobileStudy" nz-col [nzSpan]="16">
+                        <nz-switch formControlName="mobileStudy"></nz-switch>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label>培训班封面</label>
+
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <cui-fileupload name="file" mode="image" [imageHolder]="imageUrl" url="/api/upload/file" [auto]="true" (uploadComplete)="onImageUpload($event)"></cui-fileupload>
+                        <span class="text-muted">
+                            <i class="fa fa-info-circle text-info"></i> 请上传210px*120px大小的JPG.GIF.PNG图片。
+                        </span>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label nz-form-item-required for="maxPersonNumber">最大注册人数</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.maxPersonNumber" nz-col [nzSpan]="6">
+                        <nz-input formControlName="maxPersonNumber" [nzPlaceHolder]="'请输入最大注册人数'"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.maxPersonNumber.dirty&&validateForm.controls.maxPersonNumber.hasError('pattern')">输入不符合要求，请输入数字</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="shouldAbsence">应考勤次数</label>
+                    </div>
+                    <div class="tip-parent" nz-form-control [nzValidateStatus]="validateForm.controls.shouldAbsence" nz-col [nzSpan]="6">
+                        <nz-input [nzDisabled]="isAdjust" formControlName="shouldAbsence" [nzPlaceHolder]="'请输入应考勤次数'"></nz-input>
+                        <div class="tip-show">
+                            <i class="fa fa-info-circle text-info"></i>0代表没有限制</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.shouldAbsence.dirty&&validateForm.controls.shouldAbsence.hasError('pattern')">输入不符合要求，请输入数字</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label for="maxAbsence">允许最大缺勤次数</label>
+                    </div>
+                    <div class="tip-parent" nz-form-control [nzValidateStatus]="validateForm.controls.maxAbsence" nz-col [nzSpan]="6">
+                        <nz-input [nzDisabled]="isAdjust" formControlName="maxAbsence" [nzPlaceHolder]="'请输入最大缺勤次数'"></nz-input>
+                        <div class="tip-show">
+                            <i class="fa fa-info-circle text-info"></i>0代表没有限制</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.maxAbsence.dirty&&validateForm.controls.maxAbsence.hasError('pattern')">输入不符合要求，请输入数字</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label>主办单位</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <spk-user-group-select formControlName="sponsorDept"></spk-user-group-select>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label>协办单位</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <spk-user-group-select formControlName="undertakeDept"></spk-user-group-select>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label>备注</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="16">
+                        <nz-input [nzRows]="3" [nzType]="'textarea'" formControlName="description" [nzPlaceHolder]="'请输入详细地址'"></nz-input>
+                    </div>
+                </div>
+                <div *ngIf="trainingClass" nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="8">
+                        <label>培训基地</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12">
+                        <div class="select-selection">
+                            <div [ngClass]=" 'ant-select-selection__rendered '">
+                                <div *ngIf="trainBase.length==0" class="select-selection__placeholder">请添加基地</div>
+                                <ul *ngIf="trainBase.length">
+                                    <li *ngFor="let item of trainBase" class="ant-select-selection__choice ng-tns-c18-26 ng-trigger ng-trigger-tagAnimation">
+                                        <div class="ant-select-selection__choice__content">{{item.baseName}}</div>
+                                        <span title="删除基地" class="ant-select-selection__choice__remove" (click)="removeTrainBase($event,item.id,item)">×</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <i title="已添加" *ngIf="!showAddTrainBase" class="iconfont icon-tianjia" style="color:#aaa;font-size:14px;cursor:pointer;position:relative;top:2px;left:6px"></i>
+                    <i title="添加基地" (click)="addTrainBase()" *ngIf="showAddTrainBase" class="iconfont icon-tianjia" style="color:#007bff;cursor:pointer;position:relative;top:2px;left:6px"></i>
+                    <i title="详细" (click)="lookviewTrainBase()" *ngIf="!showAddTrainBase" class="iconfont icon-chakan1" style="color:#007bff;cursor:pointer;position:relative;top:2px;left:6px"></i>
+                    <i title="无详细" *ngIf="showAddTrainBase" class="iconfont icon-chakan1" style="color:#aaa;cursor:pointer;position:relative;top:2px;left:6px"></i>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-7" style="margin: 10px auto;">
+                    <div nz-form-item nz-row class="text-center">
+                        <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                            <button [disabled]="isArchived" [nzLoading]="loading" nz-button [nzType]="'primary'" (click)="_save($event)" style="margin-right: 48px;margin-left: -36px;">保存</button>
+                            <button nz-button (click)="cancelgoback($event)">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<nz-modal *ngIf="isVisible" [nzWidth]="1000" [nzVisible]="isVisible" [nzTitle]="'基地列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)" class="modal-search-form" [nzConfirmLoading]="trainBaseLoading">
+    <ng-template #modalContent>
+        <div class="search-form">
+            <form nz-form class="cui-data-table-form-box" [nzLayout]="'horizontal'">
+                <div nz-row class="cui-data-table-form-body">
+
+                    <div nz-col [nzSpan]="10" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row class="baseName">
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label for="">名称</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入基地名称">
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row class="group-item">
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label for="">组织</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <spk-user-group-select name="userGroupIds" [(ngModel)]="userGroupIds"></spk-user-group-select>
+                            </div>
+                        </div>
+
+                        <div nz-form-item nz-row class="baseAddress">
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label for="">地址</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <input placeholder="请输入地址" type="text" class="form-control input-lg" name="_baseAddress" [(ngModel)]="_baseAddress">
+                            </div>
+                        </div>
+
+                        <div nz-form-item nz-row class="baseNo">
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label for="">编号</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <input type="text" placeholder="请输入编号" class="form-control input-lg" name="_baseNo" [(ngModel)]="_baseNo">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- <spk-user-group-select name="userGroupIds" [(ngModel)]="userGroupIds"></spk-user-group-select> -->
+                </div>
+                <div class="form-group ml-2 search-btn">
+                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                </div>
+            </form>
+        </div>
+        <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="spinning">
+            <cui-data-table [columns]="columns" [data]="trainBaseData?.content" [pagination]="trainBaseData" (reload)="loadData($event)"
+                [(selection)]="selection" selectType="radio">
+
+            </cui-data-table>
+        </nz-spin>
+    </ng-template>
+</nz-modal>
+<!-- 查看基地 -->
+<nz-modal *ngIf="isVisibleTrainBase" [nzWidth]="800" [nzVisible]="isVisibleTrainBase" [nzTitle]="'查看基地列表'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancelTrainBase($event)" (nzOnOk)="handleOkTrainBase($event)" class="view-detail">
+    <ng-template #modalContent>
+        <div *ngIf="trainBase&&trainBase.length" class="cost-table-list">
+            <h5 class="title">基地详细</h5>
+            <div class="trainBase-show" *ngFor="let item of trainBase;let i = index">
+                <div class="item-box">基地名称：{{item?.baseName}}</div>
+                <div class="item-box">编号：{{item?.baseNo}}</div>
+                <div class="item-box">地址：{{item?.baseAddress}}</div>
+                <div class="item-box">面积：{{item?.buildArea}}</div>
+                <div class="item-box">等级：{{item?.baseLevel}}</div>
+            </div>
+            <!-- <table>
+                <thead>
+                    <tr>
+                        <td>基地名称</td>
+                        <td>编号</td>
+                        <td>地址</td>
+                        <td>面积</td>
+                        <td>等级</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of trainBase;let i = index">
+                        <td>{{item?.baseName}}</td>
+                        <td>{{item?.baseNo}}</td>
+                        <td>{{item?.baseAddress}}</td>
+                        <td>{{item?.buildArea}}</td>
+                        <td>{{item?.baseLevel}}</td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
+        <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="spinningTrainBase">
+            <div class="bss-id-list cost-table-list">
+                <h5 class="title">BSSID列表</h5>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>SSID</td>
+                            <td>BSSID</td>
+                            <td>开始时间</td>
+                            <td>结束时间</td>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="bssIdData&&bssIdData.content.length">
+                        <tr *ngFor="let item of bssIdData.content;let i = index">
+                            <td>{{item?.ssid}}</td>
+                            <td>{{item?.bssid}}</td>
+                            <td>{{item?.startDate|date:'yyyy-MM-dd'}}</td>
+                            <td>{{item?.endDate|date:'yyyy-MM-dd'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align:center;line-height:30px;min-height:100px;line-height:100px" *ngIf="bssIdData&&bssIdData.content.length==0">
+                    <span style="color:#28a745;font-size:1.33em" class="fa fa-lg fa-info-circle text-success"></span>
+                    <span style="font-size:1.25em">没有查询到符合条件的记录</span>
+                </div>
+                <div *ngIf="bssIdData&&bssIdData.content.length" style="text-align:right;margin-top:16px;" class="page-change">
+                    <nz-pagination [nzSize]="'small'" (nzPageIndexChange)="handelChangePage($event)" (nzPageSizeChange)="handelPageSize($event)"
+                        [(nzPageIndex)]="pageIndex" nzShowTotal [(nzPageSize)]="pageSize" [nzTotal]="bssIdData.totalElements"
+                        nzShowSizeChanger [nzPageSize]="pageSize"></nz-pagination>
+                </div>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

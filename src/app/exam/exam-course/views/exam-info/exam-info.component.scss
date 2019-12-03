@@ -1,0 +1,48 @@
+:host ::ng-deep {
+    .ant-modal {
+        width: 900px;
+        .ant-modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+    }
+    .ant-checkbox-wrapper {
+        .ant-checkbox.ant-checkbox-checked {
+            .ant-checkbox-inner {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+        }
+    }
+    .bottom{
+        margin-bottom: 0px !important;
+    }
+    .exam-casual {
+        display: block;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .ant-input-number-input-wrap {
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+    .ant-row {
+        padding-top: 2px;
+        margin-bottom: 18px;
+    }
+    .selectUserGroup {
+        display: inline-block;
+        width: 200px;
+        float: left;
+        margin-right: 20px;
+    }
+    .userGroupleft {
+        float: left;
+    }
+    .epName {
+        width: 200px !important;
+    }
+}

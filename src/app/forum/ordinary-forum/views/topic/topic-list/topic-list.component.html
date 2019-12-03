@@ -1,0 +1,161 @@
+<ng-container>
+  <div>
+    <div class="mt-3"></div>
+
+    <cui-data-table #topicTable [columns]="columns" [data]="topics?.content" [pagination]="topics" [loading]="loading" selectType="checkbox"
+      (reload)="loadData($event)" [(selection)]="checkTopic">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <nz-select style="width: 200px;" [nzDisabled]="isEnable" [nzShowSearch]="true" [nzPlaceHolder]="'选择讨论区'" nzAllowClear [(ngModel)]="boardId"
+            name="boardId">
+            <nz-option *ngFor="let option of boards" [nzLabel]="option.name" [nzValue]="option.id">
+            </nz-option>
+          </nz-select>
+          <div class="form-group ml-2">
+            <input nz-input type="text" name="title" [(ngModel)]="topic.title" placeholder="话题标题">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="searchTopic()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template #listTools>
+        <button type="button" class="btn btn-primary" (click)="showModal()">
+          <i class="fa fa-plus"></i>创建话题</button>
+        <button class="btn btn-danger" (click)="delete()">批量删除</button>
+        <div class="btn-group">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            更多批量操作
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="setLock()">锁帖</a>
+            <a class="dropdown-item" (click)="unlock()">解帖</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setLight()">高亮</a>
+            <a class="dropdown-item" (click)="cancelLight()">取消高亮</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setTop()">置顶</a>
+            <a class="dropdown-item" (click)="cancelTop()">取消置顶</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setSuperior()">设为精华</a>
+            <a class="dropdown-item" (click)="cancelSuperior()">取消精华</a>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template cuiColTpl="titleTpl" let-row="row">
+        <nz-tooltip [nzTitle]="row.title" [nzPlacement]="'topLeft'">
+          <div class="line-limit-length">
+            <span nz-tooltip>{{row.title}}</span>
+          </div>
+        </nz-tooltip>
+      </ng-template>
+
+      <ng-template cuiColTpl="topicType" let-row="row">
+        <span class="text-success" *ngIf="row.topicType == 'TOPIC'">普通话题</span>
+        <span class="text-success" *ngIf="row.topicType == 'VOTE'">投票</span>
+        <span class="text-success" *ngIf="row.topicType == 'ACTIVITY'">活动</span>
+        <span class="text-success" *ngIf="row.topicType == 'QA'">问答</span>
+      </ng-template>
+      <ng-template cuiColTpl="topicLock" let-row="row">
+        <span class="text-success" *ngIf="row.isLocked">锁定</span>
+        <span class="text-info" *ngIf="!row.isLocked">未锁定</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="lastModifiedDate" let-row="row">
+        <span>{{row.lastModifiedDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+      </ng-template>
+      <ng-template cuiColTpl="createdDate" let-row="row">
+        <span>{{row.createdDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="topicLigh" let-row="row">
+        <span class="text-success" *ngIf="row.isLight">是</span>
+        <span class="text-warning" *ngIf="!row.isLight">否</span>
+      </ng-template>
+      <ng-template cuiColTpl="topicTop" let-row="row">
+        <span class="text-success" *ngIf="row.isTop">是</span>
+        <span class="text-warning" *ngIf="!row.isTop">否</span>
+      </ng-template>
+      <ng-template cuiColTpl="topicSuperior" let-row="row">
+        <span class="text-success" *ngIf="row.isSuperior">是</span>
+        <span class="text-warning" *ngIf="!row.isSuperior">否</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="actions" let-row="row">
+        <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+      </ng-template>
+
+      <ng-template #actionGroup let-row="row">
+        <button class="btn btn-outline-danger" (click)="delete()">批量删除</button>
+        <div class="btn-group">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            更多批量操作
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="setLock()">锁帖</a>
+            <a class="dropdown-item" (click)="unlock()">解帖</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setLight()">高亮</a>
+            <a class="dropdown-item" (click)="cancelLight()">取消高亮</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setTop()">置顶</a>
+            <a class="dropdown-item" (click)="cancelTop()">取消置顶</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="setSuperior()">设为精华</a>
+            <a class="dropdown-item" (click)="cancelSuperior()">取消精华</a>
+          </div>
+        </div>
+      </ng-template>
+    </cui-data-table>
+
+    <ng-template #colRowActions let-row="row">
+      <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete_single(row)">
+            <a nz-popconfirm class="text-danger">删除</a>
+      </nz-popconfirm>
+      <!-- <a href="javascript:;" class="text-danger" (click)="delete(row)">删除</a> -->
+      <span nz-table-divider></span>
+      <nz-dropdown [nzPlacement]="'bottomRight'">
+        <a class="ant-dropdown-link" nz-dropdown class="text-primary">
+          更多
+          <i class="anticon anticon-down"></i>
+        </a>
+        <ul nz-menu>
+          <li nz-menu-item *ngIf="!row.isLocked">
+            <a (click)="setLock(row)">锁帖</a>
+          </li>
+          <li nz-menu-item *ngIf="row.isLocked">
+            <a (click)="unlock(row)">解帖</a>
+          </li>
+          <li nz-menu-item *ngIf="!row.isLight">
+            <a (click)="setLight(row)">高亮</a>
+          </li>
+          <li nz-menu-item *ngIf="row.isLight">
+            <a (click)="cancelLight(row)">取消高亮</a>
+          </li>
+          <li nz-menu-item *ngIf="!row.isTop">
+            <a (click)="setTop(row)">置顶</a>
+          </li>
+          <li nz-menu-item *ngIf="row.isTop">
+            <a (click)="cancelTop(row)">取消置顶</a>
+          </li>
+          <li nz-menu-item *ngIf="!row.isSuperior">
+            <a (click)="setSuperior(row)">设为精华</a>
+          </li>
+          <li nz-menu-item *ngIf="row.isSuperior">
+            <a (click)="cancelSuperior(row)">取消精华</a>
+          </li>
+        </ul>
+      </nz-dropdown>
+    </ng-template>
+  </div>
+</ng-container>
+
+<nz-modal *ngIf="modelLoading" [nzWidth]="1000" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'创建话题'" [nzContent]="modalContent"
+  (nzOnCancel)="handleCancel($event)">
+  <ng-template #modalContent>
+    <spk-topic-form [forumId]="forumId" (closeModal)="closeModel()">
+    </spk-topic-form>
+  </ng-template>
+</nz-modal>

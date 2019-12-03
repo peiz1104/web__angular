@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">创建课程培训 <small></small></h3>
+
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../list']">返回课程培训列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <nz-alert [nzType]="'info'" [nzShowIcon]="true" class="d-none"
+           [nzBanner]="true">
+          <div alert-body>
+            <span>定义此教程的属性, 以帮助学员搜索和查看教程。提供一个有意义的名称和说明, 选择 Player 属性, 并设置教程时间表。如果学员应定期重学此教程, 则指定认证选项。</span>
+          </div>
+      </nz-alert>
+      <div class="card mt-3">
+        <div class="card-body">
+          <ng-container [ngTemplateOutlet]="stepForm"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #stepForm>
+  <nz-steps [(nzCurrent)]="currentStep">
+    <nz-step [nzTitle]="'课程基本信息'"></nz-step>
+    <nz-step [nzTitle]="'课程培训信息'"></nz-step>
+    <nz-step [nzTitle]="'完成'"></nz-step>
+  </nz-steps>
+  <div [ngTemplateOutlet]="[step0, step1, step2][currentStep]" style="margin: 32px 0;"></div>
+
+  <div class="intro d-none" style="border-top: 1px solid #ddd; padding: 32px 48px;">
+    <h4 style="margin-top: 16px; margin-bottom: 12px; font-size: 16px;">说明</h4>
+    <h5 style="margin-top: 16px; margin-bottom: 12px;">说明项</h5>
+    <p>如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。</p>
+
+    <h5 style="margin-top: 16px; margin-bottom: 12px;">说明项</h5>
+    <p>如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。</p>
+  </div>
+</ng-template>
+
+
+<ng-template #step0>
+  <spk-course-form #courseForm [course]="course" [actionsViewRef]="courseFormActions" (doSubmit)="courseFormSubmit($event)">
+    <ng-template #courseFormActions>
+      <button  nz-button [nzType]="'primary'"  (click)="courseForm.onSubmit($event);" [disabled]="courseForm.invalid">下一步</button>
+    </ng-template>
+  </spk-course-form>
+</ng-template>
+
+<ng-template #step1>
+  <spk-classroom-form #classroomForm [classroom]="classroom" [disabledFields]="['offeringCourse.course']" [excludeFields]="['offeringCourse.sourceType']" [actionsViewRef]="classroomFormActions" (save)="classroomFormSubmit($event)">
+    <ng-template #classroomFormActions>
+      <button nz-button [nzType]="'primary'" [nzLoading]="loading"  (click)="classroomForm._save($event)">确认创建</button>
+      <button nz-button [nzType]="'light'"  (click)="prev()">上一步</button>
+    </ng-template>
+  </spk-classroom-form>
+</ng-template>
+
+<ng-template #step2>
+  <div style="text-align: center;">
+    <i class="anticon anticon-check-circle" style="color: #52c41a; font-size: 72px;"></i>
+    <h3 class="mt-3" style="font-size: 24px;">操作成功</h3>
+    <p class="mx-auto text-left mt-3 mb-4" style="width: 500px;">
+      您可以选择 “<a class="text-primary" (click)="addNext()">继续添加</a>” 再创建一个课程培训。
+      <br>
+      或者选择 “<a class="text-primary" (click)="goDetail()">进入管理</a>” 继续完善该课程相关信息（如课程大纲、注册条件等）。
+      <br>
+      或者可以 “<a class="text-primary" (click)="goList()">返回列表页</a>” 。
+    </p>
+  </div>
+
+  <div class="text-center mb-4">
+    <button nz-button [nzType]="'primary'"  (click)="addNext()">继续添加</button>
+    <button nz-button [nzType]="'primary'"  (click)="goDetail()">进入管理</button>
+    <button nz-button [nzType]="'light'"  (click)="goList()">返回列表</button>
+  </div>
+</ng-template>

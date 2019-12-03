@@ -1,0 +1,17 @@
+<div class="container" style="width: 60rem;">
+  <article class="p-5">
+    <h3 class="text-center m-3">{{article.title}}</h3>
+    
+    <section class="article-info d-flex justify-content-center text-secondary pt-3 pb-2" style="border-bottom: 1px solid #eeeeee;">
+      <div class="mx-4"><i class="fa fa-user"></i><span class="sr-only">作者</span> <span>{{article.author || '佚名'}}</span></div>
+      <div class="mx-4"><i class="fa fa-clock-o"></i><span class="sr-only">发布时间</span> <span>{{ publishedDate() | date: 'yyyy-MM-dd HH:mm'}}</span></div>
+      <div class="mx-4"><i class="fa fa-eye"></i><span class="sr-only">查看</span> <span>{{viewCount}}</span></div>
+    </section>
+  
+    <section class="article-summary p-3 my-4 bg-light" style="text-indent: 2rem;">
+      {{article.summary}}
+    </section>
+    
+    <section class="article-content" [innerHTML]="article.content"></section>
+  </article>
+</div>

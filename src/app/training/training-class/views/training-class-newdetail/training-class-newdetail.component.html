@@ -1,0 +1,104 @@
+<div class="train-class-detail">
+    <div class="train-left">
+        <cui-layout-sider [collapsable]="true" [width]="140" [(collapsed)]="isCollapsed" [trigger]="null" width="160" style="background:#f8f8fa">
+            <div style="background: #f0f3fa;">
+                <!-- <a class="text-center d-block p-4" (click)="toggleCollapsed()">
+                            <i [ngClass]="isCollapsed?'fa fa-angle-right':'fa fa-angle-left'"></i>
+                        </a> -->
+                <a class="text-center d-block p-4" [routerLink]="['../']">
+                    <button type="button" class="btn btn-light">返回列表
+                        <i class="fa fa-level-up"></i>
+                    </button>
+                </a>
+            </div>
+
+            <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+                <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                    <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">基础信息</a>
+                </li>
+                <!-- <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                            <a [routerLink]="['./', 'banner']" routerLinkActive #rlaCondition="routerLinkActive">横幅管理</a>
+                        </li> -->
+
+                <!-- <li nz-menu-item [nzSelected]="rlaMessages.isActive">
+                            <a [routerLink]="['./', 'messages']" routerLinkActive #rlaMessages="routerLinkActive">班级通知</a>
+                        </li> -->
+                <li nz-menu-item [nzSelected]="rlaTrainCourse.isActive">
+                    <a [routerLink]="['./', 'courses']" routerLinkActive #rlaTrainCourse="routerLinkActive">课程管理</a>
+                </li>
+                <!-- <li nz-menu-item [nzSelected]="rlaTbcbase.isActive">
+                            <a [routerLink]="['./', 'tbcbase']" routerLinkActive #rlaTbcbase="routerLinkActive">基地管理</a>
+                        </li> -->
+                <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                    <a [routerLink]="['./', 'condition']" routerLinkActive #rlaCondition="routerLinkActive">学员管理</a>
+                </li>
+                <!-- <li nz-menu-item [nzSelected]="rlaExamArrange.isActive">
+                            <a [routerLink]="['./', 'exam']" routerLinkActive #rlaExamArrange="routerLinkActive">班级考试</a>
+                        </li> -->
+                <li nz-menu-item [nzSelected]="rlaPerformenc.isActive">
+                    <a [routerLink]="['./', 'performence']" routerLinkActive #rlaPerformenc="routerLinkActive">成绩管理</a>
+                </li>
+                <li *ngIf="siteIdStatus" nz-menu-item [nzSelected]="rlaPerformen.isActive">
+                    <a routerLinkActive #rlaPerformen="routerLinkActive" [routerLink]="['./','endclassmanage']">结班管理</a>
+                </li>
+                <li *ngIf="!siteIdStatus" nz-menu-item [nzSelected]="rlaCertificate.isActive">
+                    <a [routerLink]="['./', 'certificate']" routerLinkActive #rlaCertificate="routerLinkActive">证书管理</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaPerformence.isActive">
+                    <a [routerLink]="['./','materials']" routerLinkActive #rlaPerformence="routerLinkActive">班级文档</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaMessages.isActive">
+                    <a [routerLink]="['./', 'attendancemessage']" routerLinkActive #rlaMessages="routerLinkActive">考勤信息</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaEnrollment.isActive">
+                    <a [routerLink]="['./', 'enrollment']" routerLinkActive #rlaEnrollment="routerLinkActive">注册审批</a>
+                </li>
+                <!-- <li nz-submenu>
+                            <span title>
+                                <span>学员管理</span>
+                            </span>
+                            <ul>
+                                <li nz-menu-item [nzSelected]="rlaCondition.isActive">
+                                    <a [routerLink]="['./', 'condition']" routerLinkActive #rlaCondition="routerLinkActive">注册条件</a>
+                                </li>
+                                <li nz-menu-item [nzSelected]="rlaEnrollment.isActive">
+                                    <a [routerLink]="['./', 'enrollment']" routerLinkActive #rlaEnrollment="routerLinkActive">注册审批</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li nz-submenu>
+                            <span title>
+                                <span>成绩管理</span>
+                            </span>
+                            <ul>
+                                <li nz-menu-item [nzSelected]="rlaStrategy.isActive">
+                                    <a [routerLink]="['./', 'score_strategy']" routerLinkActive #rlaStrategy="routerLinkActive">成绩策略</a>
+                                </li>
+                                <li nz-menu-item [nzSelected]="rlaPerformence.isActive">
+                                    <a [routerLink]="['./', 'performence']" routerLinkActive #rlaPerformence="routerLinkActive">成绩管理</a>
+                                </li>
+                                <li nz-menu-item [nzSelected]="rlaCertificate.isActive">
+                                    <a [routerLink]="['./', 'certificate']" routerLinkActive #rlaCertificate="routerLinkActive">证书管理</a>
+                                </li>
+                            </ul>
+                        </li> -->
+                <!-- <li nz-submenu>
+                            <span title>
+                                <span>调查评估</span>
+                            </span>
+                            <ul>
+                                <li nz-menu-item [nzSelected]="rlaSurvey.isActive">
+                                    <a [routerLink]="['./', 'survey']" routerLinkActive #rlaSurvey="routerLinkActive">调查管理</a>
+                                </li>
+                                <li nz-menu-item [nzSelected]="rlaEvaluate.isActive">
+                                    <a [routerLink]="['./', 'assess']" routerLinkActive #rlaEvaluate="routerLinkActive">评估管理</a>
+                                </li>
+                            </ul>
+                        </li> -->
+            </ul>
+        </cui-layout-sider>
+    </div>
+    <div class="train-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

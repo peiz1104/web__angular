@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">策略列表
+        <small>管理策略</small>
+      </h3>
+      <div class="actions pull-right">
+        <div class="btn-group">
+        </div>
+      </div>
+    </div>
+
+  <div class="page-body">
+      <cui-data-table [columns]="columns" [data]="strategys"  selectType="checkbox" [loading] ="loading"  [(selection)] = "selection">
+        <ng-template #simpleSearch>
+          <form class="form-inline">
+                <nz-select style="width: 120px;" name="type"  [(ngModel)]="strategyType"  [nzPlaceHolder]="'全部'">
+                  <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                  </nz-option>
+                  <nz-option *ngFor="let ls of types" [nzLabel]="ls.label" [nzValue]="ls.name">
+                  </nz-option>
+                </nz-select>
+            <!-- <spk-strategy-type name="strategyType" [(ngModel)] ="strategyType"></spk-strategy-type> -->
+            <div class="form-group ml-2">
+              <button type="button" class="btn btn-primary" (click)="loadData(userGroupId)">搜索</button>
+            </div>
+          </form>
+        </ng-template>
+
+      
+        <ng-template cuiColTpl="typeCol" let-row="row">
+            <span class="text-success" *ngIf="row.type == 'course'">课程</span>
+            <span class="text-success" *ngIf="row.type == 'training'">培训班</span>
+        </ng-template>
+        <ng-template cuiColTpl="scopeTypeCol" let-row="row">
+          <span class="text-success" *ngIf="row.scope == 'SITE'">站点策略</span>
+          <span class="text-success" *ngIf="row.scope == 'USERGROUP'">组织策略</span>
+      </ng-template>
+      <ng-template cuiColTpl="userGroupTpl" let-row="row">
+          {{row.userGroup?.name}}
+       </ng-template>
+      
+      <ng-template cuiColTpl="defaultCol" let-row="row">
+          <span class="text-success"> {{row.isDefault?'默认':'普通'}}</span> 
+     </ng-template>
+        <ng-template cuiColTpl="rowAction" let-row="row">
+          <div class="text-right">
+            <a class="text-primary" (click)="edit(row.id)">编辑</a>
+            <span>|</span>
+            <ng-container>
+              <a href="javascript:;" class="text-primary" (click)="setDefault(row)"  *ngIf="!row.isDefault">设为默认</a>
+              <span class="text-secondary" title="相同策略类型下至少应该保留一个默认策略" *ngIf="row.isDefault">取消默认</span>
+              <span>|</span>
+            </ng-container>
+            <ng-container>
+                <nz-popconfirm *ngIf="!row.isDefault" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row,true)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+              <!-- <a href="javascript:;" class="text-info" (click)="delete(row)" *ngIf="!row.isDefault">删除</a> -->
+              <span class="text-secondary" title="相同策略类型下至少应该保留一个默认策略" *ngIf="row.isDefault">删除</span>
+            </ng-container>
+         </div>
+        </ng-template>
+        <ng-template #listTools>
+            <div class="actions pull-right">
+                <button type="button" class="btn btn-primary" (click)="add()">添加策略</button>
+                <button class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+            </div>
+        </ng-template>
+
+        <ng-template #actionGroup>
+          <button type="button" class="btn btn-outline-danger" (click)="delete(null, false)">批量删除</button>
+        </ng-template>
+        
+      </cui-data-table>
+  </div>
+</div>

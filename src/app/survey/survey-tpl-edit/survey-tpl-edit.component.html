@@ -1,0 +1,13 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'SURVEY:SURVEY_PAPER:VIEW'}">
+    <div class="page-header">
+        <h3 class="page-title">{{survey?.name}}：属性
+            <!-- <small>创建调查模板</small> -->
+        </h3>
+    </div>
+  
+    <div class="page-body">
+      <div class="container">
+        <spk-survey-form [survey]="survey" [excludeFields]="['startDate', 'endDate']" [isSubmitting]="isSubmitting" (save)="doSave($event)"></spk-survey-form>
+      </div>
+    </div>
+  </div>

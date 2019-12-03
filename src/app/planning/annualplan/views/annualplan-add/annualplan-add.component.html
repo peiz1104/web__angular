@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <!-- <nz-breadcrumb>
+        <nz-breadcrumb-item>
+            当前位置：
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a>计划管理</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../list']">年度计划</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            创建
+        </nz-breadcrumb-item>
+    </nz-breadcrumb> -->
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 创建年度计划</small>
+        </h3>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../list']">返回年度计划列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container">
+            <!-- <div class="card"> -->
+            <!-- <div class="card-body"> -->
+            <div nz-row class='add-center'>
+                带
+                <span class='add-red'>*</span>为必填项
+            </div>
+            <form nz-form [formGroup]="validateForm" class="add-form-box">
+                <div nz-row nz-form-item>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.years" nz-col [nzSpan]="11">
+                        <nz-select formControlName="years" [nzPlaceHolder]="'请选择年份'" [nzSize]="small" [nzShowSearch]="true" class='add-select'>
+                            <nz-option [nzLabel]="annualPlan.years-1" [nzValue]="annualPlan.years-1"></nz-option>
+                            <nz-option [nzLabel]="annualPlan.years" [nzValue]="annualPlan.years"></nz-option>
+                            <nz-option [nzLabel]="annualPlan.years+1" [nzValue]="annualPlan.years+1"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.org" nz-col [nzSpan]="12">
+                        <span class="float-left">年</span>
+                        <span class="select-type">
+                            <nz-select formControlName="org" [nzPlaceHolder]="'请选择组织'" [nzSize]="small" [nzShowSearch]="true">
+                                <nz-option *ngFor="let org of orgs" [nzLabel]="org.name" [nzValue]="org"></nz-option>
+                            </nz-select>
+                        </span>
+                        <span>年度培训计划</span>
+                    </div>
+                </div>
+
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="training" nz-form-item-required> 培训预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.trainingBudget" nz-col [nzSpan]="12">
+                        <nz-input-number formControlName="trainingBudget" [nzMin]="0.00" [nzStep]="1"></nz-input-number>（元）
+                        <div nz-form-explain *ngIf="validateForm.controls.trainingBudget.dirty&&validateForm.controls.trainingBudget.hasError('required')">Please input your training!</div>
+                    </div>
+                </div>
+                <div nz-row nz-form-item>
+                    <div nz-form-label nz-col [nzSpan]="11">
+                        <label for="independent" nz-form-item-required>研发预算</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.researchBudget" nz-col [nzSpan]="12">
+                        <nz-input-number formControlName="researchBudget" [nzMin]="0.00" [nzStep]="1"></nz-input-number>（元）
+                        <div nz-form-explain *ngIf="validateForm.controls.researchBudget.dirty&&validateForm.controls.researchBudget.hasError('required')">Please input your independent!</div>
+                    </div>
+                </div>
+                <div nz-row class='add-center add-btn-div'>
+                    <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="true">确定</button>
+                    <button nz-button *ngIf="submitLoading == false" (click)="_submitForm($event,validateForm.value)" type="button" [nzSize]="'large'">确定</button>
+                    <button nz-button type="button" [nzSize]="'large'" [routerLink]="['../list']">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

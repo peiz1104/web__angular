@@ -1,0 +1,225 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">{{subjectName}}: 案例管理
+      <small>| 查看案例详情</small>
+    </h3>
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../../','list']">返回案例列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+
+      <form class="form-horizontal" *ngIf="caseInfo">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <div class="row">
+
+
+              <div class="col-5 push-7 order-2">
+                <div class="">
+                  <img cui-lazy-load [src]="caseInfo.coverUrl" [alt]="" width="220px" height="132px">
+                  <br>
+                </div>
+              </div>
+
+              <div class="col-7 pull-5 order-1">
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">案例编码</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="caseCode" class="form-control" [(ngModel)]="caseInfo.caseCode">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">案例名称</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="name" class="form-control" [(ngModel)]="caseInfo.name">
+                  </div>
+                </div>
+
+                <!-- <div class="col-5 push-7 order-2">
+                          <div class="">
+                            <img src={{caseInfo.coverUrl}} alt="" width="160" height="160" style="vertical-align:text-bottom;"><br>
+                          </div>
+                      </div> -->
+
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">作者</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="author" class="form-control" [(ngModel)]="caseInfo.author">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-form-label col-3">完成时间</label>
+                  <div class="col-9">
+                    <nz-datepicker style="width: 100%;" name="endtime" [(ngModel)]="caseInfo.endtime" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'Select date'"
+                      nzDisabled=true></nz-datepicker>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">适用对象</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="userObject" class="form-control" [(ngModel)]="caseInfo.userObject">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">开发单位</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="developmentUnit" class="form-control" [(ngModel)]="caseInfo.developmentUnit">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">所属分类</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="categoryName" class="form-control" [(ngModel)]="caseInfo.category.name" *ngIf="caseInfo.category">
+                    <input readonly="readonly" type="text" name="categoryName" class="form-control" *ngIf="!caseInfo.category"> </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">所属组织</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="userGroupName" class="form-control" [(ngModel)]="caseInfo.userGroup.name" *ngIf="caseInfo.userGroup">
+                    <input readonly="readonly" type="text" name="userGroupName" class="form-control" *ngIf="!caseInfo.userGroup"> </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="" class="col-form-label col-3">
+                    案例来源</label>
+                  <div class="col-9">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='AUTONOMY' [(ngModel)]='caseInfo.source' name="source">自主开发
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='COOPERATION' [(ngModel)]='caseInfo.source' name="source">合作开发
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='OUTSOURCING' [(ngModel)]='caseInfo.source' name="source">外购
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="" class="col-form-label col-3">
+                    经典案例</label>
+                  <div class="col-9">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value="Y" [(ngModel)]="caseInfo.isClassic" name="isClassic">经典案例
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value="N" [(ngModel)]="caseInfo.isClassic" name="isClassic">非经典案例
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group">
+                  <label for="" class="col-form-label col-3">
+                    案例题材</label>
+                  <div class="col-9">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='DESCRIBE' [(ngModel)]='caseInfo.theme' name="theme">描述型
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='RESEARCH' [(ngModel)]='caseInfo.theme' name="theme">研究型
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value='TEACHING' [(ngModel)]='caseInfo.theme' name="theme">教学型
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3"> 简介</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="introduction" class="form-control" [(ngModel)]="caseInfo.introduction">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3"> 关键字</label>
+                  <div class="col-9">
+                    <input readonly="readonly" type="text" name="keyword" class="form-control" [(ngModel)]="caseInfo.keyword">
+                  </div>
+                </div>
+
+
+                <!-- <div class="form-group row">
+                          <label for="" class="col-form-label col-3"> 内容</label>
+                          <div class="col-9">
+                            <input readonly="readonly" type="text" name="content" class="form-control" [(ngModel)]="caseInfo.content" required>
+                          </div>
+                        </div> -->
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3">
+                    <i class="fa fa-field-required"></i> 内容</label>
+                  <div class="col-9">
+                    <cui-ckeditor name="content" class="form-control" [(ngModel)]="caseInfo.content" ></cui-ckeditor>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="" class="col-form-label col-3">是否发布</label>
+                  <div class="col-9">
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value="Y" [(ngModel)]="caseInfo.isPublished" name="isPublished">已发布
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input readonly="readonly" class="form-check-input" type="radio" value="N" [(ngModel)]="caseInfo.isPublished" name="isPublished">未发布
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="form-group row">
+                  <label for="" class="col-form-label col-3"> 相关文件列表</label>
+                  <div class="col-9">
+                    <cui-data-table #dataTable [data]="caseInfo.attachements" [columns]="columns" [loading]='loading'>
+                      <ng-template cuiColTpl="downloadFile" let-row="row">
+                        <a href="javascript:;" (click)="downloadFile(row.relativePath)">下载</a>
+                      </ng-template>
+                    </cui-data-table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

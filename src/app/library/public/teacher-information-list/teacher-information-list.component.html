@@ -1,0 +1,23 @@
+<div class="teacher-informattion-list">
+    <nz-tabset [nzTabPosition]="'top'" (nzSelectChange)="changetabselect($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                讲师基本信息
+            </ng-template>
+            <spk-teacher-base-information [rank]="rank" [teacherId]="teacherId" *ngIf="currentIndexTable==0"></spk-teacher-base-information>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                讲师授课资格
+            </ng-template>
+            <spk-qualification [teacherId]="teacherId" *ngIf="currentIndexTable==1"></spk-qualification>
+        </nz-tab>
+
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                讲师授课记录
+            </ng-template>
+            <spk-record [teacherId]="teacherId" *ngIf="currentIndexTable==2"></spk-record>
+        </nz-tab>
+    </nz-tabset>
+</div>

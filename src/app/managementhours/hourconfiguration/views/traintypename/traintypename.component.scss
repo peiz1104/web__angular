@@ -1,0 +1,60 @@
+:host::ng-deep {
+    .train-type-name {
+        padding-left: 6px;
+    }
+    .fix-width {
+        width: 58%;
+        word-break: break-all;
+    }
+    .fix-middle-width {
+        width: 20%;
+        word-break: break-all;
+    }
+    .fix-small-width {
+        width: 10%;
+        word-break: break-all;
+    }
+    .classification-descript {
+        display: none;
+        min-height: 100px;
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .classification-message {
+            .name {
+                font-size: 14px;
+                color: #666;
+            }
+            .edit-train {
+                color: #007bff;
+                cursor: pointer;
+                padding-left: 10px;
+                padding-right: 6px;
+                font-size: 14px;
+            }
+            .delete-train {
+                color: #ff0000;
+                cursor: pointer;
+                font-size: 14px;
+            }
+        }
+        .descript-content {
+            margin-top: 10px;
+            line-height: 28px;
+            font-size: 14px;
+            padding-left: 12px;
+            color: #333;
+            i {
+                color: #007bff;
+                font-size: 16px;
+            }
+        }
+    }
+    .list-search-bar {
+        margin-top: 6px;
+    }
+    button {
+        cursor: pointer;
+        margin-right: 4px;
+    }
+}

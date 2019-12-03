@@ -1,0 +1,379 @@
+.down_down {
+    position: absolute;
+    right: 16px;
+    top: 8px;
+}
+
+.up_up {
+    position: absolute;
+    right: 16px;
+    bottom: 8px;
+}
+
+.up_down {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+:host ::ng-deep {
+    .page-header {
+        border-bottom: 0px;
+    }
+    .childrenplan-form-box {
+        // .childrenplan-form-body {
+        //     width: 90%;
+        //     margin: 0 auto;
+        // }
+        overflow: hidden;
+        .childrenplan-form-body2 {
+            width: 800px;
+            margin: 0 10%;
+        }
+    }
+    .layout-tips {
+        line-height: 28px;
+        padding-left: 5px;
+    }
+    .ant-input-wrapper {
+        width: 100%;
+    }
+    .ant-input-number {
+        width: 100%;
+    }
+    .ant-select {
+        width: 100%;
+        .ant-select-selection--single {
+            height: 28px;
+        }
+    }
+    .tabs-box {
+        margin-top: 20px;
+    }
+    .tabs-body {
+        width: 100%;
+        margin: 0 auto;
+        .hidden {
+            height: 38px;
+            overflow: hidden;
+        }
+        .ant-tabs-nav-container {
+            text-align: center;
+        }
+        .li {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+            .ant-row {
+                width: 47% !important;
+                display: inline-block !important;
+                min-height: 48px !important;
+                margin: 5px !important;
+                .ant-form-item-label {
+                    label {
+                        color: #666666 !important;
+                    }
+                }
+                .ant-form-item-control-wrapper {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+    .tabs-title {
+        // text-align: center;
+        margin-bottom: 15px;
+        h3 {
+            margin-left: 120px;
+            color: #0269ca;
+            font-size: 16px;
+            &:before {
+                content: '|';
+                margin-right: 5px;
+            }
+        }
+    }
+    .add-center {
+        text-align: center; // margin: 10px 0;
+        padding: 10px 0;
+        button {
+            margin-right: 10px;
+        }
+    }
+    .nofullpage {
+        text-align: center;
+        margin: 10px 0;
+        padding: 10px 0;
+        background: #f7f5f5;
+        button {
+            margin-right: 10px;
+        }
+    }
+    .add-red {
+        color: red;
+        margin: 0 5px;
+    }
+}
+
+:host ::ng-deep .showModall .ant-modal {
+    width: 1023px !important;
+    top: 56px !important;
+    .ant-select {
+        display: none;
+    }
+    .AddingTissue {
+        .ant-modal {
+            top: 65px !important;
+        }
+    }
+    .ant-modal-body {
+        padding-bottom: 0;
+    }
+    .main {
+        width: 992px;
+        height: 478px;
+        overflow: hidden;
+        border: 1px solid #9c9c9c;
+        .name {
+            width: 158px;
+            height: 580px;
+            float: left;
+            background: white;
+            border-right: 1px solid #9c9c9c;
+            .theName {
+                width: 158px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                border-bottom: 1px solid #9c9c9c;
+            }
+            .theBank {
+                width: 158px;
+                height: 50px;
+                border-bottom: 1px solid #9c9c9c;
+            }
+            .theProvince {
+                width: 158px;
+                height: 470px;
+                position: relative;
+                left: 0;
+                top: 0;
+                border-right: 1px solid #9c9c9c;
+                overflow-y: scroll;
+                p {
+                    font-size: 12px;
+                    line-height: 30px;
+                    width: 138px;
+                    padding-left: 6px;
+                    display: block;
+                    color: #131313;
+                }
+                .page {
+                    position: absolute;
+                    left: 0px;
+                    bottom: 0px;
+                }
+            }
+        }
+        .distribution {
+            width: 832px;
+            height: 580px;
+            float: left;
+            .distributionHead {
+                width: 843px;
+                height: 30px;
+                border-bottom: 1px solid #9c9c9c;
+                overflow: hidden;
+                span {
+                    line-height: 30px;
+                    height: 30px;
+                    text-align: center;
+                    width: 100px;
+                    display: block;
+                    float: left;
+                }
+                button {
+                    display: block;
+                    float: right;
+                    margin-right: 20px;
+                    width: 80px;
+                    height: 24px;
+                    margin-top: 2px;
+                }
+            }
+            .distributionSituation {
+                height: 520px;
+                width: 277px;
+                float: left;
+                border-right: 1px solid #9c9c9c;
+                overflow-y: scroll;
+                .OrganizationAndDistribution {
+                    width: 280px;
+                    height: 30px;
+                    span {
+                        display: block;
+                        width: 140px;
+                        height: 30px;
+                        text-align: center;
+                        line-height: 30px;
+                        float: left;
+                        border-bottom: 1px solid #9c9c9c;
+                    }
+                }
+                .AddingTissue {
+                    width: 280px;
+                    height: 30px;
+                    button {
+                        width: 120px;
+                        height: 28px;
+                        margin-left: 80px;
+                        margin-top: 20px;
+                    }
+                }
+                .BeijingBranch {
+                    width: 280px;
+                    height: 30px;
+                    span {
+                        display: block;
+                        width: 170px;
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 6px;
+                        float: left;
+                    }
+                    .inputNum {
+                        display: block;
+                        width: 110px;
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 6px;
+                        float: left;
+                    }
+                    input {
+                        width: 60px;
+                        height: 26px;
+                    }
+                    i {
+                        color: #ca2a2a;
+                    }
+                }
+            }
+            .borderRightNone {
+                border-right: none
+            }
+            .borderLeft {
+                border-left: 1px solid #9c9c9c;
+            }
+        }
+    }
+}
+
+:host ::ng-deep .showModalls .ant-modal {
+    width: 865px !important;
+    top: 56px !important;
+    .ant-select {
+        display: none;
+    }
+    .AddingTissue {
+        .ant-modal {
+            top: 65px !important;
+        }
+    }
+    .ant-modal-body {
+        padding-bottom: 0;
+    }
+    .main {
+        width: 834px;
+        height: 478px;
+        overflow: hidden;
+        border: 1px solid #9c9c9c;
+        .distribution {
+            width: 832px;
+            height: 580px;
+            float: left;
+            .distributionHead {
+                width: 843px;
+                height: 30px;
+                border-bottom: 1px solid #9c9c9c;
+                overflow: hidden;
+                span {
+                    line-height: 30px;
+                    height: 30px;
+                    text-align: center;
+                    width: 100px;
+                    display: block;
+                    float: left;
+                }
+                button {
+                    display: block;
+                    float: right;
+                    margin-right: 20px;
+                    width: 80px;
+                    height: 24px;
+                    margin-top: 2px;
+                }
+            }
+            .distributionSituation {
+                height: 520px;
+                width: 277px;
+                float: left;
+                border-right: 1px solid #9c9c9c;
+                .OrganizationAndDistribution {
+                    width: 280px;
+                    height: 30px;
+                    span {
+                        display: block;
+                        width: 140px;
+                        height: 30px;
+                        text-align: center;
+                        line-height: 30px;
+                        float: left;
+                        border-bottom: 1px solid #9c9c9c;
+                    }
+                }
+                .AddingTissue {
+                    width: 280px;
+                    height: 30px;
+                    button {
+                        width: 120px;
+                        height: 28px;
+                        margin-left: 80px;
+                        margin-top: 20px;
+                    }
+                }
+                .BeijingBranch {
+                    width: 280px;
+                    height: 30px;
+                    span {
+                        display: block;
+                        width: 170px;
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 6px;
+                        float: left;
+                    }
+                    .inputNum {
+                        display: block;
+                        width: 110px;
+                        height: 30px;
+                        line-height: 30px;
+                        padding-left: 6px;
+                        float: left;
+                    }
+                    input {
+                        width: 60px;
+                        height: 26px;
+                    }
+                    i {
+                        color: #ca2a2a;
+                    }
+                }
+            }
+            .borderRightNone {
+                border-right: none
+            }
+            .borderLeft {
+                border-left: 1px solid #9c9c9c;
+            }
+        }
+    }
+}

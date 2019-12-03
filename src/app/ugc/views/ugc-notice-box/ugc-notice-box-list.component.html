@@ -1,0 +1,14 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">公告</h3>
+
+        <div class="actions pull-right">
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="page-body">
+        <spk-notice-box (afterBoxInited)="afterBoxInited($event)" [noticeBox]="noticeBox"  [isSystem]="false"></spk-notice-box>
+    </div>
+</div>

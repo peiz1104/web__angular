@@ -1,0 +1,85 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">{{subjectName}}:
+            <small>调查列表</small>
+        </h5>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="papers" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input [nzSize]="'large'" [(ngModel)]="searchtext" name="searchtext" [nzPlaceHolder]="'请输入调查名'"> </nz-input>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template cuiColTpl="statusTpl" let-row="row">
+                <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="onPublish(row)">
+                    <a nz-popconfirm class="text-secondary">未发布</a>
+                </nz-popconfirm>
+                <nz-popconfirm *ngIf="row.isPublished" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="onPublish(row)">
+                    <a nz-popconfirm class="text-success">已发布</a>
+                </nz-popconfirm>
+                <!-- <a (click)="onPublish(row);" *ngIf="!row.isPublished" class="badge badge-secondary text-light">未发布1</a>
+                <a (click)="onPublish(row);" *ngIf="row.isPublished" class="badge badge-success text-light">已发布</a> -->
+            </ng-template>
+            <ng-template #rowActions let-row="row">
+                <a href="javascript:;" class="text-success" (click)="showModal(row)">管理</a>
+                <span>|</span>
+                <a href="javascript:;" class="text-success" (click)="toAnalysis(row)">统计分析</a>
+                <span>|</span>
+                <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+                <!-- <a href="javascript:;" class="text-danger" *ngIf="!row.isPublished" (click)="delete(row)">删除</a> -->
+                <a href="javascript:;" class="text-secondary" *ngIf="row.isPublished" disabled>删除</a>
+            </ng-template>
+            <ng-template #listTools>
+                <button type="button" class="btn btn-primary" (click)="showSourse()">
+                  <i class="fa fa-copy"></i>从问卷库复制</button>
+                <button type="button" class="btn btn-primary" (click)="showModal()">
+                  <i class="fa fa-plus"></i>创建调查</button>
+            </ng-template>
+            <ng-template cuiColTpl="start-date" let-row="row">
+                <span>{{row.startDate | date: 'yyyy-MM-dd' }}</span>
+            </ng-template>
+            <ng-template cuiColTpl="end-date" let-row="row">
+                <span>{{row.endDate | date: 'yyyy-MM-dd' }}</span>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <nz-modal [nzWidth]="1000" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'调查信息'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <div *ngIf="isVisible">
+                <spk-survey-detail *ngIf="showEdie" [outSide]="true" [paperId]="paperId" [trainingSurveyId]="surveyId" [trainingPaperId]="paperId"></spk-survey-detail>
+                <spk-survey-paper-edit *ngIf="!showEdie" (closeModal)="closeModal()" [outSide]="true" [trainingId]="subjectId"></spk-survey-paper-edit>
+            </div>
+        </ng-template>
+    </nz-modal>
+    <nz-modal [nzWidth]="1000" [nzFooter]="false" [nzVisible]="isShowSourse" [nzTitle]="'调查问卷资源库'" [nzContent]="sourseContent" (nzOnCancel)="closeSourse($event)">
+        <ng-template #sourseContent>
+            <div *ngIf="isShowSourse">
+                <cui-data-table [columns]="sourseColumns" [data]="allPapers" [loading]="loading" (reload)="loadSourse($event)" [pagination]="pagination" selectType="checkbox" [(selection)]="sourseSelected">
+                    <ng-template #simpleSearch>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <nz-input [nzSize]="'large'" [(ngModel)]="sourseText" name="searchtext" [nzPlaceHolder]="'请输入调查名'"> </nz-input>
+                            </div>
+                            <div class="form-group ml-2">
+                                <button type="button" class="btn btn-primary" (click)="loadSourse()">搜索</button>
+                            </div>
+                        </form>
+                    </ng-template>
+                </cui-data-table>
+                <div class="text-right" *ngIf="allPapers?.length>0">
+                    <button nz-button [nzType]="'primary'" (click)="saveSourse()" [nzLoading]="bLoading">保存</button>
+                </div>
+            </div>
+        </ng-template>
+    </nz-modal>
+</div>

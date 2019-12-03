@@ -1,0 +1,41 @@
+<form nz-form [formGroup]="dataForm">
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+      <label for="title" nz-form-item-required>标题</label>
+    </div>
+    <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('title')">
+      <nz-input [nzSize]="'large'" formControlName="title" [nzId]="'title'"></nz-input>
+      <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">标题必填</div>
+    </div>
+  </div>
+
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+      <label for="boardId" nz-form-item-required>所属讨论区</label>
+    </div>
+    <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+      <nz-select formControlName="boardId" [nzShowSearch]="true" nzAllowClear [nzPlaceHolder]="'选择讨论区'" [nzSize]="'large'" name="boardId">
+        <nz-option *ngFor="let option of boards" [nzLabel]="option.name" [nzValue]="option.id">
+        </nz-option>
+      </nz-select>
+      <div class="text-danger" *ngIf="boardType">所属讨论区必选</div>
+    </div>
+  </div>
+
+  <div nz-form-item nz-row>
+    <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+      <label for="content" nz-form-item-required>内容</label>
+    </div>
+    <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+      <cui-ckeditor name="content" formControlName="content" ></cui-ckeditor>
+      <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容必填</div>
+    </div>
+  </div>
+
+  <div nz-form-item nz-row style="margin-bottom:8px;">
+    <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+      <button nz-button [nzType]="'primary'" (click)="onSubmit()" [disabled]="dataForm.invalid">保存</button>
+      <button nz-button [nzType]="'default'" (click)="doCancel($event)">取消</button>
+    </div>
+  </div>
+</form>

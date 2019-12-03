@@ -1,0 +1,25 @@
+<form #applicableObjectsForm="ngForm"  class="form-horizontal">
+  <h5 class="my-3">基本信息</h5>
+  <div class="row">
+    <div class="col-7 pull-5 order-1">
+      <div class="form-group row">
+        <label for="code" class="col-form-label col-3"><i class="fa fa-field-required"></i> 适用对象名称</label>
+        <div class="col-9">
+          <input type="text" name="applicableObjects.name" class="form-control" [(ngModel)]="applicableObjects.name" required>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group row">
+          <div class="col-6 offset-5">
+            <button type="buttin" class="btn btn-primary" [disabled]="!applicableObjectsForm.valid" (click)="onSubmit($event)">保存</button>
+            <button type="button" class="btn btn-secondary" (click)="doCancel($event)">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

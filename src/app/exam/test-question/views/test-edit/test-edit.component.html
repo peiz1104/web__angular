@@ -1,0 +1,164 @@
+<div class="test-add-body">
+    <div class="top-bread">
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                在线考试
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="!isPaper">
+                <a (click)="backToList()">试题管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="isPaper">
+                <a (click)="backToType()">试卷分区</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                编辑试题
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>编辑试题[基本类型:{{codeName[baseCode]}}]</small>
+            </h5>
+        </div>
+    </div>
+    <nz-spin [nzSpinning]="spinning" style="position:static">
+        <div class="select-body" nz-row *ngIf="editData">
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="test-add-form-box">
+                <div nz-row class="test-add-form-body">
+                    <!-- <div class="test-add-search" nz-row>
+                        <div *ngIf="bool" nz-col [nzSpan]="8" class="test-add-form-row">
+                            <div nz-form-item>
+                                <div nz-form-label nz-col [nzSm]="6">
+                                    <label for="typeCode" nz-form-item-required>试题类型</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.typeCode" nz-col [nzSpan]="18">
+                                    <nz-select formControlName="typeCode" [nzPlaceHolder]="'请选择试题类型'">
+                                        <nz-option *ngFor="let qt of questionType" [nzLabel]="qt.typeName" [nzValue]="qt.baseCode"></nz-option>
+                                    </nz-select>
+                                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.hasError('required')">请选择试题类型!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="bool" nz-col [nzSpan]="8" class="test-add-form-row">
+                            <div nz-form-item>
+                                <div nz-form-label nz-col [nzSm]="6">
+                                    <label for="diffCode" nz-form-item-required>试题难度</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.diffCode" nz-col [nzSpan]="18">
+                                    <nz-select formControlName="diffCode" [nzPlaceHolder]="'请选择试题难度'">
+                                        <nz-option *ngFor="let di of difficult" [nzLabel]="di.diffName" [nzValue]="di.diffCode"></nz-option>
+                                    </nz-select>
+                                    <div nz-form-explain *ngIf="validateForm.controls.diffCode.dirty&&validateForm.controls.diffCode.hasError('required')">请选择试题难度!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8" class="test-add-form-row">
+                            <div nz-form-item>
+                                <div nz-form-label nz-col [nzSm]="6">
+                                    <label for="answerTime" nz-form-item-required>作答时长</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.answerTime" nz-col [nzSpan]="18">
+                                    <nz-input formControlName="answerTime" [nzPlaceHolder]="'作答时长'"></nz-input>
+                                    <div nz-form-explain *ngIf="validateForm.controls.answerTime.dirty&&validateForm.controls.answerTime.hasError('required')">请输入作答时长!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="baseCode != 'YDLJ'" nz-col [nzSpan]="8" class="test-add-form-row">
+                            <div nz-form-item>
+                                <div nz-form-label nz-col [nzSm]="6">
+                                    <label for="score" nz-form-item-required>试题分数</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.score" nz-col [nzSpan]="18">
+                                    <nz-input formControlName="score" [nzPlaceHolder]="'试题分数'"></nz-input>
+                                    <div nz-form-explain *ngIf="validateForm.controls.score.dirty&&validateForm.controls.score.hasError('required')">请输入试题分数!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8" class="test-add-form-row">
+                            <div nz-form-item>
+                                <div nz-form-label nz-col [nzSm]="6">
+                                    <label for="startTime" nz-form-item-required>有效时间</label>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.startTime" nz-col [nzSpan]="9">
+                                    <nz-datepicker formControlName="startTime" [nzShowTime]="true" style="width: 100%;" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'开始时间'"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.startTime.dirty&&validateForm.controls.startTime.hasError('required')">请选择开始时间!</div>
+                                </div>
+                                <div nz-form-control [nzValidateStatus]="validateForm.controls.endTime" nz-col [nzSpan]="9">
+                                    <nz-datepicker formControlName="endTime" [nzShowTime]="true" style="width: 100%;" [nzShowTime]="_endTime" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'"></nz-datepicker>
+                                    <div nz-form-explain *ngIf="validateForm.controls.endTime.dirty&&validateForm.controls.endTime.hasError('required')">请选择结束时间!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div nz-col [nzSpan]="12" class="test-add-form-row">
+                        <div nz-form-item>
+                            <div nz-form-label nz-col [nzSm]="6">
+                                <label for="diffCode" nz-form-item-required>试题难度</label>
+                            </div>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.diffCode" nz-col [nzSpan]="18">
+                                <nz-select formControlName="diffCode" [nzPlaceHolder]="'请选择试题难度'">
+                                    <nz-option *ngFor="let di of difficult" [nzLabel]="di.diffName" [nzValue]="di.diffCode"></nz-option>
+                                </nz-select>
+                                <div nz-form-explain *ngIf="validateForm.controls.diffCode.dirty&&validateForm.controls.diffCode.hasError('required')">请选择试题难度!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="12" class="test-add-form-row">
+                        <div nz-form-item>
+                            <div nz-form-label nz-col [nzSm]="6">
+                                <label for="answerTime" nz-form-item-required>作答时长(秒)</label>
+                            </div>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.answerTime" nz-col [nzSpan]="18">
+                                <nz-input formControlName="answerTime" [nzType]="'number'" [nzPlaceHolder]="'作答时长'"></nz-input>
+                                <div nz-form-explain *ngIf="validateForm.controls.answerTime.dirty&&validateForm.controls.answerTime.hasError('required')">请输入正确的作答时长!</div>
+                                <div nz-form-explain *ngIf="validateForm.controls.answerTime.dirty&&validateForm.controls.answerTime.hasError('error')">时长必须大于0且为整数</div>
+                                <div nz-form-explain *ngIf="validateForm.controls.answerTime.dirty&&validateForm.controls.answerTime.hasError('maxlength')">时长不得超过5位数</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="baseCode != 'YDLJ'" nz-col [nzSpan]="12" class="test-add-form-row">
+                        <div nz-form-item>
+                            <div nz-form-label nz-col [nzSm]="6">
+                                <label for="score" nz-form-item-required>试题分数</label>
+                            </div>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.score" nz-col [nzSpan]="18">
+                                <nz-input [nzType]="'number'" formControlName="score" style="width:100%" [nzPlaceHolder]="'试题分数'"></nz-input>
+                                <div nz-form-explain *ngIf="validateForm.controls.score.dirty&&validateForm.controls.score.hasError('required')">请输入正确的试题分数!</div>
+                                <div nz-form-explain *ngIf="validateForm.controls.score.dirty&&validateForm.controls.score.hasError('error')">分数必须大于0且小于99,且小数位最多为一位</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="bool && !isPaper" nz-col [nzSpan]="12" class="test-add-form-row">
+                        <div nz-form-item>
+                            <div nz-form-label nz-col [nzSm]="6">
+                                <label for="startTime">有效时间</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="9">
+                                <spk-qm-datepicker formControlName="startTime" [nzShowTime]="true" style="width:100%;" [nzPlaceHolder]="'开始时间'"></spk-qm-datepicker>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="9">
+                                <spk-qm-datepicker formControlName="endTime" style="width:100%;" [nzShowTime]="true" [nzPlaceHolder]="'结束时间'"></spk-qm-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <spk-test-choice-questions-edit *ngIf="baseCode=='DANX'||baseCode=='DUOX'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el"
+                    [data]="editData" (returnFun)="returnFun($event)"></spk-test-choice-questions-edit>
+                <spk-test-completion-questions-edit *ngIf="baseCode=='TK'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el" [data]="editData"
+                    (returnFun)="returnFun($event)"></spk-test-completion-questions-edit>
+                <spk-test-judgment-questions-edit *ngIf="baseCode=='PD'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el" [data]="editData"
+                    (returnFun)="returnFun($event)"></spk-test-judgment-questions-edit>
+                <spk-test-matching-questions-edit *ngIf="baseCode=='PP'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el" [data]="editData"
+                    (returnFun)="returnFun($event)"></spk-test-matching-questions-edit>
+                <spk-test-readingcomprehension-questions-edit *ngIf="baseCode=='YDLJ'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el"
+                    [data]="editData" (returnFun)="returnFun($event)"></spk-test-readingcomprehension-questions-edit>
+                <spk-test-shortanswer-questions-edit *ngIf="baseCode=='JD'||baseCode=='ALFX'" [validateUPForm]="validateForm" [formupbtn]="formupbtn._el"
+                    [data]="editData" (returnFun)="returnFun($event)"></spk-test-shortanswer-questions-edit>
+                <button nz-button #formupbtn [nzType]="'primary'" class='search-btn' style='display:none'></button>
+
+            </form>
+        </div>
+    </nz-spin>
+</div>

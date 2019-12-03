@@ -1,0 +1,41 @@
+<div class="">
+    <form nz-form *ngIf='_form' [formGroup]="_form" [nzLayout]="'horizontal'">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4"><label>默认语言</label></div>
+            <div nz-form-control nz-col [nzSpan]="8">
+                <nz-select formControlName="language" [nzPlaceHolder]="'默认语言'" [nzAllowClear]="true">
+                    <nz-option *ngFor="let item of _languages" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                    </nz-option>
+                </nz-select>
+                <div nz-form-extra>选择您使用系统的语言，留空会使用系统默认语言。当前系统语言 “简体中文”。</div>
+            </div>
+        </div>
+
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4"><label>登录身份</label></div>
+            <div nz-form-control nz-col [nzSpan]="8">
+                <nz-select formControlName="defaultRole" [nzPlaceHolder]="'登录身份'" [nzAllowClear]="true">
+                    <nz-option *ngFor="let item of _identities" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                    </nz-option>
+                </nz-select>
+                <div nz-form-extra>选择您登录系统使用的身份，系统将根据您的登录身份在登录时跳转到相应的页面，方便你的使用。</div>
+            </div>
+        </div>
+
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4"><label>默认管理范围</label></div>
+            <div nz-form-control nz-col [nzSpan]="8">
+                <spk-user-group-select formControlName="managerGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+                <div nz-form-extra>选择您在管理系统业务数据时常用的单位，系统会根据设置的单位查询该单位本部的数据，否则默认查询许可范围内的全部数据。</div>
+            </div>
+        </div>
+
+        <div nz-form-item nz-row>
+            <div nz-form-control nz-col [nzSpan]="8" [nzOffset]="4">
+                <button type="button" class="btn btn-primary" (click)="save()"> 保 存 </button>
+                <button type="button" class="btn btn-secondary" (click)="reset()"> 重 置 </button>
+            </div>
+        </div>
+
+    </form>
+</div>

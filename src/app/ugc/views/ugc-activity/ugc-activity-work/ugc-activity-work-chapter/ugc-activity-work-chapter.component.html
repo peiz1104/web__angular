@@ -1,0 +1,11 @@
+
+    <spk-ugc-chapter-list *ngIf="ugcActivityWork.course.id" #workChapter [(editable)]='editable' [isCreate]='isCreate'
+        [course]="ugcActivityWork.course">
+        <!-- <ng-template #workChapterActions>
+            <button nz-button [nzType]="'primary'" (click)="workChapter._save($event);" [disabled]="workChapter.invalid">下一步</button>
+        </ng-template> -->
+    </spk-ugc-chapter-list>
+
+    <div *ngIf="!ugcActivityWork.course.id">
+        没有课程章节
+    </div>

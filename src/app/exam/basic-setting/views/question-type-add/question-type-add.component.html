@@ -1,0 +1,94 @@
+<div>
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small *ngIf="isEdit">编辑试题类型</small>
+                <small *ngIf="!isEdit">新增试题类型</small>
+            </h5>
+        </div>
+    </div>
+    <div nz-col [nzSpan]="21">
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)" [nzType]="'horizontal'">
+            <nz-spin [nzSpinning]="isSpinning">
+            </nz-spin>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>类型名称</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.typeName" nzHasFeedback>
+                    <nz-input formControlName="typeName" [nzPlaceHolder]="'请控制字符在20个以内'" [(ngModel)]="typeName" [nzType]="'text'" [nzSize]="'large'"
+                        [maxlength]='20' (ngModelChange)="validateConfirmType()" (nzBlur)="typeNameBlur(typeName)">
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeName.dirty&&validateForm.controls.typeName.hasError('required')">类型名称不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeName.dirty&&validateForm.controls.typeName.errors?.maxlength">类型名称最多20个字!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeName.dirty&&validateForm.controls.typeName.hasError('notUnique')">类型名称已存在!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>类型编码</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.typeCode" nzHasFeedback>
+                    <nz-input formControlName="typeCode" [nzPlaceHolder]="'请控制字符在20个以内'" [(ngModel)]="typeCode" [nzType]="'text'" [nzSize]="'large'"
+                        [maxlength]='20' (nzBlur)="typeCodeBlur(typeCode)" [nzDisabled]="isEdit">
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.hasError('required')">类型编码不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.errors?.maxlength">类型编码最多20个字!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.hasError('capital')">类型编码只能输入大写字母!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.hasError('agreement')">类型编码不能与类型名称一致!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.typeCode.dirty&&validateForm.controls.typeCode.hasError('notUnique')">类型编码已存在!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>基本类型</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <nz-select formControlName="baseCode" [nzPlaceHolder]="'请选择'" [nzDisabled]="isEdit">
+                        <nz-option *ngFor="let option of typeSelect" [nzLabel]="option.typeName" [nzValue]="option.typeCode">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzSpan]="7" nz-form-label>
+                    <label>类型描述</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <nz-input formControlName="typeDesc" (ngModelChange)="descInput($event)" [nzPlaceHolder]="'请控制字符在200个以内'" [nzRows]="3" [nzType]="'textarea'"
+                        [nzSize]="'large'" [maxlength]='200'>
+                    </nz-input>
+                    <div class="input-tip">
+                        {{inputNum}}/200
+                    </div>
+                    <div nz-form-explain style="color:red;margin-top: 5px;" *ngIf="validateForm.controls.typeDesc.dirty&&validateForm.controls.typeDesc.errors?.maxlength">类型描述最多200个字!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>是否启用</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <!-- <nz-select formControlName="isStart" [nzPlaceHolder]="'请选择'">
+                        <nz-option [nzLabel]="'是'" [nzValue]="true"></nz-option>
+                        <nz-option [nzLabel]="'否'" [nzValue]="false"></nz-option>
+                    </nz-select> -->
+                    <nz-radio-group formControlName="isStart" [(ngModel)]="radioValue">
+                        <label nz-radio [nzValue]="true">
+                            <span>启用</span>
+                        </label>
+                        <label nz-radio [nzValue]="false">
+                            <span>不启用</span>
+                        </label>
+                    </nz-radio-group>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="isLoading" [disabled]="!validateForm.valid">保存</button>
+                    <button nz-button [nzSize]="'large'" (click)="reset($event)">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

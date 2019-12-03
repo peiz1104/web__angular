@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col">
+    <label>左侧题目</label>
+    <ul class="list-group">
+      <li class="py-1 question-action" *ngFor="let q of subquestions">
+        <input #foo type="text" class="form-control-xs" placeholder="{{q.name}}" [(ngModel)]="q.name" (change)="questionChange(q,foo)">
+        <a (click)="onAddItem(q);">
+          <i class="fa fa-plus-circle"></i>
+        </a>
+        <a (click)="onDelItem(q);">
+          <i class="fa fa fa-minus-circle"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <table class="table">
+      <thead class="bg-light">
+        <tr>
+          <th>选项文字</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of question.options">
+          <td>
+            <input #foo type="text" class="form-control-xs" placeholder="{{o.name}}" [(ngModel)]="o.name" (change)="optionChange(o,foo)">
+          </td>
+          <td class="question-action">
+            <a (click)="onInsert(o);">
+              <i class="fa fa-plus-circle"></i>
+            </a>
+            <a (click)="onDel(o);">
+              <i class="fa fa fa-minus-circle"></i>
+            </a>
+            <a (click)="onUp(o);">
+              <i class="fa fa-arrow-circle-up"></i>
+            </a>
+            <a (click)="onDown(o);">
+              <i class="fa fa-arrow-circle-down"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

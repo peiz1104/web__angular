@@ -1,0 +1,27 @@
+<div class="home-lectuer">
+  <div class="navigation-bar-box">
+    <div class="nav-name">{{itemConfig?.name||'暂无标题'}}</div>
+    <div class="nav-more" *ngIf="itemConfig?.moreArticle">
+      <span>更多</span>
+      <i class="anticon anticon-right-circle"></i>
+    </div>
+  </div>
+  <ul class="lectuer-ul" *ngIf="lectuerInfo?.length>0">
+    <li *ngFor="let one of lectuerInfo;let i = index;">
+      <ng-container [ngTemplateOutlet]="childLectuer" [ngOutletContext]="{data: one}"></ng-container>
+    </li>
+  </ul>
+  <spk-home-template-defaultbox *ngIf="lectuerInfo?.length<1"></spk-home-template-defaultbox>
+</div>
+<ng-template #childLectuer let-data="data">
+  <div class="teacher-single clearfix">
+    <div class="img-box">
+      <img [src]="data?.imgUrl" onerror="this.src='assets/images/default/head.png'" />
+    </div>
+    <div class="content-box">
+      <div class="content-title">{{data?.name || '暂无'}}</div>
+      <div class="content-job">{{rankFn(data?.rank)}}</div>
+      <div class="content-job">{{data?.userGroup?.name || '暂无'}}</div>
+    </div>
+  </div>
+</ng-template>

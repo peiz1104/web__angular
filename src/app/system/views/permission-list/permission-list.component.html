@@ -1,0 +1,120 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">授权列表
+      <small>| 查看系统中已有的授权情况</small>
+    </h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-primary" [routerLink]="['add']" *spkAuthzIf="{hasPermission: 'SYSTEM:PERMISSION:ADD'}">添加授权</button>
+    </div>
+
+    <div class="page-body">
+    <cui-data-table #table [columns]="columns" [data]="permissions" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+            (select)="onSelect($event)" [loading]="loading">
+
+      <ng-template cuiColTpl="userGroup" let-row="row">
+        <spk-user-group-popover [userGroup]="row.user.userGroup" placement="left"></spk-user-group-popover>
+      </ng-template>
+
+      <ng-template cuiColTpl="scopeUserGroup" let-row="row">
+        <div *ngIf="row.target?.type == 'USER_GROUP' ">
+            <spk-user-group-popover [userGroup]="row.target" placement="left"></spk-user-group-popover>
+        </div>
+            <span class="text-success" *ngIf="row.target?.type == 'SITE'">{{row.target?.name}} (站点)</span>      
+      </ng-template>
+
+
+      <ng-template #simpleSearch>
+        <form class="form-inline pull-left">
+          <div class="form-group">
+            <nz-input name="searchtext" [nzPlaceHolder]="'请输入用户名或姓名'" [(ngModel)]="searchtext"></nz-input>
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="search()">搜索</button>
+            <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();table.isComplexSearch=true">高级搜索</a>
+          </div>
+        </form>
+      </ng-template>
+
+
+      <ng-template #complexSearch>
+        <form class="search-bar">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">用户名/姓名</label>
+                <div class="col-9">
+                  <nz-input name="searchtext" [nzPlaceHolder]="'请输入用户名或姓名'" [(ngModel)]="searchtext"></nz-input>
+                </div>
+              </div>
+             
+              <div class="form-group row">
+                <label class="col-form-label col-3">角色名称</label>
+                <div class="col-9">
+                  <nz-input name="roleName" [nzPlaceHolder]="'请输入角色名称'" [(ngModel)]="roleName"></nz-input>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">创建人</label>
+                <div class="col-9">
+                  <nz-select class="w-100" name="isMyself" [(ngModel)]="isMyself">
+                      <nz-option [nzLabel]="'全部'" [nzValue]='false' ></nz-option>
+                      <nz-option [nzLabel]="'本人'" [nzValue]='true'></nz-option>
+                  </nz-select>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-form-label col-3">权限名称</label>
+                <div class="col-9">
+                  <nz-input name="privilegeName" [nzPlaceHolder]="'请输入权限名称'" [(ngModel)]="privilegeName"></nz-input>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-3">数据范围</label>
+                <div class="col-9">
+                  <spk-user-group-select name="userGourp" [(ngModel)]="userGroup" placeholder="按组织搜索"></spk-user-group-select>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="col-12">
+            <div class="form-group row mb-0">
+              <div class="col-3 offset-1">
+                <button type="button" class="btn btn-primary" (click)="search()">搜索</button>
+                <a href="javascript:;" class="btn btn-link" (click)="clearSearchText();table.isComplexSearch=false">普通搜索</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+
+
+      <ng-template #rowActions let-row="row">
+        <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id)" *spkAuthzIf="{hasPermission: 'SYSTEM:PERMISSION:REMOVE'}">
+          <a nz-popconfirm href="javascript:;" class="text-danger">
+            <i style="font-size:16px;color:red" class="anticon anticon-delete"></i>
+          </a>
+        </nz-popconfirm>
+
+      </ng-template>
+
+      <ng-template #actionGroup>
+        <!-- <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete()" > -->
+          <button  class="btn btn-danger" (click)="delete(null, true)" *spkAuthzIf="{hasPermission: 'SYSTEM:PERMISSION:REMOVE'}">批量删除</button>
+        <!-- </nz-popconfirm> -->
+      </ng-template>
+    </cui-data-table>
+  </div>
+</div>

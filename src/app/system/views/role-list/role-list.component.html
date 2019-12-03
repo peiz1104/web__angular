@@ -1,0 +1,56 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">角色列表
+            <small>查看系统中现有的角色</small>
+        </h3>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-primary" [routerLink]="['add']" *spkAuthzIf="{hasPermission: 'SYSTEM:ROLE:ADD'}">创建角色</button>
+        </div>
+
+        <div class="page-body">
+            <cui-data-table #roleTable [columns]="columns" [data]="roles" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination">
+                <ng-template #simpleSearch>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <nz-input name="searchtext" [nzPlaceHolder]="'请输入角色名'" [(ngModel)]="searchtext"></nz-input>
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-template>
+                <ng-template cuiColTpl="name" let-row="row">
+                    <div style="text-align:left;">{{row.name}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="createdBy" let-row="row">
+                    <div style="text-align:left;">{{row.createdBy.displayName}}</div>
+                </ng-template>
+                <ng-template cuiColTpl="roleTypeCol" let-row="row">
+                    <span style="display:block;text-align:left;" class="text-success" *ngIf="row.roleType=='SYSTEM'">系统内置</span>
+                    <span style="display:block;text-align:left;" class="text-danger" *ngIf="row.roleType=='SITE'">自定义</span>
+                </ng-template>
+                <ng-template cuiColTpl="colcreateddate" let-row="row">
+                    <div>{{row.createdDate | date:'yyyy-MM-dd HH:mm'}}</div>
+                </ng-template>
+
+      <ng-template cuiColTpl="permissionType" let-row="row">
+        <span class="text-success" *ngIf="row.permissionType">已使用</span>
+        <span class="text-danger" *ngIf="!row.permissionType">未使用</span>
+      </ng-template>
+
+                <ng-template #rowActions let-row="row">
+                    <div *ngIf="row.roleType != 'SYSTEM'">
+                        <a href="javascript:;" [routerLink]="[row.id, 'edit']" *spkAuthzIf="{hasPermission: 'SYSTEM:ROLE:EDIT'}">
+                            <i style="color:#007bbf" title="管理" class="iconfont icon-jiaoseguanli"></i>
+                        </a>
+                        <span>|</span>
+          <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row)" *spkAuthzIf="{hasPermission: 'SYSTEM:ROLE:REMOVE'}">
+                            <a nz-popconfirm class="text-danger">
+                                <i style="color:red" title="删除" class="iconfont icon-shanchu"></i>
+                            </a>
+                        </nz-popconfirm>
+                    </div>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </div>

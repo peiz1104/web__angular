@@ -1,0 +1,99 @@
+<div class="train-type-name">
+    <div class="with-side">
+        <div class="side">
+            <div class="side-body" style="width: 20rem; height: 100%; background-color: #F4F6F8;">
+                <div class="card rounded-0" style="height: 100%; background-color: #F4F6F8;">
+                    <div class="card-header d-none">
+                        <h5>
+                            <i class="fa fa-sitemap"></i>
+                        </h5>
+                    </div>
+                    <div class="card-body" style="overflow-y: auto; background-color: #F4F6F8;height:400px">
+                        <spk-categorygrouptree [hidden]="ugSearchText" (selectionChange)="onUgSelectionChange($event)"></spk-categorygrouptree>
+                        <!-- <spk-categorytree *ngIf="activeCategoryGroup && activeCategoryGroup.identifier" [identifier]="activeCategoryGroup.identifier"
+                            (selectionChange)="edit($event)"></spk-categorytree> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <div class="container-fluid">
+                    <div class="classification-descript card mb-3">
+                        <div class="classification-message">
+                            <span class="name">培训类型名称：</span>
+                            <span>学时管理</span>
+                            <span class="edit-train">
+                                <i title="编辑" class="iconfont icon-bianji-copy"></i>
+                            </span>
+                            <span class="delete-train">
+                                <i (click)="showConfirm()" title="删除" class="iconfont icon-shanchu"></i>
+                            </span>
+                        </div>
+                        <div class="descript-content">
+                            <div>
+                                <i class="anticon anticon-frown-o"></i> 暂无描述内容</div>
+                        </div>
+                    </div>
+                    <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                        [(selection)]="selection" (reload)="loadData($event)">
+                        <ng-template #simpleSearch>
+                            <ng-container>
+                                <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                    <div nz-row class="cui-data-table-form-body">
+                                        <div nz-form-control>
+                                            <nz-input formControlName="name" [nzPlaceHolder]="'请输入名称'"> </nz-input>
+                                        </div>
+                                        <div class='simple-search-bar-search-box'>
+                                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> -->
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-container>
+                        </ng-template>
+
+                        <ng-template cuiColTpl="description" let-row="row">
+                            <span>{{row.description||'暂无描述'}}</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="actions" let-row="row">
+                            <span *ngIf="!row.isDeafult">
+                                <i *spkAuthzIf="{hasPermission: 'PERIOD:TRAINING_TYPE:EDIT'}" class="iconfont icon-bianji-copy" (click)="typeedit(row.id)"
+                                    title="编辑" style="cursor:pointer;color:#007bbf;font-size:16px"></i>
+                                <i *spkAuthzIf="{hasPermission: 'PERIOD:TRAINING_TYPE:REMOVE'}" class="iconfont icon-shanchu" (click)="singledelete([row.id])"
+                                    style="cursor:pointer;color:red;font-size:16px"></i>
+                            </span>
+                            <span *ngIf="row.isDeafult">
+                                <i class="iconfont icon-bianji-copy" title="不可编辑" style="cursor:pointer;color:#aaa;font-size:16px"></i>
+                                <i class="iconfont icon-shanchu" title="不可删除" style="cursor:pointer;color:#aaa;font-size:16px"></i>
+                            </span>
+                        </ng-template>
+                        <ng-template #listTools>
+                            <div class="btn-group">
+                                <button *spkAuthzIf="{hasPermission: 'PERIOD:TRAINING_TYPE:ADD'}" (click)="addclassification($event,'fc')" nz-button [nzType]="'primary'">
+                                    <i class="fa fa-plus"></i> 创建分类</button>
+                                <button *spkAuthzIf="{hasPermission: 'PERIOD:TRAINING_TYPE:REMOVE'}" nz-button [nzType]="'primary'" (click)="delete($event)">
+                                    <i class="iconfont icon-shanchu"></i> 删除</button>
+                            </div>
+                        </ng-template>
+                        <!-- <ng-template #actionGroup>
+                            <div class="btn-group dropup">
+                                <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                    <span>批量操作</span>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item">批量删除</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item">批量创建</a>
+                                    <a class="dropdown-item">批量导入</a>
+                                </div>
+                            </div>
+                        </ng-template> -->
+
+                    </cui-data-table>
+                </div>
+            </nz-spin>
+        </div>
+    </div>
+</div>

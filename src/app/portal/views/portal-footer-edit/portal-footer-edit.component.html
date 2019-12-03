@@ -1,0 +1,72 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">页脚信息</h3>
+  </div>
+</div>
+<div>
+  <div class="page-body">
+    <form #footerForm="ngForm" (submit)="onSubmit()">
+      <div class="container">
+        <div class="alert alert-info">维护站点页眉页脚基本信息</div>
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group row">
+              <label for="" class="col-3 col-form-label">
+                <i class="fa fa-field-required"></i> 服务热线</label>
+              <div class="col-9">
+                <input #hotline="ngModel" type="text" class="form-control" name="hotline" [(ngModel)]="footer.hotline" required>
+                <span class="form-control-feedback" *ngIf="(hotline.dirty || hotline.touched) && hotline.errors?.required">热线必填</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="" class="col-3 col-form-label">
+                <i class="fa fa-field-required"></i> 微信公众号名称</label>
+              <div class="col-9">
+                <input #wchart="ngModel" type="text" class="form-control" name="wchart" [(ngModel)]="footer.wchart" required>
+                <span class="form-control-feedback" *ngIf="(wchart.dirty || wchart.touched) && wchart.errors?.required">名称必填</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="" class="col-3 col-form-label">
+                <i class="fa fa-field-required"></i> 微信公众号二维码</label>
+              <div class="col-9">
+                <cui-fileupload [imageHolder]="footer.wchartImg" name="files" mode="image" accept=".jpg,.bmp,.png"  url="/api/upload/files" [auto]="true" (uploadComplete)="wchartUploadComplete($event)"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                  <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="" class="col-3 col-form-label">
+                <i class="fa fa-field-required"></i> APP名称</label>
+              <div class="col-9">
+                <input #app="ngModel" type="text" class="form-control" name="app" [(ngModel)]="footer.app" required>
+                <span class="form-control-feedback" *ngIf="(app.dirty || app.touched) && app.errors?.required">名称必填</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="" class="col-3 col-form-label">
+                <i class="fa fa-field-required"></i> APP二维码</label>
+              <div class="col-9">
+                <cui-fileupload [imageHolder]="footer.appImg" name="files" mode="image" accept=".jpg,.bmp,.png"  url="/api/upload/files" [auto]="true" (uploadComplete)="appUploadComplete($event)"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                  <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-9 offset-3">
+                <button type="submit" class="btn btn-primary" [disabled]="!footerForm.valid">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

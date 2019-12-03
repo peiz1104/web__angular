@@ -1,0 +1,138 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">课程培训
+            <small>发布课程培训，注册学员，管理课程培训成绩等</small>
+        </h3>
+
+        <div class="actions pull-right">
+
+        </div>
+    </div>
+
+    <div class="page-body">
+
+        <cui-data-table #dataTable [columns]="columns" [data]="classrooms?.content" [pagination]="classrooms" selectType="checkbox"
+            [loading]="loading" [(selection)]="selected" (reload)="loadData($event)">
+            <ng-template #complexSearch>
+                <form class="search-bar">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">名称</label>
+                                <div class="col-9">
+                                    <nz-input name="name" [nzPlaceHolder]="'请输入课程培训名称'" [(ngModel)]="searcher.name"></nz-input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">所属组织</label>
+                                <div class="col-9">
+                                    <spk-user-group-select name="userGroup.name" [(ngModel)]="searcher.userGroup"></spk-user-group-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <div class=" col-9 offset-3">
+                                    <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+                                        <label nz-checkbox [(ngModel)]="includeChildren" name="includeChildren">
+                                            <span>包含下级组织</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-form-label col-3">发布状态</label>
+                                <div class="col-9">
+                                    <nz-select style="width: 100%" name="isPublished" [(ngModel)]="isPublished" [nzPlaceHolder]="'请选择发布状态'" [nzShowSearch]="true">
+                                        <nz-option *ngFor="let ls of isPublishedOptions" [nzLabel]="ls.label" [nzValue]="ls.value">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-form-label col-2">分类</label>
+                                <div class="col-10">
+                                    <spk-category-select (clickOk)="chooseCategory($event)" name="category.id" [(ngModel)]="searcher.category" placeholder="按分类搜索"></spk-category-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group row mb-0">
+                                <div class="col-3 offset-1">
+                                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                                    <button type="reset" class="btn ">清空</button>
+                                    <!-- <a href="javascript:;" class="btn btn-link" (click)="dataTable.isComplexSearch=false">普通搜索</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input name="name" [nzPlaceHolder]="'请输入课程培训名称'" [(ngModel)]="searcher.name"></nz-input>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                        <!-- <a href="javascript:;" class="btn btn-link" (click)="dataTable.isComplexSearch=true">高级搜索</a> -->
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template #listTools>
+                <button type="button" (click)="doPublish()" class="btn btn-primary">
+                    发布</button>
+                <button type="button" (click)="cancelPublish()" class="btn btn-primary">
+                    取消发布</button>
+                <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']">
+                    直接创建</button>
+                <button type="button" class="btn btn-primary" [routerLink]="['../', 'link']">
+                    从课程体系创建</button>
+            </ng-template>
+
+            <ng-template cuiColTpl="courseType" let-row="row">{{getCourseType(row.offeringCourse?.course?.courseType)}}</ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">{{row.startDate | date: 'yyyy-MM-dd'}}</ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">{{row.endDate | date: 'yyyy-MM-dd'}}</ng-template>
+            <!-- <ng-template cuiColTpl="enableAccredit" let-row="row">{{row.enableAccredit ? '是' : '否'}}</ng-template> -->
+            <ng-template cuiColTpl="classroomStatus" let-row="row">
+                <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="publish([row])">
+                    <a nz-popconfirm class="text-secondary">未发布</a>
+                </nz-popconfirm>
+                <nz-popconfirm *ngIf="row.isPublished" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="disPublish([row])">
+                    <a nz-popconfirm class="text-success">已发布</a>
+                </nz-popconfirm>
+            </ng-template>
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <a target="_blank" [routerLink]="['../', row.id]">管理</a>
+                <!-- | <a>复制</a> -->
+                <span nz-table-divider></span>
+                <span *ngIf="row.isPublished" class="text-secondary" title="已发布的培训课程不允许删除">删除</span>
+                <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+            </ng-template>
+            <ng-template #actionGroup>
+                <button class="btn btn-danger" [disabled]="!selected || selected.length == 0 " (click)="delete()">批量删除</button>
+            </ng-template>
+            <ng-template cuiColTpl="imgscal" let-row="row">
+                <img [src]="row?.offeringCourse?.course.imageUrl" onerror="this.src='assets/images/course.png'" [alt]="row.name" width="72px"
+                    height="42px">
+            </ng-template>
+            <ng-template cuiColTpl="category" let-row="row">
+                <span>{{getNamePath(row.offeringCourse?.course?.category?.namePath)}}</span>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

@@ -1,0 +1,174 @@
+<ng-container *ngIf="!echoTpl">
+    <div *ngIf="value" class="d-flex course-mata-info">
+        <div class="media">
+            <img cui-lazy-load [src]="value.imageUrl" [alt]="value.name" class="mr-3" width="72px" height="42px">
+            <div class="media-body">
+                <h5 class="mt-0">{{value.name}}</h5>
+                <div class="mt-2">
+                    <span>课程编码: {{value.code}}</span>
+                    <span>所属分类: {{value.category?.name}}</span>
+                    <span>学时: {{value.period}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="handle ml-auto">
+            <a *ngIf="!disabled" (click)="!disabled && openLookup()">重新选择</a>
+            <nz-popover *ngIf="disabled" [nzTitle]="'说明'" [nzTrigger]="'focus'">
+                <button nz-button nz-popover [nzType]="'dashed'" [nzShape]="'circle'">
+                    <i class="anticon anticon-lock"></i>
+                </button>
+                <ng-template #nzTemplate>
+                    <div>课程培训一旦创建，不能删除或重新选择课程内容信息</div>
+                </ng-template>
+            </nz-popover>
+        </div>
+    </div>
+
+    <div *ngIf="!value">
+        <button type="button" class="btn btn-primary" [ngClass]="{'disabled': disabled}" (click)="!disabled && openLookup()">
+            <i class="anticon anticon-select"></i> 选择课程</button>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="echoTpl" [ngTemplateOutlet]="echoTpl"></ng-container>
+
+
+<ng-template #lookupDialog>
+    <div style="height:45px;" class="search-table">
+        <div style="float:left" class="search">
+            <form nz-form [formGroup]="searchForm" (ngSubmit)="_submitSearchForm($event, searchForm.value)" [nzLayout]="'inline'">
+                <div nz-form-item>
+                    <div style="width:250px;" class="form-group">
+                        <div nz-form-control>
+                            <label class="sr-only">分类</label>
+                            <spk-category-select formControlName="category" identifier="common" placeholder="按分类搜索"></spk-category-select>
+                        </div>
+                    </div>
+                    <div style="width:160px;" class="form-group  ml-2 usergroup">
+                        <label class="sr-only">组织</label>
+                        <spk-user-group-select formControlName="userGroup.id"></spk-user-group-select>
+                        <!-- <nz-input name="userGroupId" [nzPlaceHolder]="'请输入课程名称'" [(ngModel)]="searchBy.userGroupId"></nz-input> -->
+                    </div>
+                    <div class="form-group">
+                        <div nz-form-control>
+                            <label for="" class="sr-only">名称</label>
+                            <input type="text" nz-input formControlName="searchText" placeholder="输入课程名称或课程编码">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="_submitSearchForm($event, searchForm.value)"> 搜 索 </button>
+            </form>
+        </div>
+        <div style="float:right" class="table-change-list">
+            <div style="cursor:pointer">
+                <span (click)="toggleList()">
+                    <img [src]="showlist?'assets/images/show_list_has.png':'assets/images/show_list_no.png'" alt="">
+                </span>
+                <span style="margin-left:-5px;" (click)="toggleShowList()">
+                    <img [src]="listState?'assets/images/list_has.png':'assets/images/list_no.png'" alt="">
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div *ngIf="listState" class="show-list-box" style="position:relative;margin-top:18px">
+        <div class="checked-all" style="padding-left:18px;position:absolute;top:-22px">
+            <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+            </label>
+            <span style="margin-left:-2px;">全选</span>
+        </div>
+        <div *ngIf="!showlist" style="height:1px;background-color:#e5e5e5;margin-bottom:6px"></div>
+        <nz-spin [nzSpinning]="loading">
+            <div *ngIf="courses?.content.length" class="single-box">
+                <div style="width: 100%;height: 90px;overflow: hidden;line-height: 90px;border-bottom:1px solid #e5e5e5" class="single-course-box"
+                    *ngFor="let item of courses.content;let i=index">
+                    <span style="display: block;float: left;margin-left: 20px;line-height: 90px;">
+                        <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="singlechecked($event,item)"></label>
+                    </span>
+                    <span style="width: 120px; height: 72px; display: block;float: left;margin-left: 20px;border-radius: 6px;line-height:90px">
+                        <img style="width: 120px; border-radius: 6px; height: 72px;" onerror="this.src='assets/images/course.png'" [src]="item.imageUrl"
+                            alt="">
+                    </span>
+                    <div class="content-box" style="width: 72%; margin-left: 20px;height: 90px;float: left;">
+                        <div style="width: 100%;line-height: 30px;height: 30px;overflow: hidden;">
+                            <span style="display: block;float: left; width: 73%; height: 30px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <i style="color: #000000;font-weight: bold;font-style: normal;font-size: 16px;">{{item.name}}</i>
+                            </span>
+                        </div>
+
+                        <div style="width: 100%;line-height: 22px;height: 22px;overflow: hidden;">
+                            <span style="display: block;float: left; width: 33%;height: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                编码：{{item.code}}
+                            </span>
+                            <span style="display: block;float: left; width: 33%;height: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                组织：{{item.userGroup?.name}}
+                            </span>
+                            <span style="display: block;float: left; width: 33%;height: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                分类：{{item.category?.name}}
+                            </span>
+                        </div>
+                        <div style="width: 100%;line-height: 22px;height: 22px;overflow: hidden;">
+                            <span style="display: block;float: left; width: 33%;height: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                类型：{{_getCourseTypeText(item.courseType)}}
+                            </span>
+                            <span style="display: block;float: left; width: 33%;height: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                学时：{{item.period}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 14px;text-align: center;" class="page-nation">
+                    <nz-pagination nzShowTotal [(nzPageIndex)]="pageIndex" [nzTotal]="courses.totalElements" (nzPageIndexChange)="changePages($event)"
+                        [nzPageSize]="listPageSize"></nz-pagination>
+                </div>
+            </div>
+            <div style="text-align:center;line-height:30px;min-height:100px" *ngIf="!courses?.content.length">
+                <span style="color:#28a745;font-size:1.33em" class="fa fa-lg fa-info-circle text-success"></span>
+                <span style="font-size:1.25em">没有查询到符合条件的记录</span>
+            </div>
+        </nz-spin>
+    </div>
+    <div *ngIf="showlist" class="list-box" style="margin-top:-24px;">
+        <cui-data-table [columns]="columns" [data]="courses?.content" [pagination]="courses" [selectType]="multiple ? 'checkbox' :  'radio'"
+            [(selection)]="selection" [loading]="loading" (reload)="loadList($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container [ngTemplateOutlet]="simpleSearchTpl"></ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="thumbnail" let-row="row">
+                <h5>{{row.name}}</h5>
+            </ng-template>
+            <ng-template cuiColTpl="nameAndCode" let-row="row">
+                <span>{{row.code}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="typeAndDuration" let-row="row">
+                <div>{{_getCourseTypeText(row.courseType)}}</div>
+
+            </ng-template>
+            <ng-template cuiColTpl="period" let-row="row">
+                <div>{{row.period}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="orgAndCate" let-row="row">
+                <div>{{row.userGroup?.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="categroy" let-row="row">
+                <div>{{row.category?.name}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+
+    <div class="customize-footer" style="text-align:right;margin-top:14px">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="ok($event)">
+            确 定
+        </button>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="cancel($event)">
+            取 消
+        </button>
+    </div>
+
+    <ng-template #simpleSearchTpl>
+
+    </ng-template>
+</ng-template>

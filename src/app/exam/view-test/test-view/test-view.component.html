@@ -1,0 +1,306 @@
+<div class="preview-box">
+  <!-- <div class="preview-header">
+    <h2>预览</h2>
+  </div> -->
+
+  <div class="preview-paper">
+    <div class="paper-list-view">
+      <div class="has-data">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+          <div class="question-list">
+            <div class="show-question-list">
+              <div *ngIf="paperInfo" class="header-title">
+                {{paperInfo.epName}}
+                <span class="score">(试卷总分：{{paperInfo.examScore}})</span>
+              </div>
+              <div *ngFor="let value of dataList;let i=index" class="single-question">
+                <div *ngIf="value.part" class="sub-title">
+                  {{value.part.partitionName}}
+                  <span class="all-score">(总分{{value.part.partitionScore}})</span>
+                  <!-- <span>{{'共'+ dataList.queNum +'题)'}}</span> -->
+                </div>
+                <div *ngIf="value.typeName" class="single-question-header">
+                  <div class="type-show">
+                    {{value.typeName}}
+                    <span class="single-show-cover"></span>
+                  </div>
+                </div>
+                <div *ngIf="value.casual || value.clobCasual" class="question-title">
+                  <label nz-checkbox [(ngModel)]="value.checked" *ngIf="checkbox"></label>
+                  {{'第'+(i+1)+'题 '}}
+                  <span *ngIf="value.isBigText=='true'||value.isBigText==true" class="htmlText" [innerHtml]="value.clobCasual|innerHtmlPipe"></span>
+                  <span *ngIf="value.isBigText!='true'&&value.isBigText!=true" class="htmlText" [innerText]="value.casual"></span>
+                  <span class="score-color">{{'('+(value.queScore || value.score || 0)+'分)'}}</span>
+                </div>
+                <!--  DANX单选题；DUOX多选题；"PD"判断题；"PP"匹配题; "TK"填空题 ；"JD"简答题 ；"ALFX" 案例分析题  ；"YDLJ"阅读理解题-->
+                <div class="every-question">
+                  <!-- 判断题 -->
+                  <div *ngIf="value.baseCode=='PD'" class="judge-question">
+                    <div class="answer">参考答案：
+                      <span *ngFor="let singlechoose of value.answerList " class="single-choose">
+                        <span *ngIf="singlechoose.isCorrect=='Y'">
+                          {{singlechoose.answerText=='yes'?'正确':'错误'}}
+                        </span>
+                      </span>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 单选题 -->
+                  <div *ngIf="value.baseCode=='DANX'" class="single-choose-question">
+                    <div *ngFor="let singlechoose of value.answerList; let n=index " class="s-choose-item">
+                      <span class="answerspan clearfix">
+                        <input disabled type='radio' [checked]="singlechoose.isCorrect=='Y'" name={{singlechoose.examQueId}} /> {{chooseArray[n]+'、'}}
+                        <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                        <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                      </span>
+                    </div>
+                    <div *ngFor="let filter of value.answerList;let i=index">
+                      <div *ngIf="filter.isCorrect=='Y'" class="right-answer">参考答案：{{chooseArray[i]}}</div>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 多选题 -->
+                  <div *ngIf="value.baseCode=='DUOX'" class="more-choose-question">
+                    <div *ngFor="let singlechoose of value.answerList;let n=index " class="single-choose">
+                      <label class="custom-checkbox">
+                        <input disabled type='checkbox' [checked]="singlechoose.isCorrect=='Y'" name={{singlechoose.examQueId}} />
+                        <span></span>
+                      </label>
+                      {{chooseArray[n]+'、'}}
+                      <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                      <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                    </div>
+                    <div class="mc-answer">
+                      <span>参考答案：</span>
+                      <span *ngFor="let mcright of  value.answerList;let i=index">
+                        <!-- <span>{{mcright.isCorrect}}</span> -->
+                        <span *ngIf="mcright.isCorrect=='Y'">{{chooseArray[i]}}</span>
+                      </span>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 简答题 -->
+                  <div *ngIf="value.baseCode=='JD'" class="sa-question">
+                    <div *ngFor="let singlechoose of value.answerList " class="sa-answer">
+                      参考答案：
+                      <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span>
+                      <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 匹配题 -->
+                  <div *ngIf="value.baseCode=='PP'" class="mq-question">
+                    <div *ngFor="let singlechoose of returnPPList(value.answerList,true); let s=index">
+                      <span>问题{{s+1}}、</span>
+                      <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                      <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                    </div>
+                    <div *ngFor="let singlechooseanswer of returnPPList(value.answerList); let xx=index">
+                      <span>选项{{xx+1}}、</span>
+                      <span *ngIf="singlechooseanswer.isBigText=='true'||singlechooseanswer.isBigText==true" class="htmlText" [innerHtml]="singlechooseanswer.answerText|innerHtmlPipe"></span>
+                      <span *ngIf="singlechooseanswer.isBigText!='true'&&singlechooseanswer.isBigText!=true" class="htmlText" [innerText]="singlechooseanswer.answerText"></span>
+                    </div>
+                    <div class="pp-border">
+                      <span class="right-answer">参考答案：</span>
+                      <div *ngFor="let singletest of returnPPList(value.answerList,true); let s=index">
+                        <span>问题{{s+1}}：</span>
+                        <span *ngFor="let singleanswer of returnPPList(value.answerList); let k=index">
+                          <span *ngIf="singletest.isCorrect==singleanswer.answer">
+                            选项{{k+1}}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 案例分析 -->
+                  <div *ngIf="value.baseCode=='ALFX'" class="ca-question">
+                    <div>
+                        参考答案：
+                        <span *ngFor="let singlechoose of value.answerList " class="ca-answer">
+                          <span *ngIf="singlechoose.isCorrect=='Y'">
+                            <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                            <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                          </span>
+                        </span>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 填空题 -->
+                  <div *ngIf="value.baseCode=='TK'" class="fb-question">
+                    <div class="TK-border">
+                        <span>参考答案:</span>
+                        <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                          <span *ngIf="singlechoose.isCorrect=='Y'">
+                            第{{singlechoose.answer+1}}空、
+                            <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span>
+                            <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                          </span>
+                        </div>
+                    </div>
+                    <div *ngIf="value.queAnalysis">
+                      <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                    </div>
+                  </div>
+                  <!-- 阅读理解题 -->
+                  <div *ngIf="value.baseCode=='YDLJ'" class="read-question">
+                    <div *ngFor="let ydsingle of value.childList;let i = index" class="single-choose">
+                      <!-- 阅读理解题里有判断题填空题单选多选案例分析 -->
+                      <div class="question-type-score">
+                        <span class="question-order">
+                          {{i+1 +'、'}}
+                          <span *ngIf="ydsingle.isBigText=='true'||ydsingle.isBigText==true" class="htmlText" [innerHtml]="ydsingle.clobCasual|innerHtmlPipe"></span>
+                          <span *ngIf="ydsingle.isBigText!='true'&&ydsingle.isBigText!=true" class="htmlText" [innerText]="ydsingle.casual"></span>
+                          ({{ydsingle.typeName}})
+                        </span>
+                        <span class="quesiton-score">（{{ydsingle.queScore ||ydsingle.score || 0}} 分）</span>
+                      </div>
+                      <!-- DANX单选 -->
+                      <div *ngIf="ydsingle.baseCode=='DANX'" class="DANX">
+                        <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                          <span>
+                            <input disabled type='radio' [checked]="ydchoose.isCorrect=='Y'" name={{ydchoose.examQueId}} /> {{chooseArray[y]+'、'}}
+                            <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="htmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="htmlText" [innerText]="ydchoose.answerText"></span>
+                          </span>
+                        </div>
+                        <div *ngFor="let filter of ydsingle.answerList;let k=index">
+                          <div *ngIf="filter.isCorrect=='Y'" class="right-answer">参考答案：{{chooseArray[k]}}</div>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                      <!-- DUOX多选 -->
+                      <div *ngIf="ydsingle.baseCode=='DUOX'" class="DUOX">
+                        <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                          <span>
+                            <label class="custom-checkbox">
+                              <input disabled type='checkbox' [checked]="ydchoose.isCorrect=='Y'" name={{ydchoose.examQueId}} />
+                              <span></span>
+                            </label>
+                            {{chooseArray[y]+'、'}}
+                            <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="htmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe">{{ydchoose.answerText}}</span>
+                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="htmlText" [innerText]="ydchoose.answerText"></span>
+                          </span>
+                        </div>
+                        <div class="mc-answer">
+                          <span>参考答案：</span>
+                          <span *ngFor="let mcright of  ydsingle.answerList;let k=index">
+                            <span *ngIf="mcright.isCorrect=='Y'">{{chooseArray[k]}}</span>
+                          </span>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                      <!-- PD判断 -->
+                      <div *ngIf="ydsingle.baseCode=='PD'" class="PD">
+                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                          <div>
+                              <span>参考答案：</span>
+                              <span *ngIf="ydchoose.isCorrect=='Y'">
+                                {{ydchoose.answerText=='yes'?'正确':'错误'}}
+                              </span>
+                          </div>
+                          <div *ngIf="ydsingle.queAnalysis">
+                            <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--  TK填空-->
+                      <div *ngIf="ydsingle.baseCode=='TK'" class="TK">
+                        <div>
+                            <span>参考答案:</span>
+                            <div *ngFor="let singlechoose of ydsingle.answerList;let k = index; " class="single-choose">
+                              <span *ngIf="singlechoose.isCorrect=='Y'">
+                                第{{singlechoose.answer+1}}空、
+                                <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span>
+                                <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="htmlText" [innerText]="singlechoose.answerText"></span>
+                              </span>
+                            </div>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                      <!-- 简单题JD -->
+                      <div *ngIf="ydsingle.baseCode=='JD'" class="JD">
+                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                          <span *ngIf="ydchoose.isCorrect=='Y'">
+                            <span>参考答案：</span>
+                            <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="htmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="htmlText" [innerText]="ydchoose.answerText"></span>
+                          </span>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                      <!-- 匹配题 -->
+                      <div *ngIf="ydsingle.baseCode=='PP'" class="PP">
+                        <div *ngFor="let singlechoose of returnPPList(ydsingle.answerList,true); let s=index">
+                          <span>问题{{s+1}}、</span>
+                          <span class="htmlText" [innerText]="singlechoose.answerText"></span>
+                          <!-- <span class="htmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span> -->
+                        </div>
+                        <div *ngFor="let singlechooseanswer of returnPPList(ydsingle.answerList); let xx=index">
+                          <span>选项{{xx+1}}、</span>
+                          <span class="htmlText" [innerText]="singlechooseanswer.answerText"></span>
+                          <!-- <span class="htmlText" [innerHtml]="singlechooseanswer.answerText|innerHtmlPipe">{{singlechooseanswer.answerText}}</span> -->
+                        </div>
+                        <div>
+                          <span class="right-answer">参考答案：</span>
+                          <div *ngFor="let singletest of returnPPList(ydsingle.answerList,true); let s=index">
+                            <span>问题{{s+1}}：</span>
+                            <span *ngFor="let singleanswer of returnPPList(ydsingle.answerList); let k=index">
+                              <span *ngIf="singletest.isCorrect==singleanswer.answer">
+                                选项{{k+1}}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                      <!--  ALFX案例分析题-->
+                      <div *ngIf="ydsingle.baseCode=='ALFX'" class="ALFX">
+                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                          <span *ngIf="ydchoose.isCorrect=='Y'">
+                            <span>参考答案：</span>
+                            <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="htmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="htmlText" [innerText]="ydchoose.answerText"></span>
+                          </span>
+                        </div>
+                        <div *ngIf="ydsingle.queAnalysis">
+                          <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="checkbox&&!spinning&&dataList" class="text-right">
+            <button nz-button [nzType]="'default'" (click)="cancelView()">取消</button>
+            <button nz-button [nzType]="'primary'" (click)="addQuestion()">确定</button>
+          </div>
+        </nz-spin>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+.site{
+    padding: 10px 20px;
+    .teacher-tab{
+        .teacher-one{
+            display: flex;
+            width: 47%;
+            float: left;
+            padding: 5px;
+            border: 1px solid #e6e6e6;
+            margin-bottom: 5px;
+            position: relative;
+            i{
+                position: absolute;
+                right: -10px;
+                top: -10px;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            &:nth-of-type(2n){
+                margin-left: 15px;
+            }
+            img{
+                width: 60px;
+                height: 60px;
+            }
+            .teacher-ri{
+                flex: 1;
+                padding-left: 5px;
+                overflow: hidden;
+                span{
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    word-break: break-all;
+                    line-height: 20px;
+                }
+            }
+        }
+    }
+}
+:host ::ng-deep{
+    .ant-form-item{
+        margin-bottom: 0px;
+    }
+    .lectuer-modal{
+        .ant-modal-close{
+            outline: none;
+        }
+        .table td{
+            vertical-align: middle;
+        }
+    }
+    .ant-modal-content {
+       width: 900px;
+    }
+
+}

@@ -1,0 +1,104 @@
+<div class="message-add">
+  <div class="top-bread">
+    <div class="page-header">
+      <h5 class="page-title">
+        <small>新建消息</small>
+      </h5>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <form nz-form [formGroup]="validateForm">
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="types" nz-form-item-required>发送方式</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('types')">
+          <!-- <nz-input formControlName="mode"></nz-input> -->
+          <nz-checkbox-group formControlName="types" [(ngModel)]="modeOption"></nz-checkbox-group>
+          <div nz-form-explain *ngIf="getFormControl('types').dirty&&getFormControl('types').hasError('required')">发送方式必选</div>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="title" nz-form-item-required>主题</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('title')">
+          <nz-input formControlName="title" [nzPlaceHolder]="'请输入主题'"></nz-input>
+          <!-- <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">主题不能为空</div> -->
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="scopes" >通知范围</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('scopes')">
+          <nz-checkbox-group formControlName="scopes" [(ngModel)]="scopeOption" ></nz-checkbox-group>
+          <div  class='text-danger' *ngIf="userIsNull">通知范围和接收人，至少二选一</div>
+          <!-- <div nz-form-explain *ngIf="getFormControl('scopes').dirty&&getFormControl('scopes').hasError('required')"></div> -->
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="receiveUsers">接收人</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('receiveUsers')">
+          <div class="analog" (click)="showPerson()">
+            <p *ngIf="selection?.length == 0">请选择接收人</p>
+            <ul *ngIf="selection?.length != 0">
+              <li *ngFor="let one of selection;">{{one.username}}</li>
+            </ul>
+            <i class="anticon anticon-search"></i>
+          </div>
+          <div n class='text-danger' *ngIf="userIsNull">通知范围和接收人，至少二选一</div>
+          <div>
+            <span>此处接收人列表为当前活动所有人员。</span>
+            <br>
+            <span>如果不选，则按照勾选的通知范围发送消息。</span>
+            <br>
+            <span>选择后，则将通知范围和选择的学员合并发送消息。</span>
+            <br>
+            <span>与通知范围，至少二选一</span>
+          </div>
+        </div>
+        <div nz-col class="del-person" [nzSpan]="4" (click)="delPerson()"><i class="anticon anticon-delete"></i></div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="sendTime">发送时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('sendTime ')">
+          <nz-datepicker style="width:100%;" formControlName="sendTime" [nzPlaceHolder]="'请选择发送时间'" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+          <div>如果不选，则默认实时发送</div>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="content" nz-form-item-required>正文</label>
+        </div>
+        <div *ngIf="!modeOption[2].checked" nz-col [nzSpan]="10">
+          <cui-ckeditor formControlName="content" [toolbarMode]="'um'"></cui-ckeditor>
+          <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+            <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+          </div>
+        </div>
+        <div *ngIf="modeOption[2].checked" nz-col [nzSpan]="10">
+          <nz-input formControlName="content" nzType="textarea" [nzRows]="'4'"></nz-input>
+          <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+            <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+          </div>
+        </div>
+      </div>
+      <div nz-form-item nz-row style="margin-bottom:8px;">
+        <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+          <button nz-button [nzType]="'primary'" [nzLoading]="loading" (click)="_submitForm()" class="mr-5">保存</button>
+          <button nz-button [nzType]="'default'" (click)="goBack()">返回</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <nz-modal [nzWidth]="800" [nzVisible]="isVisible" [nzFooter]="false" [nzTitle]="'接收人列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+      <spk-ugc-activity-messages-persons *ngIf="isVisible" (selected)="persons($event)" [selection]="selection" [id]="sourceId"></spk-ugc-activity-messages-persons>
+    </ng-template>
+  </nz-modal>
+</div>

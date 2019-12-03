@@ -1,0 +1,38 @@
+<div class="card-body mb-1" *ngIf="question.isShow && ((question.isView  && !question.hasLogic) || !question.isView)">
+  <h4 class="card-title">{{idx+1}}、{{question.name}}
+    <span class="text-danger" *ngIf="question.required">*</span>
+  </h4>
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col" *ngFor="let o of question.options;">
+      {{o.name}}
+    </div>
+  </div>
+  <div class="row my-2" *ngFor="let q of question.leftQuestions;let i=index;">
+    <div class="col">
+      <h4>{{q.name}}</h4>
+    </div>
+    <div class="col" *ngFor="let o of question.options;let j=index">
+      <input [name]="i" [type]="question.type == 'MATRIX_SINGLE' ? 'radio' : 'checkbox'" *ngIf="!question.isView" disabled>
+      <input [name]="i" [type]="question.type == 'MATRIX_SINGLE' ? 'radio' : 'checkbox'" *ngIf="question.isView" (click)="onJumpSubject(o,foo,q)"
+        #foo>
+    </div>
+  </div>
+  <div *ngIf="question.hasDesc" class="py-2 row ml-1">
+    <span class="text-danger">提示：</span>
+    <div [innerHtml]="question.innerDescription"></div>
+  </div>
+  <div class="card-action" [ngClass]="{'visible': question.isEdit}">
+
+    <spk-question-action [question]="question" [idx]="idx"></spk-question-action>
+
+    <div class="edit-question" *ngIf="question.isEdit">
+      <spk-question-edit [question]="question" [idx]="idx"></spk-question-edit>
+      <spk-matrix-option [question]="question" [idx]="idx"></spk-matrix-option>
+
+      <div class="d-flex justify-content-end">
+        <a class="btn btn-warning btn-block" (click)="onSave()">完成编辑</a>
+      </div>
+    </div>
+  </div>

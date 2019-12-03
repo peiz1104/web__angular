@@ -1,0 +1,101 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 辖类机构管理</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../../../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="page-header">
+
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                基础配置
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">研修院信息管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                辖内机构管理
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="form-box">
+            <div nz-row class="form-row">
+                <div nz-form-item nz-col [nzSpan]="11">
+                    <div nz-form-label nz-col [nzSpan]="10">
+                        <label>机构名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.orgName" nz-col [nzSpan]="12">
+                        <nz-input formControlName="orgName" [nzPlaceHolder]="'请输入机构名称'" [nzSize]="'large'"></nz-input>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="3">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'">查询</button>
+                </div>
+            </div>
+        </form>
+        <div>
+            <button type="button" class="btn btn-primary" (click)="showModle()"> 添加</button>
+            <button type="button" class="btn btn-primary" (click)="delete()"> 删除</button>
+        </div>
+    </div>
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="innerGroups?.content" [pagination]="innerGroups" [(selection)]="selection" selectType="checkbox"
+            (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="coltrainingschoolname" let-row="row">
+                <div style="text-align:left;">{{row.trainingSchool.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colusergroupname" let-row="row">
+                <div style="text-align:left;">{{row.org.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd hh:mm'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreatedby" let-row="row">
+                <div style="text-align:left;">{{row.createdByDisplayName}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+
+    <nz-modal [nzVisible]="citySelect" [nzTitle]="'添加机构'" [nzContent]="modalContent" (nzOnCancel)="handleCancel()" [nzFooter]="false"
+        [nzWidth]="'720px'">
+        <ng-template #modalContent>
+            <div class="city-select">
+
+                <form nz-form [formGroup]="innerGroupForm" class="city-select-list">
+                    <div class="form-select">
+                        <div nz-form-item nz-row class="select-box">
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label>选择机构</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="12">
+                                <spk-user-group-select [isRegion]="true" formControlName="orgs" mode="multiple"></spk-user-group-select>
+                                <!-- <div nz-form-extra>添加选择你所要增加的城市分类，对子机构生效！</div> -->
+                            </div>
+                        </div>
+                        <div class="ok-cancel">
+                            <button nz-button *ngIf="submitLoading == true" [nzType]="'primary'" (click)="_submitForm($event,innerGroupForm.value)" [nzSize]="'large'"
+                                [nzLoading]="true">确定</button>
+                            <button nz-button *ngIf="submitLoading == false" (click)="_submitInnerGroupForm($event,innerGroupForm.value)" [nzType]="'primary'"
+                                [nzSize]="'large'">确定</button>
+                            <button nz-button [nzType]="'primary'" [nzSize]="'default'" (click)="handleCancel()" class="cancel-br">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </ng-template>
+    </nz-modal>
+</div>

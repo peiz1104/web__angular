@@ -1,0 +1,58 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <!-- <small>| 配置管理</small> -->
+            <small *ngIf="url.indexOf('traintypename')!=-1">| 培训类型管理</small>
+            <small *ngIf="url.indexOf('traintypename')!=-1">| 培训类型列表</small>
+            <small *ngIf="url.indexOf('traintitem')!=-1">| 培训主题管理</small>
+            <small *ngIf="url.indexOf('traintitem')!=-1">| 培训主题列表</small>
+            <small *ngIf="url.indexOf('trainchannel')!=-1">| 培训方式和渠道管理</small>
+            <small *ngIf="url.indexOf('trainchannel')!=-1">| 培训方式和渠道列表</small>
+            <small *ngIf="url.indexOf('trainsource')!=-1">| 培训来源管理</small>
+            <small *ngIf="url.indexOf('trainsource')!=-1">| 培训来源列表</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')==-1&&url.indexOf('fc')!=-1">| 培训类型创建</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')!=-1&&url.indexOf('fc')!=-1">| 培训类型编辑</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')==-1&&url.indexOf('trainthemeadd')!=-1">| 培训主题创建</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')!=-1&&url.indexOf('trainthemeadd')!=-1">| 培训主题编辑</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')==-1&&url.indexOf('trainchanel')!=-1">| 培训方式创建</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')!=-1&&url.indexOf('trainchanel')!=-1">| 培训方式编辑</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')==-1&&url.indexOf('traintsource')!=-1">| 培训来源创建</small>
+            <small *ngIf="url.indexOf('edit')!=-1&&url.indexOf('id')!=-1&&url.indexOf('traintsource')!=-1">| 培训来源编辑</small>
+        </h3>
+    </div>
+</div>
+<div class="base-seting-box">
+
+    <div class="top-bread">
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                学时管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/classhour/hourconfiguration']">配置管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('traintypename')!=-1">
+                <a [routerLink]="['/classhour/hourconfiguration/traintypename']">培训类型列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('traintitem')!=-1">
+                <a routerLinkActive="active" [routerLink]="['../../','traintitem']">培训主题列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('traintypename')!=-1">
+                <a routerLinkActive="active" [routerLink]="['/classhour/hourconfiguration/traintypename']">培训类型管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('traintitem')!=-1">
+                <a routerLinkActive="active" [routerLink]="['/classhour/hourconfiguration/traintitem']">培训主题管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('trainchannel')!=-1">
+                <a routerLinkActive="active" [routerLink]="['/classhour/hourconfiguration/trainchannel']">培训方式和渠道管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item *ngIf="url.indexOf('trainsource')!=-1">
+                <a routerLinkActive="active" [routerLink]="['/classhour/hourconfiguration/trainsource']">培训来源管理</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+    </div>
+    <router-outlet></router-outlet>
+</div>

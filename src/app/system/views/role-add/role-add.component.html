@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">创建角色</h3>
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-secondary" [routerLink]="['../']">返回角色列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <spk-role-form [loading]="loading" (save)="onSave($event)" (cancel)="onCancel($event)"></spk-role-form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<form nz-form [formGroup]="_form" class="form-horizontal">
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label nz-form-item-required>标题</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16" [nzValidateStatus]="getFormControl('title')">
+            <input nz-input formControlName="title" required maxlength="30">
+            <div nz-form-extra>标题最多可输入30个字符</div>
+            <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">标题必填</div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>作者</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <input nz-input formControlName="author" maxlength="30">
+            <div nz-form-extra>留空将被填充为创建者的姓名</div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>所属分组</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <spk-news-group-select formControlName="newsGroupId"></spk-news-group-select>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>有效期</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_startDate=$event;_startValueChange()"
+                [nzDisabledDate]="_disabledStartDate"></nz-datepicker>
+            <span> ~ </span>
+            <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_endDate=$event;_endValueChange()" [nzDisabledDate]="_disabledEndDate"></nz-datepicker>
+            <div nz-form-extra>只有有效期范围内的文章才对学员开放，不设置将永久开放</div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">是否发布：</div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <nz-radio-group formControlName="isPublished">
+                <label nz-radio [nzValue]="true">
+                    <span>是</span>
+                </label>
+                <label nz-radio [nzValue]="false">
+                    <span>否</span>
+                </label>
+            </nz-radio-group>
+        </div>
+    </div>
+    <!-- div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>缩略图</label>
+        </div>
+                <div class="col-5 push-7 order-2">
+                        <cui-fileupload [imageHolder]="thumbnail" mode="image" accept=".jpg,.bmp,.png" name="files" url="/api/upload/files" [auto]="true"
+                        (uploadComplete)="onImageUpload($event)"></cui-fileupload>
+                        <div class="text-muted">
+                            <i class="fa fa-info-circle text-info"></i> 可以在此处上传封面图片。
+                            格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                            图片尺寸建议最小200*120，比例5:4
+                        </div>
+                </div>
+
+    </div> -->
+    <div class="form-group">
+            <label for="name" class="col-form-label col-md-2">缩略图：</label>
+            <div class="col-md-9">
+                    <cui-fileupload [imageHolder]="thumbnail" mode="image" accept=".jpg,.bmp,.png" name="files" url="/api/upload/files" [auto]="true"
+                    (uploadComplete)="onImageUpload($event)"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                <i class="fa fa-info-circle text-info"></i> 可以在此处上传封面图片。
+                格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                图片尺寸建议最小200*120，比例5:4</span>
+            </div>
+        </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>关键词</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <input nz-input formControlName="keywords" maxlength="30">
+            <div nz-form-extra>设置关键词便于检索，关键词用逗号或分号分隔</div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>摘要</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <textarea nz-input formControlName="summary" rows="4"></textarea>
+            <div nz-form-extra></div>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>内容</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="16">
+            <cui-ckeditor formControlName="content"></cui-ckeditor>
+            <div nz-form-extra></div>
+        </div>
+    </div>
+
+    <div nz-form-item nz-row>
+        <div nz-form-control nz-col [nzSpan]="16" [nzOffset]="4">
+            <button type="button" nz-button [nzType]="'primary'" (click)="_save($event)" [nzLoading]="loading" [disabled]="_form.invalid">保存</button>
+            <button type="button" nz-button [nzType]="'primary'" (click)="preview()">预览</button>
+            <button type="button" nz-button [nzType]="'default'" (click)="_cancel($event)">取消</button>
+        </div>
+    </div>
+
+</form>

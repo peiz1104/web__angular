@@ -1,0 +1,25 @@
+<ul class="nav nav-tabs mt-4 mb-3">
+  <li class="nav-item" *ngFor="let cg of programmanagementGroups">
+    <!--<a class="nav-link" [ngClass]="{active: cg.isCurrent == true}" (click)="showCategory(cg)">{{cg.name}}</a>-->
+    <a class="nav-link" [routerLink]="['../', cg.identifier]" routerLinkActive="active" (click)="showCategory(cg)">{{cg.name}}</a>
+  </li>
+</ul>
+<!--<spk-category [categoryGroup]="activeCategoryGroup"></spk-category>-->
+<div class="with-side" style="height: 100%;">
+  <div class="side">
+    <div class="side-body" style="width: 20rem; height: 100%;">
+      <div class="card" style="height: 100%;">
+        <div class="card-toolbar pt-4 d-none">
+          <input type="text" name="search" class="form-control" placeholder="搜索">
+        </div>
+
+        <div class="card-body">
+          <spk-program-management-tree *ngIf="activeProgrammanagementGroup && activeProgrammanagementGroup.identifier" [identifier]="activeProgrammanagementGroup.identifier" (selectionChange)="edit($event)"></spk-program-management-tree>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

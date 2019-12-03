@@ -1,0 +1,34 @@
+前端常见问题
+
+----
+@Input() tips: {};
+@Input() data: {};
+
+ERROR in /mnt/d/Workspace/spark/learner-web/src/$$_gendir/app/component/single-course/single-course.component.ngfactory.ts (85,36): Property 'status' does not exist on type '{}'.
+
+# 改
+@Input() tips: any;
+@Input() data: any;
+----
+
+----
+<div class="title" title={{data.title}} (click)="this.router.navigate(['/trainingDetail'])">{{data.title||'暂无'}}</div>
+
+constructor(private router: Router) { }
+
+ERROR in ng:///mnt/d/Workspace/spark/learner-web/src/app/component/train-box/train-box.component.html (5,49): Property 'router' is private and only accessible within class 'TrainBoxComponent'.
+
+# 改
+<div class="title" title={{data.title}} [routerLink]="['/trainingDetail']">{{data.title||'暂无'}}</div>
+
+constructor() { }
+----
+
+----
+<nz-input [(ngModel)]="inputValue" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="defaultWord.placeWord"></nz-input>
+
+ERROR in ng:///mnt/d/Workspace/spark/learner-web/src/app/component/comment-box/comment-box.component.html (8,19): Property 'inputValue' does not exist on type 'CommentBoxComponent'.
+
+# 改
+CommentBoxComponent 中添加属性 inputValue
+----

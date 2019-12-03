@@ -1,0 +1,114 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 年度学习任务列表</small>
+        </h3>
+    </div>
+</div>
+<div class="hour-task-list-box">
+    <!-- <div class="top-bread">
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                学时管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="active">年度学习任务列表</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>年度学习任务列表</small>
+            </h5>
+        </div>
+    </div> -->
+    <div class="form-list-box">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                    [(selection)]="selection" (reload)="loadData($event)">
+
+                    <!-- <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-form-control>
+                                        <nz-input formControlName="trainname" [nzPlaceHolder]="'年度学时名称'"> </nz-input>
+                                    </div>
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template> -->
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form class="form-inline">
+                                <div class="form-group">
+                                    <select placeholder="请选择年份" class="select-box" [(ngModel)]="year" name="year" id="year">
+                                        <!-- <option value="" selected data-default>select your beverage</option> -->
+                                        <option value="nowDate-5">{{nowDate-5}}</option>
+                                        <option value="nowDate-4">{{nowDate-4}}</option>
+                                        <option value="nowDate-3">{{nowDate-3}}</option>
+                                        <option value="nowDate-2">{{nowDate-2}}</option>
+                                        <option value="nowDate-1">{{nowDate-1}}</option>
+                                        <option value="nowDate">{{nowDate}}</option>
+                                        <option value="nowDate+1">{{nowDate+1}}</option>
+                                        <option value="nowDate+2">{{nowDate+2}}</option>
+                                        <option value="nowDate+3">{{nowDate+3}}</option>
+                                        <option value="nowDate+4">{{nowDate+4}}</option>
+                                        <option value="nowDate+5">{{nowDate+5}}</option>
+                                    </select>
+                                    <span *ngIf="!year" class="placehoder-show">请选择年份</span>
+                                    <span *ngIf="year" (click)="removeyear()" class="close-choose">
+                                        <i class="iconfont icon-guanbi1"></i>
+                                    </span>
+                                </div>
+                                <div class="form-group search-btn-margin ml-2">
+                                    <button nz-button [nzType]="'primary'" (click)="loadData()">搜索</button>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                            <button *spkAuthzIf="{hasPermission: 'PERIOD:TASK:ADD'}" (click)="addhourtask($event,'addtask')" nz-button [nzType]="'primary'">
+                                <i class="iconfont icon-tianjia" style="font-size:12px"></i> 添加年度学时任务</button>
+                            <!-- <button *spkAuthzIf="{hasPermission: 'PERIOD:TASK:REMOVE'}" type="button" class="btn btn-primary" (click)="delete($event)">
+                                <i class="iconfont icon-shanchu"></i> 删除</button> -->
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <span *spkAuthzIf="{hasPermission: 'PERIOD:TASK:EDIT'}">
+                            <i *ngIf="!row.carryOver" title="编辑" style="font-size:16px;cursor:pointer;color:#007fbb" (click)="eidtpriod(row.id)" class="iconfont icon-bianji-copy"></i>
+                            <i *ngIf="row.carryOver" title="结转不可编辑" style="font-size:16px;cursor:pointer;color:#aaa" class="iconfont icon-bianji-copy"></i>
+                        </span>
+
+                        <!-- <i *spkAuthzIf="{hasPermission: 'PERIOD:TASK:REMOVE'}" title="删除" style="font-size:16px;cursor:pointer;color:red" (click)="singledelete([row.id])" class="iconfont icon-shanchu"></i> -->
+                    </ng-template>
+
+                    <ng-template cuiColTpl="startDate" let-row="row">
+                        <span>{{row.startDate|date:'yyyy-MM-dd'}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="remark" let-row="row">
+                        <span style="display:block;text-align:left;">{{row.remark}}</span>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="endDate" let-row="row">
+                        <span>{{row.endDate|date:'yyyy-MM-dd'}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="lookView" let-row="row">
+                        <i [routerLink]="['../',row.id,row.year,'viewdetail']" [queryParams]="{isCarryOver:row.carryOver}" class="iconfont icon-chakan1"
+                            title="查看" style="cursor:pointer;color:#007fbb"></i>
+                    </ng-template>
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

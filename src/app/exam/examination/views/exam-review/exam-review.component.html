@@ -1,0 +1,14 @@
+<div class="container-fluid">
+    <div class="card-title text-center">
+        {{columnsData.length>0?columnsData[0].examName:''}}
+    </div>
+    <div class="card-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [loading]="loading" (reload)="loadData($event)">
+            <ng-template cuiColTpl="action" let-row="row">
+                <a class="text-primary" (click)="goReviceExam(row.uceId)">回顾考试</a>
+                <span nz-table-divider></span>
+                <a class="text-primary" (click)="goRevicePapers(row.uceId)"> 回顾阅卷 </a>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

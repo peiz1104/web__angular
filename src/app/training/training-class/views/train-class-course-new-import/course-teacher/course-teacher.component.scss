@@ -1,0 +1,185 @@
+:host::ng-deep {
+    .course-teacher-box {
+        padding: 0px 20px;
+        .steps-content {
+            margin-top: 16px; // border: 1px dashed #e9e9e9;
+            border-radius: 6px;
+            min-height: 350px;
+            padding-top: 10px;
+            position: relative;
+            .first-content {
+                .import-template {
+                    text-align: center;
+                    .tip-word {
+                        color: red;
+                    }
+                    .down-load {
+                        cursor: pointer;
+                        display: inline-block;
+                        width: 60px;
+                        height: 24px;
+                        line-height: 24px;
+                        border-radius: 4px;
+                        background: #108ee9;
+                        color: #fff;
+                    }
+                }
+                .notice-message {
+                    position: absolute;
+                    left: 50%;
+                    top: 42px;
+                    width: 518px;
+                    margin-left: -259px;
+                    border: 1px solid #e5e5e5;
+                    padding: 10px;
+                    h5 {
+                        color: #007bbf;
+                    }
+                    .item-tip {
+                        color: #aaa;
+                        line-height: 28px;
+                    }
+                }
+                .upload-file-box {
+                    position: absolute;
+                    top: 232px;
+                    left: 50%;
+                    margin-left: -197px;
+                    .select-title {
+                        position: absolute;
+                        left: -70px;
+                        top: 5px;
+                        color: green;
+                    }
+                }
+            }
+            .show-right-error {
+                .right-list {
+                    width: 700px;
+                    margin: 30px auto;
+                    h5 {
+                        color: green;
+                        padding-bottom: 10px;
+                    }
+                    .tip {
+                        color: red;
+                    }
+                    .list-title {
+                        background: #f8fbfd;
+                        border-top: 1px solid #e9ecef;
+                        border-bottom: 2px solid #e9ecef;
+                        overflow: hidden;
+                        height: 32px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        .title-item {
+                            float: left;
+                            width: 20%;
+                        }
+                        .title-item-big {
+                            float: left;
+                            width: 59%;
+                        }
+                    }
+                    .no-data {
+                        line-height: 70px;
+                        text-align: center;
+                    }
+                    .sigle-box {
+                        overflow: hidden;
+                        border-bottom: 1px solid #e5e5e5;
+                        .item-box {
+                            width: 20%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                        .item-box-big {
+                            width: 59%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                    }
+                }
+                .error-list {
+                    width: 700px;
+                    margin: 30px auto;
+                    h5 {
+                        color: red;
+                        padding-bottom: 10px;
+                    }
+                    .list-title {
+                        background: #f8fbfd;
+                        border-top: 1px solid #e9ecef;
+                        border-bottom: 2px solid #e9ecef;
+                        overflow: hidden;
+                        height: 32px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        .title-item {
+                            width: 10%;
+                            float: left;
+                        }
+                        .title-item-big {
+                            width: 79%;
+                            float: left;
+                        }
+                    }
+                    .tip {
+                        color: green;
+                    }
+                    .no-data {
+                        line-height: 70px;
+                        text-align: center;
+                    }
+                    .sigle-box {
+                        overflow: hidden;
+                        border-bottom: 1px solid #e5e5e5;
+                        .item-box {
+                            width: 10%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                        .item-box-big {
+                            width: 79%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                    }
+                }
+            }
+            .import-success {
+                .title {
+                    color: green;
+                    line-height: 30px;
+                    h5 {
+                        line-height: 250px;
+                        text-align: center;
+                    }
+                    .success-icon {
+                        font-size: 30px;
+                        margin-right: 12px;
+                        color: green;
+                        .iconfont {
+                            font-size: 30px;
+                        }
+                    }
+                    .import-success {
+                        position: relative;
+                        font-size: 16px;
+                        font-weight: 600;
+                        top: -5px;
+                        color: green;
+                    }
+                }
+            }
+        }
+        .steps-action {
+            margin-top: 24px;
+            text-align: center;
+        }
+    }
+}

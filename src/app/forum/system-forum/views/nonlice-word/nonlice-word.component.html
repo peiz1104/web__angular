@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">过滤词管理</h3>
+  </div>
+
+  <div class="page-body">
+    <cui-data-table [columns]="columns" [data]="nonlicetWords?.content" [pagination]="nonlicetWords" [(selection)]="selection"
+      selectType="checkbox" [loading]='loading' (reload)="loadData($event)">
+
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group ml-2">
+            <input nz-input type="text" name="word" [(ngModel)]="word" placeholder="请输入过滤词">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="searchTopic()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template #listTools>
+        <button type="button" class="btn btn-primary" (click)="showModalMiddle()">添加过滤词</button>
+        <button type="button" class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+      </ng-template>
+
+      <ng-template cuiColTpl="rowAction" let-row="row">
+        <div class="text-right">
+            <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row,true)">
+                <a nz-popconfirm class="text-danger">删除</a>
+            </nz-popconfirm>
+          <!-- <a href="javascript:;" class="text-danger" (click)="delete(row)">删除</a> -->
+        </div>
+      </ng-template>
+
+      <ng-template #actionGroup>
+        <button type="button" class="btn btn-outline-danger" (click)="delete(null, false)">批量删除</button>
+      </ng-template>
+    </cui-data-table>
+
+    <nz-modal [nzContent]="modalContent" [nzVisible]="isVisibleMiddle" [nzTitle]="'添加过滤词'" (nzOnCancel)="handleCancelMiddle($event)"
+      (nzOnOk)="handleOkMiddle($event)" *ngIf="dataForm">
+      <ng-template #modalContent>
+        <form nz-form [formGroup]="dataForm">
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="title" nz-form-item-required>过滤词</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="16" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('word')">
+              <nz-input [nzSize]="'large'" formControlName="word" [nzId]="'word'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('word').dirty&&getFormControl('word').hasError('required')">必填</div>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+    </nz-modal>
+  </div>
+</div>

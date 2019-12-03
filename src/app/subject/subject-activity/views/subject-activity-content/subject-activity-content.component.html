@@ -1,0 +1,27 @@
+<form class="form-horizontal" [formGroup]="_form" nz-form *ngIf="_form">
+    <div class="page-header">
+        <h3 class="page-title">内容简介
+            <small>| 对专区详情做详细的解释</small>
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-7 pull-5 order-1">
+                <div class="form-group row">
+                    <label for="" class="col-3 col-form-label">简介：</label>
+                    <div class="col-9">
+                        <textarea nz-input formControlName="content" placeholder="输入内容，最长不能超过2000字" [nzAutosize]="{ minRows: 2, maxRows: 6 }" maxlength="2000"></textarea>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="col-9 offset-3">
+                            <button nz-button [nzType]="'primary'" (click)="onSubmit($event)" [nzLoading]="loading">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

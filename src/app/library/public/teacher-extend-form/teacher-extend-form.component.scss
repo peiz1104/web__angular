@@ -1,0 +1,15 @@
+:host::ng-deep{
+    .ant-row,.ant-form-item{
+      width:100%;
+    }
+    form input[type="radio"]{
+      position:relative;
+      top:2px;
+  }
+  .ant-row,.ant-form-item{
+    margin-bottom: 4px;
+  }
+.s-height{
+    height: 30px !important;
+}
+}

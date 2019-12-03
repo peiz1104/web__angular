@@ -1,0 +1,16 @@
+:host ::ng-deep {
+    .vertical-center-modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ant-modal-close {
+        right: -16px;
+        top: -10px;
+    }
+    .my-row {
+        .col-one {
+            float: left;
+        }
+    }
+}

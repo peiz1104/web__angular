@@ -1,0 +1,54 @@
+<div class="with-side">
+  <div class="main">
+    <div class="container-fluid">
+      <div class="page-header">
+        <h3 class="page-title">资源管理
+          <small>资源库管理</small>
+          <small>类型管理</small>
+        </h3>
+        <div class="actions pull-right">
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary" [routerLink]="['../', 'addtypemanagement']">
+              <i class="fa fa-plus"></i> 添加类型</button>
+          </div>
+        </div>
+      </div>
+
+   <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="typeManagement" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+                        [loading]="loading" (select)="onSelect($event)">
+
+          <ng-template #simpleSearch>
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入类型名称">
+              </div>
+              <div class="form-group ml-2">
+                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+              </div>
+            </form>
+          </ng-template>
+
+          <ng-template cuiColTpl="name" let-row="row">
+            <span style="display:block;text-align:left;">{{row.name}}</span>
+          </ng-template>
+
+          <ng-template cuiColTpl="lastModifiedDate" let-row="row">
+            {{row.lastModifiedDate | date: 'yyyy-MM-dd'}}
+          </ng-template>
+
+          <ng-template cuiColTpl="actions" let-row="row">
+            <div class="text-right">
+              <a  class="text-info" [routerLink]="['../', row.id,'edit']">编辑</a>
+              <span>|</span>
+              <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a>
+            </div>
+          </ng-template>
+          <ng-template #actionGroup>
+            <button class="btn btn-danger" [disabled]="!selected" (click)="delete()">批量删除</button>
+          </ng-template>
+        </cui-data-table>
+      </div>
+    </div>
+  </div>
+</div>

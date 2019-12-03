@@ -1,0 +1,144 @@
+<div class="results-body">
+    <nz-spin [nzTip]="'Loading...'" [nzSpinning]="spinning">
+        <div class="container-fluid">
+            <div nz-row>
+                <div nz-col [nzSpan]="18">
+                    <form nz-form [formGroup]="Resultsgunli" (ngSubmit)="submitForm($event,Resultsgunli.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body" [nzType]="'flex'" [nzAlign]="'middle'">
+
+                            <div nz-col [nzSpan]="8">
+                                <nz-select [nzPlaceHolder]="'请选择状态'" formControlName="scoreState" [nzSize]="'large'" [nzShowSearch]="true">
+                                    <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                                    <nz-option [nzLabel]="'已完成'" [nzValue]="'C'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'进行中'" [nzValue]="'I'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'失败'" [nzValue]="'F'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'未学习'" [nzValue]="'N'">
+                                    </nz-option>
+                                </nz-select>
+                            </div>
+                            <div nz-col [nzSpan]="8" style="margin-top:10px;" class="userinp">
+                                <div>
+                                    <nz-input formControlName="user.username" [nzSize]="'large'" [nzPlaceHolder]="'请输入用户信息搜索'"> </nz-input>
+                                </div>
+                            </div>
+                            <div nz-col style="margin-top:10px" [nzSpan]="6">
+                                <button type="submit" nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                    搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <cui-data-table #tableHandle [columns]="columns " [data]="paginations?.content" [pagination]="paginations " selectType="checkbox"
+                [(selection)]="selection " [loading]="loading" (reload)="loadData($event)">
+                <ng-template cuiColTpl="state" let-row="row">
+                    <span class="text-success" *ngIf="row.scoreState=='C'">已完成</span>
+                    <span class="text-danger" *ngIf="row.scoreState== 'I'">进行中</span>
+                    <span class="text-danger" *ngIf="row.scoreState=='F'">失败</span>
+                    <span class="text-danger" *ngIf="row.scoreState=='N'">未学习</span>
+                </ng-template>
+                <ng-template cuiColTpl="userGroupTpl" let-row="row">
+                    <spk-user-group-popover [userGroup]="row.user.userGroup" placement="left"></spk-user-group-popover>
+                </ng-template>
+                <ng-template cuiColTpl="score" let-row="row">
+                    {{row.score || '--'}}
+                </ng-template>
+                <ng-template cuiColTpl="scoreId" let-row="row">
+                    <!-- <a class="text-primary">修改</a> -->
+                    <a class="text-primary" (click)="showModal(row.user.id)">详情</a>
+                </ng-template>
+
+                <ng-template #listTools>
+                    <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+                </ng-template>
+
+            </cui-data-table>
+        </div>
+    </nz-spin>
+
+    <!-- 编辑成绩模态框 -->
+    <nz-modal [nzVisible]="isVisible" [nzWidth]="'50%'" [nzContent]="modalContent" [nzTitle]="'学习详情'" (nzOnCancel)="handleCancel($event)"
+        (nzOnOk)="handleOk($event)">
+
+        <ng-template #modalContent>
+            <div nz-row>
+                <div nz-col [nzSpan]="8">
+                    <strong>姓名：</strong>{{usermessage?.user?.displayName}}
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <strong>所属单位：</strong>{{usermessage?.user?.userGroup?.name}}
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="8">
+                    <strong>课堂表现分：</strong> {{usermessage?.attendanceScore || '--'}}
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <strong>培训班得分：</strong> {{usermessage?.score || '--'}}
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <strong>培训班完成的状态：</strong>
+                    <a class="text-success" *ngIf="usermessage.scoreState=='C'">已完成</a>
+                    <a class="text-danger" *ngIf="usermessage.scoreState== 'I'">进行中</a>
+                    <a class="text-danger" *ngIf="usermessage.scoreState=='F'">失败</a>
+                    <a class="text-danger" *ngIf="!usermessage.scoreState || usermessage.scoreState=='N'">未学习</a>
+                    <!-- {{usermessage?.status}} -->
+                </div>
+            </div>
+            <br>
+            <div nz-row>
+                <div nz-col [nzSpan]="12">
+                    <h5>
+                        <strong>课程</strong>
+                    </h5>
+                </div>
+            </div>
+            <br>
+            <!-- 成绩单列表 -->
+            <cui-data-table #tableHandle1 [columns]="courseScoreColumns" [data]="achievement.content" [(selection)]="selectionPer" [loading]="achievementLoading"
+                (reload)="loadDatamodel($event)">
+                <ng-template cuiColTpl="state" let-row="row">
+                    <span class="text-success" *ngIf="row.status=='C'">完成</span>
+                    <span class="text-danger" *ngIf="row.status=='I'">未完成</span>
+                    <span class="text-danger" *ngIf="row.status=='F'">失败</span>
+                    <span class="text-danger" *ngIf="row.status=='N'">未学习</span>
+                </ng-template>
+                <ng-template cuiColTpl="courseType" let-row="row">
+                    <span *ngIf="row.courseType=='ONLINE'">在线</span>
+                    <span *ngIf="row.courseType=='LIVE'">直播</span>
+                    <span *ngIf="row.courseType=='OFFLINE'">面授</span>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+</div>
+
+<ng-template #theListTools>
+    <div class="btn-tools">
+        <button [disabled]="isArchived" nz-button [nzType]="'primary'" (click)="refresh()">
+            <i class="iconfont icon-gengxin"></i>
+            刷新成绩
+        </button>
+
+        <button *ngIf="amisexist" nz-button [nzType]="'primary'" (click)="tbc_score_send()">
+            <i class="iconfont icon-dangantuisong"></i>
+            推送AMIS系统
+        </button>
+        <!-- <button [disabled]="isArchived" nz-button [nzType]="'primary'" [routerLink]="['../', 'course-pour']">
+            <i class="iconfont icon-daoru1"></i>
+            导入培训班面授课程成绩
+        </button> -->
+        <button [disabled]="isImprot" nz-button [nzType]="'primary'" [routerLink]="['../', 'pour']">
+            <i class="iconfont icon-daoru1"></i>
+            导入培训班成绩
+        </button>
+        <button nz-button [nzType]="'primary'" (click)="downloadExcelFile()" [disabled]="exportShow">
+            <i class="iconfont icon-daochu1"></i>
+            导出培训班成绩
+        </button>
+    </div>
+</ng-template>

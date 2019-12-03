@@ -1,0 +1,90 @@
+<div class="certificate-box" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:VIEW'}">
+    <div class='top-bread'>
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                资源管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                证书库
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>证书列表</small>
+            </h5>
+        </div>
+    </div>
+    <div class='select-body'>
+        <cui-data-table #tableHandle [columns]="columns" [data]="allData.content" [pagination]="allData" selectType="checkbox" [(selection)]="selection"
+            [loading]="loading" (reload)="loadData($event)">
+            <!-- <ng-template cuiColTpl="editTemplate" let-row="row">
+            </ng-template> -->
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="name" [nzPlaceHolder]="'请输入证书名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                    搜索</button>
+                                <!-- <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级搜索</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" [routerLink]="['../','add']" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:ADD'}">
+                        <i class="fa fa-plus"></i> 新建证书</button>
+                </div>
+            </ng-template>
+
+            <ng-template cuiColTpl="isUsed" let-row="row">
+                <span [class.text-danger]="row.isUsed" [class.text-success]="!row.isUsed">
+                    {{row.isUsed ? '已颁发' : '未颁发'}}
+                </span>
+            </ng-template>
+
+            <ng-template #rowActions let-row="row" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:EDIT'}">
+                <nz-tooltip [nzTitle]="'编辑模板'">
+                    <span nz-tooltip>
+                        <i class="fa fa-edit text-primary" (click)="goMubanEdit(row)"></i>
+                    </span>
+                </nz-tooltip>
+                <span nz-table-divider></span>
+                <a class="text-primary" (click)="goEdit(row)" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:EDIT'}">编辑</a>
+                <span nz-table-divider></span>
+                <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id)">
+                    <a nz-popconfirm class="text-danger" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:REMOVE'}">删除</a>
+                </nz-popconfirm>
+                <!-- <a class="text-danger" (click)="delete(row.id)" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:REMOVE'}">删除1</a> -->
+                <span nz-table-divider></span>
+                <a class="text-primary" (click)="isVisibleTop=true;selectId=row.id;imgurl=row.imgUrlPath?row.imgUrlPath:''" *spkAuthzIf="{hasPermission: 'RESOURCE:CERT_LIB:VIEW'}">预览</a>
+                <!-- <nz-dropdown [nzPlacement]="'bottomRight'">
+                            <a class="ant-dropdown-link" nz-dropdown>
+                                        更多 <i class="anticon anticon-down"></i>
+                        </a>
+                        <ul nz-menu>
+                            <li nz-menu-item><a>复制</a></li>
+                            <li nz-menu-item><a>修改</a></li>
+                        </ul>
+                        </nz-dropdown> -->
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+    <nz-modal [nzTitle]="'证书预览'" [nzVisible]="isVisibleTop" [nzContent]="modalContent" (nzOnCancel)="handleCancelTop($event)"
+        [nzFooter]="false">
+        <ng-template #modalContent>
+            <spk-drag-box *ngIf="isVisibleTop" [bool]="false" [id]="selectId" [imgurl]="imgurl"></spk-drag-box>
+            <button type="button" class="btn btn-outline-primary closeBtn" (click)="handleCancelTop($event)"> 关闭</button>
+        </ng-template>
+    </nz-modal>
+</div>

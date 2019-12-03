@@ -1,0 +1,77 @@
+<div class="with-side" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:VIEW'}">
+    <div class="main">
+      <div class="container-fluid">
+        <div class="page-header">
+          <h3 class="page-title">讲师列表 <small>讲师库管理</small></h3>
+          <div class="actions pull-right">
+          </div>
+        </div>
+  
+        <div class="page-body"> 
+            <cui-data-table [columns]="columns" [data]="teacher" [pagination]="pagination" selectType="checkbox" (reload)="loadData($event)"
+            (select)="onSelect($event)" [loading]="loading">
+            <ng-template #simpleSearch>
+              <form class="form-inline">
+                <div class="form-group">
+                  <nz-input [nzPlaceHolder]="'请输入讲师名称'" name="searchtext" [(ngModel)]="searchtext"></nz-input>
+                </div>
+                <div class="form-group ml-2">
+                  <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                </div>
+              </form>
+            </ng-template>
+            <ng-template cuiColTpl="teacherTypeCol" let-row="row">
+                <span *ngIf="row.teacherType=='EXTERNAL'">外部讲师</span>
+                <span *ngIf="row.teacherType=='INTERNAL'">内部讲师</span>
+            </ng-template>
+            <ng-template cuiColTpl="groupCol" let-row="row">
+                <span *ngIf="row.teacherType=='EXTERNAL'">{{row.userGroup?.name}}</span>
+                <span *ngIf="row.teacherType=='INTERNAL'">{{row.user?.userGroup?.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="sexCol" let-row="row">
+                <div *ngIf="row.teacherType=='EXTERNAL'">
+                  <span *ngIf="row.sex=='MALE'">男</span>
+                  <span *ngIf="row.sex=='FAMALE'">女</span>
+                </div>
+                <div *ngIf="row.teacherType=='INTERNAL'">
+                    <span *ngIf="row.user?.sex=='MALE'">男</span>
+                    <span *ngIf="row.user?.sex=='FAMALE'">女</span>
+                  </div>
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                <span>{{row.startDate | date: 'yyyy-MM-dd'}}</span>
+            </ng-template>
+
+                    <ng-template #rowActions let-row="row">
+                        <div *ngIf="row.teacherType == 'EXTERNAL'">
+                <a href="javascript:;"  [routerLink]="[row.id, 'extend']" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:EDIT'}">编辑</a>
+                <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)">
+                    <a nz-popconfirm class="text-danger" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:REMOVE'}">删除</a>
+                </nz-popconfirm>
+                        </div>
+                        <div *ngIf="row.teacherType == 'INTERNAL'">
+                  <a href="javascript:;"  [routerLink]="[row.id, 'internal']" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:EDIT'}">编辑</a>
+                  <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)">
+                      <a nz-popconfirm class="text-danger" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:REMOVE'}">删除</a>
+                  </nz-popconfirm>
+                        </div>
+<!--               <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,true)">
+                  <a nz-popconfirm class="text-danger" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:REMOVE'}">删除</a>
+              </nz-popconfirm> -->
+                    </ng-template>
+            <ng-template #listTools>
+                <div class="actions pull-right">
+                    <button type="button" class="btn btn-primary" [routerLink]="['../', 'extend']" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:ADD'}"><i class="fa fa-plus"></i> 添加外部讲师</button>
+                    <button type="button" class="btn btn-primary" [routerLink]="['../', 'internal']" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:ADD'}"><i class="fa fa-plus"></i> 添加内部讲师</button>
+                    <button class="btn btn-danger" (click)="delete(null, false)" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:REMOVE'}">批量删除</button>
+                </div>
+            </ng-template>
+
+                    <ng-template #actionGroup>
+              <button class="btn btn-outline-danger" (click)="delete(null, false)" *spkAuthzIf="{hasPermission: 'RESOURCE:TEACHER_LIB:REMOVE'}">批量删除</button>
+                    </ng-template>
+                </cui-data-table>
+            </div>
+        </div>
+    </div>
+</div>

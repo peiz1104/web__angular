@@ -1,0 +1,68 @@
+#menu {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    cursor: pointer;
+}
+
+.sild-body {
+    width: 12rem;
+}
+
+.no-width-side-body {
+    width: 0;
+}
+
+#sideBtn {
+    width: 20px;
+    height: 60px;
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    z-index: 10;
+    #triangle-bottomright {
+        width: 0;
+        height: 0;
+        border-bottom: 20px solid #ffffff;
+        border-left: 20px solid transparent;
+        position: absolute;
+        top: 0px;
+    }
+    #imgBtn {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 20px;
+        right: 0;
+        background: white;
+        padding-left: 0px;
+    }
+    #triangle-topright {
+        width: 0;
+        height: 0;
+        border-top: 20px solid #ffffff;
+        border-left: 20px solid transparent;
+        position: absolute;
+        top: 40px;
+    }
+}
+
+:host::ng-deep {
+    .course-detail-box {
+        width: 100%;
+        height: 100%;
+        .course-detail-left {
+            float: left;
+            width: 140px;
+        }
+        .course-detail-content {
+            float: left;
+            width: calc(100% - 140px)
+        }
+    }
+    .ant-menu-root {
+        .ant-menu-item {
+            text-align: left;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+:host::ng-deep {
+    .red-class-list {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px 16px;
+        .list-tool-bar {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+@import 'full-dialog';
+@import 'rco-preview-dialog';
+.ant-calendar-year-panel-last-decade-cell .ant-calendar-year-panel-year,
+.ant-calendar-year-panel-next-decade-cell .ant-calendar-year-panel-year {
+    user-select: none;
+    color: rgba(0, 0, 0, 0.25) !important;
+}

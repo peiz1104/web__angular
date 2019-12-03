@@ -1,0 +1,107 @@
+<div class="import-box">
+    <div class="top-bread">
+        <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                在线考试
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/exam/exam-paper']" [queryParams]="link">试卷管理</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="color-active">试题导入</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="import-header">
+        <div class="paper-message">
+            <h4 class="title">{{queryParams.epName}}</h4>
+            <div class="publish-status">状态：
+                <span class="publish-color">{{queryParams.isPutout == 'true' ? '已发布' : '未发布'}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="import-content">
+        <div class="operating-instructions">1、导入试题前请按照模板格式整理试题：
+            <a href="assets/File/examQuestionTemplate.xls" target="_blank" download="examQuestionTemplate.xls">试题模板下载</a>
+            <a (click)="testimportexplain($event)">试题模板说明</a>
+            <nz-modal *ngIf="isVisible" [nzVisible]="isVisible" [nzTitle]="'模板说明详述'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+                (nzOnOk)="handleOk($event)" [nzFooter]="false">
+                <ng-template #modalContent>
+                    <div class="modal-header-title">一、试题模板填写说明:</div>
+                    <div class="matters-needing-attention">1、 红色字体标题列为必填项。</div>
+                    <div class="matters-needing-attention">2、 模板仅支持文本形式的试题，不支持图片、音频、视频等。</div>
+                    <div class="matters-needing-attention">3、 题型为“阅读理解题”的试题，由一个父题和若干个子题构成。父题占一行，然后在父题行以下依次输入子题，每道子题占一行，子题个数应与父题的参考答案项中填写的数目对应；父题与子题、子题与子题必须相邻，不得间隔其他试题；每道子题按照相应题型的要求填写。</div>
+                    <div class="matters-needing-attention">4、 填空题题干中的空白部分为英文输入状态下的“ _____ ”（1个空格+5个下划线+1个空格）。</div>
+                    <div class="matters-needing-attention">5、 请不要在模板中插入列，以及改变模板中列的顺序。</div>
+                    <div class="matters-needing-attention">6、模板中所有试题的选项列，每项最大支持输入1000个汉字。</div>
+                    <div class="modal-header-title">二、试题模板列说明：</div>
+                    <div class="matters-needing-attention"> 1、题型：请从下拉选项中选取试题题型。</div>
+                    <div class="matters-needing-attention"> 2、难度：请从下拉选项中选取试题难度。</div>
+                    <div class="matters-needing-attention"> 3、分数：试题对应分数，只支持到小数点后一位。</div>
+                    <div class="matters-needing-attention"> 4、时长：试题的答题时长，请填写整数（单位为秒）。</div>
+                    <div class="matters-needing-attention">
+                        <p>5、参考答案：</p>
+                        <div class="sub-des">① 题型为：单选题，输入A、B、C、D…中正确答案对应一项的字母(第一项为A，第二项为B，第三项为C....以此类推)；</div>
+                        <div class="sub-des">② 题型为：多选题，输入A、B、C、D…中对应一项或多项的字母(第一项为A，第二项为B，第三项为C....以此类推)p案对应多项时，字母之间不需任何间隔（如ABC）；，正确答</div>
+                        <div class="sub-des">③ 题型为：判断题，仅填写'对'或'错'；</div>
+                        <div class="sub-des">④ 题型为：匹配题，按照问题所匹配的答题次序依次输入字母（如ADC）；</div>
+                        <div class="sub-des">⑤ 题型为：填空题，输入题干中空的个数，也就是正确答案的个数；</div>
+                        <div class="sub-des">⑥ 题型为：简答题、案例分析题，请以文字形式输入参考答案；</div>
+                        <div class="sub-des">⑦ 题型为：阅读理解题，请输入子题的个数；</div>
+                    </div>
+                    <div class="matters-needing-attention"> 6、是否子题：如果此题为阅读理解题的子题请输入“y”，否则不要输入任何内容。</div>
+                    <div class="matters-needing-attention">
+                        <p>7、选项：根据试题需要填写试题选项，每项占一列，可以为多项。</p>
+                        <div class="sub-des">① 题型为：单选题、多选题，每项为一个答案选项；</div>
+                        <div class="sub-des">② 题型为：判断题，不填写任何内容；</div>
+                        <div class="sub-des">③ 题型为：匹配题，先依次输入问题，每个问题占一项（一个单元格），可以为多项；然后英文输入状态下输入 |||| （四竖）作为与选项的分隔符（占一个单元格），之后输入答案选项，每个答案选项为一项（占一个单元格），可以为多项；
+                        </div>
+                        <div class="sub-des">④ 题型为：填空题，每个空对应答案，依次输入。所填写项的个数应与参考答案项填写的个数对应;</div>
+                        <div class="sub-des">⑤ 题型为：简答题、阅读理解题、案例分析题，此项均不需输入任何内容。</div>
+                    </div>
+                </ng-template>
+            </nz-modal>
+        </div>
+        <div class="import-from">
+            <div class="show-upload-name" style="display: none">
+                <span class="upload-file-name">文件类型</span>
+                <nz-select [nzPlaceHolder]="'文件类型'" [(ngModel)]="fileType" style="width:200px;">
+                    <nz-option nzLabel="word" nzValue="WORD"></nz-option>
+                    <nz-option nzLabel="excel" nzValue="EXCEL"></nz-option>
+                </nz-select>
+            </div>
+            <div class="upload-box">
+                <span class="header-introduce">2、请选择试题文件</span>
+                <!-- <i class="anticon anticon-upload">
+                    <cui-fileupload class="custom-upload" name="file" mode="file" url="/api/upload/file" [auto]="true" (uploadComplete)="getfile($event)">
+                    </cui-fileupload>
+                    <span class="word-des">请选择文件</span>
+                </i> -->
+                <input (change)="changeFile($event)" accept="{{fileType=='EXCEL'?'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'.doc,.docx'}}"
+                    type="file" />
+            </div>
+            <div class="show-upload-name">
+                <span class="upload-file-name">3、试题文件上传</span>
+                <nz-input [(ngModel)]="inputUploadValue.name" [nzReadonly]="true"></nz-input>
+            </div>
+            <div *ngIf="errorResolve.length">
+                <div *ngFor="let item of errorResolve;" style="color:red">
+                    <span>第{{item.excelRow}}行错误：{{item.errMsg}}</span>
+                </div>
+            </div>
+            <div class="submit-data">
+                <div class="btn">
+                    <button (click)="importopear($event)" nz-button [nzType]="'primary'" [nzLoading]="isLoading">
+                        <span>导入</span>
+                    </button>
+                    <button (click)="goBack()" nz-button [nzType]="'default'">
+                        <span>返回</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<ng-container >
+    <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'light'">
+        <li nz-menu-item [routerLink]="['./']" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+            [nzSelected]="rla.isActive">
+            <span>评选属性</span>
+        </li>
+        <li nz-menu-item [routerLink]="['options']" routerLinkActive #rla1="routerLinkActive" [nzSelected]="rla1.isActive">
+            <span>作品列表</span>
+        </li>
+    </ul>
+
+    <div class="mt-4">
+        <router-outlet></router-outlet>
+    </div>
+</ng-container>

@@ -1,0 +1,217 @@
+.dashedConsole{
+    width: 1088px;
+    height: 148px;
+    margin: 20px auto;
+    margin-bottom: 0px;
+    border: 1px solid #e2e2e2;
+    // background: pink;
+    .p{
+        margin-left: 10px;
+        margin-top: 16px;
+    }
+    .HeadPortraitCon{
+        width:1088px;
+        height: 106px;
+        margin-top: 10px;        
+        .headPortraitTitle{
+            width: 628px;
+            height: 106px;
+            display: block;
+            float: left;
+            margin-left: 10px;
+            h4{
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+        }
+        .HeadPortrait{
+            width: 75px;
+            height: 75px;
+            border-radius: 100%;
+            display: block;
+            float: left;
+            background: red;
+            margin-left: 10px;
+        }
+        .NumberOfItems{
+            width: 118px;
+            height: 106px;
+            display: block;
+            float: left;
+            text-align: center;
+            position: relative;
+            left: 0;
+            top: 0;
+            p{
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+            h3{
+                i{
+                    font-style: normal;
+                    font-size: 16px;
+                }
+            }
+            .rightBorder{
+                width: 1px;
+                height: 40px;
+                background: #e2e2e2;
+                position: absolute;
+                top: 33px;
+                right: 0px;
+            }
+        }
+
+    }
+    
+}
+
+.OngoingProject{
+    width: 1088px;
+    height: 488px;
+    margin: 20px auto;
+    overflow: hidden;
+    .OngoingProjectLeft{
+        width: 691px;
+        height: 488px;
+        display: block;
+        float: left;
+        border: 1px solid #e2e2e2;
+        border-right: none;
+        border-bottom: none;
+        .head{
+            width: 690px;
+            height: 58px;
+            line-height: 58px;
+            padding-left: 20px;
+            border-bottom: 1px solid#e2e2e2;
+            border-right: 1px solid #e2e2e2;
+            span{
+                display: block;
+                float: right;
+                margin-right: 20px;
+                color: #1ea7ea;
+            }
+        }
+        .OngoingProjectBot{
+            width: 690px;
+            height: 488px;
+            .OngoingProjectItem{
+                width: 230px;
+                height: 143px;
+                border-bottom: 1px solid #e2e2e2;
+                border-right: 1px solid #e2e2e2;
+                float: left;
+                .OngoingProjectItemHead{
+                    width: 230px;
+                    height: 20px;
+                    display: block;
+                    line-height: 20px;
+                    margin-top: 18px;
+                    margin-left: 10px;
+                    .img{
+                        width: 20px;
+                        height: 20px;
+                        font-style: normal;
+                        display: block;
+                        border-radius: 100%;
+                        // background: red;
+                        float: left;
+                        .anticon-info-circle-o{
+                            margin-left: 10px;
+                            color:#01abff;
+                        }
+                    }
+                    p{
+                        display: block;
+                        float: left;
+                        margin-left: 10px;
+                        font-weight: bold;
+                    }
+                }
+                .OngoingProjectContent{
+                    width: 210px;
+                    height: 50px;
+                    margin: 8px auto;
+                    display: -webkit-box;
+                    line-height: 25px;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2 ;
+                    overflow: hidden;
+                }
+                .OngoingProjectBottom{
+                    width: 210px;
+                    height: 20px;
+                    margin: 8px auto;
+                    display: block;
+                    line-height: 20px;
+                    .month{
+                        display: block;
+                        float: right;
+                        font-style: normal;
+                    }
+                }
+            }
+        }
+    }
+    .OngoingProjectRight{
+        width: 375px;
+        height: 612px;
+        float: left;
+        margin-left: 22px;
+        .nav{
+            width: 375px;
+            height: 58px;
+            line-height: 58px;
+            margin-left: 22px;
+        }
+        .FastNavigation{
+            width: 375px;
+            height: 156px;
+            border: 1px solid #e2e2e2;
+            
+            .nav-content{
+                border-top: 1px solid #e2e2e2;
+                width: 375px;
+                height: 98px;
+                .operation{
+                    width: 75px;
+                    height: 49px;
+                    line-height: 49px;
+                    text-align: center;
+                    display: block;
+                    float: left;
+                }
+            }
+        }
+        .exponent{
+            width: 375px;
+            height: 312px;
+            border: 1px solid #e2e2e2;
+            margin-top: 20px;
+            .exponentContent{
+                width: 375px;
+                height: 254px;
+                border-top: 1px solid #e2e2e2;
+                img{
+                    width:206px;
+                    height: 196px; 
+                    display: block;
+                    margin: 4px auto;
+                }
+                .bottom{
+                    overflow: hidden;
+                    span{
+                        width: 125px;
+                        height: 48px;
+                        display: block;
+                        float: left;
+                        text-align: center;
+                        line-height: 24px;
+                    }
+                }
+            }
+        }
+    }
+
+}

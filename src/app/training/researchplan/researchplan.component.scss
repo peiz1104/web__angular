@@ -1,0 +1,28 @@
+:host::ng-deep{
+    .planing-box{
+        padding: 4px 16px;
+        .active{
+            color:#007eff;
+        }
+        .complex-search-bar-search-box{
+            left:60px;
+        }
+        button{
+            cursor: pointer;
+        }
+        .form-box{
+            .select-body{
+                .cui-data-table-form-body{
+                    .cui-data-table-form-row{
+                        .ant-select .ant-select-selection{
+                            height: auto!important;
+                         }
+                    }
+                }
+               
+            }
+        }
+        
+        
+    }
+}

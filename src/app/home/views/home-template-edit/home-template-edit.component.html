@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="page-body">
+        <div class="container">
+            <form [formGroup]="dataForm" class="form-horizontal">
+                <div class="form-group">
+                    <label for="name" class="col-form-label col-md-3">
+                        <span class="text-danger">*</span>模板名称</label>
+                    <div class="col-md-9">
+                        <input type="text" formControlName="name" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-form-label col-md-3"></label>
+          <div class="col-md-9" *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:EDIT'}">
+                        <button [nzLoading]="saveLoading" nz-button [nzType]="'primary'" (click)="onSubmit()">保存</button>
+                        <button nz-button [nzType]="'default'" (click)="cancelModal($event)">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

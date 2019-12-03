@@ -1,0 +1,255 @@
+<div class="main">
+    <!-- <button nz-button [nzType]="'primary'" (click)="handelGenerationEvaluation()">
+        <span>生成评估结果</span>
+    </button> -->
+    <button nz-button [nzType]="'primary'" (click)="handelGenerationEvaluation()" [nzLoading]="isLoadingOne">
+        <span>生成评估结果</span>
+    </button>
+    <nz-tabset (nzSelectedIndexChange)="handelSelectedIndexChange($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                培训班
+            </ng-template>
+            <nz-spin [nzSpinning]="isCurriculumIng">
+                <div class="course" *ngIf="curriculumData">
+                    <div class="title">
+                        <p>评估名称：</p>
+                        <p>评估达标率：</p>
+                        <p>班主任：</p>
+                    </div>
+                    <div class="content">
+                        <p title="{{curriculumData.assessName}}">{{curriculumData.assessName}}</p>
+                        <p>{{curriculumData.evaluationRate}}
+                            <span *ngIf="curriculumData.evaluationRate" style="padding-left:6px;color:#aaa;font-size:12px">
+                                （ 计算方式：{{curriculumData.reportUserCount>0?'评估人数/报道人数':'评估人数/注册人数'}}）
+                            </span>
+                        </p>
+                        <p>{{curriculumData.classLeaderName}}</p>
+                    </div>
+                    <div class="title">
+                        <p>评估得分：</p>
+                        <p>评估/注册
+                            <span *ngIf="curriculumData.reportUserCount>0">/报道人数:</span>
+                        </p>
+                        <p>助教：</p>
+                    </div>
+                    <div class="content">
+                        <p>{{curriculumData.assessScore}}</p>
+                        <p>{{curriculumData.assessNumber}}/{{curriculumData.classNumber}}
+                            <span *ngIf="curriculumData.reportUserCount>0">/{{curriculumData.reportUserCount}}</span>
+                        </p>
+                        <p *ngIf="curriculumData.assistantList">
+                            <span *ngFor="let item of curriculumData.assistantList">
+                                {{item}},
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="teacher" *ngIf="!curriculumData">
+                    <p style="font-size: 16px;text-align: center;">
+                        <i class="anticon anticon-info-circle-o" style="color:#28a745;"></i>没有查询到符合条件的记录</p>
+                </div>
+            </nz-spin>
+        </nz-tab>
+
+
+
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                讲师
+            </ng-template>
+            <nz-spin [nzSpinning]="isTeacher">
+                <div class="teacher">
+                    <div *ngFor="let item of teacherData">
+                        <div class="teacherItem">
+                            <span class="teacherName">
+                                <span class="name" [ngStyle]="{'line-height':item.courseList ? item.courseList.length*70-16+'px' : '' }">{{item.teacherName ? item.teacherName : '无'}}</span>
+                            </span>
+                            <div class="teacherTitleItem" *ngFor="let ite of item.courseList">
+                                <span class="courseTitle">
+                                    <h3>{{ite.courseName}}</h3>
+                                    <p>评估得分：{{ite.assessscore}} &nbsp;&nbsp;&nbsp;&nbsp; 评估达标率：{{ite.evaluationRate}} &nbsp;&nbsp;&nbsp;&nbsp;评估数量：{{ite.assessNumber}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp; 班级学员总数：{{ite.classNumber}} &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span *ngIf="ite.reportUserCount>0"> 报道数量：{{ite.reportUserCount}}</span>
+                                    </p>
+                                </span>
+                                <span *ngIf="true" class="change" (click)="handelChange(ite.courseId,item.teacherId)">
+                                    调&nbsp;&nbsp;换
+                                </span>
+                                <span class="qualified">
+                                    <img *ngIf="ite.isQualified" src="assets/images/qualified.png" alt="">
+                                    <img *ngIf="!ite.isQualified" src="assets/images/unqualified.png" alt="">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bank"></div>
+                    </div>
+
+                    <div class="coursePage" *ngIf="teacherData.length>0">
+                        <nz-pagination [(nzPageIndex)]="teacherIndex" [nzTotal]="totalTeacher" (nzPageIndexChange)="handleIndexChange($event)"></nz-pagination>
+                    </div>
+                    <div class="teacher" *ngIf="teacherData&&teacherData.length==0">
+                        <p style="font-size: 16px;text-align: center;">
+                            <i class="anticon anticon-info-circle-o" style="color:#28a745;"></i>没有查询到符合条件的记录</p>
+                    </div>
+                </div>
+            </nz-spin>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                课程
+            </ng-template>
+            <nz-spin [nzSpinning]="isCurriculumIng">
+                <div class="classCourse">
+                    <div class="courseItem" *ngFor="let item of trainingClassData ">
+                        <span class="img">
+                            <img [src]="item.courseUrl" alt="">
+                        </span>
+                        <span class="courseTitle">
+                            <h3>{{item.courseName}}</h3>
+                            <p>评估得分：{{item.assessscore}} &nbsp;&nbsp;&nbsp;&nbsp; 评估达标率：{{item.evaluationRate}} &nbsp;&nbsp;&nbsp;&nbsp;评估数量：{{item.assessNumber}}
+                                &nbsp;&nbsp;&nbsp;&nbsp; 班级学员总数：{{item.classNumber}} &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span *ngIf="item.reportUserCount>0">
+                                    报道数量：{{item.reportUserCount}}</span>
+                            </p>
+                        </span>
+                        <span class="qualified">
+                            <img *ngIf="item.isQualified" src="assets/images/qualified.png" alt="">
+                            <img *ngIf="!item.isQualified" src="assets/images/unqualified.png" alt="">
+                        </span>
+                    </div>
+
+                    <div class="coursePage" *ngIf="trainingClassData.length>0">
+                        <nz-pagination [(nzPageIndex)]="courseIndex" [nzTotal]="total" (nzPageIndexChange)="handleIndexChange($event)"></nz-pagination>
+                    </div>
+                    <div class="teacher" *ngIf="trainingClassData&&trainingClassData.length==0">
+                        <p style="font-size: 16px;text-align: center;">
+                            <i class="anticon anticon-info-circle-o" style="color:#28a745;"></i>没有查询到符合条件的记录</p>
+                    </div>
+                </div>
+            </nz-spin>
+        </nz-tab>
+    </nz-tabset>
+</div>
+<nz-modal [nzVisible]="isVisible" [nzTitle]="'选择讲师'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)"
+    [nzWidth]="1000" [nzZIndex]="1003">
+    <ng-template #modalContent>
+        <!-- <form nz-form>
+        <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="userGroupId">所属机构</label>
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <spk-user-group-select [(ngModel)]="userGroupId"></spk-user-group-select>
+                </div>
+            </div>
+        </div>
+        <div  nz-col [nzSpan]="8" class="cui-data-table-form-row">
+            <div style="width:80%" nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="userName">讲师工号</label>
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <nz-input  [nzPlaceHolder]="'请输入讲师工号'"></nz-input>
+                </div>
+            </div>
+        </div>
+        <div  nz-col [nzSpan]="8" class="cui-data-table-form-row">
+            <div nz-form-control>
+                <nz-input [(ngModel)]="inputValue" [nzPlaceHolder]="'请输入讲师姓名'" (ngModelChange)="_console($event)"></nz-input>
+            </div>
+        </div>
+        <button type="button" style="margin-left: 5px" (click)="handelSearch()" class="btn btn-primary"> 搜 索 </button>
+        </form> -->
+        <div>
+            <cui-data-table #tableHandle [columns]="column" [data]="dat?.content" [pagination]="dat" [loading]="loadin" selectType="radio"
+                [(selection)]="selectio" (reload)="loadDat($event)">
+                <!-- <ng-template #complexSearch>
+                    <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+                </ng-template>
+
+                <ng-template #simpleSearch>
+                    <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+                </ng-template>
+                <ng-template #listTools>
+                    <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+                </ng-template> -->
+                <ng-template #simpleSearch>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="handelSearch($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div style="position: relative" class="cui-data-table-form-body">
+                            <div nz-row>
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div style="width:80%" nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="userGroupId">所属机构</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <spk-user-group-select formControlName="userGroupId"></spk-user-group-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div style="width:80%" nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="userName">讲师工号</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="userName" [nzPlaceHolder]="'请输入讲师工号'"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div style="width:80%" nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="displayName">讲师姓名</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入讲师姓名'"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="position:absolute;top:0px;right:0px;" class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+                </ng-template>
+
+                <ng-template cuiColTpl="type" let-row="row">
+                    <span>{{row.teacherType=="FULLTIME"?'专职讲师':(row.teacherType=="PARTTIME"?'兼职讲师':'外部讲师')}}</span>
+                </ng-template>
+                <!-- <ng-template cuiColTpl="myName" let-row="row">
+                    <span>{{ row.name }}</span>
+                </ng-template> -->
+                <ng-template cuiColTpl="group" let-row="row">
+                    <span>{{ row.userGroup?.namePath }}</span>
+                </ng-template>
+                <ng-template cuiColTpl="isPost" let-row="row">
+                    <span style="cursor:pointer;" class="text-primary" (click)="ispublish(row)">{{row.publishStatus?'已发布':'未发布'}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="sex" let-row="row">
+                    {{(row.user&&row.user.sex === 'FAMALE'?'男':'女')||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="rank" let-row="row">
+                    {{isLvs(row)}}
+                </ng-template>
+                <ng-template cuiColTpl="start" let-row="row">
+                    {{(row.startDate | date:"yyyy-MM-dd")||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="myDate" let-row="row">
+                    {{(row.birthday | date:"yyyy-MM-dd")||'---'}}
+                </ng-template>
+                <ng-template cuiColTpl="look" let-row="row">
+                    <i style="cursor:pointer;" class="anticon anticon-search text-primary" (click)="lookCourse(row)"></i>
+                </ng-template>
+            </cui-data-table>
+        </div>
+    </ng-template>
+</nz-modal>

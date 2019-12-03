@@ -1,0 +1,258 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">条线文件管理
+            <small>| 总公司消息列表</small>
+        </h3>
+    </div>
+</div>
+<div class="head-office-message">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template #complexSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label>文件名称</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="18">
+                                        <nz-input formControlName="fileName" [nzPlaceHolder]="'请输入文件名称'"></nz-input>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label>文件号</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="18">
+                                        <nz-input formControlName="fileNumber" [nzPlaceHolder]="'请输入文件号'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label>开始时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="18">
+                                        <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label>结束时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="18">
+                                        <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label nz-form-item-required for="userGroup">所属机构</label>
+                                    </div>
+                                    <div nz-form-control [nzValidateStatus]="userGroup" nz-col [nzSpan]="18">
+                                        <spk-user-group-select formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cui-data-table-form-row">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询
+                                    </button>
+                                    <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="btn">
+                <spk-user-group-select  *ngIf="isHeadCompany"   #ugLookup mode="multiple" [autoClear]="true" (selectOk)="userGroupLookupOk($event)">
+                        <ng-template #echoTpl>
+                            <button nz-button [nzType]="'primary'" [disabled]="isArchived" (click)="mutipleShare()">
+                                <i class="iconfont icon-fenxiang"></i> 批量共享</button>
+                        </ng-template>
+                    </spk-user-group-select>
+                    <button  *ngIf="isHeadCompany"   (click)="cancelFile()" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-xuqiaofahu"></i> 取消共享</button>
+                    <button  *ngIf="isHeadCompany"  (click)="add()" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia-copy"></i> 添加</button>
+                    <button *ngIf="isHeadCompany"  [nzType]="'primary'" nz-button (click)="deleteFile()">
+                        <i class="iconfont icon-shanchu"></i>删除</button>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="declareUserName" let-row="row">
+                <span>{{row.fileName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="declaredisPlayName" let-row="row">
+                <span>{{row.publicName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="userGroupNamePath" let-row="row">
+                <span>{{row.createdDate | date:'yyyy-MM-dd'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="trainName" let-row="row">
+                <a href="/api/stripe/file/download/{{row.id}}" class="text-info" target="_blank">下载</a>
+            </ng-template>
+
+            <ng-template cuiColTpl="periodTrainingTheme" let-row="row">
+                <span>{{row.createdBy?.displayName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="trainContent" let-row="row">
+                <span>{{row.lastModifiedDate | date:'yyyy-MM-dd'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                <span>{{row.startDate | date:'yyyy-MM-dd'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">
+                <span>{{row.endDate | date:'yyyy-MM-dd'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="isShare" let-row="row">
+                <span  *ngIf="isHeadCompany" >
+                    <span  *ngIf="row.myself" [routerLink]="['../',row.id]"  style="cursor:pointer;color:#007bbf">选择组织</span>
+                    <span *ngIf="!row.myself" style="color:#6c6d6d">是</span>
+                </span>
+                <!-- <ng-template #otherSlect>
+                     <span style="color:#484949">选择组织</span>
+                </ng-template> -->
+                <span  *ngIf="!isHeadCompany"  title="已共享">是</span>
+                </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span  *ngIf="isHeadCompany" >
+                    <i *ngIf="row.myself"  title="编辑" (click)="editor(row.id)" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#007bbf"></i>
+                    <i *ngIf="!row.myself"  title="编辑"  class="iconfont icon-bianji-copy" style="color:#686969"></i>
+                </span>
+                <ng-template #otherDisplay>
+                        <i title="无编辑权限" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#aaa"></i>
+                </ng-template>
+                <span  *ngIf="!isHeadCompany" >
+                    <i title="无编辑权限" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#aaa"></i>
+                </span>
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #lookupDialog>
+    <div class="add-calendar">
+        <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+            <div class="card-calendar">
+                <div class="card-body">
+                    <!-- <h5 class="card-title">其他信息</h5> -->
+                    <div class="row">
+                        <div class="col-6 push-6 order-1">
+
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>上传附件</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14">
+                                        <cui-fileupload [maxFileSize]="1024*1024*20" accept=".ppt,.pptx,.doc,.docx,.xls,.xlsx,.pdf,.zip,.rar,.txt"
+                                            mode="file" name="file" url="/api/upload/file" [auto]="true" (uploadComplete)="onFileUpload($event)"
+                                            class="upload-file"></cui-fileupload>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>文件名称</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls['fileName']">
+                                        <nz-input [nzPlaceHolder]="'请输文件名称'" type="text" name="fileName" class="form-control" formControlName="fileName"></nz-input>
+                                        <div nz-form-explain *ngIf="_form.controls['fileName'].dirty&&_form.controls['fileName'].hasError('required')">请输入文件名称!</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>文件类型</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.fileType">
+                                        <nz-input [nzPlaceHolder]="'请输入文件类型'" type="text" name="fileType" class="form-control" formControlName="fileType"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 pull-6 order-2">
+                            <!-- <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>分公司名称</label>
+                                    </div>
+                                    <div [nzValidateStatus]="_form.controls.userGroup" nz-form-control nz-col [nzSpan]="14">
+                                        <spk-user-group-select formControlName="userGroup"></spk-user-group-select>
+                                        <div nz-form-explain *ngIf="_form.controls.userGroup.dirty&&_form.controls.userGroup.hasError('required')">请选择组织!</div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>文件号</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls['publicName']">
+                                        <nz-input [nzPlaceHolder]="'请输文件名称'" type="text" name="publicName" class="form-control" formControlName="publicName"></nz-input>
+                                        <div nz-form-explain *ngIf="_form.controls['publicName'].dirty&&_form.controls['publicName'].hasError('required')">请输入文件号!</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>开始时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14">
+                                        <nz-datepicker formControlName="startDate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                        <div style="color:red" nz-form-explain *ngIf="_form.controls.startDate.dirty&&_form.controls.startDate.hasError('required')">请选择开始时间!</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div style="width:100%" nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="8">
+                                        <label nz-form-item-required>结束时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="14">
+                                        <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                        <div style="color:red" nz-form-explain *ngIf="_form.controls.endDate.dirty&&_form.controls.endDate.hasError('required')">请选择结束时间!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div style="width:100%;" class="form-group row">
+                            <div style="width:100%;text-align:center" nz-form-item nz-row>
+                                <div nz-col [nzSpan]="20" nz-form-control>
+                                    <button [disabled]="_form.invalid" [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,49 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-17 10:24:08
+ * @Last Modified by: mozhengqian
+ * @Last Modified time: 2017-11-28 13:01:46
+ */
+
+ :host::ng-deep {
+    .certificate-box {
+        .cui-data-table-wrap {
+            margin: 0;
+        }
+        .ant-modal-content {
+            overflow: auto;
+        }
+        .select-body {
+            margin: 5px 15px;
+        }
+        .ant-modal {
+            width: 100%!important;
+            top: 0;
+            height: 100%;
+            padding: 0;
+            .ant-modal-content {
+                height: 100%;
+            }
+        }
+    }
+    .closeBtn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 60px;
+        cursor: pointer;
+    }
+    button {
+        outline: none;
+    }
+    .btn-box {
+        text-align: right;
+        margin-right: 15px;
+        button {
+            min-width: 60px;
+        }
+        .btn-primary {
+            margin-right: 10px;
+        }
+    }
+}

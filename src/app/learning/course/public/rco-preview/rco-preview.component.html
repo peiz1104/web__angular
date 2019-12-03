@@ -1,0 +1,53 @@
+<div class="player-wrap d-flex flex-row-reverse h-100">
+
+    <div class="player-slider" [ngClass]="{'fold': sideFold, 'unfold': !sideFold}">
+        <div class="operator">
+            <div class="op chapter" [ngClass]="{'light': !sideFold}" (click)="toggleSide()">
+                <i class="anticon anticon-bars"></i>
+                章节
+            </div>
+        </div>
+
+        <!-- <ul class="list-unstyled">
+        <li  *ngFor="let rco of rcos"  [style.paddingLeft]="rco.depth + 'rem'" 
+            [ngClass]="{'active': rco.isCurrent, 'disabled': !rco.isEnabled}" >
+            <div (click)="clickPlay(rco)">
+                <i ></i>
+                <span>{{rco.title}}({{rco.id}})</span>
+            </div>
+        </li>
+    </ul> -->
+        <div class="outline">
+            <h3 *ngIf="false">{{rootRco.title}}</h3>
+            <ng-container *ngTemplateOutlet="rcoItem; context: {$implicit: 'outline', rco: getRootNode()}"></ng-container>
+        </div>
+    </div>
+
+    <div class="player-body">
+        <iframe id="cmi-frame" frameborder="no" border="0" [src]="safePlayUrl"></iframe>
+    </div>
+</div>
+
+<ng-template #rcoItem let-rco="rco">
+    <div *ngIf="rco?.contentType=='TOPIC_GROUP'" class="rco-topic-group">
+        <span class="rco-title d-inline-block text-truncate">
+            <i class="anticon anticon-folder-open"></i> {{rco?.title}}</span>
+    </div>
+    <div *ngIf="rco?.contentType=='TOPIC'" class="rco-topic d-flex" (click)="rco && rco?.isEnabled && clickPlay(rco)">
+        <span class="rco-title d-inline-block text-truncate">
+            <i class="anticon anticon-book"></i> {{rco?.title}}</span>
+        <span *ngIf="rco.isCurrent" class="text-success d-inline-block text-truncate ml-auto" style="width: 6rem; padding-left: 1rem;">正在播放</span>
+    </div>
+
+    <ng-container *ngIf="rco?.children && rco?.children.length > 0">
+        <ng-container *ngTemplateOutlet="rcoList; context: {$implicit: 'outline', rcoList: rco?.children}"></ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #rcoList let-rcoList="rcoList">
+    <ul>
+        <li *ngFor="let item of rcoList" class="rco-item" [ngClass]="{'active': item.isCurrent, 'disabled': !item.isEnabled}">
+            <ng-container *ngTemplateOutlet="rcoItem; context: {$implicit: 'outline', rco: item}"></ng-container>
+        </li>
+    </ul>
+</ng-template>

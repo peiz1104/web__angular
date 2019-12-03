@@ -1,0 +1,25 @@
+:host::ng-deep {
+    // .table {
+    //     margin-top: 40px;
+    // }
+    .vertical-center-modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .vertical-center-modal .ant-modal {
+        top: 0;
+    }
+    .ant-col-8 {
+        margin-top: 10px;
+    }
+    .userinp {
+        margin: 0 10px;
+    }
+    .ant-modal-close {
+        outline: none;
+    }
+    .ant-select-selection-selected-value {
+        // color: #d9d9d9;
+    }
+}

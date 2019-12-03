@@ -1,0 +1,51 @@
+<div class="select-person">
+    <div class="select-person-box" (click)="openSelectPersonModule($event)">
+        <div class="show-box">
+            <div *ngIf="!_value || _value?.length == 0" class="data-placeholder">{{placeholder}}</div>
+            <ul *ngIf="!_value || _value?.length > 0" class="data-list-box">
+                <li *ngFor="let ug of _value" class="data-single">
+                    <span class="">{{ug.displayName}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- 弹出层选择列表 -->
+<nz-modal [nzVisible]="selectPerson" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel($event)"
+    [nzWidth]="'80%'" [nzStyle]="{height:'100%',top:'0px'}">
+    <ng-template #modalTitle>
+        <div class="text-center">选择人员</div>
+    </ng-template>
+    <ng-template #modalContent>
+        <div class="select-person-matter clearfix">
+            <!-- <div class="select-person-left">
+                <spk-ug-lookup (selectionChange)="selectUserGroup($event)"></spk-ug-lookup>
+            </div> -->
+            <div class="select-person-right">
+                <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [selectType]="mode" [(selection)]="selection"
+                    (reload)="loadData($event)" [loading]="loading">
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-form-control>
+                                        <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名或姓名">
+                                    </div>
+                                    <div class='simple-search-bar-search-box'>
+                                        <button nz-button [nzType]="'primary'" class="search-btn" (click)="loadData()">
+                                            搜索</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+                </cui-data-table>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button [nzType]="'primary'" (click)="sublimtPerson($event)">确 定</button>
+    </ng-template>
+</nz-modal>

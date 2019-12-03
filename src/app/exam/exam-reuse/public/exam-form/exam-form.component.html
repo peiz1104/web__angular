@@ -1,0 +1,312 @@
+<form nz-form [formGroup]="validateForm" class="test-add-form-box">
+  <div nz-row>
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+      <div nz-col [nzSpan]="12">
+        <div class="row">
+          <div class="col-11 pull-5 order-1">
+            <div nz-form-item nz-row>
+              <div nz-col [nzPush]="3" [nzSpan]="21">
+                <cui-fileupload name="file" mode="image" [auto]="true" url="/api/upload/file" (uploadComplete)="onUploadComplete($event)"
+                  [imageHolder]="examDetail.images"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                    <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, GIF 或 PNG, 大小不能超过 1MB。</span>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="examName" nz-form-item-required>考试名称</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.examName" nz-col [nzSpan]="16">
+                <nz-input formControlName="examName" [nzPlaceHolder]="'请输入考试名称'"></nz-input>
+                <div nz-form-explain *ngIf="validateForm.controls.examName.dirty&&validateForm.controls.examName.hasError('required')">请输入考试名称!</div>
+                <div nz-form-explain *ngIf="validateForm.controls.examName.dirty&&validateForm.controls.examName.hasError('maxlength')">考试名称不能超过50字符!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="paperName" nz-form-item-required>选择试卷</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.paperName" nz-col [nzSpan]="14">
+                <nz-input *ngIf="!paperDisabled" [nzPlaceHolder]="validateForm.value.paperName" [nzReadonly]="'true'" (nzFocus)="openSelectPaper()"
+                  formControlName="paperName"></nz-input>
+                <nz-input *ngIf="paperDisabled" [nzPlaceHolder]="validateForm.value.paperName" [nzReadonly]="'true'" [nzDisabled]="'true'"
+                  formControlName="paperName"></nz-input>
+                <div nz-form-explain *ngIf="validateForm.controls.paperId.dirty&&validateForm.controls.paperId.hasError('required')">请选择试卷!</div>
+              </div>
+              <div nz-col [nzSpan]="2" class="pt-2 pl-1">
+                <a class="text-primary" title="预览" (click)="showViewPaper()">
+                  预览
+                </a>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="etmCode" nz-form-item-required>计时方式</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.etmCode" nz-col [nzSpan]="16">
+                <nz-select formControlName="etmCode">
+                  <nz-option *ngFor="let option of etmCodeData" [nzLabel]="option.label" [nzValue]="option.value" [nzDisabled]="option.disabled">
+                  </nz-option>
+                </nz-select>
+                <div nz-form-explain *ngIf="validateForm.controls.etmCode.dirty&&validateForm.controls.etmCode.hasError('required')">请输入考试计时方式!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row *ngIf="validateForm.value.etmCode == 'KSSC' ">
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="examTime" nz-form-item-required>考试时长( 分钟 )</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.examTime" nz-col [nzSpan]="16">
+                <nz-input-number class="w-100" formControlName="examTime" [nzStep]="1"></nz-input-number>
+                <!-- <nz-input [nzType]="'number'" class="w-100" formControlName="examTime" [Min]="1" [Max]="100" [Step]="1"></nz-input> -->
+                <div nz-form-explain *ngIf="validateForm.controls.examTime.dirty&&validateForm.controls.examTime.hasError('required')">请输入考试时长!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row *ngIf="validateForm.value.etmCode == 'KSSJ' ">
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="endTime" nz-form-item-required>最迟交卷时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.endTime" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="endTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'最迟交卷时间'"></spk-qm-datepicker>
+                <div nz-form-explain *ngIf="validateForm.controls.endTime.dirty&&validateForm.controls.endTime.hasError('required')">最迟交卷时间!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="onfocusCount" nz-form-item-required>切屏次数</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.onfocusCount" nz-col [nzSpan]="16">
+                <nz-input-number class="w-100" formControlName="onfocusCount" [nzStep]="1"></nz-input-number>
+                <!-- <nz-input [nzType]="'number'" class="w-100" formControlName="onfocusCount" [nzMin]="-1" [nzMax]="10" [nzStep]="1"></nz-input> -->
+                <div class="w-100">0不允许切屏、-1不限制切屏</div>
+                <div nz-form-explain *ngIf="validateForm.controls.onfocusCount.dirty&&validateForm.controls.onfocusCount.hasError('required')">请输入切屏次数!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="countmCode" nz-form-item-required>计分方式</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.countmCode" nz-col [nzSpan]="16">
+                <nz-select formControlName="countmCode">
+                  <nz-option *ngFor="let option of countmCodeData" [nzLabel]="option.label" [nzValue]="option.value" [nzDisabled]="option.disabled">
+                  </nz-option>
+                </nz-select>
+                <div nz-form-explain *ngIf="validateForm.controls.countmCode.dirty&&validateForm.controls.countmCode.hasError('required')">请选择计分方式!</div>
+              </div>
+            </div>
+            <div nz-row>
+              <!-- <div nz-col [nzSpan]="12">
+                              <div nz-form-item nz-row>
+                              <div nz-form-label nz-col [nzSpan]="16">
+                                  <label for="isDistributed">是否启用分布式</label>
+                              </div>
+                              <div nz-form-control [nzValidateStatus]="validateForm.controls.isDistributed" nz-col [nzSpan]="8">
+                                  <label nz-checkbox formControlName="isDistributed"></label>
+                              </div>
+                              </div>
+                          </div> -->
+              <div nz-col [nzSpan]="12">
+                <div nz-form-item nz-row>
+                  <div nz-form-label nz-col [nzSpan]="16">
+                    <label for="isPreGenerated">是否预生成</label>
+                  </div>
+                  <div nz-form-control [nzValidateStatus]="validateForm.controls.isPreGenerated" nz-col [nzSpan]="8">
+                    <label nz-checkbox formControlName="isPreGenerated"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="6">
+                <label for="examDesc">考试说明</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.examDesc" nz-col [nzSpan]="18">
+                <nz-input formControlName="examDesc" [nzPlaceHolder]="'请输入考试说明'" [nzType]="'textarea'" [nzRows]="'3'"></nz-input>
+                <div nz-form-explain *ngIf="validateForm.controls.examDesc.dirty&&validateForm.controls.examDesc.hasError('maxlength')">考试说明不能超过500字符!</div>
+                <div nz-form-explain *ngIf="validateForm.controls.examDesc.dirty&&validateForm.controls.examDesc.hasError('confirm')">请填写考试说明</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <div class="row">
+          <div class="col-11 pull-5 order-1">
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="startTime" nz-form-item-required>考试开始时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.startTime" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="startTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试开始时间'"
+                  [nzDisabled]="true"></spk-qm-datepicker>
+                <div nz-form-explain *ngIf="validateForm.controls.startTime.dirty&&validateForm.controls.startTime.hasError('required')">考试开始时间!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="enterExamTime" nz-form-item-required>进入考试截止时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.enterExamTime" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="enterExamTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'进入考试截止时间'"
+                  [nzDisabled]="true"></spk-qm-datepicker>
+                <div nz-form-explain *ngIf="validateForm.controls.enterExamTime.dirty&&validateForm.controls.enterExamTime.hasError('required')">进入考试截止时间!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="lowLine" nz-form-item-required>及格分数</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.lowLine" nz-col [nzSpan]="16">
+                <nz-input-number class="w-100" formControlName="lowLine" [nzMin]="0" [nzStep]="1"></nz-input-number>
+                <div nz-form-explain style="color:red">大于等于0小于等于试卷总分：{{score||0}}</div>
+                <div nz-form-explain *ngIf="validateForm.controls.lowLine.dirty&&validateForm.controls.lowLine.hasError('required')">请输入及格分数线!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="examCount" nz-form-item-required>考试次数</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.examCount" nz-col [nzSpan]="16">
+                <nz-input-number class="w-100" formControlName="examCount" [nzStep]="1"></nz-input-number>
+                <div nz-form-explain class="w-100">0可以考无限次</div>
+                <div nz-form-explain *ngIf="validateForm.controls.examCount.dirty&&validateForm.controls.examCount.hasError('required')">请输入考试次数!</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="moreUser">学员继续考试生成码</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.moreUser" nz-col [nzSpan]="16">
+                <nz-select formControlName="moreUser">
+                  <nz-option *ngFor="let option of moreUserData" [nzLabel]="option.label" [nzValue]="option.value">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="scoreDisplayTime">成绩发布时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.scoreDisplayTime" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="scoreDisplayTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                  [nzPlaceHolder]="'成绩发布时间'"></spk-qm-datepicker>
+                <div nz-form-explain>不选择时间则不发布成绩</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row class="bottom">
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="answerDisplayTime">可回顾考试时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.answerDisplayTime" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="answerDisplayTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                  [nzPlaceHolder]="'可回顾考试时间'"></spk-qm-datepicker>
+                <div nz-form-explain>不选择时间则不允许回顾</div>
+              </div>
+            </div>
+            <div nz-row>
+              <div nz-col [nzSpan]="12">
+                <div nz-form-item nz-row>
+                  <div nz-form-label nz-col [nzSpan]="16">
+                    <label for="isUserInfo">阅卷显示学生信息</label>
+                  </div>
+                  <div nz-form-control [nzValidateStatus]="validateForm.controls.isUserInfo" nz-col [nzSpan]="8">
+                    <label nz-checkbox formControlName="isUserInfo"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="enrollStart">考试报名开始时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollStart" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="enrollStart" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试报名开始时间'"
+                  [nzDisabled]="true"></spk-qm-datepicker>
+                  <div nz-form-explain style="color:red" *ngIf="validateForm.controls.enrollStart.value>validateForm.controls.enterExamTime.value">考试报名开始时间不能大于考试截止时间</div>
+              </div>
+            </div>
+            <div nz-form-item nz-row>
+              <div nz-form-label nz-col [nzSpan]="8">
+                <label for="enrollEnd">考试报名截止时间</label>
+              </div>
+              <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollEnd" nz-col [nzSpan]="16">
+                <spk-qm-datepicker class="w-100" formControlName="enrollEnd" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试报名截止时间'"
+                  [nzDisabled]="true"></spk-qm-datepicker>
+                  <div nz-form-explain style="color:red" *ngIf="validateForm.controls.enrollEnd.value>validateForm.controls.enterExamTime.value">考试报名截止时间不能大于考试截止时间</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <div class="row my-3">
+          <div class="col-12">
+            <div class="form-group row">
+              <div class="col-12 text-center">
+                <button nz-button type="button" (click)="onSubmit($event,validateForm.value)" [nzType]="'primary'" class="btn btn-primary"
+                  [nzLoading]="submitLoading">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nz-spin>
+  </div>
+</form>
+<!-- 弹出层选择试卷列表 -->
+<nz-modal [nzVisible]="selectPaper" [nzTitle]="'试卷列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" [nzFooter]="false"
+  [nzWidth]="'900px'" [nzStyle]="{height:'100%',top:'20px'}">
+  <ng-template #modalContent>
+    <div class="select-paper-matter">
+      <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [(selection)]="selection"
+        (reload)="loadData($event)" [loading]="paperListLoading">
+        <ng-template #simpleSearch>
+          <ng-container>
+            <form nz-form [formGroup]="_searchForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+              <div nz-row class="cui-data-table-form-body">
+                <div nz-form-control>
+                  <span class="userGroupleft">组织机构：</span>
+                  <spk-user-group-select formControlName="userGroup" class="selectUserGroup" (selectOk)="selectGroup($event)"></spk-user-group-select>
+                  <nz-input formControlName="epName" [nzPlaceHolder]="'试卷名称...'" width="200px" style="width:200px"> </nz-input>
+
+                </div>
+                <div class='simple-search-bar-search-box'>
+                  <button type="button" (click)="_submitForm($event, _searchForm.value)" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </ng-template>
+
+        <ng-template #listTools>
+          <div class="btn-group">
+          </div>
+        </ng-template>
+        <ng-template cuiColTpl="epName" let-row="row">
+          <div class="exam-casual">{{row.epName}}</div>
+        </ng-template>
+        <ng-template cuiColTpl="titleCode" let-row="row">
+          <span>{{row.titleCode == 'G' ? '人工组卷' : row.titleCode == 'S' ? '随机组卷': row.titleCode == 'H' ? '混合组卷' : row.titleCode
+            == 'RG' ? '策略组卷' : ' '}}</span>
+        </ng-template>
+        <ng-template cuiColTpl="epType" let-row="row">
+          <span>{{row.epType ? ( row.epType=='PC'? '网页端试卷':(row.epType=='MB'? '移动端试卷':(row.epType=='CB'? '通用试卷':'网页端试卷'))) :'网页端试卷'}}</span>
+        </ng-template>
+        <ng-template cuiColTpl="sumScore" let-row="row">
+          <span>{{row.sumScore == 0 ? '不限制' : row.sumScore}}</span>
+        </ng-template>
+        <ng-template cuiColTpl="epid" let-row="row">
+          <a class="text-primary" (click)="selectExam(row)"> 选择 </a>
+        </ng-template>
+      </cui-data-table>
+    </div>
+  </ng-template>
+</nz-modal>
+<!-- 弹出层预览试卷 -->
+<nz-modal *ngIf="validateForm.value.paperId" [nzVisible]="viewPaper" [nzTitle]="'试题列表'" [nzContent]="PaperContent" (nzOnCancel)="viewPaper=false"
+  (nzOnOk)="viewPaper=false" [nzWidth]="'900px'">
+  <ng-template #PaperContent>
+    <spk-test-view [view]="viewPaper" [url]="'/api/exam/paper/show'" [params]="params"></spk-test-view>
+  </ng-template>
+</nz-modal>

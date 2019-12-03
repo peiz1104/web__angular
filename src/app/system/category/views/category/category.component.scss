@@ -1,0 +1,13 @@
+:host::ng-deep{
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    .text-center .text-right{
+        text-align: center !important;
+    }
+    
+    button{
+        cursor: pointer;
+    }
+}

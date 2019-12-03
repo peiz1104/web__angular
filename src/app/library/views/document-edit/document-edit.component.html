@@ -1,0 +1,19 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:DOCUMENT_LIB:EDIT'}">
+    <div class="page-header">
+        <h3 class="page-title">{{document?.name}}: 编辑</h3>
+        <!-- <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../../list']">返回文档列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div> -->
+    </div>
+</div>
+
+<div>
+    <div class="page-body">
+        <div class="container">
+            <div class="alert alert-danger" *ngIf="errormsg">{{errormsg}}</div>
+            <spk-document-form [loading]="loading" [document]="document" (doSubmit)="saveDocument($event)"></spk-document-form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'RESOURCE:CASE_LIB:ADD'}">
+  <div class="page-header">
+    <h3 class="page-title">添加案例</h3>
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../','list']">返回案例列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+      <div class="alert alert-danger" *ngIf="err">{{err}}</div>
+      <nz-tabset [nzSelectedIndex]="tableIndex">
+        <nz-tab [nzDisabled]="canCheck">
+          <ng-template #nzTabHeading>
+            案例信息填写
+          </ng-template>
+          <cui-alert [value]="msg"></cui-alert>
+          <spk-case-form #caseInfoForm [loading]="loading" [library]="true" [caseInfo]="caseInfo" (doSubmit)="onSubmit($event)" (cancel)="onCancel($event)"></spk-case-form>
+        </nz-tab>
+
+        <nz-tab>
+          <ng-template #nzTabHeading>
+            浏览开放设置
+          </ng-template>
+          <ng-container *ngTemplateOutlet="conditionTpl; context: {condition: condition}"></ng-container>
+        </nz-tab>
+      </nz-tabset>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #conditionTpl let-condition="condition">
+  <div *ngIf="!condition">
+    <p class="text-secondary">
+      <i class="fa fa-info-circle fa-lg text-info"></i> 注册条件没有初始化，请点击下面的按钮初始化注册条件</p>
+    <button type="button" class="btn btn-primary mt-3" (click)="initCondition()">初始化注册条件</button>
+  </div>
+  <spk-condition *ngIf="condition" [condition]="condition"></spk-condition>
+</ng-template>

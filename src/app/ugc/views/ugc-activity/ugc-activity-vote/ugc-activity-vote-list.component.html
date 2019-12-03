@@ -1,0 +1,64 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">大众评选列表</h5>
+    </div>
+
+    <div class="page-body">
+
+        <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData()">
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+            
+            <ng-template cuiColTpl="title" let-row="row">
+                <a class="text-primary">{{row.title}}</a>
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                {{row.startDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">
+                {{row.endDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="workCount" let-row="row">
+                 {{row.workCount ? row.workCount : 0 }}
+            </ng-template>
+
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <a href="javascript:;"  *ngIf="!row.isAll" class="text-primary" [routerLink]="[row.id, 'options']">作品</a>
+                <span nz-table-divider *ngIf="!row.isAll"></span>
+                <a href="javascript:;" class="text-success" [routerLink]="[row.id, 'edit']">规则</a>
+                <span nz-table-divider></span>
+                <a class="text-danger"  (click)="delete([row])">删除</a>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</div>
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-item>
+                <div nz-form-control>
+                    <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入标题'"> </nz-input>
+                </div>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #theListTools>
+    <button type="button" class="btn btn-primary" [routerLink]="['../add']" >
+        <i class="fa fa-plus"></i> 创建评选</button>
+        <button type="button" class="btn btn-danger" [disabled]="!selection || selection.length == 0" (click)="delete()">
+            批量删除</button>
+</ng-template>

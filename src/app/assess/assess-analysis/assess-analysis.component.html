@@ -1,0 +1,166 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">
+            <small>统计分析</small>
+        </h5>
+    </div>
+    <div class="page-body">
+        <nz-tabset [nzSize]="'small'" (nzSelectChange)="_tabChange($event)">
+            <!-- [nzSelectedIndex]="tableIndex" -->
+
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    回答人数统计
+                </ng-template>
+                <h1 class="text-center mt-4 mb-4">{{assess?.name}}</h1>
+                <!-- <h5 class="text-center mt-4 mb-2">共{{totalAnswer}}人参与<span *ngIf="assessType == 'ASSESS'">，平均分：{{totalAvg}}分</span></h5> -->
+                <div>
+                    <div class="title-item" *ngFor="let question of questions;let i=index" [ngSwitch]="question.type">
+                        <div class="title" *ngSwitchCase="'SINGLE'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[单选题]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'MULTIPLE'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[多选题]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'SINGLE_FILL'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[单项填空]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'MULTIPLE_FILL'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[多项填空]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'SHORT_ANSWER'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[简答题]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'MATRIX_SINGLE'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[矩阵单选]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="title" *ngSwitchCase="'MATRIX_MULTIPLE'">
+                            <dl class="clearfix"><dt>第{{i+1}}题：</dt>
+                                <dd>{{question.name}}<span>[矩阵多选]</span></dd>
+                            </dl>
+                        </div>
+                        <div class="count unit">
+                            <div class="radiu-box" *ngIf="question.type == 'SINGLE' || question.type == 'MULTIPLE'">
+                                <table class="the-table" qi="10000" cellspacing="0" cellpadding="3" border="0" style="background-color:#e0e0e0;width:100%;border-collapse:collapse;">
+                                    <tbody>
+                                        <tr align="center" style="font-weight:bold;background: #e4e7eb;">
+                                            <td class="arrge">选项 <i class="icon"></i></td>
+                                            <td id="sort-10000" align="center" class="arrge" style="width:50px;;white-space:nowrap;">小计<i class="icon "></i></td>
+                                            <td align="center" style="width:360px;" *ngIf="assessType == 'ASSESS'">选项分值</td>
+                                            <td align="center" style="width:360px;">比例</td>
+                                        </tr>
+                                        <tr style="background:#f7fafc;" *ngFor="let option of question.options">
+                                            <td val="1">{{option.name}}</td>
+                                            <td align="center">{{option.totalNum}}</td>
+                                            <td align="center" *ngIf="assessType == 'ASSESS'">{{option.score}}</td>
+                                            <td percent="50" align="left">
+                                                <div class="bar">
+                                                    <nz-progress [ngModel]="getPercent(option,question)"></nz-progress>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr style="background: #e4e7eb;" total="1">
+                                            <td><b>本题有效填写人次</b></td>
+                                            <td align="center"><b>{{question.totalNum}}</b></td>
+                                            <td *ngIf="assessType == 'ASSESS'"><b>本题平均分数</b></td>
+                                            <td align="center" *ngIf="assessType == 'ASSESS'"><b>{{question.avgScore}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="radiu-box" *ngIf="question.type == 'MATRIX_SINGLE' || question.type == 'MATRIX_MULTIPLE'">
+                                <table class="the-table" qi="10000" cellspacing="0" cellpadding="3" border="0" style="background-color:#e0e0e0;width:100%;border-collapse:collapse;">
+                                    <tbody>
+                                        <tr align="center" style="font-weight:bold;background: #e4e7eb;">
+                                            <td class="arrge" style="width:360px;">题目\选项 <i class="icon"></i></td>
+                                            <td align="center" style="width:360px;" *ngFor="let option of question.options">{{option.name}}</td>
+                                            <td align="center" style="width:360px;" *ngIf="assessType == 'ASSESS'">平均分数</td>
+                                        </tr>
+                                        <tr style="background:#f7fafc;" *ngFor="let leftQuestion of question.leftQuestions">
+                                            <td val="1">{{leftQuestion.name}}</td>
+                                            <td align="center" *ngFor="let loption of leftQuestion.options">{{loption.totalNum}}</td>
+                                            <td align="center" *ngIf="assessType == 'ASSESS'"><b>{{leftQuestion.avgScore}}</b></td>
+                                        </tr>
+                                        <tr style="background: #e4e7eb;" total="1">
+                                            <td><b>本题有效填写人数</b></td>
+                                            <td align="center"><b>{{question.totalNum}}</b></td>
+                                            <td *ngIf="assessType == 'ASSESS'"><b>本题平均分数</b></td>
+                                            <td align="center" *ngIf="assessType == 'ASSESS'"><b>{{question.avgScore}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="radiu-box" *ngIf="question.type == 'SINGLE_FILL' || question.type == 'MULTIPLE_FILL' || question.type == 'SHORT_ANSWER'">
+                                <table class="the-table" qi="10000" cellspacing="0" cellpadding="3" border="0" style="background-color:#e0e0e0;width:100%;border-collapse:collapse;">
+                                    <tbody>
+                                        <tr align="center" style="font-weight:bold;background: #e4e7eb;">
+                                            <td class="arrge" style="width:360px;">题目 <i class="icon"></i></td>
+                                            <td align="center" style="width:360px;">详情</td>
+                                        </tr>
+                                        <tr style="background:#f7fafc;" *ngFor="let option of question.options">
+                                            <td val="1">{{option.name}}</td>
+                                            <td align="center"><a href="javascript:void(0);" (click)="openDetail(option)">详情</a></td>
+                                        </tr>
+                                        <tr style="background: #e4e7eb;" total="1">
+                                            <td><b>本题有效填写人数</b></td>
+                                            <td align="center"><b>{{question.totalNum}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nz-tab>
+
+            <nz-tab *ngIf="assess?.isAnonymous == 'REJECT'">
+                <ng-template #nzTabHeading>
+                    每人回答情况汇总
+                </ng-template>
+                <cui-data-table [columns]="columns" [data]="assessList" [loading]="loading" (reload)="getUserAnswerList($event)" [pagination]="pagination">
+                    <ng-template #simpleSearch>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名或姓名">
+                            </div>
+                            <div class="form-group ml-2">
+                                <button type="button" class="btn btn-primary" (click)="getUserAnswerList()">搜索</button>
+                            </div>
+                        </form>
+                        <ng-template #rowActions let-row="row">
+                            <a href="javascript:;" class="text-success" (click)="openEcho(row)">查看详情</a>
+                        </ng-template>
+                    </ng-template>
+                </cui-data-table>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+    <nz-modal [nzVisible]="isVisible" [nzTitle]="'作答详情'" [nzFooter]="false" [nzContent]="detailContent" (nzOnCancel)="handleCancel($event)">
+        <ng-template #detailContent>
+            <cui-data-table [columns]="detailColumns" [data]="detailList" [loading]="loading" (reload)="loadList($event)" [pagination]="detailPag">
+                <ng-template #simpleSearch>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" name="detailText" [(ngModel)]="detailText" placeholder="请输入用户名或姓名">
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadList()">搜索</button>
+                        </div>
+                    </form>
+                </ng-template>
+            </cui-data-table>
+        </ng-template>
+    </nz-modal>
+</div>

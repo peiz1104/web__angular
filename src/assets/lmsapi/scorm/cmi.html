@@ -1,0 +1,171 @@
+<!DOCTYPE html> 
+
+<html>  
+
+  <head>
+
+    <title>scorm_cmi.html</title>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=Yes">
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+	<!--[if lt IE 8 ]><script type="text/javascript" src="../common/js/json2.js"></script><![endif]-->
+    <script type="text/javascript" src="../common/js/jquery1x.js"></script>
+    <script type="text/javascript" src="./ScormAPI.js"></script>
+	<style>
+		html,body{ margin:0px; height:100%;width: 100%;padding:0;}
+		.main-frame {
+		    border: medium none;
+		    bottom: 0;
+		    height: 100%;
+		    position: absolute;
+		    top: 0;
+		    width: 100%;
+		}
+	</style>
+
+
+  </head>
+
+  
+
+  <body style="margin:0;padding:0;overflow:auto;" onload="initCMIData();">
+
+  <iframe id="iframeB" class="main-frame" src="" height="100%" width="100%" style="border: 0px"></iframe>
+  <script type="text/javascript" src="./scorm_cmi.js"></script>
+
+	<script type="text/javascript">
+
+		 
+
+		var loadingUrl = '../common/html/loading.html';
+
+		var client_proxy = '';
+
+		var LocString = String(window.document.location.href);
+
+		var iframe=document.getElementById('iframeB');
+
+		function GetQueryString(str){
+
+			var rs=new RegExp("(^|)"+str+"=([^&]*)(&|$)","gi").exec(LocString),tmp;
+
+			if(tmp=rs)return tmp[2];
+
+			return "没有这个参数";
+
+		}
+
+		//alert("URL => "+GetQueryString("content"));
+
+		var content = GetQueryString("content");
+
+		if(content!=null&&content!=''){
+
+			content = decodeURIComponent(content);
+
+			// alert('content = > '+content)
+
+			// var tmp = content.split('&');
+
+			// if(tmp!=null&&tmp.length>1){
+
+			// 	client_proxy = tmp[0] + client_proxy;
+
+			// 	url = tmp[1];
+
+			// }
+
+			// if(tmp!=null&&tmp.length>2&&url!=null&&url!=""&&url.indexOf("?")!=-1){
+
+			// 	for(var i=2;i<tmp.length;i++){
+
+			// 		url = url + "&" + tmp[i];
+
+			// 	}
+
+			// }
+			url = content;
+			//console.log(client_proxy+'\n'+url);
+
+		}
+		var playType="";
+		/*window.addEventListener('message',function(e){
+			var message = JSON.parse(e.data);
+            playType=message.playType;
+        },false);	*/
+		$(window).on("message", function(e){
+			var message = $.parseJSON(e.originalEvent.data);
+			playType=message.playType;
+		});
+
+		/**
+
+		 * @remark 初始化数据
+
+		 */
+
+		function initCMIData(){
+			client_proxy = client_proxy;
+			isInit = true;
+			iframe.src = loadingUrl;
+			send();
+
+		}
+
+		
+
+		var API;
+
+		/**
+
+		 * @remark 等待课件初始化信息加载完成进入课程
+
+		 */
+		var getIsPreviewTimes = 0;
+		var loadInit = window.setInterval(function(){
+			if (getIsPreviewTimes < 5) {
+				window.parent.postMessage('{"type":"playType"}','*');
+				getIsPreviewTimes+=1;
+			}
+			
+
+			if((this.getParamData!=null&&this.getParamData!="") || playType == "preview") {
+				//console.log("getParamData" + getParamData);
+
+				window.clearInterval(loadInit);
+				API = new GenericAPIAdaptor;
+				iframe.src = url;
+
+				if (iframe.attachEvent){ 
+
+					iframe.attachEvent("onload", function(){ 
+
+					     window.parent.postMessage('{"type":"loaded"}','*');
+
+					}); 
+
+				} else { 
+
+					iframe.onload = function(){ 
+
+				    	window.parent.postMessage('{"type":"loaded"}','*');
+
+					}; 
+
+				} 
+			}
+
+		},500);
+
+		
+
+	</script>
+
+  </body>
+
+</html>
+

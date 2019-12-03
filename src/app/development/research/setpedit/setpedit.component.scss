@@ -1,0 +1,33 @@
+:host::ng-deep {
+    .setp-edit {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px 18px;
+        .card-body {
+            .cancel-btn {
+                display: inline-block;
+                width: 60px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                background: #e5e5e5;
+                cursor: pointer;
+                border-radius: 4px;
+            }
+            .plan-remark,
+            .plan-content,
+            {
+                padding: 2px 6px;
+            }
+            #remark {
+                height: 40px;
+                resize: none;
+                width: 100%;
+            }
+        }
+        .ant-row,
+        .ant-form-item {
+            width: 100%;
+        }
+    }
+}

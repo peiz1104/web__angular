@@ -1,0 +1,305 @@
+<div class="period-declare-work">
+    <div class="search-condition">
+        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+            <div class="cui-data-table-form-body">
+                <div nz-row>
+                    <div nz-col [nzSpan]="6" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label for="trainName">培训名称</label>
+                            </div>
+                            <div nz-col [nzSpan]="16">
+                                <nz-input formControlName="trainName" [nzPlaceHolder]="'培训名称'"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-col [nzSpan]="6" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label for="startDate">开始时间</label>
+                            </div>
+                            <div nz-col [nzSpan]="16">
+                                <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择开始时间'" style="width:100%;"></nz-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="6" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label for="endDate">结束时间</label>
+                            </div>
+                            <div nz-col [nzSpan]="16">
+                                <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择结束时间'" style="width:100%;"></nz-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div nz-col [nzSpan]="6" class="cui-data-table-form-row">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="6">
+                                <label>审核状态</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="10">
+                                <!-- <nz-input formControlName="isSubmit" [nzPlaceHolder]="'请输入姓名'"></nz-input> -->
+                                <nz-select [nzPlaceHolder]="'请选择审核状态'" formControlName="status" nzAllowClear [nzShowSearch]="true">
+                                    <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'已通过'" [nzValue]="'P'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'待审核'" [nzValue]="'A'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'待管理员审核'" [nzValue]="'M'">
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'已拒绝'" [nzValue]="'R'">
+                                    </nz-option>
+                                </nz-select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class='complex-search-bar-search-box'>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                        <i class="fa fa-search"></i>查询</button>
+                </div>
+            </div>
+        </form>
+        <div class="declare-mutiple">
+            <button nz-button [nzType]="'primary'" (click)="mutipleAprove()">批量审核</button>
+        </div>
+    </div>
+
+    <div class="period-list">
+        <nz-spin class="spin-style-set" [nzTip]="'正在读取数据...'" [nzSpinning]="spinning">
+            <div class="list-detail">
+                <nz-table #nzTable [nzAjaxData]="data" [nzShowTotal]="true" nzShowSizeChanger [nzIsPageIndexReset]="true" [nzPageIndex]="pageIndex"
+                    [nzPageSize]="pageSize" (nzPageIndexChangeClick)="_changePage($event)" (nzPageSizeChange)="_pageSizeChane($event)"
+                    [nzTotal]="total">
+                    <thead nz-thead>
+                        <tr>
+                            <th nz-th nzCheckbox>
+                                <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+                                </label>
+                            </th>
+                            <th nz-th *ngFor="let item of columns;let i =index">
+                                <span>{{item.title}}</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="data&&data.length==0" nz-tbody>
+
+                        <div class="no-data">
+                            <i class="anticon anticon-frown-o"></i>
+                            <span>暂无数据！</span>
+                        </div>
+                    </tbody>
+
+                    <tbody *ngIf="data.length" nz-tbody>
+                        <tr nz-tbody-tr *ngFor="let data of nzTable.data;let sort = index">
+                            <td nz-td nzCheckbox>
+                                <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
+                                </label>
+                            </td>
+                            <td *ngFor="let singleItem of columns" [ngClass]="singleItem.styleClass" nz-td>
+                                <span *ngIf="singleItem.data">{{data[singleItem.data]}}</span>
+                                <span *ngIf="singleItem.tpl">
+                                    <span *ngIf="singleItem.tpl=='username'"> {{data.user?.username}}</span>
+                                    <span *ngIf="singleItem.tpl=='displayName'"> {{data.user?.displayName}}</span>
+                                    <span *ngIf="singleItem.tpl=='startDate'">{{data.startDate|date:'yyyy-MM-dd'}}</span>
+                                    <span *ngIf="singleItem.tpl=='endDate'">{{data.endDate|date:'yyyy-MM-dd'}}</span>
+                                    <span *ngIf="singleItem.tpl=='status'">
+                                        <span *ngIf="data.status=='N'">未提交</span>
+                                        <span *ngIf="data.status=='A'" style="color:orange">待审核</span>
+                                        <span *ngIf="data.status=='M'" style="color:orange">待管理员审核</span>
+                                        <span *ngIf="data.status=='P'" style="color:green">已通过</span>
+                                        <span *ngIf="data.status=='R'" style="color:red">已拒绝</span>
+                                    </span>
+                                    <span *ngIf="singleItem.tpl=='periodTrainingTheme'">
+                                        {{data.periodTrainingTheme?.name}}
+                                    </span>
+                                    <span *ngIf="singleItem.tpl=='actions'">
+                                        <i style="color:#aaa;font-size:16px" *ngIf="data.status!='A'" title="不可审核" class="iconfont icon-shenhe2"></i>
+                                        <span>
+                                            <i *ngIf="data.status!=null&&data.status=='A'" style="color:#007bbf;font-size:16px;cursor: pointer" title="审核" (click)="toexamine(data.id)"
+                                                class="iconfont icon-shenhe2"></i>
+                                        </span>
+
+                                    </span>
+                                </span>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+
+            </div>
+        </nz-spin>
+    </div>
+</div>
+
+<nz-modal class="refus-modal" [nzZIndex]="1002" *ngIf="isVisible" [nzFooter]="false" [nzWidth]="900" [nzVisible]="isVisible"
+    [nzTitle]="'学时审核'" [nzContent]="modalContent" [nzMaskClosable]="false" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="refuspinning" [nzTip]="'正在读取数据...'">
+            <div class="show-message-box">
+                <div class="left-box">
+                    <div class="sigle-box">
+                        <span class="lable">员工编号：</span>
+                        <span class="content" *ngIf="periodmessageData">
+                            <span>
+                                {{periodmessageData?.user?.username||'暂无'}}
+                            </span>
+                        </span>
+                        <!-- <span class="content" *ngFor="let item of paramsData.userList;let u=index">
+                                <span *ngIf="u!=paramsData.userList.length-1">{{item.displayName}},</span>
+                                <span *ngIf="u==paramsData.userList.length-1">{{item.displayName}}</span>
+                            </span> -->
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训名称：</span>
+                        <span [title]="periodmessageData.trainName" class="content">{{periodmessageData.trainName||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训内容：</span>
+                        <span [title]="periodmessageData.trainContent" class="content">{{periodmessageData.trainContent||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">开始时间：</span>
+                        <span class="content">{{periodmessageData.startDate|date:'yyyy-MM-dd'||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训学时数：</span>
+                        <span class="content">{{periodmessageData.periodNumber||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训方式：</span>
+                        <span class="content">{{periodmessageData.periodTrainingWey?.name||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训地点：</span>
+                        <span class="content">{{periodmessageData.trainPlace}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">主办单位：</span>
+                        <span class="content">{{periodmessageData?.userGroupName}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">描述：</span>
+                        <span [title]="viewperiodDetailData?.remark" class="content">{{periodmessageData?.remark||'暂无'}}</span>
+                    </div>
+                    <!-- <div class="sigle-box">
+                            <span class="lable">培训主题：</span>
+                            <span class="content">{{periodmessageData.periodTrainingTheme?.name||'暂无'}}</span>
+                        </div> -->
+
+
+                </div>
+                <div class="right-box">
+                    <div class="sigle-box">
+                        <span class="lable">姓名：</span>
+                        <span class="content" *ngIf="periodmessageData">{{periodmessageData?.user?.displayName||'暂无'}}</span>
+                        <!-- <span class="content" *ngFor="let item of paramsData.userList;let u=index">
+                                <span *ngIf="u!=paramsData.userList.length-1">{{item.username}},</span>
+                                <span *ngIf="u==paramsData.userList.length-1">{{item.username}}</span>
+                            </span> -->
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训主题：</span>
+                        <span class="content">{{periodmessageData.periodTrainingTheme?.name||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训天数：</span>
+                        <span class="content">{{periodmessageData.trainDays||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">结束时间：</span>
+                        <span class="content">{{periodmessageData.endDate|date:'yyyy-MM-dd'||'暂无'}}</span>
+                    </div>
+                    <div class="sigle-box">
+                        <span class="lable">培训类型：</span>
+                        <span class="content">{{periodmessageData.periodTrainingType?.name||'暂无'}}</span>
+                    </div>
+                    <!-- <div class="sigle-box">
+                            <span class="lable">培训人数：</span>
+                            <span class="content">{{periodmessageData.trainPeople||'暂无'}}</span>
+                        </div> -->
+                    <div class="sigle-box">
+                        <span class="lable">培训形式：</span>
+                        <span class="content">{{periodmessageData.trainForm=='ONLINE'?'在线培训':(periodmessageData.trainForm=='FACE_TO_FACE'?'面授培训':(periodmessageData.trainForm=='BLEND'?'混合培训':'其他培训'))}}</span>
+                    </div>
+
+                    <div class="sigle-box">
+                        <span class="lable">培训来源：</span>
+                        <span class="content">{{periodmessageData.periodTrainingSource?.name||'暂无'}}</span>
+                    </div>
+
+                    <div class="sigle-box">
+                        <span class="lable">收费方式：</span>
+                        <span class="content">{{periodmessageData?.isInvolveCost?'收费':'免费'||'暂无'}}</span>
+                    </div>
+                    <div *ngIf="periodmessageData?.isInvolveCost" class="sigle-box">
+                        <span class="lable">费用：</span>
+                        <span class="content">{{periodmessageData?.cost||'暂无'}}</span>
+                    </div>
+
+                    <div class="sigle-box">
+                        <span class="lable">附件：</span>
+                        <span class="content content-file">
+                            <ul *ngIf="periodmessageData.attachs&&periodmessageData.attachs.length" class="file-list-upload">
+                                <li *ngFor="let item of periodmessageData.attachs" class="file-item upload-success">
+                                    <span class="show-item">
+
+                                        <a [href]="item.relativePath" [download]="item.originFileName">
+                                            <strong>{{item.originFileName}}</strong>
+                                        </a>
+                                    </span>
+                                    <span></span>
+                                    <div class="progress" style="height: 3px;">
+                                        <div class="progress-bar progress-bar-striped bg-success" style="width: 100%;"></div>
+                                    </div>
+                                    <!-- <span (click)="removeUploadfile(item.relativePath)" class="item-remove">✕</span> -->
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group-show">
+                <button (click)="pass('P')" nz-button [nzType]="'primary'">
+                    <span>通过</span>
+                </button>
+                <button (click)="refuse('R')" nz-button [nzType]="'primary'">
+                    <span>拒绝</span>
+                </button>
+                <button (click)="handleCancel($event)" nz-button [nzType]="'primary'">
+                    <span>取消</span>
+                </button>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>
+<nz-modal *ngIf="reasonisVisible" [nzZIndex]="1002" [nzVisible]="reasonisVisible" [nzTitle]="'审核意见'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancelReason($event)" (nzOnOk)="handleOkReason($event)" [nzConfirmLoading]="isConfirmLoading" class="reson-modal">
+    <ng-template #modalContent>
+        <!--<div class="tip-title">意见填写:</div>-->
+        <textarea [(ngModel)]="reasonText" name="" id="reson-text" cols="30" rows="6"></textarea>
+    </ng-template>
+</nz-modal>
+
+<nz-modal class="refuse-modal" [nzZIndex]="1002" [nzFooter]="false" *ngIf="isVisibleRefuse" [nzVisible]="isVisibleRefuse"
+    [nzTitle]="'审核意见'" [nzContent]="modalContent" (nzOnCancel)="handleCancelRefuse($event)" (nzOnOk)="handleOkRefuse($event)">
+    <ng-template #modalContent>
+        <textarea placeholder="请输入审批意见！" [(ngModel)]="textcontent" name="textvalue" id="review" cols="30" rows="6"></textarea>
+        <div class="opear-btn">
+            <button *spkAuthzIf="{hasPermission: 'PERIOD:AUDIT:SECOND'}" [nzLoading]="cpbtnstate" (click)="chooseUserPass()" nz-button
+                [nzType]="'primary'">
+                <span>通过</span>
+            </button>
+            <button *spkAuthzIf="{hasPermission: 'PERIOD:AUDIT:SECOND'}" [nzLoading]="crbtnstate" (click)="chooseUserRefuse()" nz-button
+                [nzType]="'primary'">
+                <span>拒绝</span>
+            </button>
+        </div>
+    </ng-template>
+</nz-modal>

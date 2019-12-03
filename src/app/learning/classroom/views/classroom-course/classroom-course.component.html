@@ -1,0 +1,15 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">{{classroom?.name}}: 课程信息 <small></small></h3>
+  
+      <div class="actions pull-right">
+        <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+      </div>
+    </div>
+  
+    <div class="page-body">
+      <!-- <spk-course-info [course]="classroom.offeringCourse.course"></spk-course-info> -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  

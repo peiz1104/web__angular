@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">编码策略管理
+      <small>管理培训班、课程体系等的编码策略模板</small>
+    </h3>
+  </div>
+  <div class="page-body">
+    <nz-tabset (nzSelectChange)="_tabChange($event)">
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          <span> 培训班编码策略
+          </span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="conditionTpl; context: {type: 'TRAIN_CLASS', codeStrategy: traindClassCode}"></ng-container>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          <span>课程体系编码策略</span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="conditionTpl; context: {type: 'COURSE', codeStrategy: courseCode}"></ng-container>
+      </nz-tab>
+      <nz-tab *spkAuthzIf="{hasPermission: 'SETTINGS:FEE_CODE:VIEW'}">
+        <ng-template #nzTabHeading>
+          <span>费用编码</span>
+        </ng-template>
+        <div>
+            <spk-fee-type></spk-fee-type>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+
+    <ng-template #conditionTpl let-type="type" let-codeStrategy="codeStrategy">
+      <spk-code-strategy-form *ngIf="codeStrategy" [codeStrategy]="codeStrategy" [type]="type"></spk-code-strategy-form>
+    </ng-template>
+  </div>
+</div>

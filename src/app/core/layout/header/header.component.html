@@ -1,0 +1,126 @@
+<nav class="navbar navbar-dark navbar-expand-lg main-navbar" style="background-color: #ffffff">
+    <!--style="background-color: #1b243e;"-->
+    <a class="navbar-brand" href="/" style="padding: 0px 14px;">
+        <!-- <i class="fa fa-graduation-cap"></i> 企慕课堂 -->
+        <!-- <ng-container *ngIf="!site?.logo">
+            <img [title]="site?.name ? site.name : '国寿E学'" src="./assets/images/app_logo_chinalife.png" [alt]="site?.name ? site.name : '国寿E学'"
+                style="height:36px;width:140px">
+        </ng-container> -->
+        <!-- <ng-container *ngIf="site?.logo"> -->
+        <img onerror="this.src='./assets/images/app_logo_chinalife.png'" [title]="site?.name" [src]="site?.logo" [alt]="site?.name"
+            width="120">
+        <!-- <span>{{site?.name ? site.name : '国寿E学'}}</span> -->
+        <!-- </ng-container> -->
+    </a>
+    <i class="iconfont icon-trigger" *ngIf="isBlock" [ngClass]="isCollapsed?'right-open':'left-open'" (click)="toggleCollapsed()"
+        style="line-height: 56px;"></i>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <!-- <a class="nav-link active" href="/{{site?.shortName}}"><i class="fa fa-home"></i> {{site?.name}}</a> -->
+                <!-- <a class="nav-link active" href="/"> {{site?.name}}</a> -->
+
+                <a class="nav-link active" routerLink="/home">控制台</a>
+            </li>
+            <!-- <li >
+                <a class="nav-link" href="javascript:;">产品与服务</a>
+            </li> -->
+        </ul>
+        <!--<form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>-->
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" style="padding:15px 0px;">
+                <a class="nav-link" href="/">
+                    <i class="iconfont icon-shouye"></i> 学员首页</a>
+            </li>
+            <li class="nav-item" style="padding:15px 0px;">
+                <a class="logo-out-style" (click)="logout()">
+                    <i class="iconfont icon-guanbi"></i>
+                    <span>注销</span>
+                </a>
+            </li>
+            <li class="nav-item" *ngIf="isInstructor$ | async">
+                <a class="nav-link" [routerLink]="['/assist/home']">
+                    <i class="iconfont icon-yijinsheng-mingdan"></i> 教辅管理</a>
+            </li>
+            <!-- <li class="nav-item" *ngIf="isAdministrator$ | async">
+                <a class="nav-link" [routerLink]="['/']">管理控制台</a>
+            </li> -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/account/notification']">消息
+                    <span class="badge badge-warning font-weight-normal text-light">{{noticeNum}}</span>
+                </a>
+            </li> -->
+
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="#">帮助</a>
+            </li> -->
+            <li class="nav-item dropdown user-avatar" style="position:inherit" (mouseover)="udropDisplay = true" (mouseleave)="udropDisplay = false">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" [routerLink]="['/account/info']">
+                    <!-- {{user?.username}} -->
+                    <img width="40" height="40" style="border:1px solid #d1d1d1; border-radius: 50%;" (error)="defaultImgSrc($event)" [src]="userimg"
+                        alt="头像">
+                    <!-- <nz-avatar style="border:1px solid #388ecb" [nzSize]="'large'" nzIcon="user" [nzSrc]="user?.avatar"></nz-avatar> -->
+                </a>
+                <div class="dropdown-menu dropdown-menu-right p-0 mt-0 rounded-0" style="width: 22rem;" [ngClass]="{'show': udropDisplay}"
+                    (mouseover)="udropDisplay = true" (mouseleave)="udropDisplay = false">
+                    <!-- <div class="d-flex p-3" style="border-bottom: 1px solid #cccccc;">
+                            <nz-avatar [nzSize]="'large'" class=" ml-2" nzIcon="user" [nzSrc]="user?.avatar"></nz-avatar>
+                            <div class="ml-2">
+                                <span class="d-inline-block text-truncate" style="font-size: 1.25rem;">{{user?.displayName || user?.firstName}}</span>
+                                <br>
+                                <span class="d-inline-block text-truncate text-muted">{{user?.userGroup?.name || '无归属组织'}}</span>
+                            </div>
+                        </div> -->
+                    <div style="z-index:1006" class="row m-0 p-3 account-menu-new">
+                        <a class="col-4 text-center text-secondary-new" [routerLink]="['/account/info']">
+                            <span class="d-block">
+                                <i class="fa fa-lg fa-id-card-o p-2"></i>
+                            </span>
+                            <span class="d-block">基本资料</span>
+                        </a>
+
+                        <a class="col-4 text-center text-secondary-new" [routerLink]="['/account/secure']">
+                            <span class="d-block">
+                                <i class="fa fa-lg fa-lock p-2"></i>
+                            </span>
+                            <span class="d-block">账户安全</span>
+                        </a>
+
+                        <a class="col-4 text-center text-secondary-new" [routerLink]="['/account/preference']">
+                            <span class="d-block">
+                                <i class="fa fa-lg fa-rocket p-2"></i>
+                            </span>
+                            <span class="d-block">偏好设置</span>
+                        </a>
+
+                        <a class="col-4 text-center text-secondary-new" [routerLink]="['/account/authorization']">
+                            <span class="d-block">
+                                <i class="fa fa-lg fa-list-alt p-2"></i>
+                            </span>
+                            <span class="d-block">账户许可</span>
+                        </a>
+                    </div>
+                    <!-- <div>
+                            <a class="btn btn-block btn-light rounded-0 py-3 text-secondary" style="cursor: pointer;" (click)="logout()">
+                                <i class="fa fa-sign-out"></i> 退出系统</a>
+                        </div> -->
+                </div>
+            </li>
+            <li class="nav-item" style="padding:13px 14px 13px 0px;">
+                <span class="d-inline-block text-truncate" style="font-size: 14px;font-family:Arial, Helvetica, sans-serif;font-weight:bold">{{user?.displayName || user?.firstName}}</span>
+                <br>
+                <span class="d-inline-block text-truncate text-muted">{{user?.userGroup?.name || '无归属组织'}}</span>
+            </li>
+
+        </ul>
+    </div>
+</nav>

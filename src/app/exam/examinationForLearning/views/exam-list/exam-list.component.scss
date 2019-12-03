@@ -1,0 +1,44 @@
+.exam-home-body {
+    .select-body {
+        margin: 5px 15px;
+    }
+}
+.cui-data-table-wrap{
+    th,td{
+        word-break: break-all;
+    }
+}
+.btn-link{
+    border:1px solid #e0e0e0;
+}
+.search-btn{
+    cursor: default;
+}
+:host::ng-deep {
+    .exam-home-body {
+        .page-info {
+            border: none;
+            padding: 0;
+            .page-info-select {
+                width: 300px;
+            }
+        }
+        .exam-casual {
+            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .select-body {
+            margin: 5px 15px;
+            .align-middle {
+                text-overflow: inherit;
+            }
+        }
+    }   
+    .select-box {
+        width: 300px;
+    }
+}

@@ -1,0 +1,38 @@
+:host ::ng-deep {
+    nz-input {
+        width: 200px;
+    }
+    .main {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px 16px;
+        .contentMar {
+            // margin-top: 50px;
+            background: #e2e0e0;
+            border-top: 1px solid #ded0d0 !important;
+            background: #f8fbfd;
+        }
+        .title {
+            width: 100%;
+            overflow: hidden;
+            height: 30px;
+            border: 1px solid #e5e5e5;
+            border-top: none;
+            border-right: none;
+            border-left: none;
+            span {
+                width: 20%;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                display: block;
+                float: left;
+                .icon-bianji {
+                    font-size: 24px;
+                    color: #1a8fe2;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

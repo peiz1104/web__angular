@@ -1,0 +1,118 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{course.code}}]{{course.name}}: 导入大纲 <small></small></h3>
+
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../']">返回课程大纲 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <cui-wizard (nextClick)="onNext($event)" (cancelClick)="onCancel()" (finishClick)="onFinish()">
+        <cui-wizard-step #stepIntro label="文件和选项" [valid]="optionForm.valid">
+          <div nz-row *ngIf="imsmanifestError" class="mb-3">
+            <div nz-col [nzSpan]="18" [nzOffset]="3">
+                <nz-alert [nzType]="'error'"
+                [nzMessage]="imsmanifestError" [nzShowIcon]="true" [nzCloseable]="true"></nz-alert>
+            </div>
+          </div>
+          
+          <form [formGroup]="optionForm" class="form-horizontal">
+            <div class="form-group">
+              <label for="" class="col-form-label col-3">规范类型</label>
+              <div class="col-7">
+                <nz-radio-group formControlName="standard" [nzSize]="'large'">
+                  <label nz-radio [nzValue]="'CMI'" class="d-block mt-2 font-weight-bold">
+                      <span>SCORM 1.2 内容集合（具有IMS元数据 1.2 的IMS内容打包1.1）</span>
+                  </label>
+                  <span class="text-secondary ml-4 px-2">从ZIP文件导入内容对象和结构，属性和物理内容文件（如果有的话）。</span>
+                  <label nz-radio [nzValue]="'NONSTANDARD'" class="d-block mt-2 font-weight-bold">
+                      <span>非标准内容集合</span>
+                  </label>
+                  <span class="text-secondary ml-4 px-2">从ZIP文件导入物理内容文件，你需要在稍后手动指定内容对象属性。</span>
+                </nz-radio-group>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="" class="col-form-label col-3">课件文件</label>
+              <div class="col-7">
+                <cui-fileupload mode="file" name="file" url="/api/upload/file" [auto]="true" [maxFileSize]="maxFileSize" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+                <span>使用不大于 1GB 的课件包，课件包应是.zip文件</span>
+              </div>
+            </div>
+          </form>
+        </cui-wizard-step>
+
+        <cui-wizard-step #stepLocal label="内容位置" [valid]="locationForm?.valid">
+          <form *ngIf="locationForm" [formGroup]="locationForm" class="form-horizontal">
+            <div class="form-group">
+                <label for="" class="col-form-label col-3">课件名称</label>
+                <div class="col-7">
+                  <nz-radio-group formControlName="titleSource" [nzSize]="'large'" class="mt-2">
+                      <label nz-radio [nzValue]="'1'" [hidden]="!isScorm">
+                          <span>从内容中解析</span>
+                      </label>
+                      <label nz-radio [nzValue]="'2'">
+                          <span>上传的文件名</span>
+                      </label>
+                      <label nz-radio [nzValue]="'3'">
+                          <span>自定义</span>
+                      </label>
+                  </nz-radio-group>
+                  <input type="text" class="form-control" name="title" formControlName="title">
+                </div>
+            </div>
+
+            <div class="form-group" [hidden]="isScorm">
+              <label for="" class="col-form-label col-3">起始地址</label>
+              <div class="col-7">
+                <input type="text" class="form-control" name="startingUrl" formControlName="startingUrl">
+                <span class="text-secondary">课件播放的起始路径，相对于课件包填写， 例如 'index.html' 或者 'path/to/starting.htm'</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="" class="col-form-label col-3">跟踪类型</label>
+              <div class="col-7">
+                <nz-radio-group formControlName="trackingType" [nzSize]="'large'">
+                  <label nz-radio [nzValue]="'AUTO'" class="d-block mt-2">
+                      <span>不跟踪</span>
+                  </label>
+                  <label nz-radio [nzValue]="'CMI'" class="d-block mt-2">
+                      <span>SCORM 1.2</span>
+                  </label>
+                  <span class="text-secondary ml-4"><i class="fa fa-info text-info"></i> 此选项的值将根据上一步骤中设置的选项自动生成</span>
+                </nz-radio-group>
+              </div>
+            </div>
+          </form>
+        </cui-wizard-step>
+
+        <cui-wizard-step #stepSave label="分析保存" [valid]="true">
+          <div class="row justify-content-md-center">
+            <div class="col col-lg-8">
+              <p class="text-info">课件内容包已上传到服务器，并成功地进行了分析，导入后将完成下面所列的操作，单击“下一步”以导入对象。</p>
+              <ol>
+                <li>将创建课件对象</li>
+                <li>将创建课件内容对象</li>
+                <li>将从课件内容包中提取文件</li>
+              </ol>
+            </div>
+          </div>
+        </cui-wizard-step>
+
+        <cui-wizard-step #stepFinish label="导入完成" [valid]="!importLoading && !importError">
+            <div class="row justify-content-md-center">
+              <div class="col col-lg-8">
+                <p *ngIf="importLoading" class="text-info"><i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i> 正在执行导入，请耐心等候...</p>
+                <p *ngIf="!importLoading && !importError" class="text-success">课件内容包已成功解析并保存</p>
+                <p *ngIf="!importLoading && importError" class="text-danger">{{importError}}</p>
+              </div>
+            </div>
+        </cui-wizard-step>
+      </cui-wizard>
+    </div>
+  </div>
+</div>

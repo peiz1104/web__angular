@@ -1,0 +1,127 @@
+<!-- <form #examForm="ngForm" (submit)="onSubmit($event)" class="form-horizontal"> -->
+<form nz-form [formGroup]="validateForm" class="test-add-form-box">
+    <nz-spin [nzSpinning]="loading" [nzTip]="'正在读取数据...'">
+        <!-- <h5 class="my-3">属性</h5> -->
+        <div class="row">
+            <div class="col-5 push-7 order-2">
+                <div class="">
+                    <cui-fileupload name="file" (change)="changeUploadImage($event)" accept=".jpg,.gif,.png,.jpeg" mode="image" [maxFileSize]="1024*1024*1" [auto]="true" url="/api/upload/file" (uploadComplete)="onUploadComplete($event)" [imageHolder]="examDetail.imageUrl"></cui-fileupload>
+                    <br>
+                    <span class="text-muted">
+                        <i class="fa fa-info-circle text-info"></i> 可以在此处上载图片。格式应为 JPG, GIF 或 PNG, 大小不能超过 1MB。</span>
+                </div>
+            </div>
+            <div class="col-7 pull-5 order-1">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name" nz-form-item-required>考试名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="18">
+                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入考试名称'"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请输入考试名称!</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('maxlength')">考试名称不能超过50字符!</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name" nz-form-item-required>组织机构</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <spk-user-group-select formControlName="userGroup"></spk-user-group-select>
+                    </div>
+                </div>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="12">
+                                <label for="isPublished">是否发布</label>
+                            </div>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.isPublished" nz-col [nzSpan]="12">
+                                <label nz-checkbox formControlName="isPublished"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="description">考试说明</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.description" nz-col [nzSpan]="18">
+                        <nz-input formControlName="description" [nzPlaceHolder]="'请输入考试说明'" [nzType]="'textarea'" [nzRows]="'3'"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.description.dirty&&validateForm.controls.description.hasError('maxlength')">考试说明不能超过500字符!</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.description.dirty&&validateForm.controls.description.hasError('confirm')">请填写考试说明</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 class="my-3">考试时间</h5>
+        <div class="row">
+            <div class="col-7 pull-5 order-1">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="startDate" nz-form-item-required>可进入考试时间</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.startDate" nz-col [nzSpan]="18">
+                        <spk-qm-datepicker class="w-100" formControlName="startDate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试开始时间'"></spk-qm-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.startDate.dirty&&validateForm.controls.startDate.hasError('required')">考试开始时间!</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="endDate" nz-form-item-required>进入考试截止时间</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.endDate" nz-col [nzSpan]="18">
+                        <spk-qm-datepicker class="w-100" formControlName="endDate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'进入考试截止时间'"></spk-qm-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.endDate.dirty&&validateForm.controls.endDate.hasError('required')">进入考试截止时间!</div>
+                    </div>
+                </div>
+                <div nz-row>
+                    <div nz-col [nzSpan]="12">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="12">
+                                <label for="isBM">是否开启报名</label>
+                            </div>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.isBM" nz-col [nzSpan]="12">
+                                <label nz-checkbox formControlName="isBM"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div nz-form-item nz-row *ngIf="validateForm.value.isBM">
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="enrollStart" nz-form-item-required>考试报名开始时间</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="enrollStartControl()" nz-col [nzSpan]="18">
+                        <spk-qm-datepicker class="w-100" formControlName="enrollStart" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试报名开始时间'"></spk-qm-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.isBM.value==true&&!validateForm.controls.enrollStart.value">考试报名开始时间不能为空!</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.isBM.value==true&&validateForm.controls.enrollStart.value>validateForm.controls.endDate.value">考试报名时间不能大于考试截止时间</div>
+                    </div>
+
+                </div>
+                <div nz-form-item nz-row *ngIf="validateForm.value.isBM">
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="enrollEnd" nz-form-item-required>考试报名截止时间</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]=" enrollEndControl()" nz-col [nzSpan]="18">
+                        <spk-qm-datepicker class="w-100" formControlName="enrollEnd" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'考试报名截止时间'"></spk-qm-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.isBM.value==true&&!validateForm.controls.enrollEnd.value">考试报名截止时间不能为空!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-3">
+            <div class="col-7">
+                <div class="form-group row">
+                    <div class="col-12 text-center">
+                        <button nz-button type="button" (click)="onSubmit($event,validateForm.value)" [nzType]="'primary'" class="btn btn-primary" [nzLoading]="submitLoading">保存</button>
+                        <button nz-button type="button" (click)="goBack()" [nzType]="'default'" class="btn btn-default">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-spin>
+</form>

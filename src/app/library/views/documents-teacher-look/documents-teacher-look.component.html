@@ -1,0 +1,44 @@
+<div class="px-4">
+  <div class="page-body">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" (reload)="loadData($event)">
+
+      <!-- <ng-template #complexSearch>
+        <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+      </ng-template>
+
+      <ng-template #simpleSearch>
+        <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+      </ng-template> -->
+
+      <ng-template cuiColTpl="teacherName" let-row="row">
+        <span>{{row.name}}</span>
+      </ng-template>
+
+      <ng-template cuiColTpl="teacherType" let-row="row">
+        <span *ngIf="row.teacherType == 'EXTERNAL'">外部讲师</span>
+        <span *ngIf="row.teacherType == 'FULLTIME'">专职讲师</span>
+        <span *ngIf="row.teacherType == 'PARTTIME'">兼职讲师</span>
+      </ng-template>
+
+
+    </cui-data-table>
+  </div>
+  <!-- <div class="clearfix">
+    <button class="pull-right" nz-button [nzType]="'primary'" (click)="ok()">取消</button>
+  </div> -->
+</div>
+
+<ng-template #simpleSearchBox>
+  <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+    <div nz-row class="cui-data-table-form-body">
+      <div nz-form-control>
+        <nz-input formControlName="name" [nzPlaceHolder]="'请输入关键词'"> </nz-input>
+      </div>
+      <div class='simple-search-bar-search-box'>
+        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+          <i class="fa fa-search"></i>查询
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

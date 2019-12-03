@@ -1,0 +1,21 @@
+
+<!--<spk-category [categoryGroup]="activeCategoryGroup"></spk-category>-->
+<div class="with-side" style="height: 100%;">
+    <div class="side">
+        <div class="side-body" style="width: 20rem; height: 100%;">
+            <div class="card" style="height: 100%;">
+                <div class="card-toolbar pt-4 d-none">
+                    <input type="text" name="search" class="form-control" placeholder="搜索">
+                </div>
+
+                <div class="card-body">
+                    <spk-ugc-activity-category-tree  #cateTree  [activityId]="activityId"
+                        (selectionChange)="edit($event)"></spk-ugc-activity-category-tree>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <router-outlet></router-outlet>
+    </div>
+</div>

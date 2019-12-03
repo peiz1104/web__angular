@@ -1,0 +1,57 @@
+:host::ng-deep {
+    .hour-annual-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 4px 16px;
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+        }
+        button {
+            cursor: pointer;
+            margin-right: 16px;
+        }
+        .btn-group {
+            button {
+                cursor: pointer;
+                margin-right: 16px;
+                position: relative;
+                padding-left: 22px!important;
+                i {
+                    position: absolute;
+                    top: 2px;
+                    left: 4px;
+                }
+            }
+        }
+        .simple-search-bar {
+            // margin-left: 40px;
+            width: 600px;
+        }
+        .simple-search-bar-search-box {
+            margin-top: 0px;
+            margin-left: -22px;
+        }
+        .list-search-bar {
+            position: relative;
+            margin-bottom: 0px!important;
+            min-height: 2.5rem;
+        }
+        .list-tool-bar {
+            height: 40px;
+            width: 60px;
+            margin-bottom: 0px!important;
+        }
+        .complex-search-bar-search-box {
+            margin-top: 5px;
+            position: absolute;
+            left: 20px;
+            bottom: -30px;
+            z-index: 999;
+        }
+    }
+}

@@ -1,0 +1,175 @@
+<div style="background: #ffffff;" *ngIf="false">
+    <div style="padding: 1.125rem 1.5rem 1rem 1.5rem;">
+        <nz-breadcrumb [nzSeparator]="'/'">
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/']">
+                    <i class="anticon anticon-home"></i>
+                </a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                培训班教辅
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+</div>
+
+<div style="margin: 1.75rem; background: #ffffff; padding: 1.5rem;width: 1200px;margin: 0 auto;">
+    <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+        [(selection)]="selection" (reload)="loadData()">
+
+        <ng-template #complexSearch>
+            <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+        </ng-template>
+
+        <ng-template #simpleSearch>
+            <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+        </ng-template>
+        <ng-template #listTools>
+            <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+        </ng-template>
+
+        <ng-template cuiColTpl="name" let-row="row">
+            <a class="text-primary">{{row.name}}</a>
+        </ng-template>
+        <ng-template cuiColTpl="startDate" let-row="row">
+            {{row.startDate | date: 'yyyy-MM-dd'}}
+        </ng-template>
+        <ng-template cuiColTpl="endDate" let-row="row">
+            {{row.endDate | date: 'yyyy-MM-dd'}}
+        </ng-template>
+        <ng-template cuiColTpl="isPublished" let-row="row">
+            <span [class.text-secondary]="!row.isPublished" [class.text-success]="row.isPublished">
+                {{row.isPublished ? '已发布' : '未发布'}}
+            </span>
+        </ng-template>
+        <ng-template cuiColTpl="isArchived" let-row="row">
+            <span [class.text-secondary]="!row.isArchived" [class.text-success]="row.isArchived">
+                {{row.isArchived ? '已结班' : '未结班'}}
+            </span>
+        </ng-template>
+        <ng-template cuiColTpl="actions" let-row="row">
+            <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+        </ng-template>
+    </cui-data-table>
+</div>
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-input formControlName="searchText" [nzPlaceHolder]="'培训班名称'"> </nz-input>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #complexSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+        <div class="cui-data-table-form-body">
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="name">培训班名称</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="name" [nzPlaceHolder]="'请输入培训班名称'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="sponsorDeptId">所属组织</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <spk-user-group-select formControlName="sponsorDeptId"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="isPublished">是否发布</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-select formControlName="isPublished" [nzPlaceHolder]="'请选择'" nzAllowClear [nzShowSearch]="true">
+                                <nz-option [nzLabel]="'是'" [nzValue]="1"></nz-option>
+                                <nz-option [nzLabel]="'否'" [nzValue]="0"></nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="startDate">开始时间</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-datepicker formControlName="startDate" [nzShowTime]="true" [nzPlaceHolder]="'请选择开始时间'" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                style="width:100%;"></nz-datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="endDate">结束时间</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-datepicker formControlName="endDate" [nzShowTime]="true" [nzPlaceHolder]="'请选择结束时间'" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                                style="width:100%;"></nz-datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="cui-data-table-form-row">
+                    <div class='complex-search-bar-search-box'>
+                        <button nz-button [nzType]="'primary'" class='search-btn'>
+                            <i class="fa fa-search"></i>查询</button>
+                        <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=false">简单查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #theListTools>
+    <div class="btn-group">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            批量操作
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="archive()">结班</a>
+            <a class="dropdown-item" (click)="disArchive()">取消结班</a>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #colRowActions let-row="row">
+    <a [routerLink]="['../', row.id]">管理</a>
+    <span nz-table-divider></span>
+    <nz-dropdown [nzPlacement]="'bottomRight'">
+        <a class="ant-dropdown-link" nz-dropdown class="text-primary">
+            更多
+            <i class="anticon anticon-down"></i>
+        </a>
+        <ul nz-menu>
+            <li nz-menu-item>
+                <a (click)="archive(row)">结班</a>
+            </li>
+            <li nz-menu-item>
+                <a (click)="disArchive(row)">取消结班</a>
+            </li>
+            <li nz-menu-item>
+                <a (click)="delete(row)">删除</a>
+            </li>
+        </ul>
+    </nz-dropdown>
+</ng-template>

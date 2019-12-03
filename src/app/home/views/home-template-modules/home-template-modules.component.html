@@ -1,0 +1,141 @@
+<div class="config" *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:EDIT'}">
+    <div class="config-header">
+        <div class="header-left">
+            <span (click)="onCancel()">
+                <i class="iconfont icon-fanhui1"></i>
+            </span> PC端首页配置
+        </div>
+        <div class="header-right">
+            <div class="item" (click)="showView()">
+                <i class="iconfont icon-chakan1"></i>预览</div>
+            <!-- <div class="item">
+        <i class="anticon anticon-caret-right"></i>未发布
+      </div> -->
+        </div>
+    </div>
+
+    <nz-spin [nzSpinning]="loading">
+        <div class="main">
+
+            <div class="view-content">
+                <div class="page-wapper">
+                    <div class="page-body">
+                        <div class="home-page">
+                            <div class="column" [ngClass]="{'active':curId == modulesNew?.logo.id}" *ngIf='modulesNew?.logo' (click)="switchType(modulesNew?.logo)">
+                                <spk-home-template-column [itemConfig]="modulesNew?.logo" (isLoad)="onLoad($event)"></spk-home-template-column>
+                                <div class="border-hover">
+                                </div>
+                            </div>
+                            <div class="sorts" [sortablejs]="modulesNew?.center" [sortablejsOptions]="eventOptions">
+                                <div class="column" [ngClass]="{'active':curId ==item.id}" *ngFor="let item of modulesNew?.center;" (click)="switchType(item)">
+                                    <div class="clearfix" *ngIf="item?.moduleType=='BANNER'">
+                                        <spk-home-template-column-bannernew [itemConfig]="item" (isLoad)="onLoad($event)" ></spk-home-template-column-bannernew>
+                                        <!-- <spk-home-template-column-banner [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-banner> -->
+                                    </div>
+                                    <div class="home-common clearfix" *ngIf="item?.moduleType=='ARTICLE'">
+                                        <spk-home-template-column-article [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-article>
+                                    </div>
+                                    <div class="home-common clearfix" *ngIf="item?.moduleType=='COURSE'">
+                                        <spk-home-template-column-course [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-course>
+                                    </div>
+                                    <div class="home-common clearfix" *ngIf="item?.moduleType=='TEACHER'">
+                                        <spk-home-template-column-lectuer [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-lectuer>
+                                    </div>
+                                    <div class="border-hover">
+                                        <i *ngIf="item?.moduleType!='BANNER'" class="iconfont icon-2guanbi" (click)="deleteModule(item)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column" [ngClass]="{'active':curId == modulesNew?.footer.id}" *ngIf='modulesNew?.footer' (click)="switchType(modulesNew?.footer)">
+                                <spk-home-template-column [itemConfig]="modulesNew?.footer" [templateId]="templateId" (isLoad)="onLoad($event)"></spk-home-template-column>
+                                <div class="border-hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="set-content">
+                <div *ngIf="moduleType=='ALL'" class="add-column">
+                    <!-- <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('LOGO')">
+              <i class="anticon anticon-plus"></i>
+              <span>添加页眉</span>
+          </button>
+          <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('FOOTER')">
+            <i class="anticon anticon-plus"></i>
+            <span>添加页脚</span>
+          </button>
+          <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('BANNER')">
+              <i class="anticon anticon-plus"></i>
+              <span>添加BANNER</span>
+          </button> -->
+
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('ARTICLE')">
+                        <i class="iconfont icon-tianjia-copy"></i>
+                        <span>添加文章模块</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('COURSE')">
+                        <i class="iconfont icon-tianjia-copy"></i>
+                        <span>添加课程模块</span>
+                    </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" style="width:100%" (click)="onAdd('TEACHER')">
+                        <i class="iconfont icon-tianjia-copy"></i>
+                        <span>添加讲师模块</span>
+                    </button>
+                </div>
+                <div *ngIf="moduleType=='LOGO'" class="set-one set-logo">
+                    <spk-config-logo *ngIf="curId" [id]="curId" (back)="backConfig()" (refresh)="refresh()"></spk-config-logo>
+                </div>
+                <div *ngIf="moduleType=='FOOTER'" class="set-one set-footer">
+                    <spk-config-footer *ngIf="curId" [id]="curId" (back)="backConfig()" (refresh)="refresh()"></spk-config-footer>
+                </div>
+                <div style="margin-bottom:54px;" *ngIf="moduleType=='BANNER'" class="set-one set-banner">
+                    <spk-config-banner *ngIf="curId" [id]="curId" (back)="backConfig()" (refresh)="refresh()"></spk-config-banner>
+                </div>
+
+                <div *ngIf="moduleType=='ARTICLE'" class="set-one set-article">
+                    <spk-config-article [id]="curId" (back)="backConfig()" (refresh)="refresh($event)"></spk-config-article>
+                </div>
+                <div *ngIf="moduleType=='COURSE'" class="set-one set-course">
+                    <spk-config-course [id]="curId" (back)="backConfig()" (refresh)="refresh($event)"></spk-config-course>
+                </div>
+                <div *ngIf="moduleType=='TEACHER'" class="set-one set-lectuer">
+                    <spk-config-lectuer [id]="curId" (back)="backConfig()" (refresh)="refresh($event)"></spk-config-lectuer>
+                </div>
+            </div>
+
+        </div>
+    </nz-spin>
+
+</div>
+<nz-modal class="view-modal" [nzVisible]="isView" [nzWidth]="1200" [nzFooter]="false" [nzTitle]="false" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel()" [nzClosable]="false">
+    <ng-template #modalContent>
+        <div class="view-page" *ngIf="isView">
+            <nz-spin [nzSpinning]="viewLoading">
+                <div class="page-mask"></div>
+                <div class="column" *ngIf='modulesNew?.logo'>
+                    <spk-home-template-column [itemConfig]="modulesNew?.logo" (isLoad)="onLoad($event)"></spk-home-template-column>
+                </div>
+                <div class="column" *ngFor="let item of modulesNew?.center;">
+                    <div class="clearfix" *ngIf="item?.moduleType=='BANNER'">
+                        <spk-home-template-column-bannernew [itemConfig]="item" (isLoad)="onLoad($event)" ></spk-home-template-column-bannernew>
+                        <!-- <spk-home-template-column-banner [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-banner> -->
+                    </div>
+                    <div class="home-common clearfix" *ngIf="item?.moduleType=='ARTICLE'">
+                        <spk-home-template-column-article [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-article>
+                    </div>
+                    <div class="home-common clearfix" *ngIf="item?.moduleType=='COURSE'">
+                        <spk-home-template-column-course [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-course>
+                    </div>
+                    <div class="home-common clearfix" *ngIf="item?.moduleType=='TEACHER'">
+                        <spk-home-template-column-lectuer [itemConfig]="item" (isLoad)="onLoad($event)"></spk-home-template-column-lectuer>
+                    </div>
+                </div>
+                <div class="column" *ngIf='modulesNew?.footer'>
+                    <spk-home-template-column [itemConfig]="modulesNew?.footer" [templateId]="templateId" (isLoad)="onLoad($event)"></spk-home-template-column>
+                </div>
+            </nz-spin>
+        </div>
+    </ng-template>
+</nz-modal>

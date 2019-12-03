@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">添加案例</h3>
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../','list']">返回案例列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+      <cui-alert [value]="msg"></cui-alert>
+      <spk-case-form #caseInfoForm [userGroup] = "userGroup" [library]="false" [loading]="loading" [caseInfo]="caseInfo" (doSubmit)="onSubmit($event)" (cancel)="onCancel($event)"></spk-case-form>
+    </div>
+  </div>
+</div>

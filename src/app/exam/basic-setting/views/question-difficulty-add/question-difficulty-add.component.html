@@ -1,0 +1,60 @@
+<div>
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small *ngIf="isEdit">编辑试题难度</small>
+                <small *ngIf="!isEdit">新增试题难度</small>
+            </h5>
+        </div>
+    </div>
+    <div nz-col [nzSpan]="21">
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)" [nzType]="'horizontal'">
+            <nz-spin [nzSpinning]="isSpinning">
+            </nz-spin>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>难度名称</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.diffName" nzHasFeedback>
+                    <nz-input formControlName="diffName" [nzPlaceHolder]="'请控制字符在20个以内'" [(ngModel)]="diffName" [nzType]="'text'" [nzSize]="'large'"
+                        [maxlength]='20' (nzBlur)="diffNameBlur(diffName)">
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.diffName.dirty&&validateForm.controls.diffName.hasError('required')">难度名称不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.diffName.dirty&&validateForm.controls.diffName.errors?.maxlength">难度名称最多20个字!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.diffName.dirty&&validateForm.controls.diffName.hasError('notUnique')">难度名称已存在!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzSpan]="7" nz-form-label>
+                    <label>难度说明</label>
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <nz-input formControlName="diffDesc" (ngModelChange)="descInput($event)" [nzPlaceHolder]="'请控制字符在200个以内'" [nzRows]="3" [nzType]="'textarea'"
+                        [nzSize]="'large'" [maxlength]='200'>
+                    </nz-input>
+                    <div class="input-tip">
+                        {{inputNum}}/200
+                    </div>
+                    <div nz-form-explain style="color:red;margin-top:5px;" *ngIf="validateForm.controls.diffDesc.dirty&&validateForm.controls.diffDesc.errors?.maxlength">难度描述最多200个字!</div>
+                </div>
+            </div>
+            <!-- <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>是否启用</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <nz-select formControlName="isStart" [nzPlaceHolder]="'请选择'">
+                        <nz-option [nzLabel]="'是'" [nzValue]="true"></nz-option>
+                        <nz-option [nzLabel]="'否'" [nzValue]="false"></nz-option>
+                    </nz-select>
+                </div>
+            </div> -->
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="isLoading" [disabled]="!validateForm.valid">保存</button>
+                    <button nz-button [nzSize]="'large'" (click)="reset($event)">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

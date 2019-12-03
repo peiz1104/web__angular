@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col">
+    <table class="table">
+      <thead class="bg-light">
+        <tr>
+          <th>选项文字</th>
+          <th>说明</th>
+          <th>必填</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let option of options">
+          <td>
+            <input #foo type="text" class="form-control-xs" placeholder="{{option.name}}" [(ngModel)]="option.name" (change)="optionChange(option,foo)">
+          </td>
+          <td>
+            <a title="添加说明" (click)="showDescriptionModalMiddle(option)">
+              <i class="fa fa-file-text-o"></i>
+            </a>
+          </td>
+          <td>
+            <label class="form-check-label">
+              <input [(ngModel)]="option.required" type="checkbox" class="form-check-input">&nbsp;</label>
+          </td>
+          <td class="question-action">
+            <a (click)="onInsert(option);">
+              <i class="fa fa-plus-circle"></i>
+            </a>
+            <a (click)="onDel(option);">
+              <i class="fa fa fa-minus-circle"></i>
+            </a>
+            <a (click)="onUp(option);">
+              <i class="fa fa-arrow-circle-up"></i>
+            </a>
+            <a (click)="onDown(option);">
+              <i class="fa fa-arrow-circle-down"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalDescription" [nzVisible]="isVisibleDescriptionMiddle"
+      (nzOnOk)="okDescription($event)" (nzOnCancel)="cancelDescription($event)">
+      <ng-template #modalDescription>
+        <cui-ckeditor [(ngModel)]="inputValue"></cui-ckeditor>
+      </ng-template>
+    </nz-modal>
+  </div>
+</div>

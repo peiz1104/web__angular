@@ -1,0 +1,26 @@
+:host::ng-deep{
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    .search-complex{
+        .fa-search{
+            color:#fff;
+        }
+        .search-btn{
+            color:#fff;
+        }
+    }
+}
+.rejectBtn {
+    position: absolute;
+    bottom: 10px;
+    left:16px;
+}
+.hiddenWord{
+    overflow:hidden; 
+    text-overflow:ellipsis;
+    display:-webkit-box; 
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; 
+}

@@ -1,0 +1,267 @@
+@import '../../../styles/consoletheme/theme.scss';
+:host::ng-deep {
+    .sprk-body-theme {
+        .new-page-header {
+            height: $titleHeight;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: $primary-color;
+            line-height: $titleHeight;
+            vertical-align: middle;
+            padding-right: 10px;
+            z-index: 1003;
+            .logo {
+                width: 140px;
+                height: $titleHeight;
+                float: left;
+                text-align: center;
+                background: #fff;
+                border-right: 1px solid $headBorderColor;
+                img {
+                    display: inline-block;
+                    width: 110px; // height: 28px;
+                    vertical-align: middle;
+                }
+            }
+            .left-selection {
+                float: left;
+                height: 100%;
+            }
+            .right-selection {
+                float: right;
+                height: 100%;
+                .select-item:first-child {
+                    border-left: 1px solid $headBorderColor;
+                }
+            }
+            .select-item {
+                padding: 0 20px;
+                min-width: 100px;
+                height: 100%;
+                text-align: center;
+                float: left;
+                color: #fff;
+                cursor: pointer;
+                border-right: 1px solid $headBorderColor;
+                >* {
+                    vertical-align: middle;
+                }
+                .text {
+                    padding: 0 10px;
+                }
+                &:hover {
+                    background: $headBorderColor;
+                }
+            }
+            .select-item-active {
+                background: $headBorderColor;
+            }
+            .select-item-drop {
+                padding: 0;
+                position: relative;
+                z-index: 11;
+                .mask {
+                    width: 0;
+                    height: 0;
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: #000;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                }
+                &.open {
+                    .mask {
+                        width: auto;
+                        height: auto;
+                        opacity: 0.3;
+                    }
+                    .drop-title {
+                        background: #fff;
+                        color: #898989;
+                        -moz-user-select: none;
+                        -khtml-user-select: none;
+                        user-select: none;
+                        .arrow {
+                            transform: rotateX(180deg);
+                        }
+                    }
+                    .drop-container {
+                        height: 500px;
+                        opacity: 1;
+                        overflow: auto;
+                    }
+                }
+                .drop-title {
+                    padding: 0 20px;
+                    position: relative;
+                    -moz-user-select: none;
+                    -khtml-user-select: none;
+                    user-select: none;
+                    .arrow {
+                        font-size: 1em;
+                        transition: transform 0.3s;
+                    }
+                }
+                .drop-container {
+                    background: #fff;
+                    overflow: hidden;
+                    width: 780px;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    height: 0; // opacity: 0;
+                    transition: opacity 0.3s, height 0.2s ease-in-out;
+                }
+            }
+            .product-block {
+                line-height: normal;
+                .block-title {
+                    border-bottom: 1px solid #ddd;
+                    font-size: 14px;
+                    padding: 10px;
+                    text-align: left;
+                    color: #333;
+                    user-select: none;
+                }
+                .block-content {
+                    .product-item {
+                        width: 20%;
+                        text-align: center;
+                        padding: 20px 0;
+                        float: left;
+                        img {
+                            width: 70px;
+                            height: 50px;
+                            border-radius: 2px;
+                            display: block;
+                            margin: auto;
+                        }
+                        .current {
+                            display: inline-block;
+                            padding: 0 15px;
+                            line-height: 20px;
+                            margin-top: 20px;
+                            color: #fff;
+                            background: #1890ff;
+                            border-radius: 10px;
+                        }
+                        a {
+                            display: inline-block;
+                            padding: 0 15px;
+                            line-height: 20px;
+                            margin-top: 20px;
+                            color: #333;
+                            border-radius: 10px;
+                            transition: all cubic-bezier(0.39, 0.575, 0.565, 1) 0.5s;
+                            &:hover {
+                                color: #333;
+                                background: #e9e9e9;
+                            }
+                        }
+                    }
+                }
+            }
+            .userinfo {
+                font-size: 12px;
+                color: #fff;
+                float: left;
+                display: flex;
+                height: $titleHeight;
+                padding: 0 15px;
+                vertical-align: middle;
+                cursor: pointer;
+                position: relative;
+                clear: none;
+                .clearfix {
+                    clear: none;
+                }
+                .userimg {
+                    width: 40px;
+                    height: $titleHeight;
+                    vertical-align: middle;
+                    float: left;
+                    img {
+                        background: #fff;
+                        width: 36px;
+                        height: 36px;
+                        border-radius: 100%;
+                        vertical-align: middle;
+                    }
+                }
+                .userdesc {
+                    // display: inline-block;
+                    max-width: 100px;
+                    height: 100%;
+                    line-height: 0;
+                    float: left;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px 10px;
+                    .desc {
+                        // display: inline-block;
+                        width: 100%;
+                        height: 20px;
+                        line-height: 20px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        float: left;
+                    }
+                }
+                .listicon {
+                    display: inline-block;
+                }
+                &:hover {
+                    // background: @headBorderColor;
+                    .drop-container {
+                        display: block;
+                    }
+                }
+                .drop-container {
+                    display: none;
+                    position: absolute;
+                    top: calc(100% + 10px);
+                    right: 0;
+                    width: 140px;
+                    background: #388ecb;
+                    color: #fff;
+                    &:before {
+                        content: "";
+                        width: 100%;
+                        height: 10px;
+                        position: absolute;
+                        top: -10px;
+                    }
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        top: -8px;
+                        right: 10px;
+                        width: 0;
+                        height: 0;
+                        border-left: 8px solid transparent;
+                        border-right: 8px solid transparent;
+                        border-bottom: 8px solid #388ecb;
+                    }
+                    .drop-item {
+                        padding: 0 15px;
+                        line-height: 40px;
+                        .anticon {
+                            vertical-align: middle;
+                            font-size: 1.4em;
+                            margin-right: 10px;
+                        }
+                        &:hover {
+                            background: #4a9fdb;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

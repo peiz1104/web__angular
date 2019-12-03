@@ -1,0 +1,242 @@
+<form #caseInfoForm="ngForm" class="form-horizontal" *ngIf="caseInfo" [formGroup]="_form" nz-form>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">基本信息</h5>
+            <div class="row">
+
+                <div class="col-5 push-7 order-2">
+                    <div class="">
+                        <cui-fileupload name="file" mode="image" accept=".jpg,.bmp,.png" url="/api/images/upload" [auto]="true" (uploadComplete)="initImage($event)" [imageHolder]="getFormControl('coverUrl').value"></cui-fileupload>
+                        <br>
+                        <span class="text-muted">
+                          <i class="fa fa-info-circle text-info"></i> 
+                          可以在此处上传封面图片。
+                          格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                          图片尺寸建议最小200*120，比例5:4</span>
+                    </div>
+                </div>
+
+                <div class="col-7 pull-5 order-1">
+
+                    <div class="form-group row">
+                        <label for="caseCode" class="col-form-label col-3">
+                        <i class="fa fa-field-required"></i> 案例编码</label>
+                        <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.caseCode">
+                            <!-- <input type="text" onkeyup="this.value=this.value.replace(/[^\w_]/g,'');" name="caseCode" class="form-control" formControlName="caseCode" (blur) = "codeExist()"> -->
+                            <nz-input formControlName="caseCode" (nzBlur)="codeExist()" (keyup)="keyUp()" [nzPlaceHolder]="'案例编码由数字，字母和下划线组成'"></nz-input>
+                            <div class="text-danger" *ngIf="getFormControl('caseCode').dirty&&getFormControl('caseCode').hasError('required')">案例编码必填</div>
+                            <div class="text-danger" *ngIf="codeIsExist">案例编码重复</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-form-label col-3">
+                        <i class="fa fa-field-required"></i> 案例名称</label>
+                        <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.name">
+                            <nz-input formControlName="name" [nzPlaceHolder]="'请输入案例名称，最多20个字'" (nzBlur)="nameExist()" [maxlength]="'20'"></nz-input>
+                            <div class="text-danger" *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">案例名称必填</div>
+                            <div class="text-danger" *ngIf="nameIsExist">案例名称重复</div>
+                            <div class="text-danger" *ngIf="_form.controls.name.dirty&&_form.controls.name.errors?.maxlength">名称最多20个字!</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-form-label col-3"> 作者</label>
+                        <div class="col-9">
+                            <nz-input formControlName="author" [maxlength]="'10'" [nzPlaceHolder]="'为空时，默认保存创建者名称'"></nz-input>
+                            <div class="text-danger" *ngIf="_form.controls.author.dirty&&_form.controls.author.errors?.maxlength">作者最多10个字</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-3">完成时间</label>
+                        <div class="col-9">
+                            <nz-datepicker style="width: 100%;" formControlName="endtime" [nzPlaceHolder]="'请选择日期'" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">适用对象</label>
+                        <div class="col-9">
+                            <nz-input formControlName="userObject" [maxlength]="'150'"></nz-input>
+                            <div class="text-danger" *ngIf="_form.controls.userObject.dirty&&_form.controls.userObject.errors?.maxlength">字数最多150个字</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">开发单位</label>
+                        <div class="col-9">
+                            <nz-input formControlName="developmentUnit" [maxlength]="'150'"></nz-input>
+                            <div class="text-danger" *ngIf="_form.controls.developmentUnit.dirty&&_form.controls.developmentUnit.errors?.maxlength">字数最多150个字</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+                        <i class="fa fa-field-required"></i> 所属分类</label>
+                        <div class="col-9">
+                            <spk-category-select name="category.id" formControlName="category" (ngModelChange)="logSelectCategory($event)"></spk-category-select>
+                            <div class="text-danger" *ngIf="categoryType">所属分类必填</div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="library">
+                        <label for="" class="col-form-label col-3">
+                        <i class="fa fa-field-required"></i> 所属组织</label>
+                        <div class="col-9">
+                            <spk-user-group-select name="userGroup.id" formControlName="userGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+                            <div class="text-danger" *ngIf="userGroupType">所属组织必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+                        <i class="fa "></i> 案例来源</label>
+                        <div class="col-9 pt-1">
+                            <nz-radio-group formControlName="source">
+                                <label nz-radio [nzValue]="'AUTONOMY'">
+                  <span>自主开发</span>
+                </label>
+                                <label nz-radio [nzValue]="'COOPERATION'">
+                  <span>合作开发</span>
+                </label>
+                                <label nz-radio [nzValue]="'OUTSOURCING'">
+                  <span>外购</span>
+                </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+                        <i class="fa"></i> 经典案例</label>
+                        <div class="col-9 pt-1">
+                            <nz-radio-group formControlName="isClassic">
+                                <label nz-radio [nzValue]="'Y'">
+                            <span>是</span>
+                          </label>
+                                <label nz-radio [nzValue]="'N'">
+                  <span>否</span>
+                </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+              <i class="fa "></i> 案例题材</label>
+                        <div class="col-9 pt-1">
+                            <nz-radio-group formControlName="theme">
+                                <label nz-radio [nzValue]="'DESCRIBE'">
+                  <span>描述型</span>
+                </label>
+                                <label nz-radio [nzValue]="'RESEARCH'">
+                  <span>研究型</span>
+                </label>
+                                <label nz-radio [nzValue]="'TEACHING'">
+                  <span>教学型</span>
+                </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">简介</label>
+                        <div class="col-9">
+                            <nz-input [nzRows]="4" [nzType]="'textarea'" formControlName="introduction" [nzPlaceHolder]="'请输入案例简介'" [maxlength]="'200'"></nz-input>
+                            <div class="text-danger" *ngIf="_form.controls.introduction.dirty&&_form.controls.introduction.errors?.maxlength">字数最多200个字</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">关键字</label>
+                        <div class="col-9">
+                            <cui-chips formControlName="_keywords" (ngModelChange)="keywordsChange($event)"></cui-chips>
+                            <span>输入完敲回车开始下一个关键字输入。</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-3 col-form-label">
+              <i class="fa fa-field-required"></i>内容</label>
+                        <div class="col-9">
+                            <cui-ckeditor name="content" formControlName="content" ></cui-ckeditor>
+                            <div class="text-danger" *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3">
+              <i class="fa "></i> 是否发布</label>
+                        <div class="col-9 pt-1">
+                            <nz-radio-group formControlName="isPublished">
+                                <label nz-radio [nzValue]="'Y'">
+                  <span>是</span>
+                </label>
+                                <label nz-radio [nzValue]="'N'">
+                  <span>否</span>
+                </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" *ngIf="!library">
+                        <label for="" class="col-form-label col-3">
+              <i class="fa "></i> 是否入库</label>
+                        <div class="col-9 pt-1">
+                            <nz-switch formControlName="isLibrary">
+                                <i class=" anticon anticon-check" checked></i>
+                                <i class=" anticon anticon-cross" unchecked></i>
+                            </nz-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" *ngIf="!library && getFormControl('isLibrary').value">
+                        <label for="" class="col-form-label col-3">
+              <i class="fa fa-field-required"></i> 所属组织</label>
+                        <div class="col-9">
+                            <spk-user-group-select name="userGroup.id" formControlName="userGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+                            <div class="text-danger" *ngIf="userGroupType">所属组织必填</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" *ngIf="!hasAttachements()">
+                        <label for="" class="col-form-label col-3"> 文件列表</label>
+                        <div class="col-9">
+                            <cui-data-table #dataTable [data]="attachements" [columns]="columns" [loading]="attachementsLoading">
+                                <ng-template cuiColTpl="deleteFile" let-row="row">
+                                    <a href="javascript:;" (click)="deleteFile(row.id)">删除</a>
+                                </ng-template>
+                            </cui-data-table>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="" class="col-form-label col-3"> 上传附件</label>
+                        <div class="col-9">
+                            <cui-fileupload mode="file" name="file" url="/api/upload/file" [auto]="true" [multiple]="true" (uploadComplete)="initDocument($event)" [maxFileSize]="1024*1024*20" accept=".ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip,.pdf"></cui-fileupload>
+                            <br>
+                            <span class="text-muted">
+                <i class="fa fa-info-circle text-info"></i> 可以在此处上传文档。格式应为PPT,PPTX,DOC,DOCX,XLS,XLSX,ZIP,PDF 大小不能超过20MB。</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group row">
+                                    <div class="col-9 offset-3">
+                                        <button nz-button [nzType]="'primary'" [disabled]="!_form.valid" (click)="onSubmit($event)" [nzLoading]="loading">保存</button>
+                                        <button nz-button [nzType]="'default'" (click)="doCancel($event)">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

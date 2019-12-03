@@ -1,0 +1,203 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 年度学时任务查看列表</small>
+        </h3>
+        <div class="class-btn">
+            <button type="button" class="btn btn-light" [routerLink]="['../../../','tasklist']">返回列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="hour-task-view">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <button [disabled]="isCarryOver=='true'" nz-button [nzType]="'primary'" (click)="batchimport($event)">
+                    <i style="font-size:14px;top:4px;" class="iconfont icon-daoru1"></i> 批量导入学时任务</button>
+                <button [disabled]="isCarryOver=='true'" (click)="allUpdate()" nz-button [nzType]="'primary'">
+                    <span>
+                        <i class="iconfont icon-gengxin"></i> 更新学时任务</span>
+                </button>
+            </ng-template>
+            <ng-template cuiColTpl="username" let-row="row">
+                <span>{{row?.user?.username}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="displayName" let-row="row">
+                <span>{{row?.user?.displayName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="usergroup" let-row="row">
+                {{getfullNamePath(row?.user?.userGroup?.namePath)}}
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span>
+                    <i *ngIf="isCarryOver=='true'" title="学时已结转不可编辑" class="iconfont icon-bianji-copy" style="color:#aaa;cursor:pointer"></i>
+                    <i *ngIf="isCarryOver!='true'" (click)="updatePeriod(row)" title="编辑" class="iconfont icon-bianji-copy" style="color:#007bbf;cursor:pointer"></i>
+                </span>
+
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"> </nz-input>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #complexSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+        <div class="cui-data-table-form-body">
+            <div nz-row>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="teacherNo">姓名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="userName">用户名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="userGroup">组织</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <spk-user-group-select mode="multiple" formControlName="userGroupId"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cui-data-table-form-row">
+                <div class='complex-search-bar-search-box'>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                        <i class="fa fa-search"></i>查询
+                    </button>
+                    <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<nz-modal [nzFooter]="false" *ngIf="isVisible" [nzVisible]="isVisible" [nzTitle]="'学时更新'" [nzContent]="modalContent" (nzOnCancel)="resetForm($event)">
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>学时</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control nzHasFeedback [nzValidateStatus]="validateForm.controls.periodNumber">
+                    <nz-input formControlName="periodNumber" [nzPlaceHolder]="'请输入学时'" [nzSize]="'large'">
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.periodNumber.dirty&&validateForm.controls.periodNumber.hasError('pattern')">请输入数字</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.periodNumber.dirty&&validateForm.controls.periodNumber.hasError('required')">请输入学时</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                    <button [nzLoading]="submitLoading" nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!validateForm.valid">提交</button>
+                    <button nz-button [nzSize]="'large'" (click)="resetForm($event)">取消</button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</nz-modal>
+
+<nz-modal *ngIf="isVisibleImportant" [nzMaskClosable]="false" [nzWidth]="1000" [nzVisible]="isVisibleImportant" [nzTitle]="'批量导入'"
+    [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)" class="import-hour-task-modal">
+    <ng-template #modalContent>
+        <div class="import-from-box">
+            <div class="import-user">
+                <div class="page-body">
+                    <div class="plan-template">
+                        <div class="plan-template-li">
+                            <div class="plan-template-li-title">
+                                <h3> 第一步</h3>
+                            </div>
+                            <div class="plan-template-li-input-box">
+                                <div class='input-box'>点击下载模板</div>
+                                <a class="hour-template-import" href="./assets/Hourfile/user-period-task-import.xlsx" target="_blank" download="导入学时任务模板.xls">模板</a>
+                            </div>
+                        </div>
+                        <div class="plan-template-li">
+                            <div class="plan-template-li-title">
+                                <h3>第二步</h3>
+                            </div>
+                            <div class="input-cui">
+                                <cui-fileupload mode="file" name="file" url="/api/period/usersummary/validImportFile" [auto]="true" (uploadComplete)="onUploadComplete($event)"
+                                    class="btn-box"></cui-fileupload>
+                                <span class="cover-border"></span>
+                            </div>
+                        </div>
+                        <div class="plan-template-li noborder">
+                            <div class="plan-template-li-input-box">
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'validating'" [nzLoading]="true">
+                                    <span>解析中</span>
+                                </button>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'importing'" [nzLoading]="true">
+                                    <span>导入中</span>
+                                </button>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'before'" (click)="import()">导入</button>
+                                <!-- <span *ngIf="status == 'after'">导入完成</span> -->
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'after'">导入失败</button>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" *ngIf="status == 'success'">导入成功</button>
+                                <!-- <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="toList()">返回</button> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 错误信息展示 -->
+                    <div class="box-center" nz-row *ngIf="messageShow == true">
+                        <h3>导入模板中可能存在以下错误，除此以外，均导入成功(若无，则全部导入成功)</h3>
+
+                        <cui-data-table [columns]="messageColumns" [data]="messageImportant">
+                            <ng-template cuiColTpl="colsheet" let-row="row">
+                                <div>{{row.sheet}}</div>
+                            </ng-template>
+                            <ng-template cuiColTpl="colnumber" let-row="row">
+                                <div>{{row.number}}</div>
+                            </ng-template>
+                            <ng-template cuiColTpl="colmessage" let-row="row">
+                                <div>
+                                    <ul>
+                                        <li *ngFor="let it of row.errorList;let i = index"> {{(i+1)+'、'+it}}；</li>
+                                    </ul>
+                                </div>
+                            </ng-template>
+                        </cui-data-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>

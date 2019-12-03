@@ -1,0 +1,39 @@
+:host::ng-deep {
+    .localtraffic-box {
+        button {
+            cursor: pointer;
+            margin-right: 4px;
+        }
+        .complex-search-bar-search-box {
+            margin-left: 60px;
+        }
+        .ant-modal-footer {
+            display: none;
+        }
+    }
+    .aduit-modal {
+        .traffic-pass {
+            span {
+                line-height: 20px;
+                font-size: 12px;
+                color: green;
+                padding-bottom: 6px;
+            }
+            #audit-tedxt {
+                resize: none;
+                border: 1px solid #aaa;
+                border-radius: 4px;
+                padding: 2px 5px;
+            }
+            .counts {
+                font-size: 12px;
+                line-height: 22px;
+                color: red;
+            }
+        }
+        .btn-box {
+            text-align: center;
+            margin-top: 14px;
+        }
+    }
+}

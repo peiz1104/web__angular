@@ -1,0 +1,25 @@
+<div class="card-body mb-1" *ngIf="question.isShow">
+  <h4 class="card-title">{{idx+1}}、{{question.name}}
+    <span *ngIf="question.options[0].score">({{question.options[0].score}}分)</span>
+    <span class="text-danger" *ngIf="question.required">*</span>
+  </h4>
+  <div class="row my-2">
+    <label class="form-check-label ml-4">
+      <textarea rows="4" class="w-100"></textarea>
+    </label>
+  </div>
+  <div *ngIf="question.hasDesc" class="py-2 row ml-1">
+    <span class="text-danger">提示：</span>
+    <span *ngIf="question.hasDesc && !question.hasHighEdit">{{question.description}}</span>
+    <div *ngIf="question.hasHighEdit" [innerHtml]="question.innerDescription"></div>
+  </div>
+  <div class="card-action" [ngClass]="{'visible': question.isEdit}">
+
+    <spk-assess-question-action [question]="question" [idx]="idx"></spk-assess-question-action>
+
+    <div class="edit-question" *ngIf="question.isEdit">
+      <spk-assess-question-edit [question]="question" [idx]="idx"></spk-assess-question-edit>
+      <a class="btn btn-warning btn-block" (click)="onSave();">完成编辑</a>
+    </div>
+  </div>
+</div>

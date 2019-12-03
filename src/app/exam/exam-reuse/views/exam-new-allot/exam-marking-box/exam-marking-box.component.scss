@@ -1,0 +1,9 @@
+:host ::ng-deep {
+    .PMTable,
+    .PSTable,
+    .addUserTable {
+        .ant-select {
+            display: none;
+        }
+    }
+}

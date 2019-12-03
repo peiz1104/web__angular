@@ -1,0 +1,45 @@
+:host::ng-deep {
+    .releated-test-box {
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+        }
+        .header-releated {
+            position: relative;
+            border-bottom: 1px solid #aaa;
+            .releated-title {
+                height: 60px;
+                line-height: 60px;
+                font-weight: bold;
+                text-align: center;
+            }
+            .go-back {
+                position: absolute;
+                top: 16px;
+                left: 16px;
+                font-size: 14px;
+                cursor: pointer;
+                i {
+                    font-size: 18px;
+                    margin-left: 10px;
+                }
+            }
+        }
+        .select-body {
+            margin-top: 14px;
+            padding: 0 10px;
+            .create-list {
+                padding-left: 10px;
+                height: 26px;
+                line-height: 26px;
+                font-size: 14px;
+                margin-bottom: 10px;
+                border-left: 1px solid #007bff !important;
+            }
+        }
+    }
+}

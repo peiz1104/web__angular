@@ -1,0 +1,63 @@
+<div class="training-exam-box">
+    <div class='top-bread'>
+        <div class="page-header">
+            <h5 class="page-title"><small>考试安排</small></h5>
+        </div>
+    </div>
+    <div class='select-body'>
+        <cui-data-table #tableHandle [columns]="columns" [data]="allData.content" [pagination]="allData" [loading]='loading' selectType="checkbox" [(selection)]="selection">
+            <!-- <ng-template cuiColTpl="casual" let-row="row">
+                    <nz-tooltip [nzPlacement]="'right'">
+                        <span nz-tooltip class='addTd'>{{row.casual||row.clobCasual}}</span>
+                        <ng-template #nzTemplate>
+                            <p>{{row.casual||row.clobCasual}}</p>
+                        </ng-template>
+                    </nz-tooltip>
+                </ng-template> -->
+            <ng-template cuiColTpl="option" let-row="row">
+                <a class="text-primary">管理</a>
+                <span nz-table-divider></span>
+                <a class="text-danger">删除</a>
+                <!-- <nz-dropdown [nzPlacement]="'bottomRight'">
+                        <a class="ant-dropdown-link" nz-dropdown>
+                                    更多 <i class="anticon anticon-down"></i>
+                    </a>
+                    <ul nz-menu>
+                        <li nz-menu-item><a>复制</a></li>
+                        <li nz-menu-item><a>修改</a></li>
+                    </ul>
+                    </nz-dropdown> -->
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="name" [nzPlaceHolder]="'考试名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>搜索</button>
+                                <!-- <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级搜索</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> 新建考试</button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-primary" (click)="isVisibleTop=true;"> 从资源库复制</button>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <nz-modal [nzTitle]="'复制考试'" [nzVisible]="isVisibleTop" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+        <ng-template #modalContent>
+            <spk-modal-list></spk-modal-list>
+        </ng-template>
+    </nz-modal>
+</div>

@@ -1,0 +1,156 @@
+[[create-domain]]
+= 创建领域模型
+
+领域模型包含 entity 和 service， 这里还将顺便讲解一下 mock 的使用。
+
+== 创建 Entity
+
+在entity目录中创建类文件 `course.ts` `online-course.ts` `offline-course.ts` `live-course.ts`。
+
+.course.ts
+[source,typescript]
+----
+export Class Course {
+    id?: number;
+    name?: string;
+}
+----
+
+.online-course.ts
+[source,typescript]
+----
+import { Course } from './course';
+
+export Class OnlineCourse extends Course {
+    
+}
+----
+
+.offline-course.ts
+[source,typescript]
+----
+import { Course } from './course';
+
+export Class OfflineCourse extends Course {
+    
+}
+----
+
+.live-course.ts
+[source,typescript]
+----
+import { Course } from './course';
+
+export Class LiveCourse extends Course {
+    
+}
+----
+
+
+== 创建 Service
+
+在service目录中创建 Service 类文件 `course.service.ts` `online-course.service.ts` `offline-course.service.ts` `live-course.service.ts`
+
+.course.service.ts
+[source,typescript]
+----
+...
+import { HttpAdaptor } from './../../../core/http/http-adaptor';
+import { BaseService } from './../../../core/service/base.service';
+import { Course } from './../entity/course';
+
+@Injectable()
+export class CourseService extends BaseService<Course> {
+    constructor(protected httpAdaptor: HttpAdaptor) {
+        super(httpAdaptor.http, httpAdaptor, '/api/course');
+    }
+}
+----
+
+.online-course.service.ts
+[source,typescript]
+----
+...
+import { OnlineCourse } from './../entity/online-course';
+
+@Injectable()
+export class OnlineCourseService extends BaseService<OnlineCourse> {
+    constructor(protected httpAdaptor: HttpAdaptor) {
+        super(httpAdaptor.http, httpAdaptor, '/api/onlineCourse');
+    }
+}
+----
+
+.offline-course.service.ts
+[source,typescript]
+----
+...
+import { OfflineCourse } from './../entity/offline-course';
+
+@Injectable()
+export class OfflineCourseService extends BaseService<OfflineCourse> {
+    constructor(protected httpAdaptor: HttpAdaptor) {
+        super(httpAdaptor.http, httpAdaptor, '/api/offlineCourse');
+    }
+}
+----
+
+.live-course.service.ts
+[source,typescript]
+----
+...
+import { LiveCourse } from './../entity/live-course';
+
+@Injectable()
+export class LiveCourseService extends BaseService<LiveCourse> {
+    constructor(protected httpAdaptor: HttpAdaptor) {
+        super(httpAdaptor.http, httpAdaptor, '/api/liveCourse');
+    }
+}
+----
+
+
+创建好的Service还不能直接使用，需要在 `CourseModule` 中提供这些服务。
+
+.course.module.ts
+[source,typescript]
+----
+@NgModule({
+  ...
+  providers: [CourseService, OnlineCourseService, OfflineCourse, LiveCourse]
+})
+export class CourseModule { }
+----
+
+== 创建 Mock
+
+Mock 是数据模拟，它能使我们的前端开发脱离服务端，从而达到前后端并行开发，缩短单个功能开发周期的目的。
+
+这里列举一个示例，完整代码参考 `src/app/mock/course.mock.ts` 。
+
+.course.mock.ts
+[source,typescript]
+----
+import { MockUtil } from './mock-util';
+
+export const courseTemplate = {
+    'id|+1': 1,
+    'name': '@ctitle',
+};
+
+export const courseTemplateArr = {
+    'data|10': [courseTemplate]
+}
+
+MockUtil.get('/api/courses(\\?.*)?', () => {
+    let data = MockUtil.mockData(courseTemplateArr).data;
+    let page = MockUtil.getPageModel();
+    page.content = data;
+    return page;
+});
+----
+
+[WARNING]
+====
+Mock 策略有待完善
+====

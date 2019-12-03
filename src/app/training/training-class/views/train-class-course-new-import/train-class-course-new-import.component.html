@@ -1,0 +1,28 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">培训班课程管理
+            <small>| 课程讲师/学员组导入</small>
+        </h3>
+        <div class="class-btn">
+            <button type="button" class="btn btn-light" (click)="goback()">返回列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="import-course-teacher">
+    <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'" (nzSelectChange)="changeTable($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                课程讲师导入
+            </ng-template>
+            <spk-course-teacher *ngIf="tableIndex==0"></spk-course-teacher>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                学员分组导入
+            </ng-template>
+            <spk-course-user *ngIf="tableIndex==1"></spk-course-user>
+        </nz-tab>
+    </nz-tabset>
+</div>

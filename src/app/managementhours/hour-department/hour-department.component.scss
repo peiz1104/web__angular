@@ -1,0 +1,64 @@
+:host ::ng-deep {
+    .hour-department {
+        width: 100%;
+        padding: 0 10px;
+        .simple-search-bar {
+            position: relative;
+            button {
+                position: absolute;
+                top: 0px;
+                right: -92px;
+            }
+        }
+    }
+    .depart-hour-attch-view {
+        .file-list-upload {
+            .file-item,
+            .upload-success {
+                border: 1px dashed #28a745;
+                margin: .425rem 0;
+                padding: .5rem .75rem;
+                border-radius: 2px;
+                position: relative;
+                .progress {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    -moz-opacity: .5;
+                    opacity: .5;
+                    display: flex;
+                    overflow: hidden;
+                    font-size: 0.75rem;
+                    background-color: #e9ecef;
+                    border-radius: 0.25rem;
+                    margin-bottom: 0px;
+                }
+                .item-remove {
+                    position: absolute;
+                    right: 6px;
+                    top: -6px;
+                    cursor: pointer;
+                }
+            }
+        }
+        .no-data {
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            i {
+                font-size: 24px;
+                color: #007bbf;
+            }
+            span {
+                font-size: 14px;
+                color: #666;
+                font-weight: 600;
+                font-family: "Microsoft YaHei";
+                position: relative;
+                top: -2px;
+                left: 8px;
+            }
+        }
+    }
+}

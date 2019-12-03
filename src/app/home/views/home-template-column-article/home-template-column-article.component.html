@@ -1,0 +1,42 @@
+<!-- 新闻中心 -->
+<div class="home-article">
+  <div class="navigation-bar-box">
+    <div class="nav-name">{{itemConfig?.name||'暂无标题'}}</div>
+    <div class="nav-more" *ngIf="itemConfig?.moreArticle">
+      <span>更多</span>
+      <i class="anticon anticon-right-circle"></i>
+    </div>
+  </div>
+  <div class="news-center-box">
+    <div class="picture-tab clearfix" *ngIf="articleInfo?.length > 0">
+      <div class="picture-tab-left">
+        <img [src]="articleInfo[0]?.thumbnail" onerror="this.src='./assets/images/default/new.png'" alt="picture" class="picture-img-url">
+        <div class="picture-title">{{articleInfo[0]?.title||'暂无标题'}}</div>
+        <div class="picture-instruct">{{articleInfo[0]?.summary|| '暂无内容'}}</div>
+        <div class="picture-bottom clearfix">
+          <span>发布时间：{{(articleInfo[0]?.startDate||articleInfo[0]?.createdDate | dateMoment)||'---'}}</span>
+          <a href="javascript:;">查看全文<i class="anticon anticon-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="picture-tab-right" *ngIf="articleInfo?.length > 1">
+        <div class="picture-news-single clearfix" *ngFor="let item of articleInfo | slice:1:4;">
+          <div class="single-img">
+            <img [src]="item?.thumbnail" alt="图片" onerror="this.src='./assets/images/default/new.png'">
+          </div>
+          <div class="single-content">
+            <div class="single-title"> {{item?.title}} </div>
+            <div class="single-detail">{{item?.summary|| '暂无内容'}}</div>
+            <div class="single-bottom clearfix">
+              <span>发布时间：{{(item?.startDate||item?.createdDate | dateMoment)||'---'}}</span>
+              <a href="javascript:;">查看全文<i class="anticon anticon-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="picture-tab-right" *ngIf="articleInfo?.length == 1">
+        <spk-home-template-defaultbox></spk-home-template-defaultbox>
+      </div>
+    </div>
+    <spk-home-template-defaultbox *ngIf="articleInfo?.length<1"></spk-home-template-defaultbox>
+  </div>
+</div>

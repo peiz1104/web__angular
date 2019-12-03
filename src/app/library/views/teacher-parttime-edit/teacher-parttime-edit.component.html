@@ -1,0 +1,28 @@
+<div class="top-bread">
+    <!-- <nz-breadcrumb class="bread">
+    <nz-breadcrumb-item>
+      您所在位置：
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      讲师库
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a class="text-primary" [routerLink]="['../../']">兼职讲师列表</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      编辑兼职讲师
+    </nz-breadcrumb-item>
+  </nz-breadcrumb> -->
+    <div class="page-header">
+        <h5 class="page-title">讲师库
+            <small>| 编辑兼职讲师</small>
+        </h5>
+        <button class="btn btn-secondary pull-right" type="button" [routerLink]="['../../']">
+            返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="px-4">
+    <spk-teacher-parttime-form [isStarShow]="isStarShow" *ngIf="teacher" [teacher]="teacher" [isEdit]="true" (save)="onSave($event)" (cancel)="goBack()"></spk-teacher-parttime-form>
+</div>

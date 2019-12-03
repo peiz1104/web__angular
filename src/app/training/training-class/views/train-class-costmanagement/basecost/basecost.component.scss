@@ -1,0 +1,77 @@
+:host::ng-deep {
+    .base-cost-box {
+        .simple-search-bar {}
+        button {
+            margin-right: 4px;
+        }
+        .ant-modal-footer {
+            display: none;
+        }
+        .width-fix {
+            width: 20%;
+            word-break: break-all;
+        }
+    }
+    .pull-modal {
+        .ant-modal {
+            width: 800px !important;
+            .ant-modal-content {
+                width: 800px;
+                .header-box {
+                    position: relative;
+                    height: 30px;
+                    margin-bottom: 26px;
+                    .input-box {
+                        width: 60%;
+                        float: left;
+                        .error-tip {
+                            color: red;
+                            font-size: 12px;
+                        }
+                    }
+                    button {
+                        float: left;
+                    }
+                }
+                .cost-list {
+                    .no-data {
+                        text-align: center;
+                        font-size: 20px;
+                        i {
+                            color: #007bbf;
+                        }
+                        span {
+                            color: #888;
+                        }
+                    }
+                    .cost-table-list {
+                        table {
+                            min-width: 100%;
+                            border: 1px solid #ddd;
+                            border-right: none;
+                            border-bottom: none;
+                            border-spacing: 0;
+                            thead {
+                                background: #e9ecef;
+                            }
+                            tr {
+                                background: #f9f9f9;
+                            }
+                            td {
+                                height: 34px;
+                                text-align: center;
+                                border-right: 1px solid #ddd;
+                                border-bottom: 1px solid #ddd;
+                                margin: 0;
+                                padding: 0 10px;
+                            }
+                        }
+                    }
+                }
+            }
+            .ant-modal-footer {
+                display: block;
+            }
+        }
+    }
+}

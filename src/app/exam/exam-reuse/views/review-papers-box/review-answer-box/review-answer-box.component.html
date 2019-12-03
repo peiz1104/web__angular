@@ -1,0 +1,360 @@
+<div class="box-one" *ngIf="data">
+  <!--简答题-->
+  <div *ngIf="data.baseType=='JD'||data.baseType=='ALFX'" class="ans-short">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <!-- <span class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe">{{data.casual}}</span> -->
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <!-- <div class="answer">
+            <nz-input [(ngModel)]="content" [nzType]="'textarea'" [nzRows]="'4'" [nzPlaceHolder]="''"></nz-input>
+        </div> -->
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>
+        <span class="htmlInline" [innerHtml]="rightKeys.content | innerHtmlPipe">{{rightKeys.content}}</span>
+      </p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>
+        <span *ngIf="!answers?.userAns?.length" class="htmlInline"></span>
+        <span *ngIf="answers?.userAns?.length">
+          <span *ngIf="!answers.isImg||answers.isImg!='Y'" class="htmlInline" [innerHtml]="answers.userAns | innerHtmlPipe ">{{answers.userAns||''}}</span>
+        </span>
+        <span *ngIf="answers.isImg=='Y'">
+          <span *ngFor="let url of answers.userAns;let imgIndex = index;" class="img-box">
+            <img onerror="this.src='assets/images/imgerror.png'" src="{{url}}" style="cursor: pointer;" isNoClick="true" (click)="handleImgView.emit({'src':url})">
+          </span>
+        </span>
+      </p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--单选题-->
+  <div *ngIf="data.baseType=='DANX'" class="ans-radio">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <div class="answer">
+      <nz-radio-group [(ngModel)]="answers.value">
+        <label *ngFor="let row of data.opionList;let i = index;" nz-radio [nzValue]="row.opId">
+          <span>{{getCharCode(i)}}、
+            <span *ngIf="row.isBigText=='true' || row.isBigText==true " class="htmlInline" [innerHtml]="row.content|innerHtmlPipe"></span>
+            <span *ngIf="row.isBigText!='true'&&row.isBigText!=true " class="htmlInline" [innerText]="row.content"></span>
+          </span>
+        </label>
+      </nz-radio-group>
+    </div>
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>{{rightKeys.content}}</p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>{{answers.userAns}}</p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--多选题-->
+  <div *ngIf="data.baseType=='DUOX'" class="ans-checkbox">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <div class="answer">
+      <!-- <nz-checkbox-group [(ngModel)]="dxContent"></nz-checkbox-group> -->
+      <label *ngFor="let row of dxContent;let i = index" class="checkbox-label">
+        <label class="custom-checkbox">
+          <input type="checkbox" [checked]="content.indexOf(row.opId + '') > -1">
+          <span></span>
+        </label>
+        <!-- <input type="checkbox" [checked]="content.indexOf(row.opId + '') > -1">  -->
+        {{getCharCode(i)}}、
+        <span *ngIf="row.isBigText=='true' || row.isBigText==true " class="htmlInline" [innerHtml]="row.content|innerHtmlPipe"></span>
+        <span *ngIf="row.isBigText!='true'&&row.isBigText!=true " class="htmlInline" [innerText]="row.content"></span>
+        &nbsp;
+      </label>
+    </div>
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>
+        <span *ngFor="let item of rightKeys.value">{{item}} &emsp;</span>
+      </p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>
+        <span *ngFor="let item of answers.value">{{item}} &emsp;</span>
+      </p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--判断-->
+  <div *ngIf="data.baseType=='PD'" class="ans-judge">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <div class="answer">
+      <nz-radio-group [(ngModel)]="content">
+        <label *ngFor="let row of data.opionList;let i = index;" nz-radio [nzValue]="row.content">
+          <span>{{row.content=='yes'?'对':'错'}}</span>
+        </label>
+      </nz-radio-group>
+    </div>
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>{{pdRightKey}}</p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>{{pdUserAsw}}</p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--填空-->
+  <div *ngIf="data.baseType=='TK'" class="ans-kong">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>
+        <span *ngFor="let item of tkRightKey;let i=index">
+          <span [innerHtml]="(i+1+'、')+(item||'空')| innerHtmlPipe"></span>
+        </span>
+      </p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>
+        <span *ngFor="let item of tkUserAsw;let i=index">
+          <span *ngIf="item&&(!item.isImg||item.isImg!='Y')" [innerHtml]="(i+1+'、')+(item.userAns ||'')| innerHtmlPipe">
+          </span>
+          <span *ngIf="item&&(item.isImg=='Y')">
+            {{i+1}}、
+            <span *ngFor="let url of item.userAns;let imgIndex = index;" class="img-box">
+              <img onerror="event.srcElement.src='assets/learner/imgerror.png'" src="{{url}}" style="cursor: pointer;" isNoClick="true"
+                (click)="handleImgView.emit({'src':url})">
+            </span>
+          </span>
+          <span *ngIf="!item">
+            {{i+1}}、空
+          </span>
+        </span>
+      </p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--匹配-->
+  <div *ngIf="data.baseType=='PP'" class="ans-match">
+    <div class="title">第{{childNum||data.que_num}}题,
+      <span *ngIf="data.isBigText=='true' || data.isBigText==true " class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe"></span>
+      <span *ngIf="data.isBigText!='true'&&data.isBigText!=true " class="htmlInline" [innerText]="data.casual"></span>
+      ({{data.score}}分)
+      <span class="childName" [hidden]="childName">[{{data.typeName}}]</span>
+    </div>
+    <div class="clearfix ans-small">
+      <ul>
+        <li *ngFor="let row of data.childQueList;let i = index;">({{i+1}})
+          <span *ngIf="row.isBigText=='true' || row.isBigText==true " class="htmlInline" [innerHtml]="row.casual|innerHtmlPipe"></span>
+          <span *ngIf="row.isBigText!='true'&&row.isBigText!=true " class="htmlInline" [innerText]="row.casual"></span>
+          &nbsp;
+        </li>
+      </ul>
+      <ul>
+        <li *ngFor="let row of data.opionList;let i = index;">({{getCharCode(i)}})
+          <span *ngIf="row.isBigText=='true' || row.isBigText==true " class="htmlInline" [innerHtml]="row.content|innerHtmlPipe"></span>
+          <span *ngIf="row.isBigText!='true'&&row.isBigText!=true " class="htmlInline" [innerText]="row.content"></span>
+          &nbsp;
+        </li>
+      </ul>
+    </div>
+    <ul class="answer ans-only">
+      <li *ngFor="let vals of data.childQueList; let i = index;">
+        <span>({{i+1}})</span>
+        <nz-radio-group [(ngModel)]="content[vals.queId+'']">
+          <label *ngFor="let row of data.opionList;let j = index;" nz-radio [nzValue]="row.opId">
+            <span>{{getCharCode(j)}}</span>
+          </label>
+        </nz-radio-group>
+      </li>
+    </ul>
+    <div class="answer-tip">
+      <p>
+        <span class="right-key-label">参考答案：</span>
+        <span *ngFor="let item of rightKeys.value; let i = index;">({{i+1}})、{{item}} &emsp;</span>
+      </p>
+      <p>
+        <span class="user-answer-label">考生答案：</span>
+        <span *ngFor="let item of answers.value;  let i = index;">({{i+1}})、{{item}} &emsp;</span>
+      </p>
+      <p>该题得分：{{answers.ownScore || '0'}}</p>
+      <div *ngIf="markingData?.length">
+        <p *ngFor="let item of markingData;">
+          <span class="tip-label">阅&ensp;卷&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="arbitrationData?.length">
+        <p *ngFor="let item of arbitrationData; ">
+          <span class="tip-label">仲&ensp;裁&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+      <div *ngIf="reviewData?.length">
+        <p *ngFor="let item of reviewData; ">
+          <span class="tip-label">复&ensp;评&ensp;人: {{item.markName}}</span>
+          <span class="tip-label">阅卷分数：{{item.score}} </span>
+          <span class="tip-label-time">阅卷时间：{{item.operTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+          <span class="tip-label">批注：{{item.comment || '无'}}</span>
+          <span class="tip-label">评分方式：{{markType[item.markScoreMode]}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

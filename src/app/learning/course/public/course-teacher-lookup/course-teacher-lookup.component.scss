@@ -1,0 +1,26 @@
+:host ::ng-deep{
+    .simple-search-bar {
+        display: inline-block;
+    }
+    .simple-search-bar-search-box {
+        margin-top: 5px;
+        display: inline-block;
+        margin-left: 25px;
+    }
+    .cui-data-table-form-body{
+        .ant-form-item-control-wrapper {
+            display: inline-block;
+        }
+        .ant-form-item-control {
+            line-height: 30px !important;
+            height: 30px !important;
+        }
+        .ant-input {
+            height: 30px !important;
+            // width: 130px !important;
+            font-size: 12px !important;
+            line-height: 30px !important;
+            padding-top: 2px !important;
+        }
+    }
+}

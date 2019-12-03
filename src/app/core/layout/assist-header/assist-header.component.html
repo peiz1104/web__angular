@@ -1,0 +1,68 @@
+<div class="head_nav">
+    <div class="top-logo clearfix">
+        <a href="/" class="go-home">
+            <img onerror="this.src='./assets/images/app_logo_chinalife.png'" [title]="site?.name" [src]="site?.logo" [alt]="site?.name"
+                class="img-url">
+        </a>
+        <div class="nav-all-course clearfix">
+            <ul class="home-nav clearfix">
+                <li *ngFor="let item of menu;index as i" (click)="handelClickMenu(i,item.path)" [ngClass]="{'borderBottom': i == menuClassIndex}">
+                    <a style="color:#000">{{item.name}} </a>
+                </li>
+            </ul>
+        </div>
+        <div class="switch-box clearfix">
+            <div class="user-center">
+                <a href="/learner/personNew">
+                    <i title="个人中心" class="iconfont icon-yonghu"></i>
+                </a>
+            </div>
+            <div class="user-set">
+                <a href="/learner/user">
+                    <i title="设置" class="iconfont icon-shezhi1"></i>
+                </a>
+            </div>
+            <div class="logout">
+                <i title="注销" (click)="logout()" class="iconfont icon-guanbi"></i>
+            </div>
+
+            <div class="message-box">
+                <nz-badge [nzCount]="notReadMessageNumber" [nzOverflowCount]="99">
+                    <ng-template #content>
+                        <a class="message-icon" href="/learner/person/message">
+                            <i class="iconfont icon-xiaoxi float-icon"></i>
+                        </a>
+                    </ng-template>
+                </nz-badge>
+            </div>
+            <!-- <div *ngIf="isLogin" class="username">{{user.username}}</div> -->
+            <div class="users_box">
+                <nz-dropdown [nzPlacement]="'bottomCenter'" [nzTrigger]="'hover'" [nzVisible]="false">
+                    <div class="users_img_url">
+                        <img nz-dropdown (error)="defaultImgSrc($event)" [src]="userimg" alt="头像">
+                    </div>
+                    <ul *ngIf="false" nz-menu class="head-menu-box">
+                        <div class="menu-title" style="border-bottom: 1px solid #d8d8d8;font-size: 16px;text-indent: 11px;padding: 10px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{user.displayName}}</div>
+                        <li nz-menu-item>
+                            <a href="/learner/personNew">
+                                <i class="anticon anticon-user float_br"></i>个人中心</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a href="/learner/user">
+                                <i class="anticon anticon-setting float_br"></i>账号设置</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a (click)="logout()">
+                                <i class="anticon anticon-logout float_br"></i>退出</a>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+            </div>
+            <div class="console-manage" *ngIf="user?.hasPermission">
+                <button [routerLink]="['/home']" nz-button [nzType]="'primary'">
+                    <span>系统管理</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

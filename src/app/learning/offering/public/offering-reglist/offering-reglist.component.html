@@ -1,0 +1,134 @@
+<div class="train-reglist-box">
+    <div class="top-bread">
+        <!-- <div class="page-header">
+            <h5 class="page-title">
+                <small>培训班下授权注册人列表列表</small>
+            </h5>
+        </div> -->
+    </div>
+    <div class="form-box">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                    [(selection)]="selection" (reload)="loadData($event)">
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-form-control>
+                                        <nz-input formControlName="search" [nzPlaceHolder]="'请输入名称'"> </nz-input>
+                                    </div>
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                        <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> -->
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+                    <ng-template #complexSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="name">用户名</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="search" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="displayName">姓名</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+
+                                                <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="">所属组织</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <spk-user-group-select mode="multiple" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="">考勤分数</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="attendanceScore" [nzPlaceHolder]="'请输入考勤分数'"></nz-input>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="cui-data-table-form-row">
+                                        <div class='complex-search-bar-search-box'>
+                                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #listTools>
+                        <div>
+                            <spk-user-lookup #userLookupReglist (ok)="userLookupOk($event)">
+                                <ng-template #echoTpl>
+                                    <button [disabled]="!!isArchived" (click)="userLookupReglist.openLookup()" nz-button [nzType]="'primary'">
+                                        <i class="iconfont icon-tianjia-copy"></i> 添加授权注册人</button>
+                                </ng-template>
+                            </spk-user-lookup>
+                            <spk-logic-group-select #lgLookup mode="multiple" style="display: inline-block;" (selectOk)="logicGroupLookupOk($event)">
+                                <ng-template #echoTpl>
+                                    <button nz-button [nzType]="'primary'" [disabled]="!!isArchived" (click)="lgLookup.openLookup()">
+                                        <i class="iconfont icon-tianjia-copy"></i> 添加用户组</button>
+                                </ng-template>
+                            </spk-logic-group-select>
+                            <button [disabled]="!!isArchived" nz-button [nzType]="'primary'" (click)="mutipleDelete($event)">
+                                <span>
+                                    <i class="iconfont icon-shanchu"></i> 删除</span>
+                            </button>
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <i *ngIf="isArchived" title="已结班不可删除" class="iconfont icon-shanchu" style="cursor:pointer;font-size:16px;color:red;"></i>
+                        <i *ngIf="!isArchived" title="删除" (click)="deleteuser([row.id])" class="iconfont icon-shanchu" style="cursor:pointer;font-size:16px;color:red;"></i>
+                    </ng-template>
+                    <ng-template cuiColTpl="username" let-row="row">
+                        <span>{{ row.user ? row.user.username:'--' }}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="id" let-row="row">
+                        <span>{{row.user.id}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="email" let-row="row">
+                        <span>{{row.user.email}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="displayName" let-row="row">
+                        <span>{{ row.user ? row.user.displayName:'--'}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="userGroup" let-row="row">
+                        <span>{{ row.user.userGroup ? row.user.userGroup.name : ''}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="logicalName" let-row="row">
+                        <span>{{ row.logicalGroup ? row.logicalGroup.name : ''}}</span>
+                    </ng-template>
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

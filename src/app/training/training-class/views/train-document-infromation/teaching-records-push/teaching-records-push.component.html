@@ -1,0 +1,93 @@
+<div class="course-message-work">
+  <div class="select-body">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+      <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                      [(selection)]="selection" (reload)="loadData($event)">
+
+<!--        <ng-template #simpleSearch>
+          <ng-container>
+            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+              <div nz-row class="cui-data-table-form-body">
+                <div nz-form-control>
+                  <nz-input formControlName="trainFeeType" [nzPlaceHolder]="'请输入课程名称!'"> </nz-input>
+                </div>
+                <div class='simple-search-bar-search-box'>
+                  <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                  &lt;!&ndash; <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> &ndash;&gt;
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </ng-template>-->
+        <ng-template cuiColTpl="name" let-row="row">
+          <h5>{{row.name}}</h5>
+        </ng-template>
+
+        <ng-template cuiColTpl="displayname" let-row="row">
+          <h5>{{row.displayname}}</h5>
+        </ng-template>
+        <ng-template cuiColTpl="username" let-row="row">
+          <h5>{{row.username}}</h5>
+        </ng-template>
+        <ng-template cuiColTpl="teachingPeriod" let-row="row">
+          <h5>{{row.teachingPeriod}}</h5>
+        </ng-template>
+        <ng-template cuiColTpl="evaluationScore" let-row="row">
+          <h5>{{row.evaluationScore}}</h5>
+        </ng-template>
+
+     <!--   <ng-template cuiColTpl="toamis" let-row="row">
+          <span class="text-success" *ngIf="row.toamis == 'SUCCESS'">成功</span>
+          <span class="text-success" *ngIf="row.toamis == 'FALSE'">失败</span>
+          <span class="text-success" *ngIf="row.toamis == 'NOCALL'">没有调用</span>
+        </ng-template>
+&lt;!&ndash;-->
+        <ng-template cuiColTpl="rowActions" let-row="row">
+
+        </ng-template>-->
+      </cui-data-table>
+    </nz-spin>
+  </div>
+</div>
+<!--
+<nz-modal *ngIf="isVisible" [nzVisible]="isVisible" [nzFooter]="false" [nzWidth]="900" [nzTitle]="'课程资料列表'" [nzContent]="modalContent"
+          (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+  <ng-template #modalContent>
+    <nz-spin [nzSpinning]="spinningDetail" [nzTip]="'正在读取数据...'">
+      <cui-data-table #tableHandle [columns]="columnsDetail" [data]="testListDataDetail?.content" [pagination]="testListDataDetail"
+                      selectType="checkbox" [(selection)]="selectionDetail" (reload)="loadcoursedetailList($event)">
+
+        <ng-template #simpleSearch>
+          <ng-container>
+            <form nz-form [formGroup]="searchForm" (ngSubmit)="submitForm($event,searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+              <div nz-row class="cui-data-table-form-body">
+                <div nz-form-control>
+                  <nz-input formControlName="name" [nzPlaceHolder]="'请输入文档名称!'"> </nz-input>
+                </div>
+                <div class='simple-search-bar-search-box'>
+                  <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                  &lt;!&ndash; <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> &ndash;&gt;
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </ng-template>
+        <ng-template cuiColTpl="colTitle" let-row="row">
+                    <span>
+                        <strong>{{row.name}}</strong>
+                    </span>
+        </ng-template>
+        <ng-template cuiColTpl="convertStatusCol" let-row="row">
+          <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NEEDLESS'">无需转码</span>
+          <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NOT_START'">未开始</span>
+          <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'WAITING'">等待转码</span>
+          <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'TRANSCODING'">转码中</span>
+          <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'COMPLETE'">转码完成</span>
+          <span class="text-danger" *ngIf="row.documentInfo.transcodeStatus == 'FAILED'">转码失败</span>
+        </ng-template>
+      </cui-data-table>
+    </nz-spin>
+  </ng-template>
+</nz-modal>-->

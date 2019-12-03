@@ -1,0 +1,56 @@
+$comcolor: #0569b5;
+.site{
+    padding: 10px 20px;
+    .nav{
+        .nav-icon{
+            width: 50px;
+            i{
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                &:hover{
+                    color: $comcolor;
+                }
+            }
+        }
+        .nav-mid{
+            width: 255px;
+            margin: 0 20px;
+        }
+        .nav-ri{
+            color: $comcolor;
+            cursor: pointer;
+        }
+    }
+   
+    .title{
+        line-height: 36px;
+        background: #f3f3f3;
+        padding: 0 20px;
+        margin: 10px 0;
+        i{
+            float: right;
+            margin-top: 12px;
+        }
+    }
+    .nav{
+        margin-top: 10px;
+    }
+}
+:host ::ng-deep{
+    .image-holder-wrapper{
+        display: inline-block;
+        height: 42px !important;
+        width: auto !important;
+        max-width: 100%;
+        margin: 10px 0;
+    }
+    .cui-fileupload-choose{
+        span{
+            img{
+                width: auto;
+                height: 42px;
+            }
+        }
+    }
+}

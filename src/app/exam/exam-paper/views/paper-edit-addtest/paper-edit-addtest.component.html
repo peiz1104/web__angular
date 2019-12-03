@@ -1,0 +1,480 @@
+<div class="add-test-box">
+    <div class="exam-paper-list">
+        <div>
+            <div class="box">
+                <div class="exam-paper-header">
+                    <h3>{{paperMessage.epName}}
+                        <span class="score">(限制分值：{{paperMessage.sumScore ? paperMessage.sumScore : '不限'}}分)</span>
+                        <span class="score">(已抽取题分：{{paperMessage.examScore}}分)</span>
+                    </h3>
+                    <div class="btn-group">
+                        <button nz-button [nzType]="'primary'" (click)="previewpaper()">
+                            <span>预览并检查</span>
+                        </button>
+                        <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:AREA_MGR'}">
+                            <button *ngIf="!paperMessage.isPutout" (click)="showModal()" nz-button [nzType]="'primary'">
+                                <span>添加分区</span>
+                        </button>
+                        </span>
+                        <!-- <button (click)="importpaper($event,1,'P')" nz-button [nzType]="'primary'">
+                            <span>导入试卷</span>
+                        </button> -->
+                        <button nz-button [nzType]="'primary'" (click)="refresh()">
+                            <span>刷新</span>
+                        </button>
+                    </div>
+                    <nz-modal *ngIf="isVisible" [nzMaskClosable]="false" [nzVisible]="isVisible" [nzTitle]="addeditparId ? '修改分区' : '添加分区'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+                        <ng-template #modalContent>
+                            <form nz-form [formGroup]="_validateForm" (ngSubmit)="_submitForm($event,_validateForm.value)">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="7">
+                                        <label nz-form-item-required>试题分区名称</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="_getFormControl('partitionName')">
+                                        <nz-select (nzOpenChange)="openChange()" formControlName="partitionName" [nzSize]="'large'">
+                                            <nz-option *ngFor="let item of questionType" [nzLabel]="item.label" [nzValue]="item.value"></nz-option>
+                                        </nz-select>
+                                        <div nz-form-explain *ngIf="_getFormControl('partitionName').dirty&&_getFormControl('partitionName').hasError('required')">请选择试题分区</div>
+                                    </div>
+                                    <div class="choose-descript">(注：请根据试题类型设置分区)</div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="7">
+                                        <label>自定义分区</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="_getFormControl('customname')">
+                                        <nz-input maxlength='20' formControlName="customname" [nzSize]="'large'">
+                                        </nz-input>
+                                        <div nz-form-explain *ngIf="_getFormControl('customname').dirty&&_getFormControl('customname').hasError('maxlength')">分区最多可输入20个字</div>
+                                        <div nz-form-explain *ngIf="_getFormControl('customname').dirty&&_getFormControl('customname').hasError('confirm')">输入自定义分区名称不能有空格</div>
+                                    </div>
+                                    <div class="custom-partition">(注：自定义分区名称)</div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="7">
+                                        <label>试题及选项显示顺序</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="10" nz-form-control>
+                                        <nz-select formControlName="orderCode" [nzSize]="'large'">
+                                            <nz-option *ngFor="let item of orderCode" [nzLabel]="item.dicName" [nzValue]="item.dicCode"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="7">
+                                        <label>出题方式</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="10" nz-form-control>
+                                        <!-- 只有混合组卷的时候可以使用选择随机或手工 -->
+                                        <span class="method-chuti" *ngIf="titleCode!='H'">{{titleCode=='G'?'人工组卷':(titleCode=='S'? '随机组卷':'策略组卷')}}</span>
+                                        <nz-select [nzDisabled]="addeditparId" *ngIf="titleCode=='H'" formControlName="titleCode" [nzSize]="'large'">
+                                            <nz-option *ngFor="let option of questionMethod" [nzLabel]="option.dicName" [nzValue]="option.dicCode"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="7">
+                                        <label>分区说明</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="_getFormControl('partitionDesc')">
+                                        <nz-input maxlength='1000' [nzType]="'textarea'" [nzPlaceHolder]="'请填分区说明'" formControlName="partitionDesc" [nzSize]="'large'">
+                                        </nz-input>
+                                        <div nz-form-explain *ngIf="_getFormControl('partitionDesc').dirty&&_getFormControl('partitionDesc').hasError('maxlength')">分区说明最多可输入1000个字</div>
+                                        <div nz-form-explain *ngIf="_getFormControl('partitionDesc').dirty&&_getFormControl('partitionDesc').hasError('confirm')">输入分区说明不能有空格</div>
+                                    </div>
+                                </div>
+                                <div nz-form-item nz-row>
+                                    <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                                        <button nz-button [nzType]="'primary'" [disabled]="!_validateForm.valid" [nzLoading]="addpartitionstate" [nzSize]="'large'">提交</button>
+                                        <!-- <button nz-button [nzSize]="'large'" (click)="_resetForm($event)">重置</button> -->
+                                        <button nz-button [nzSize]="'large'" (click)="handleCancel($event)">取消</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </nz-modal>
+                </div>
+            </div>
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <div *ngIf="paperData.length" class="paper-list">
+                    <div *ngFor="let item of paperData ;let ud=index" class="paper-partition-list">
+                        <div class="test-question-header">
+                            <div class="test-introduce">试题分区名称：{{item.partitionName}}
+                                <span class="test-message">(共{{item.queAllNum ? item.queAllNum : '0'}}题)</span>
+                                <span class="test-order">试题及选项显示顺序：{{item.orderCode == 'R' ? '随机' : '固定'}}</span>
+                                <span class="test-choose-order">出题方式：{{item.titleCodeName}}</span>
+                            </div>
+                            <div class="btn-group">
+                                <span *ngIf="!paperMessage.isPutout">
+                                    <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                        <button *ngIf="titleCode == 'G' || titleCode == 'RG'" (click)="manualdrawing(item.partitionId,'M')" nz-button [nzType]="'primary'">
+                                            <span>手工抽题</span>
+                                </button>
+                                </span>
+                                <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                        <button *ngIf="titleCode == 'S' || titleCode == 'RG'" (click)="randomquestions(item.partitionId,'R')" nz-button [nzType]="'primary'">
+                                            <span>随机抽题</span>
+                                </button>
+                                </span>
+                                <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                        <button *ngIf="titleCode == 'H'" (click)="mixQuestion(item.partitionId)" nz-button [nzType]="'primary'">
+                                                <span>添加试题</span>
+                                </button>
+                                </span>
+                                <button (click)="previewPartition($event,item)" nz-button [nzType]="'primary'">
+                                        <span>预览分区</span>
+                                    </button>
+                                <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                        <button *ngIf="item.titleCode != 'R'" (click)="importsingletest($event,item.partitionId,'T')" nz-button [nzType]="'primary'">
+                                                <span>导入试题</span>
+                                </button>
+                                </span>
+                                <button (click)="modifyparition($event,item.partitionId,item)" nz-button [nzType]="'primary'" *spkAuthzIf="{hasPermission:'EXAM:PAPER:AREA_MGR'}">
+                                        <span><i class="anticon anticon-edit"></i> 修改分区</span>
+                                    </button>
+                                <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:AREA_MGR'}">
+                                <button *ngIf="paperData.length>1&&ud!==0 " (click)="moveUpPratition($event,item.partitionId)" nz-button [nzType]="'primary'" >
+                                        <span>上移</span>
+                                </button>
+                                </span>
+                                <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:AREA_MGR'}">
+                                <button *ngIf="paperData.length>1&&ud!==paperData.length-1" (click)="moveDownPratition($event,item.partitionId)" nz-button [nzType]="'primary'">
+                                        <span>下移</span>
+                                </button>
+                                </span>
+                                <button (click)="deletePratition($event,item.partitionId)" nz-button [nzType]="'primary'" *spkAuthzIf="{hasPermission:'EXAM:PAPER:AREA_MGR'}">
+                                        <span title="删除分区">
+                                             <i class="anticon anticon-delete"></i>
+                                        </span>
+                                    </button>
+                                </span>
+                                <button (click)="showPartition($event,item.partitionId)" nz-button [nzType]="'primary'">
+                                    <span>
+                                        <i [ngClass]="singlePartitionId==item.partitionId ? 'anticon anticon-up' : 'anticon anticon-down'"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="test-tip">温馨提示：如果一场考试中除了“手工抽-固定显”的抽题方式，还有随机抽的方式，要先进行“手工抽”，以保证随机抽的试题的数量。</div>
+                        </div>
+                        <div *ngIf="singlePartitionId==item.partitionId" class="test-list">
+                            <div class="r-table" *ngIf="item.titleCode=='R'">
+                                <cui-data-table foot="false" #tableHandle [data]="item.pllist" [pagination]="" [columns]="columns">
+                                    <ng-template *ngIf="!paperMessage.isPutout" cuiColTpl="editactions" let-row="row">
+                                        <i title="修改" (click)="editLibpary(row.plId,item.partitionId)" style="cursor: pointer" class="anticon anticon-edit"></i>
+                                    </ng-template>
+                                    <ng-template *ngIf="!paperMessage.isPutout" cuiColTpl="deleteactions" let-row="row">
+                                        <span title="删除" (click)="deleteLibpary(row.plId)" style="cursor: pointer">删除</span>
+                                    </ng-template>
+                                    <ng-template cuiColTpl="answerLength" let-row="row">
+                                        <span>{{row.answerLength ? row.answerLength : '--'}}</span>
+                                    </ng-template>
+                                </cui-data-table>
+                            </div>
+                            <div class="t-info" *ngIf="item.titleCode=='H'">
+                                <div *ngFor="let value of item.pqlist||item.pllist; let i=index" class="question-categroy">
+                                    <div class="question-type-score">
+                                        <span class="question-order">{{i+1 +'、'}}{{value.typeName||value.typeCodeName}}</span>
+                                        <span class="quesiton-score">（{{value.queScore}} 分）</span>
+                                    </div>
+                                    <div *ngIf="!paperMessage.isPutout" class="opear-subject">
+                                        <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                            <span class="edit" (click)="handleEdit(value.typeName,value.queId,false)">
+                                                <i class="anticon anticon-edit"></i> 
+                                            </span>
+                                        </span>
+                                        <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                            <span (click)="deletequestion($event,value.queId)" class="delete">
+                                                <i class="anticon anticon-delete"></i>
+                                            </span>
+                                        </span>
+                                        <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                            <span *ngIf="i !== 0" class="move-up" (click)="handleMove('UP',value.queId)">
+                                                <i class="anticon anticon-arrow-up arrowColor"></i>
+                                            </span>
+                                        </span>
+                                        <span *spkAuthzIf="{hasPermission:'EXAM:PAPER:QUESTION_MGR'}">
+                                            <span *ngIf="i !== item.pqlist?.length - 1" class="move-down" (click)="handleMove('DOWN',value.queId)">
+                                                <i class="anticon anticon-arrow-down arrowColor"></i>
+                                            </span>
+                                        </span>
+                                        <span class="storage">{{value.examQueId ? '已入库' : '未入库'}}</span>
+                                    </div>
+                                    <div class="subject">
+                                        <span *ngIf="value.isBigText=='true'||value.isBigText==true" class="epHtmlText" [innerHtml]="value.clobCasual|innerHtmlPipe"></span>
+                                        <span *ngIf="value.isBigText!='true'&&value.isBigText!=true" class="epHtmlText" [innerText]="value.casual"></span>
+                                    </div>
+                                    <!-- typeCode:DANX单选题 -->
+                                    <div *ngIf="value.baseCode=='DANX'" class="DANX">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div *ngFor="let singlechoose of value.answerList; let n=index " class="single-choose">
+                                                <span class="answerspan clearfix">
+                                                        <input disabled type='radio' [checked]="singlechoose.isCorrect=='Y'" /> {{answerList[n]+'、'}}
+                                                        <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="epHtmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                                                <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                                </span>
+                                            </div>
+                                            <div *ngFor="let filter of value.answerList;let k=index">
+                                                <div *ngIf="filter.isCorrect=='Y'" class="right-answer">参考答案：{{answerList[k]}}</div>
+                                            </div>
+                                            <div *ngIf="value.queAnalysis">
+                                                <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:DUOX多选题 -->
+                                    <div *ngIf="value.baseCode=='DUOX'" class="DUOX">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div *ngFor="let singlechoose of value.answerList;let n=index " class="single-choose">
+                                                <span class="answerspan clearfix">
+                                                        <input disabled type='checkbox' [checked]="singlechoose.isCorrect=='Y'" name={{singlechoose.examQueId}} /> {{answerList[n]+'、'}}
+                                                        <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="epHtmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                                                <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                                </span>
+                                            </div>
+                                            <div class="mc-answer">
+                                                <span>参考答案：</span>
+                                                <span *ngFor="let mcright of value.answerList;let k=index">
+                                                          <span *ngIf="mcright.isCorrect=='Y'">{{answerList[k]}}</span>
+                                                </span>
+                                            </div>
+                                            <div *ngIf="value.queAnalysis">
+                                                <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--typeCode"PD"判断题  -->
+                                    <div *ngIf="value.baseCode=='PD'" class="PD">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                                                <span class="answer-style">参考答案：</span>
+                                                <span *ngIf="singlechoose.answerText=='yes'">
+                                                            {{'正确'}}
+                                                        </span>
+                                                <span *ngIf="singlechoose.answerText=='no'">
+                                                            {{'错误'}}
+                                                        </span>
+                                            </div>
+                                            <div *ngIf="value.queAnalysis">
+                                                <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:"PP"匹配题 -->
+                                    <div *ngIf="value.baseCode=='PP'" class="PP">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div *ngFor="let singlechoose of returnPPList(value.answerList,true); let s=index">
+                                                <span>问题{{s+1}}、</span>
+                                                <span class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                            </div>
+                                            <div *ngFor="let singlechooseanswer of returnPPList(value.answerList); let xx=index">
+                                                <span>选项{{xx+1}}、</span>
+                                                <span class="epHtmlText" [innerText]="singlechooseanswer.answerText"></span>
+                                            </div>
+                                            <div class="pp-border">
+                                                <span class="right-answer PP-answer">参考答案：</span>
+                                                <div *ngFor="let singletest of returnPPList(value.answerList,true); let s=index">
+                                                    <span>问题{{s+1}}：</span>
+                                                    <span *ngFor="let singleanswer of returnPPList(value.answerList); let k=index">
+                                              <span *ngIf="singletest.isCorrect==singleanswer.answer">
+                                                选项{{k+1}}
+                                              </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="value.queAnalysis">
+                                                <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:"TK"填空题 -->
+                                    <div *ngIf="value.baseCode=='TK'" class="TK">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div class="answer-style">参考答案：</div>
+                                            <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                                                <span *ngIf="singlechoose.isCorrect=='Y'">
+                                                    第{{singlechoose.answer+1}}空、
+                                                    <span class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="value.queAnalysis">
+                                            <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:"JD"简答题 -->
+                                    <div *ngIf="value.baseCode=='JD'" class="JD">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div class="answer-style">参考答案：</div>
+                                            <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                                                <!-- <span *ngIf="singlechoose.isCorrect=='Y'">
+                                                            {{' '+singlechoose.answerText}}
+                                                        </span> -->
+                                                <span *ngIf="singlechoose.isCorrect=='Y'">
+                                                        <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="epHtmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe">{{singlechoose.answerText}}</span>
+                                                <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="value.queAnalysis">
+                                            <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:"ALFX" 案例分析题 -->
+                                    <div *ngIf="value.baseCode=='ALFX'" class="ALFX">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div class="answer-style">参考答案：</div>
+                                            <div *ngFor="let singlechoose of value.answerList " class="single-choose">
+                                                <span *ngIf="singlechoose.isCorrect=='Y'">
+                                                    <span *ngIf="singlechoose.isBigText=='true'||singlechoose.isBigText==true" class="epHtmlText" [innerHtml]="singlechoose.answerText|innerHtmlPipe"></span>
+                                                <span *ngIf="singlechoose.isBigText!='true'&&singlechoose.isBigText!=true" class="epHtmlText" [innerText]="singlechoose.answerText"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="value.queAnalysis">
+                                            <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="value.queAnalysis|innerHtmlPipe"></span></div>
+                                        </div>
+                                    </div>
+                                    <!-- typeCode:"YDLJ"阅读理解题 -->
+                                    <div *ngIf="value.baseCode=='YDLJ'" class="YDLJ">
+                                        <div *ngIf="singleQuestionId==value.queId" class="show-question">
+                                            <div *ngFor="let ydsingle of value.childList ;let i = index" class="single-choose">
+                                                <!-- 阅读理解题里有判断题填空题单选多选案例分析 -->
+                                                <div class="question-type-score">
+                                                    <span class="question-order">{{i+1 +'、'}}{{ydsingle.typeName}}</span>
+                                                    <span class="quesiton-score">（{{ydsingle.queScore}} 分）</span>
+                                                    <div *ngIf="!paperMessage.isPutout" class="son-question-ctrol">
+                                                        <span class="edit" (click)="handleEdit(ydsingle.typeName,ydsingle.queId,true)">
+                                                                    <i class="anticon anticon-edit"></i>
+                                                                </span>
+                                                        <span *ngIf="i != 0" class="move-up" (click)="handleMove('UP',ydsingle.queId)">
+                                                                    <i class="anticon anticon-arrow-up"></i>
+                                                                </span>
+                                                        <span *ngIf="i != value.childList.length - 1" class="move-down" (click)="handleMove('DOWN',ydsingle.queId)">
+                                                                    <i class="anticon anticon-arrow-down"></i>
+                                                                </span>
+                                                    </div>
+                                                </div>
+                                                <div class="subject">
+                                                    <span *ngIf="ydsingle.isBigText=='true'||ydsingle.isBigText==true" class="epHtmlText" [innerHtml]="ydsingle.clobCasual|innerHtmlPipe"></span>
+                                                    <span *ngIf="ydsingle.isBigText!='true'&&ydsingle.isBigText!=true" class="epHtmlText" [innerText]="ydsingle.casual"></span>
+                                                </div>
+                                                <!-- DANX单选 -->
+                                                <div *ngIf="ydsingle.baseCode=='DANX'" class="DANX">
+                                                    <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                                                        <input disabled type='radio' [checked]="ydchoose.isCorrect=='Y'" /> {{answerList[y]+'、'}}
+                                                        <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="epHtmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                                                        <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="epHtmlText" [innerText]="ydchoose.answerText"></span>
+                                                    </div>
+                                                    <div *ngFor="let filter of ydsingle.answerList;let k=index">
+                                                        <div *ngIf="filter.isCorrect=='Y'" class="right-answer">参考答案：{{answerList[k]}}</div>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                                <!-- DUOX多选 -->
+                                                <div *ngIf="ydsingle.baseCode=='DUOX'" class="DUOX">
+                                                    <div *ngFor="let ydchoose of ydsingle.answerList;let y=index " class="single-choose">
+                                                        <input disabled type='checkbox' [checked]="ydchoose.isCorrect=='Y'" name={{ydchoose.examQueId}} /> {{answerList[y]+'、'}}
+                                                        <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="epHtmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe">{{ydchoose.answerText}}</span>
+                                                        <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="epHtmlText" [innerText]="ydchoose.answerText"></span>
+                                                    </div>
+                                                    <div class="mc-answer">
+                                                        <span>参考答案：</span>
+                                                        <span *ngFor="let mcright of  ydsingle.answerList;let k=index">
+                                                              <span *ngIf="mcright.isCorrect=='Y'">{{answerList[k]}}</span>
+                                                        </span>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                                <!-- PD判断 -->
+                                                <div *ngIf="ydsingle.baseCode=='PD'" class="PD">
+                                                    <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                                        <span class="answer-style">参考答案：</span>
+                                                        <span *ngIf="ydchoose.isCorrect=='Y'">
+                                                                    {{'正确'}}
+                                                                </span>
+                                                        <span *ngIf="ydchoose.isCorrect=='N'">
+                                                                    {{'错误'}}
+                                                                </span>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                                <!--  TK填空-->
+                                                <div *ngIf="ydsingle.baseCode=='TK'" class="TK">
+                                                    <div>
+                                                        <div class="answer-style">参考答案：</div>
+                                                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                                            <span *ngIf="ydchoose.isCorrect=='Y'">
+                                                                {{ydchoose.answer+1+'、'}}<span class="epHtmlText" [innerText]="ydchoose.answerText"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                                <!-- 简单题JD -->
+                                                <div *ngIf="ydsingle.baseCode=='JD'" class="JD">
+                                                    <div>
+                                                        <div class="answer-style">参考答案：</div>
+                                                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                                            <span *ngIf="ydchoose.isCorrect=='Y'">
+                                                                <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="epHtmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                                                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="epHtmlText" [innerText]="ydchoose.answerText"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                                <!--  ALFX案例分析题-->
+                                                <div *ngIf="ydsingle.baseCode=='ALFX'" class="ALFX">
+                                                    <div>
+                                                        <div class="answer-style">参考答案：</div>
+                                                        <div *ngFor="let ydchoose of ydsingle.answerList " class="single-choose">
+                                                            <span *ngIf="ydchoose.isCorrect=='Y'">
+                                                                <span *ngIf="ydchoose.isBigText=='true'||ydchoose.isBigText==true" class="epHtmlText" [innerHtml]="ydchoose.answerText|innerHtmlPipe"></span>
+                                                            <span *ngIf="ydchoose.isBigText!='true'&&ydchoose.isBigText!=true" class="epHtmlText" [innerText]="ydchoose.answerText"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="ydsingle.queAnalysis">
+                                                        <div class="right-answer">试题解析：<span class="htmlText" [innerHtml]="ydsingle.queAnalysis|innerHtmlPipe"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div (click)="showQuestion($event,value.queId)" class="click-show-option">
+                                        <i [ngClass]="singleQuestionId==value.queId ? 'anticon anticon-up' : 'anticon anticon-down'"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nz-spin>
+            <nz-modal class="preview-class" [nzVisible]="previewModel" [nzTitle]="'预览试卷'" [nzWidth]="900" [nzContent]="modalContent1" (nzOnCancel)="handleCancelViewModel()" (nzOnOk)="handleOkViewModel()">
+                <ng-template #modalContent1>
+                    <spk-test-view *ngIf="previewModel" [view]="previewModel" [url]="'/api/exam/paper/show'" [params]="previewEpIds"></spk-test-view>
+                </ng-template>
+            </nz-modal>
+            <nz-modal class="preview-class preview-class-Partition" [nzVisible]="previewPartitionModel" [nzWidth]="900" [nzTitle]="'预览分区'" [nzContent]="modalContent" (nzOnCancel)="handleCancelPreviewModel()" (nzOnOk)="handleOkPreviewModel()">
+                <ng-template #modalContent>
+                    <spk-test-view *ngIf="previewPartitionModel" [view]="previewPartitionModel" [url]="'/api/exam/paper/partition/show'" [params]="previewIds"></spk-test-view>
+                </ng-template>
+            </nz-modal>
+            <div class="go-back">
+                <button [routerLink]="['/exam/exam-paper']" [queryParams]="link" nz-button [nzType]="'primary'">
+                    <span>完成</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

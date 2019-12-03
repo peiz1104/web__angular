@@ -1,0 +1,97 @@
+[[project-structure]]
+= 工程结构
+
+项目是由 Angular CLI 脚手架初始化而来。因此，项目的基本结构和 Angular 官方倡导的标准项目结构没有多少出入，可以参考  https://angular.cn/guide/quickstart#项目文件概览[项目文件概览] 了解更多信息，这里不再重复解释相同的内容。
+
+////
+== 根目录
+
+
+== src 文件夹
+////
+
+
+== src/app 文件夹
+
+应用代码主要组织在 `src/app` 文件夹中。为了更好的组织和管理代码，这里对代码结构做了一些约定。
+
+[source,bash]
+----
+./src/app
+├── core        <1>
+├── dashboard   <2>
+├── learning    <3>
+├── lib         <4>
+├── mock        <5>
+├── shared      <6>
+├── showcase    <7>
+├── system      <8>
+├── app.component.spec.ts
+├── app.component.ts
+├── app.module.ts
+└── app-routing.module.ts
+----
+<1> Core Module
+<2> Dashboard Module
+<3> Learning Module
+<4> Lib Module
+<5> Mock Module
+<6> Shared Module
+<7> Showcase Module
+<8> System Module
+
+
+=== 关于 CoreModule
+
+参考 https://angular.cn/docs/ts/latest/guide/ngmodule.html#!#shared-module
+公共组件、指令和管道，并且共享给那些需要它们的模块
+
+=== 关于 SharedModule
+
+应用级核心组件和服务，不可复用，随着应用一起加载
+参考 https://angular.cn/docs/ts/latest/guide/ngmodule.html#!#core-module
+
+=== 关于 Console UI Lib 和 Showcase
+
+参考 https://github.com/consoleui/console-ui-ng
+
+[[organize-business-module]]
+== 组织业务模块
+
+如上一节提到的 `learning` 和 `system` 模块，均属于业务模块。业务模块是根据特定的场景和边界划分出来的代码块。业务模块与业务模块之间，关系是相对独立的，依赖关系是单向的。
+
+[TIP]
+====
+关于业务边界的定义和业务模块的拆分，准备后续提供专门的文档进行详细说明，这里不再赘述。
+====
+
+
+[source,bash]
+----
+./src/app/[module-name]
+├── [submodule-name]    <1>
+│   ├── entity          <2>
+│   ├── partial         <3>
+│   ├── service         <4>
+│   ├── public          <5>
+│   ├── views           <6>
+│   ├── utils           <7>
+│   ├── mock            <8>
+│   ├── [submodule-name].module.ts          <9>
+│   ├── [submodule-name]-routing.module.ts  <10>
+│   └── index.ts        <11>
+├── [module-name].module.ts
+├── [module-name]-routing.module.ts
+└── index.ts
+----
+<1> 模块或子模块目录
+<2> 实体对象，一般和API返回的DTO对应
+<3> 片段组件，内部使用片段组件，业务组件
+<4> 服务
+<5> 公共组件，提供给外部使用，业务组件
+<6> 路由组件，路由直接可达的组件
+<7> 工具
+<8> mock
+<9> 子模块定义
+<10> 子模块路由定义
+<11> 语言级别模块导出文件，一般导出 `public` `entity` `service` `mock` 和  `[SubmoduleName]Module`

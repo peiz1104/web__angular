@@ -1,0 +1,123 @@
+<div class="work-add">
+    <form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+        <h5 class="my-3">基本信息</h5>
+        <div class="row">
+            <div class="col-5 push-7 order-2">
+                <div>
+                    <label>课程封面</label>
+                    <cui-fileupload name="file" mode="image" [imageHolder]="getFormControl('imageUrl').value" url="/api/upload/file" [auto]="true" (uploadComplete)="onImageUpload($event)"></cui-fileupload>
+                    <br>
+                    <span class="text-muted">
+                                <i class="fa fa-info-circle text-info"></i> 可以在此处上传封面图片。
+                                格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                                图片尺寸建议最小200*120，比例5:4
+                            </span>
+                </div>
+            </div>
+            <div class="col-7 pull-5 order-1">
+
+                <!-- <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label >课件文件</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="18">
+                                    <cui-fileupload mode="file" name="files" url="/api/upload/files" [auto]="true" (uploadComplete)="onFileUpload($event)" [maxFileSize]="1024 * 1024 * 1024" accept=".zip,.mp4" ></cui-fileupload>
+                                    <br>
+                                    <span class="text-muted">
+                                        <i class="fa fa-info-circle text-info"></i> 使用不大于 1GB的课件，支持ZIP和MP4文件，使用ZIP格式上传需要指定起始播放文件</span>
+                                </div>
+                            </div>
+                            <div *ngIf="getFormControl('fileType').value == 'zip' " nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label for="startFileName" nz-form-item-required>起始播放文件</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="17">
+                                    <nz-input formControlName="startFileName" [nzPlaceHolder]="'请输入起始播放文件路径'"></nz-input>
+                                    <div nz-form-explain *ngIf="validateForm.controls.startFileName.dirty&&validateForm.controls.startFileName.hasError('required')">Zip格式课件包必须设置起始播放文件路径，例如index.html</div>
+                                </div>
+                            </div> -->
+
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name" nz-form-item-required>标题</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="getFormControl('name')" nz-col [nzSpan]="18">
+                        <nz-input formControlName="name" [nzDisabled]="!editable" [nzPlaceHolder]="''"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">标题不能为空</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="owner" nz-form-item-required>所有者</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="17" [nzValidateStatus]="getFormControl('owner')">
+                        <div class="analog" (click)="showPerson()">
+                            <p *ngIf="selection?.length == 0">请选择所有者</p>
+                            <ul *ngIf="selection?.length != 0">
+                                <li *ngFor="let one of selection;">{{one.username}}</li>
+                            </ul>
+                            <i class="anticon anticon-search"></i>
+                        </div>
+                    </div>
+                    <div nz-col class="del-person" [nzSpan]="1" (click)="delPerson()">
+                        <i class="anticon anticon-delete"></i>
+                    </div>
+                    <div nz-form-explain class="text-danger" *ngIf="getFormControl('owner').dirty&&getFormControl('owner').hasError('required')">请选择所有者</div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label nz-form-item-required>作品分类</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="18" [nzValidateStatus]="getFormControl('category')">
+                        <spk-ugc-activity-category-select formControlName="category" [activityId]="activityId"></spk-ugc-activity-category-select>
+                        <div nz-form-explain class="text-danger" *ngIf="getFormControl('category').dirty&&getFormControl('category').hasError('required')">请选择分类</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="intro">描述</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.intro" nz-col [nzSpan]="18">
+                        <nz-input [nzRows]="4" [nzType]="'textarea'" [nzDisabled]="!editable" formControlName="intro" [nzPlaceHolder]="'请输入内容描述'"></nz-input>
+                    </div>
+                </div>
+
+                <!-- <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label nz-form-item-required>是否发布</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSpan]="18">
+                                    <nz-switch formControlName="isPublished"></nz-switch>
+                                </div>
+                            </div> -->
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-7">
+                <div nz-form-item nz-row>
+                    <div nz-col [nzOffset]="6" [nzSpan]="12" nz-form-control>
+                        <ng-container [ngTemplateOutlet]="actionsViewRef || defaultActions"></ng-container>
+
+                        <!-- <button nz-button (click)="resetForm($event)">Reset</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<ng-template #defaultActions>
+    <button nz-button [nzType]="'primary'" [nzLoading]="loading" [disabled]="!editable" (click)="_save($event)">保存</button>
+</ng-template>
+<nz-modal [nzWidth]="800" [nzVisible]="isVisible" [nzFooter]="false" [nzTitle]="'报名用户列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <spk-ugc-activity-work-persons *ngIf="isVisible" (selected)="persons($event)" [selection]="selection" [id]="activityId"></spk-ugc-activity-work-persons>
+    </ng-template>
+</nz-modal>

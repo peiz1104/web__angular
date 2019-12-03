@@ -1,0 +1,149 @@
+<div class="bg-white px-4">
+  
+    <div class="page-header">
+      <h5 class="page-title">{{entity?.name}} : 自定义属性</h5>
+
+      <div class="actions pull-right">
+        <button class="btn btn-secondary" [routerLink]="['../../']">返回实体列表 <i class="fa fa-level-up"></i></button>
+      </div>
+    </div>
+    <p class="mb-4">定义自定义属性, 以存储所有此类对象 (如用户) 的其它信息。当管理对象属性时, 既可以手动输入属性值, 也可以从下拉列表中选择属性值。</p>
+    
+    <div class="page-body">
+      <!-- <nz-alert [nzType]="'info'" [nzMessage]="'列表显示的是系统中可自定义属性的对象，点击对象名称对对象的属性进行配置。'" 
+      [nzShowIcon]="true" [nzCloseable]="true"></nz-alert> -->
+  
+      <div class="mt-4"></div>
+  
+      <div class="row">
+        <div class="col-3">
+          <ng-container *ngTemplateOutlet="attributeList"></ng-container>
+        </div>
+        <div class="col-9">
+          <ng-container *ngTemplateOutlet="attributeProps"></ng-container>
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <ng-template #attributeList>
+    <div *ngIf="entity.isExtendible" class="p-3 text-center bg-light border-secondary mb-4 text-secondary" (click)="addAttribute()">
+      <i class="fa fa-lg fa-plus"></i>
+    </div>
+    <div *ngIf="!attributes" class="text-secondary">
+      <p>
+        <i class="fa fa-lg fa-info-circle text-info"></i> 该站点还没有对 “{{entity.name}}” 设置自定义属性，请点击上面的 <a class="text-primary" (click)="add()">添加</a> 按钮添加自定义顺序。
+      </p>
+    </div>
+    <ul *ngIf="attributes" class="list-group">
+      <li *ngFor="let attr of attributes" class="list-group-item list-group-item-action" [ngClass]="{'active': attr.id == selected?.id}"
+          (click)="onSelect(attr)">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="title">
+            <span>{{attr.name}}</span>
+          </div>
+          <div class="action">
+            <nz-popconfirm *ngIf="!attr.isInbuilt" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(attr.id)">
+                <button nz-popconfirm type="button" class="btn btn-link text-secondary"><i class="fa fa-remove"></i> <span class="sr-only">移除</span></button>
+            </nz-popconfirm>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </ng-template>
+
+<ng-template #attributeProps>
+  <!-- <nz-tabset nzType="card" nzSize="small">
+      <nz-tab>
+          <ng-template #nzTabHeading>
+              属性
+          </ng-template>
+          
+          <ng-container *ngTemplateOutlet="attributeForm"></ng-container>
+      </nz-tab>
+      <nz-tab>
+          <ng-template #nzTabHeading>
+              值列表
+          </ng-template>
+          form
+      </nz-tab>
+  </nz-tabset> -->
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <h5>{{selected?.name ? '修改属性' + selected?.name : '创建自定义属性'}}</h5>
+      </div>
+      <div class="card-body">
+        <h5>基本信息</h5>
+        <div>
+          <ng-container *ngTemplateOutlet="attributeForm"></ng-container>
+        </div>
+        <div *ngIf="getFormControl('fieldType').value == 'LIST'">
+            <h5>值列表</h5>
+            <div>
+              <ng-container *ngTemplateOutlet="validValuesForm"></ng-container>
+            </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="save()">
+            <span> 保 存 </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #attributeForm>
+  <form nz-form [formGroup]="_form" [nzLayout]="'horizontal'">
+      <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSpan]="4"><label nz-form-item-required>名称</label></div>
+          <div nz-form-control nz-col [nzSpan]="8">
+              <input nz-input formControlName="name" required maxlength="30">
+          </div>
+      </div>
+      <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSpan]="4"><label nz-form-item-required>标识符</label></div>
+          <div nz-form-control nz-col [nzSpan]="8">
+              <input nz-input formControlName="identifier" required maxlength="30">
+          </div>
+      </div>
+      <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSpan]="4"><label nz-form-item-required>值类型</label></div>
+          <div nz-form-control nz-col [nzSpan]="8">
+              <nz-select formControlName="fieldType" [nzPlaceHolder]="'属性值类型'" [nzAllowClear]="false" >
+                <nz-option 
+                    *ngFor="let item of _fieldTypes" 
+                    [nzLabel]="item.label"
+                    [nzValue]="item.value"
+                    [nzDisabled]="item.disabled">
+                </nz-option>
+              </nz-select>
+          </div>
+      </div>
+      <div nz-form-item nz-row>
+          <!-- <div nz-form-label nz-col [nzSpan]="4"><label></label></div> -->
+          <div nz-form-control nz-col [nzSpan]="8" [nzOffset]="4">
+              <label nz-checkbox formControlName="isViewable">
+                  <span>学员可查看</span>
+              </label>
+          </div>
+      </div>
+      <div nz-form-item nz-row>
+          <!-- <div nz-form-label nz-col [nzSpan]="4"><label></label></div> -->
+          <div nz-form-control nz-col [nzSpan]="8" [nzOffset]="4">
+              <label nz-checkbox formControlName="isRequired">
+                  <span>必填/选</span>
+              </label>
+          </div>
+      </div>
+  </form>
+</ng-template>
+
+<ng-template #validValuesForm>
+  <form nz-form [formGroup]="_form" [nzLayout]="'horizontal'">
+      <spk-attribute-valid-value-control formControlName="validValues"></spk-attribute-valid-value-control>
+  </form>
+</ng-template>

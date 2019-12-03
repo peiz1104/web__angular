@@ -1,0 +1,123 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: ['SURVEY:SURVEY_ACT:ADD','SURVEY:SURVEY_ACT:EDIT']}">
+    <div class="page-header" *ngIf="!outSide">
+        <h3 class="page-title">{{surveyPaper.id ? '管理' : '创建'}}调查</h3>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">返回调查列表
+        <i class="fa fa-level-up"></i>
+      </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container">
+            <form [formGroup]="dataForm" class="form-horizontal" nz-form>
+                <div class="form-group">
+                    <label for="name" class="col-form-label col-md-3">
+                     <span class="text-danger">*</span>调查名称</label>
+                    <div class="col-md-9" nz-form-control [nzValidateStatus]="dataForm.controls.name">
+                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入调查名称，最多20个字'"></nz-input>
+                        <div *ngIf="dataForm.controls.name.invalid && (dataForm.controls.name.dirty || dataForm.controls.name.touched)" class="text-danger">
+                            <div *ngIf="dataForm.controls.name.errors.required">
+                                调查名称必填
+                            </div>
+                        </div>
+                        <div class="text-danger" *ngIf="dataForm.controls.name.dirty&&dataForm.controls.name.errors?.maxlength">名称最多20个字!</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-form-label col-md-3">调查描述</label>
+                    <div class="col-md-9">
+                        <nz-input formControlName="description" [nzPlaceHolder]="'请控制字符在200个以内'" [nzType]="'textarea'" [nzRows]="'3'"></nz-input>
+                        <div class="text-danger" *ngIf="dataForm.controls.description.dirty&&dataForm.controls.description.errors?.maxlength">字数最多200个字</div>
+                    </div>
+                </div>
+
+                <div class="form-group" *ngIf="!outSide">
+                    <label for="name" class="col-form-label col-md-3">
+                    <span class="text-danger">*</span>所属组织</label>
+                    <div class="col-md-9">
+                        <spk-user-group-select formControlName="userGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+                        <div *ngIf="userGroupValidate" class="text-danger">所属组织必填</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-form-label col-md-3">图片</label>
+                    <div class="col-md-9">
+                        <cui-fileupload [imageHolder]="imageValue" accept=".jpg,.bmp,.png" name="files" mode="image" url="/api/upload/files" [auto]="true" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+                        <br>
+                        <span class="text-muted">
+                        <i class="fa fa-info-circle text-info"></i> 可以在此处上传封面图片。
+                        格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                        图片尺寸建议最小200*120，比例5:4</span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="startDate" class="col-form-label col-3">
+                    <span class="text-danger">*</span>开始时间</label>
+                    <div class="col-9">
+                        <nz-datepicker style="width: 40%;" (ngModelChange)="_startDate=$event;_startValueChange()" formControlName="startDate" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        <div *ngIf="startValidate" class="text-danger">开始时间必填</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endDate" class="col-form-label col-3">
+                    <span class="text-danger">*</span>结束时间</label>
+                    <div class="col-9">
+                        <nz-datepicker style="width: 40%;" (ngModelChange)="_endDate=$event;_endValueChange()" [nzDisabledDate]="_disabledEndDate" formControlName="endDate" [nzFormat]="'YYYY-MM-DD'"></nz-datepicker>
+                        <div *ngIf="endValidate" class="text-danger">结束时间必填</div>
+                    </div>
+                </div>
+
+                <div class="form-group d-none">
+                    <label for="name" class="col-form-label col-md-3">
+                    <span class="text-danger">*</span>使用问卷</label>
+                    <div class="col-md-9 paper-input">
+                        <input type="hidden" formControlName="paper">
+                        <nz-input formControlName="paperName" (click)="openPapersDialog()" [nzReadonly]="true"></nz-input>
+                        <!-- <a [routerLink]="['../../','paper','add']" *ngIf="!outSide">创建问卷</a> -->
+                        <div *ngIf="paperValidate" class="text-danger">问卷必填</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-form-label col-3">
+                    <span class="text-danger">*</span>匿名作答</label>
+                    <div class="col-9">
+                        <nz-radio-group formControlName="isAnonymous">
+                            <label nz-radio [nzValue]="'ALLOW'">
+                                <span>是</span>
+                            </label>
+                            <label nz-radio [nzValue]="'REJECT'">
+                                <span>否</span>
+                            </label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-form-label col-md-3"></label>
+                    <div class="col-md-9">
+                        <button nz-button [nzType]="'primary'" (click)="onSubmit()" [nzLoading]="isLoading" [disabled]="dataForm.invalid">保存</button>
+                        <button nz-button [nzType]="'default'" (click)="onCancel()" *ngIf="!outSide">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ng-template #paperLookupDialog>
+    <h5 cui-layer-title>选择问卷</h5>
+    <div cui-layer-content style="min-width: 1000px; min-height: 560px;">
+        <spk-paper-lookup (selectionChange)="selectPaper($event)"></spk-paper-lookup>
+    </div>
+    <div cui-layer-actions class="text-right">
+        <button type="button" class="btn btn-primary" (click)="paperLookupOk()">确定</button>
+        <button type="button" class="btn btn-secondary" (click)="paperLookupCancel()">取消</button>
+    </div>
+</ng-template>

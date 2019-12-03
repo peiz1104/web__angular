@@ -1,0 +1,55 @@
+<div class="container-fluid1">
+    <div>
+        <div class="mt-4">
+            <div class="clearfix">
+                <div class="board" *ngFor="let board of boards">
+                    <nz-card>
+                        <ng-template #body>
+                            <div class="d-flex">
+                                <!-- <nz-avatar [nzShape]="'square'" [nzSize]="'large'" [nzIcon]="'layout'" class="mr-3"></nz-avatar> -->
+                                <div style="margin-right:30px">
+                                    <img cui-lazy-load [src]="board.cover" [alt]="" width="100px" height="58px">
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="mb-2 text-truncate">
+                                        <nz-tooltip [nzTitle]="board.name" [nzPlacement]="'topLeft'">
+                                            <div class="line-limit-length">
+                                                <a nz-tooltip="board.name" href="javascript:;" (click)="goTopicList(board.id)">{{board.name}}</a>
+                                            </div>
+                                        </nz-tooltip>
+                                    </h5>
+                                    <!-- <nz-tooltip [nzTitle]="board.description ? board.description : '暂无简介'">
+                                        <p class="p-show" nz-tooltip>{{board.description ? board.description : '暂无简介'}}</p>
+                                    </nz-tooltip> -->
+                                    <p class="p-show">
+                                        <span *ngIf="board.boardType=='NORMAL'">普通讨论区</span>
+                                        <span *ngIf="board.boardType=='QA'">问答讨论区</span>
+                                    </p>
+                                    <p class="p-show">
+                                        <span *ngIf="board.isPublished">已发布</span>
+                                        <span *ngIf="!board.isPublished">未发布</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #extra>
+                            <a href="javascript:;" (click)="setting(board.id)">编辑 |</a>
+                            <nz-popconfirm [nzTitle]="'确定要删除这个讨论区吗？'" (nzOnConfirm)="confirmDelete(board.id)">
+                                <a nz-popconfirm href="javascript:;">删除</a>
+                            </nz-popconfirm>
+                        </ng-template>
+                    </nz-card>
+                </div>
+
+                <div class="board-add">
+                    <a href="javascript:;" (click)="addBoard()">
+
+                        <div class="text-center">
+                            <i class="anticon anticon-plus" style="font-size: 2rem; color: #fff; line-height: 3.33rem;"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

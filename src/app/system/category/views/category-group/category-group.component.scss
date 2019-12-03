@@ -1,0 +1,18 @@
+:host ::ng-deep {
+    .ant-tabs-bar {
+        margin-bottom: 0;
+
+        .ant-tabs-tab {
+            a {
+                color: unset;
+                text-decoration: none;
+                display: block;
+                padding: 8px 20px;
+                margin: -8px -20px;
+            }
+        }
+    }
+}
+.category-tree-wrapper {
+    overflow: auto;
+}

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">{{subjectActivity.name}}: 资料
+        <small></small>
+      </h3>
+    </div>
+  
+    <div class="page-body">
+      <ng-container *ngIf="!subjectActivity?.materialGroupId">
+        <p class="text-secondary mb-2">
+          <i class="fa fa-info-circle fa-lg text-info"></i> 该专区的资料管理功能没有初始化，请点击下面的按钮初始化资料管理。</p>
+        <button type="button" class="btn btn-secondary" (click)="initGroup()">初始化专区资料管理</button>
+      </ng-container>
+  
+      <ng-container *ngIf="!!subjectActivity?.materialGroupId">
+        <spk-materials-list [materialGroupId]="subjectActivity?.materialGroupId"></spk-materials-list>
+      </ng-container>
+    </div>
+  </div>

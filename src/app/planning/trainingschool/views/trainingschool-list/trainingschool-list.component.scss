@@ -1,0 +1,27 @@
+:host ::ng-deep {
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    .form-box {
+        border: 1px solid #ccc;
+        padding: 10px 0;
+        margin: 10px 0;
+        .form-row {
+            width: 65%;
+            margin: 0 auto;
+            padding: 10px 0;
+            .ant-form-item {
+                margin: 0;
+            }
+        }
+        .ant-form-item-label {
+            label {
+                margin: 0;
+            }
+        }
+    }
+    button{
+        cursor: pointer;
+    }
+}

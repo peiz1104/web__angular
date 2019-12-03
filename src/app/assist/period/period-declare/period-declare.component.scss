@@ -1,0 +1,208 @@
+:host::ng-deep {
+    .period-declare-work {
+        width: 100%;
+        .search-condition {
+            background: #fff; // padding: 0px 0px 0px 24px;
+            position: relative;
+            height: 66px;
+            .ant-form-item-label {
+                label {
+                    color: #878787;
+                }
+            }
+            .complex-search-bar-search-box {
+                position: absolute;
+                top: -6px;
+                right: 14px;
+            }
+            .declare-mutiple {
+                position: absolute;
+                left: 30px;
+                top: 34px;
+            }
+        }
+        .period-list {
+            padding: 0px 10px;
+            min-height: 50px;
+            margin-top: -18px;
+            width: 100%;
+            .list-title {
+                margin-bottom: 10px;
+                position: relative;
+                .title-tip {
+                    color: #232323;
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding-left: 10px;
+                    font-family: 'Microsoft Yahei';
+                }
+                .button-group {
+                    position: absolute;
+                    right: 10px;
+                    top: -2px;
+                }
+            }
+            .list-detail {
+                background: #fff;
+                min-height: 196px;
+                margin: 16px auto;
+                width: calc(100% - 20px);
+                position: relative;
+                .spin-style-set>div>.ant-spin {
+                    width: 100%;
+                    position: relative;
+                }
+                .ant-spin-container>div>.ant-table {
+                    overflow: unset;
+                    width: 100%;
+                }
+                .ant-table-thead>tr>th {
+                    background: #f6f6f6;
+                }
+                .no-data {
+                    position: absolute;
+                    top: 66px;
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                    width: 100%;
+                    z-index: 13;
+                    i {
+                        color: #007bbf;
+                    }
+                    span {
+                        color: #888;
+                        font-size: 14px;
+                        margin-left: 2px;
+                    }
+                }
+                .ant-table-placeholder {
+                    height: 60px;
+                    span {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+    .refus-modal {
+        .show-message-box {
+            width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            background: #eef6fb;
+            .left-box {
+                float: left;
+                width: 398px;
+                .sigle-box {
+                    position: relative;
+                    min-height: 36px;
+                    .lable {
+                        font-size: 14px;
+                        font-weight: bold;
+                        position: absolute;
+                        right: 300px;
+                        ;
+                    }
+                    .content {
+                        font-size: 14px;
+                        position: absolute;
+                        left: 112px;
+                        width: 280px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                }
+            }
+            .right-box {
+                float: left;
+                width: 399px;
+                border-left: 1px solid #e5e5e5;
+                .sigle-box {
+                    position: relative;
+                    min-height: 36px;
+                    .lable {
+                        font-size: 14px;
+                        font-weight: bold;
+                        position: absolute;
+                        right: 300px;
+                    }
+                    .content {
+                        font-size: 14px;
+                        position: absolute;
+                        left: 110px;
+                        width: 280px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        .file-list-upload {
+                            .file-item,
+                            .upload-success {
+                                border: 1px dashed #28a745;
+                                margin: .225rem 0;
+                                border-radius: 2px;
+                                position: relative;
+                                height: 36px;
+                                .progress {
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    -moz-opacity: .5;
+                                    opacity: .5;
+                                    display: flex;
+                                    overflow: hidden;
+                                    font-size: 0.75rem;
+                                    background-color: #e9ecef;
+                                    border-radius: 0.25rem;
+                                    margin-bottom: 0px !important;
+                                }
+                                .item-remove {
+                                    position: absolute;
+                                    right: .75rem;
+                                    top: .5rem;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                    .content-file {
+                        position: relative;
+                    }
+                }
+            }
+        }
+        .btn-group-show {
+            text-align: center;
+            height: 50px;
+            padding-top: 10px;
+        }
+    }
+    .reson-modal {
+        .ant-modal-body {
+            /*.tip-title{
+          line-height: 24px;
+          color:red;
+      }*/
+            #reson-text {
+                padding: 10px;
+                width: 380px;
+                resize: none;
+            }
+        }
+    }
+    .refuse-modal {
+        #review {
+            width: 360px;
+            padding: 8px;
+            resize: none;
+        }
+        .opear-btn {
+            text-align: center;
+            margin-top: 15px;
+        }
+    }
+}

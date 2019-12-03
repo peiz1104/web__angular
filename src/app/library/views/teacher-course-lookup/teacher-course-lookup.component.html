@@ -1,0 +1,74 @@
+<div class="px-4">
+    <div class="page-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" [selectType]="selectType"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="col2-1" let-row="row">
+                <h5>{{row.name}}</h5>
+                <span>{{row.code}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="col2-2" let-row="row">
+                <div>{{getCourseTypeText(row.courseType)}}</div>
+                <div>课时: {{row.period}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="col2-3" let-row="row">
+                <div>{{row.userGroup?.name}}</div>
+                <div>{{row.category?.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colIsPublished" let-row="row">
+                <ng-container *ngIf="row.isArchived">
+                    <span class="text-secondary">已归档</span>
+                </ng-container>
+                <ng-container *ngIf="!row.isArchived">
+                    <span *ngIf="row.isPublished" class="text-success">已发布</span>
+                    <span *ngIf="!row.isPublished" class="text-warning">未发布</span>
+                </ng-container>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <div class="clearfix">
+        <button class="pull-right" nz-button [nzType]="'default'" (click)="clear()">清空</button>
+        <button class="pull-right mr-3" nz-button [nzType]="'primary'" (click)="selectOK()">确定</button>
+    </div>
+</div>
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+
+            <div nz-form-control>
+                <div nz-col [nzSpan]="10">
+                    <spk-category-select class="select-choose-category" formControlName="category" placeholder="按分类搜索"></spk-category-select>
+                </div>
+            </div>
+
+
+            <div nz-form-control>
+                <nz-select formControlName="status" style="width: 120px;" [nzPlaceHolder]="'全部'">
+                    <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                    </nz-option>
+                    <nz-option *ngFor="let ls of _status" [nzLabel]="ls.label" [nzValue]="ls.value">
+                    </nz-option>
+                </nz-select>
+            </div>
+
+            <div nz-form-control>
+                <div nz-col [nzSpan]="10" style="width: 150px;">
+                    <nz-input formControlName="name" [nzPlaceHolder]="'请输入课程名称'"> </nz-input>
+                </div>
+            </div>
+            <div class="search-btn-course" nz-form-control>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询
+                </button>
+            </div>
+        </div>
+    </form>
+</ng-template>

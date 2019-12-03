@@ -1,0 +1,92 @@
+<div class="research-message-box">
+    <div class="title">详细信息</div>
+    <div class="detail-show">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <div class="card">
+                <div class="personal-message-list">
+                    <div class="left">
+                        <div class="single-box">
+                            <span class="lable">阶段名称：</span>
+                            <span class="content">{{detailData.name}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">开始时间：</span>
+                            <span class="content">{{detailData.startDate}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">负责人：</span>
+                            <span class="content">{{detailData.createdByDisplayName}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">里程进度：</span>
+                            <span class="content">
+                                <nz-progress [ngModel]="detailData?.mileageProgress" [nzStrokeWidth]="5" [nzStatus]="'active'"></nz-progress>
+                            </span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">人天标准：</span>
+                            <span class="content">{{detailData.standardCost}} 元</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">项目人数：</span>
+                            <span class="content">{{detailData.greenDreamProject?.trainingNumber}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">研发费：</span>
+                            <span class="content">{{detailData.researchCost}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">参研单位：</span>
+                            <span class="content">{{detailData.userGroupNames}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">阶段性计划：</span>
+                            <span class="content">{{detailData.plan}}</span>
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <div class="single-box">
+                            <span class="lable">阶段编号：</span>
+                            <span class="content">{{detailData.phaseNumber}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">结束时间：</span>
+                            <span class="content">{{detailData.endDate}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">研发阶段数：</span>
+                            <span class="content">第{{detailData.phaseNo}}阶段</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable"> 研发费用预算 ：</span>
+                            <span class="content">{{detailData.trainingBudget}} 元</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">参与人数：</span>
+                            <span class="content">{{detailData.peopleNumber}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">交通费: </span>
+                            <span class="content">{{detailData.transportCosts}}元</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">会议费：</span>
+                            <span class="content">{{detailData.researchCost}} 元</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable"> 阶段性目标 ：</span>
+                            <span class="content">{{detailData.target}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">备注：</span>
+                            <span class="content">{{detailData.remark}}</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </nz-spin>
+    </div>
+</div>

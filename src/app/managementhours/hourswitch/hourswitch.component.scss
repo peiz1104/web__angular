@@ -1,0 +1,70 @@
+:host::ng-deep {
+    .hour-switch-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 16px;
+        .list-tool-bar {
+            margin-bottom: 0px;
+        }
+        .simple-search-bar-search-box {
+            position: absolute;
+            top: -5px;
+            left: 154px;
+        }
+        .placehoder-show {
+            color: #ccc;
+            font-size: 12px;
+            position: absolute;
+            top: 4px;
+            left: 4px;
+        }
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-active {
+                color: #108ee9;
+            }
+        }
+        .btn-group {
+            button {
+                // cursor: pointer;
+                // margin-right: 12px;
+                // position: relative;
+                // padding-left: 18px;
+                // i {
+                //     position: absolute;
+                //     top: 2px;
+                //     left: 0px;
+                // }
+            }
+        }
+    }
+    .ant-modal {
+        .cancel-btn {
+            display: inline-block;
+            height: 30px;
+            width: 60px;
+            background: #007bbf;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 12px;
+            border-radius: 6px;
+        }
+        .not-allowed {
+            cursor: not-allowed;
+        }
+        .form-group {
+            width: 100%;
+            .ant-col-10 {
+                width: 94%;
+            }
+        }
+    }
+    .ant-row,
+    .ant-form-item {
+        width: 100%;
+    }
+}

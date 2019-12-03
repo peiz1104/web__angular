@@ -1,0 +1,53 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:VIEW'}">
+    <!-- *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:VIEW'}" -->
+    <div class="page-header">
+        <h3 class="page-title">模板列表
+            <small>查看系统中现有的模板</small>
+        </h3>
+    </div>
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="templates" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input name="searchtext" [nzPlaceHolder]="'请输入模板名'" [(ngModel)]="searchtext"></nz-input>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <button type="button" class="btn btn-primary" (click)=showEdit() *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:ADD'}">
+                    <i class="fa fa-plus"></i> 创建模板</button>
+            </ng-template>
+            <ng-template cuiColTpl="name" let-row="row">
+                <a (click)="showEdit(row);" href="javascript:;" class="text-info">{{row.name}}</a>
+            </ng-template>
+            <ng-template cuiColTpl="isDefaultTpl" let-row="row">
+                <!--  *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:PUBLISH'}" -->
+                <div *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:PUBLISH'}">
+                    <a (click)="onDefault(row);" *ngIf="!row.isDefault" class="text-secondary">非默认</a>
+                    <a (click)="onDefault(row);" *ngIf="row.isDefault" class="text-success">默认</a>
+                </div>
+            </ng-template>
+            <ng-template #rowActions let-row="row">
+                <a href="javascript:;" class="text-info" [routerLink]="[row.id, 'module']" *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:EDIT'}">管理模板</a>
+                <span *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:REMOVE'}">
+                    <span *spkAuthzIf="{hasPermission: 'PORTAL:HOME_TPL:EDIT'}">|</span>
+                    <nz-popconfirm *ngIf="!row.isDefault" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row)">
+                        <a nz-popconfirm class="text-danger">删除</a>
+                    </nz-popconfirm>
+                    <!-- <a href="javascript:;" *ngIf="!row.isDefault" class="text-danger" (click)="delete(row)">删除</a> -->
+                    <span *ngIf="row.isDefault" class="text-secondary">删除</span>
+                </span>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+
+<nz-modal [nzVisible]="isEdit" [nzFooter]="false" [nzTitle]="'管理模板'" [nzContent]="modalContent" (nzOnCancel)="handleCancel()">
+    <ng-template #modalContent>
+        <spk-home-template-edit *ngIf="isEdit" [templateId]="templateId" (cancel)=handleCancel()></spk-home-template-edit>
+    </ng-template>
+</nz-modal>

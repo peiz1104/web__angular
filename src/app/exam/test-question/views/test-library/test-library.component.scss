@@ -1,0 +1,31 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-07 09:52:09
+ * @Last Modified by:   mozhengqian
+ * @Last Modified time: 2017-11-07 09:52:09
+ */
+
+.test-library-body {
+    .content-body {
+        margin: 5px 15px;
+    }
+    .test-library-li {
+        padding-right: 50px;
+        margin-bottom: 10px;
+        height: 150px;
+        overflow: hidden;
+        word-wrap: break-word;
+        word-break: break-all;
+        button{
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+        }
+        .test-library-info {
+            color: #999;
+            margin: 10px 0;
+            // width: 80%;
+        }
+    }
+}

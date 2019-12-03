@@ -1,0 +1,183 @@
+<div class="teacher-base-information">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <div *ngIf="!data" class="no-data">
+            <i class="iconfont icon-frown"></i>
+            <span>暂无老师基本信息数据</span>
+        </div>
+        <div *ngIf="data" class="teacher-information-box">
+            <div class="left-content">
+                <div class="message-single">
+                    <span class="title">讲师姓名：</span>
+                    <span *ngIf="rank!=='External'" class="content">{{data?.user.displayName}}</span>
+                    <span *ngIf="rank=='External'" class="content">{{data.name}}</span>
+                </div>
+
+
+                <div class="message-single">
+                    <span class="title">性别：</span>
+                    <span *ngIf="rank!=='External'" class="content">{{data?.user.sex=='FAMALE'?'女':'男'}}</span>
+                    <span *ngIf="rank=='External'" class="content">{{data.sex=='FAMALE'?'女':'男'}}</span>
+                </div>
+
+                <div class="message-single">
+                    <span class="title">出生日期：</span>
+                    <span class="content" *ngIf="rank!=='External'">{{(data?.user?.userAttribute?.birthday)||'暂无'}}</span>
+                    <span class="content" *ngIf="rank=='External'">{{(data.birthday|date:'yyyy-MM-dd')||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">联系方式：</span>
+                    <span class="content" *ngIf="rank!=='External'">{{data?.user.phoneNumber||'暂无'}}</span>
+                    <span class="content" *ngIf="rank=='External'">{{data.phoneNumber||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">电子邮件：</span>
+                    <span class="content" *ngIf="rank!=='External'">{{data.user?.email||'暂无'}}</span>
+                    <span class="content" *ngIf="rank=='External'">{{data.email||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">通信地址：</span>
+                    <span class="content">{{data.address ||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">所属专业：</span>
+                    <span class="content">{{data.major||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">毕业院校：</span>
+                    <span class="content">{{data.schoolName||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">毕业时间：</span>
+                    <span class="content">{{(data.graduationTime|date:'yyyy-MM-dd')|| '暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">最高学历：</span>
+                    <span class="content">{{geteducation(data.education)||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">学位：</span>
+                    <span class="content">{{getdegree(data.degree)||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">入职时间：</span>
+                    <span class="content">{{(data.inductionTime|date:'yyyy-MM-dd')||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank=='PartTime'" class="message-single">
+                    <span class="title">星级：</span>
+                    <span class="content">{{getStar(data.star)||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">讲师简介：</span>
+                    <span class="content">{{data.description||'暂无'}}</span>
+                </div>
+
+            </div>
+            <div class="right-content">
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">讲师工号：</span>
+                    <span class="content">{{data?.user.username}}</span>
+                </div>
+
+                <div class="message-single">
+                    <span class="title">讲师编号：</span>
+                    <span class="content">{{data.teacherNo}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">讲师类型：</span>
+                    <span class="content">{{rank=='FullTime'?'专职讲师':(rank=='PartTime'?'兼职讲师':'外部讲师')}}</span>
+                </div>
+
+
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">证件类型：</span>
+                    <span class="content">{{getCardType(data.CardType)||'暂无'}}</span>
+                </div>
+
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">证件号码：</span>
+                    <span class="content">{{data.CardNumber||'暂无'}}</span>
+                </div>
+
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">职位：</span>
+                    <span class="content">{{data.position||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">职称：</span>
+                    <span class="content">{{data.title||'暂无'}}</span>
+                </div>
+
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">认定职级：</span>
+                    <span class="content">{{getRank(data.rank)||'暂无'}}</span>
+                </div>
+
+
+
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">讲师资格：</span>
+                    <span class="content">{{getqualifications(data.qualifications)||'暂无'}}</span>
+                </div>
+
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">岗位：</span>
+                    <span class="content">{{data?.user?.userAttribute?.position}}</span>
+                </div>
+
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">讲师级别：</span>
+                    <span class="content">{{getTeacherleve(data.rank)||'暂无'}}</span>
+                </div>
+
+                <div class="message-single">
+                    <span class="title">所属机构：</span>
+                    <span class="content" *ngIf="rank!=='External'">{{data?.user?.userGroup?.name}}</span>
+                    <span class="content" *ngIf="rank=='External'">{{data?.userGroup?.name}}</span>
+                </div>
+
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">任教开始时间：</span>
+                    <span class="content">{{(data.startDate|date:'yyyy-MM-dd')||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">累计课时数：</span>
+                    <span class="content">{{data.classHour||'暂无'}}</span>
+                </div>
+                <div class="message-single">
+                    <span class="title">任职期间平均得分:</span>
+                    <span class="content">{{data.avgScore||'暂无'}}</span>
+                </div>
+
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">所属渠道：</span>
+                    <span class="content">{{getchannel(data.channel)||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank!=='External'" class="message-single">
+                    <span class="title">专业工作小结：</span>
+                    <span class="content">{{data.workSummary||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">培训方向：</span>
+                    <span class="content">{{data.trainingDirection ||'暂无'}}</span>
+                </div>
+                <div *ngIf="rank=='External'" class="message-single">
+                    <span class="title">科研成果：</span>
+                    <span class="content">{{data.researchResult ||'暂无'}}</span>
+                </div>
+
+                <div class="message-single" *ngIf="data.documentInfo?.isPreview && data.documentInfo?.transcodeStatus == 'COMPLETE'">
+                    <span class="title">聘任公文预览：</span>
+                    <!-- <a class="content"  [routerLink]="['../preview',  data.documentInfo?.id]">预览</a> -->
+                    <a class="content" (click)="lookPdf()">预览</a>
+                </div>
+
+            </div>
+        </div>
+    </nz-spin>
+</div>
+<nz-modal *ngIf="isVisible" [nzWidth]="1000" [nzVisible]="isVisible" [nzTitle]="'预览'" [nzContent]="modalContent" [nzFooter]="false"
+    (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <spk-pdf-look [documentInfoId]="data.documentInfo?.id"></spk-pdf-look>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,54 @@
+<form [formGroup]="_form" class="form-horizontal" *ngIf="_form" nz-form>
+    <div class="row">
+        <div class="col-7">
+            <div class="form-group row">
+                <label for="" class="col-3 col-form-label">
+          <i class="fa fa-field-required"></i> 编码</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.code">
+                    <nz-input formControlName="code" (nzBlur)="codeExist()"  (nzFocus)="codeIsExist = false" [nzPlaceHolder]="'请输入组织编码,最大长度20'" [maxlength]="'20'"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('required')">编码必填</div>
+                    <div class="text-danger" *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('maxlength')">编码长度最大20!</div>
+                    <div class="text-danger" *ngIf="codeIsExist">组织编码重复</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-3 col-form-label">
+          <i class="fa fa-field-required"></i> 名称</label>
+                <div class="col-9" nz-form-control [nzValidateStatus]="_form.controls.name">
+                    <nz-input formControlName="name" (nzFocus)="nameIsExist = false" [nzPlaceHolder]="'请输入组织名称'"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">名称必填</div>
+                    <div class="text-danger" *ngIf="nameIsExist">组织名称重复</div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-3 col-form-label"> 组织级别</label>
+                <div class="col-9">
+                    <cui-select [options]="regionTypes" formControlName="regionType" placeholder=""></cui-select>
+                    <!-- <nz-select style="width: 120px;" name="status" formControlName="regionType" [nzPlaceHolder]="''">
+                        <nz-option *ngFor="let ls of regionTypes" [nzLabel]="ls.label" [nzValue]="ls.value">
+                        </nz-option>
+                    </nz-select> -->
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-3 col-form-label">上级部门</label>
+                <div class="col-9">
+                    <spk-user-group-select formControlName="parent" [disabled]="userGroup"></spk-user-group-select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-3 col-form-label">简介</label>
+                <div class="col-9">
+                    <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'5'" [maxlength]="'255'"></nz-input>
+                    <div class="text-danger" *ngIf="getFormControl('description').dirty&&getFormControl('description').hasError('maxlength')">简介长度最大255！</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-9 offset-3">
+                    <button nz-button [nzType]="'primary'" [nzLoading]="loading" [disabled]="_form.invalid" (click)="onSubmit($event)" *spkAuthzIf="{hasPermission: ['SYSTEM:USER_GROUP:ADD', 'SYSTEM:USER_GROUP:EDIT']}">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

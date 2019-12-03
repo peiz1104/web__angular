@@ -1,0 +1,13 @@
+:host ::ng-deep {
+    .document-list-dom {
+        width: 100%;
+        .document-list-left {
+            width: 160px;
+            float: left;
+        }
+        .document-list-right {
+            width: calc(100% - 160px);
+            float: left;
+        }
+    }
+}

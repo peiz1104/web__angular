@@ -1,0 +1,173 @@
+<div class="train-class-file">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>班级文档</small>
+            </h5>
+            <div class="actions pull-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> 上传文档</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-box">
+        <cui-data-table #tableHandle [columns]="columns" [data]="listData?.content" [pagination]="listData" selectType="checkbox"
+            (reload)="reload($event)" [(selection)]="selection">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="name" [nzPlaceHolder]="'请输入文档名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                    <i class="fa fa-search"></i>查询</button>
+                                <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+
+
+            <ng-template #complexSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="name">文档名称</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入文档名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="displayName">是否发布</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-select formControlName="isPublish" [nzPlaceHolder]="'请选择是否发布状态'" nzAllowClear>
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="null">
+                                            </nz-option>
+                                            <nz-option [nzLabel]="'已发布'" [nzValue]="true">
+                                            </nz-option>
+                                            <nz-option [nzLabel]="'未发布'" [nzValue]="false"></nz-option>
+                                        </nz-select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="">是否精品</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-select formControlName="isExcellent" [nzPlaceHolder]="'请选择是否精品'" nzAllowClear>
+                                            <nz-option [nzLabel]="'全部'" [nzValue]="null">
+                                            </nz-option>
+                                            <nz-option [nzLabel]="'精品'" [nzValue]="true">
+                                            </nz-option>
+                                            <nz-option [nzLabel]="'普通'" [nzValue]="false"></nz-option>
+                                        </nz-select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="">转码状态</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <nz-select formControlName="transcodeStatus" [nzPlaceHolder]="'请选择转码状态'" nzAllowClear>
+                                        <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="'无需转码'" [nzValue]="'NEEDLESS'">
+                                        </nz-option>
+                                        <nz-option [nzLabel]="'未开始'" [nzValue]="'NOT_START'"></nz-option>
+                                        <nz-option [nzLabel]="'等待转码'" [nzValue]="'WAITING'"></nz-option>
+                                        <nz-option [nzLabel]="'转码中'" [nzValue]="'TRANSCODING'"></nz-option>
+                                        <nz-option [nzLabel]="'转码完成'" [nzValue]="'COMPLETE'"></nz-option>
+                                        <nz-option [nzLabel]="'转码失败'" [nzValue]="'FAILED'"></nz-option>
+
+                                    </nz-select>
+                                </div>
+                            </div>
+
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-label nz-col [nzSpan]="6">
+                                    <label for="">组织</label>
+                                </div>
+                                <div nz-col [nzSpan]="18">
+                                    <spk-user-group-select mode="multiple" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                </div>
+                            </div>
+
+
+                            <div class="cui-data-table-form-row">
+                                <div class='complex-search-bar-search-box'>
+                                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询</button>
+                                    <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <!-- <button class="btn btn-outline-primary"><i class="fa fa-download"></i> 导出用户</button> -->
+            </ng-template>
+
+            <ng-template cuiColTpl="nameCol" let-row="row">
+                <i *ngIf="row.format=='doc' || row.format=='docx'" class="fa fa-file-word-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='pdf'" class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='ppt' || row.format=='pptx'" class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                <i *ngIf="row.format=='xls' || row.format=='xlsx'" class="fa fa-file-excel-o" aria-hidden="true"></i>
+                <span>{{row.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="convertStatusCol" let-row="row">
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NEEDLESS'">无须转码</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'NOT_START'">未开始</span>
+                <span class="text-success" *ngIf="row.documentInfo.transcodeStatus == 'WAITING'">等待转码</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'TRANSCODING'">转码中</span>
+                <span class="text-info" *ngIf="row.documentInfo.transcodeStatus == 'COMPLETE'">转码完成</span>
+                <span class="text-danger" *ngIf="row.documentInfo.transcodeStatus == 'FAILED'">转码失败</span>
+            </ng-template>
+            <ng-template cuiColTpl="excellentCol" let-row="row">
+                <span class="text-success" *ngIf="row.isExcellent">精品</span>
+                <span class="text-info" *ngIf="!row.isExcellent">普通</span>
+            </ng-template>
+            <ng-template cuiColTpl="publishCol" let-row="row">
+                <span class="text-success" *ngIf="row.isPublish">已发布</span>
+                <span class="text-warning" *ngIf="!row.isPublish">未发布</span>
+            </ng-template>
+
+            <ng-template #rowActions let-row="row">
+                <a href="javascript:;" [routerLink]="['../', row.id, 'edit']">编辑</a>
+                <a href="javascript:;" class="text-danger" (click)="delete(row)">删除</a>
+            </ng-template>
+
+            <!-- <ng-template #actionGroup>
+                <button class="btn btn-danger" (click)="delete()">批量删除</button>
+                <button type="button" class="btn btn-success" (click)="publish()">发布</button>
+                <button type="button" class="btn btn-warning" (click)="disPublish()">撤销发布</button>
+                <button type="button" class="btn btn-success" (click)="excellent()">设为精品</button>
+                <button type="button" class="btn btn-info" (click)="disExcellent()">撤销精品</button>
+            </ng-template> -->
+        </cui-data-table>
+    </div>
+</div>

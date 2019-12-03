@@ -1,0 +1,228 @@
+:host ::ng-deep {
+    .head_nav {
+        width: 100%;
+        min-width: 1200px;
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+        height: 86px;
+        position: fixed;
+        top: 0;
+        z-index: 1001;
+        .top-logo {
+            margin: 0 auto;
+            width: 1200px;
+            padding-top: 24px;
+            .go-home {
+                float: left;
+                width: 138px;
+                margin-left: 0px;
+            }
+            .img-url {
+                float: left;
+                width: 120px;
+                margin-left: 20px;
+            }
+            .switch-box {
+                float: right;
+                height: 50px;
+                line-height: 50px;
+                .logout {
+                    float: left;
+                    font-size: 20px;
+                    cursor: pointer;
+                    height: 60px;
+                    line-height: 58px;
+                    i {
+                        font-size: 20px;
+                    }
+                    &:hover {
+                        i {
+                            color: red;
+                        }
+                    }
+                }
+                .user-set {
+                    float: left;
+                    font-size: 20px;
+                    cursor: pointer;
+                    height: 60px;
+                    margin-right: 12px;
+                    line-height: 60px;
+                    a {
+                        text-decoration: none;
+                        color: #666;
+                    }
+                    i {
+                        font-size: 20px;
+                    }
+                    &:hover {
+                        i {
+                            color: #007bbf;
+                        }
+                    }
+                }
+                .user-center {
+                    float: left;
+                    font-size: 20px;
+                    cursor: pointer;
+                    height: 60px;
+                    margin-right: 12px;
+                    line-height: 56px;
+                    a {
+                        text-decoration: none;
+                        color: #666;
+                    }
+                    i {
+                        font-size: 20px;
+                    }
+                    &:hover {
+                        i {
+                            color: #007bbf;
+                        }
+                    }
+                }
+                .console-manage {
+                    float: left;
+                    margin-left: 12px;
+                    height: 60px;
+                    line-height: 57px;
+                }
+                .login {
+                    float: left;
+                    font-size: 16px;
+                    color: #666;
+                    cursor: pointer;
+                    padding: 0 16px;
+                }
+                .message-box {
+                    float: left;
+                    font-size: 18px;
+                    margin: 3px 26px 0px 12px;
+                    .message-icon {
+                        color: #666;
+                        .float-icon {
+                            font-size: 24px; // height: 30px;
+                            margin-top: 5px;
+                        }
+                    }
+                }
+                .administer {
+                    float: left;
+                    font-size: 12px;
+                    margin-top: 2px;
+                    color: #999;
+                    &:hover {
+                        color: #0569b5;
+                    }
+                }
+                .username {
+                    float: left;
+                    font-size: 16px;
+                    color: #666;
+                    padding: 0 16px;
+                }
+                .users_box {
+                    float: left;
+                }
+            }
+        }
+        .nav-all-course {
+            height: 50px;
+            width: 500px;
+            float: left;
+            line-height: 50px;
+            margin-left: 86px;
+            .all-course {
+                float: left;
+                width: 280px;
+                height: 50px;
+                background-color: #0569b5;
+                color: #fff;
+                font-size: 16px;
+                text-indent: 46px;
+                line-height: 50px;
+                position: relative;
+                cursor: pointer;
+                .float-logo {
+                    font-size: 25px;
+                    position: absolute;
+                    left: -38px;
+                    top: 13px;
+                    pointer-events: none;
+                }
+            }
+            .show-course-list {
+                color: #fff;
+                background-color: #fff;
+                cursor: default;
+            }
+            .home-nav {
+                float: left;
+                height: 60px;
+                margin-left: 6px;
+                .borderBottom {
+                    border-bottom: 2px solid #388ecb;
+                    color: #388ecb;
+                }
+                li {
+                    cursor: pointer;
+                    float: left;
+                    float: left;
+                    line-height: 60px;
+                    padding: 0 16px;
+                    font-size: 16px;
+                    color: #000000;
+                    a {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+    .head_nav {
+        .ant-badge .ant-badge-count {
+            padding: 0 4px;
+            line-height: 14px;
+            min-width: 14px;
+            top: -3px;
+            height: 14px;
+        }
+        .users_box {
+            .users_img_url {
+                img {
+                    height: 40px;
+                    width: 40px;
+                    border: 1px solid #d1d1d1;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    cursor: pointer;
+                }
+            }
+            .head-menu-box {
+                .icon_bar {
+                    font-size: 18px;
+                }
+                a {
+                    font-size: 12px;
+                    color: #333333;
+                }
+                .menu-title {
+                    border-bottom: 1px solid #d8d8d8;
+                    font-size: 16px;
+                    text-indent: 11px;
+                    padding: 10px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+    .show-head-nav {
+        .nav-all-course {
+            nz-dropdown {
+                float: left;
+            }
+        }
+    }
+}

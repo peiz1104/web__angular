@@ -1,0 +1,15 @@
+:host::ng-deep {
+    .paper-base-message {
+        .warn {
+            color: red;
+        }
+        .areatext {
+            .ant-form-item-control nz-input {
+                width: 300%;
+            }
+            textarea.ant-input {
+                width: 500px !important;
+            }
+        }
+    }
+}

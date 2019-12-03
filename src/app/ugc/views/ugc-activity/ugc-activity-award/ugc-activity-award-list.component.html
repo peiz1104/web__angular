@@ -1,0 +1,185 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h5 class="page-title">获奖作品列表</h5>
+    </div>
+
+    <div class="page-body">
+
+        <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+            [(selection)]="selection"  (reload)="loadData()">
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="title" let-row="row">
+                <a class="text-primary">{{row.work !=null ? row.work.courseName:'' }}</a>
+            </ng-template>
+            <ng-template cuiColTpl="owner" let-row="row">
+                    {{ (row.work !=null && row.work.ownerUser !=null) ? row.work.ownerUser.displayName : ''}} {{ (row.work !=null && row.work.ownerUser !=null) ? '(' +row.work.ownerUser.username+ ')' :''
+                    }}
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                {{row.createdDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="createdBy" let-row="row">
+            <ng-container *ngIf="row.createdByDisplayName != null">
+                     {{row.createdByDisplayName ? row.createdByDisplayName : row.createdByUsername }}
+            </ng-container>
+            <ng-container *ngIf="row.createdByDisplayName == null">-</ng-container>
+            
+            </ng-template>
+            
+            <ng-template cuiColTpl="displayOrder" let-row="row">
+                <a  (click)="showModal(row)" class="text-success">{{ row.displayOrder ? row.displayOrder : 0 }}</a>
+            </ng-template>
+
+            <ng-template cuiColTpl="isPublished" let-row="row">
+                <nz-popconfirm *ngIf="row.isPublished == false" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="publish([row],true)">
+                    <a nz-popconfirm class="text-secondary">未发布</a>
+                </nz-popconfirm>
+                <nz-popconfirm *ngIf="row.isPublished == true" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="cancel([row],true)">
+                    <a nz-popconfirm class="text-success">已发布</a>
+                </nz-popconfirm>
+                <!-- <a *ngIf="row.isPublished == false" (click)="publish([row])" class="text-secondary">未发布</a>
+                <a *ngIf="row.isPublished == true" (click)="cancel([row])" class="text-success">已发布</a> -->
+            </ng-template>
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <a href="javascript:;" class="text-primary" (click)="showModal(row)">编辑</a>
+                <span nz-table-divider></span>
+                <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete([row],true)">
+                    <a nz-popconfirm class="text-danger">删除</a>
+                </nz-popconfirm>
+                <!-- <a class="text-danger" (click)="delete([row])" >删除</a> -->
+            </ng-template>
+            <ng-template #actionGroup let-row="row">
+                    <button class="btn btn-outline-primary" (click)="publish(null,false)">发布</button>
+                    <button class="btn btn-outline-primary" (click)="cancel(null,false)">撤销发布</button>
+                    <button class="btn btn-outline-danger" (click)="delete(null,false)">批量删除</button>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</div>
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-item>
+                <div nz-form-control>
+                    <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入标题或创建者'"> </nz-input>
+                </div>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #theListTools>
+    <button type="button" class="btn btn-primary" (click)="addWorks()">
+        <i class="fa fa-plus"></i> 添加获奖作品</button>
+    <div class="btn-group" >
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            批量操作
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="publish(null, false)" >发布</a>
+            <a class="dropdown-item" (click)="cancel(null, false)" >取消发布</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="delete(null, false)" >删除</a> 
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<nz-modal [nzWidth]="800" [nzVisible]="showWorks" [nzTitle]="'选择作品'" [nzContent]="modalContent" [nzFooter]="modalFooters"
+    (nzOnCancel)="handleCancel($event)">
+    <ng-template #modalContent>
+        <div class="select-person-matter clearfix">
+            <div class="select-person-right">
+                <cui-data-table *ngIf="showWorks" #tableWork [columns]="workColumns" [data]="workData?.content" [pagination]="workData" [loading]="showWorkLoading"
+                    selectType="checkbox" [(selection)]="selectionWorks" (reload)="loadWorksData()">
+
+                    <ng-template #simpleSearchWork>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchWorkForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-form-item>
+                                        <div nz-form-control>
+                                            <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入标题'"> </nz-input>
+                                        </div>
+                                    </div>
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            搜索</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </ng-container>
+                    </ng-template>
+
+
+
+                    <ng-template cuiColTpl="title" let-row="row">
+                        <a class="text-primary">{{row.courseName}}</a>
+                    </ng-template>
+                    <ng-template cuiColTpl="owner" let-row="row">
+                         {{row.ownerUser !=null ? row.ownerUser.displayName : ''}} {{ row.ownerUser !=null ? '(' +row.ownerUser.username+ ')' :''
+                        }}
+                    </ng-template>
+                    <ng-template cuiColTpl="category" let-row="row">
+                        <ng-container *ngIf="row.category != null && row.category.parent == null"> {{row.category.name}}</ng-container>
+                        <ng-container *ngIf="row.category != null && row.category.parent != null">{{row.category.parent.name }}/{{row.category.name}}</ng-container>
+                    </ng-template>
+                </cui-data-table>
+            </div>
+        </div>
+
+
+
+    </ng-template>
+    <ng-template #modalFooters>
+        <button nz-button [nzType]="'primary'" [nzLoading]="addLoading"  (click)="confirm($event)">
+            <i class="fa fa-plus"></i> 确定</button>
+        <button type="button" class="btn btn-danger" (click)="handleCancel($event)">
+            取消</button>
+    </ng-template>
+
+</nz-modal>
+
+<nz-modal [nzWidth]="800" [nzVisible]="showDisplayOrder" [nzFooter]="false" [nzTitle]="'名次更改'" [nzContent]="modalDisplayOrderContent" (nzOnCancel)="handleCancelDisplayOrder($event)">
+    <ng-template #modalDisplayOrderContent>
+        <form nz-form [formGroup]="_displayOrderForm" [nzLayout]="'horizontal'">
+            <div class="row">
+                <div class="col-7">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label for="displayOrder" nz-form-item-required>名次</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18">
+                            <nz-input-number formControlName="displayOrder"  [nzMin]="0"  [nzStep]="1" style="width: 100%;" [nzPlaceHolder]="'请输作品名次'"> </nz-input-number>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-7">
+                    <div nz-form-item nz-row>
+                        <div nz-col [nzOffset]="6" [nzSpan]="12" nz-form-control>
+                            <button nz-button [nzType]="'primary'" (click)="onSubmit()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,13 @@
+:host::ng-deep {
+    .search-btn-course {
+        position: relative;
+        top: -10px;
+        left: 20px;
+    }
+    .select-choose-category {
+        .cui-dropdown-label {
+            line-height: 24px !important;
+            display: inline-block;
+        }
+    }
+}

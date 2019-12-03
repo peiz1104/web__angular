@@ -1,0 +1,78 @@
+:host::ng-deep {
+    .edit-paper-box {
+        padding: 5px 15px;
+        .top-bread {
+            a {
+                text-decoration: none;
+            }
+            .color-show-edit {
+                color: #108ee9;
+            }
+        }
+        .comment-create-paper-header {
+            padding: 10px 4px;
+            border: 1px solid #c6c6c6;
+            min-height: 64px;
+            position: relative;
+            .anticon-right {
+                position: relative;
+                top: 4px;
+                margin-right: 10px;
+                margin-left: 10px;
+                font-size: 26px;
+            }
+            a {
+                text-decoration: none;
+                display: inline-block;
+                width: 100%;
+                height: 28px;
+                line-height: 28px;
+            }
+            .color-show {
+                color: #108ee9;
+                border-color: #108ee9;
+            }
+            .color-show-edit {
+                color: #108ee9;
+                border-color: #108ee9;
+            }
+            .btn-colse {
+                position: absolute;
+                top: 18px;
+                right: 50px;
+                button {
+                    color: #fff;
+                    background: #d7001f;
+                }
+            }
+            .descript {
+                margin-top: 10px;
+            }
+        }
+        .paper-base-message {
+            margin-top: 30px;
+            .introduce {
+                padding-top: 10px;
+            }
+            .create-form {
+                padding-top: 20px;
+                border: 1px solid #c6c6c6;
+                margin-top: 10px;
+                .from-des {
+                    color: #fe0000;
+                    font-size: 14px;
+                }
+                .from-box {
+                    min-height: 370px;
+                    padding: 20px;
+                    .ant-col-8 {
+                        min-height: 74px;
+                        .no-dot:after {
+                            content: '';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

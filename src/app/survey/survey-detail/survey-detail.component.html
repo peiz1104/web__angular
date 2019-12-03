@@ -1,0 +1,57 @@
+<div *spkAuthzIf="{hasPermission: ['SURVEY:SURVEY_PAPER:EDIT','SURVEY:SURVEY_PAPER:ADD']}">
+  <div class="survey-detail my-survey" *ngIf="!outSide">
+    <a class="back" [routerLink]="['../']">
+      <i _ngcontent-c9="" class="fa fa-angle-left"></i>
+    </a>
+    <nz-tabset [nzTabPosition]="'left'" [nzShowPagination]="false">
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          基本信息
+        </ng-template>
+        <spk-survey-paper-edit *ngIf="surveyId" [surveyId]="surveyId" [outSide]="false"></spk-survey-paper-edit>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          问卷信息
+        </ng-template>
+        <spk-survey-edit *ngIf="paperId" [paperId]="paperId" [outSide]="true"></spk-survey-edit>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          问卷设置
+        </ng-template>
+        <spk-questions *ngIf="paperId" [paperId]="paperId" [isSurvey]="true"></spk-questions>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          注册条件
+        </ng-template>
+        <spk-survey-condition [offeringId]="offeringId"></spk-survey-condition>
+
+      </nz-tab>
+    </nz-tabset>
+  </div>
+
+  <div class="survey-detail" *ngIf="outSide">
+    <nz-tabset [nzTabPosition]="'left'" [nzShowPagination]="false">
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          基本信息
+        </ng-template>
+        <spk-survey-paper-edit *ngIf="trainingSurveyId" [trainingSurveyId]="trainingSurveyId" [outSide]="true"></spk-survey-paper-edit>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          问卷信息
+        </ng-template>
+        <spk-survey-edit *ngIf="paperId" [paperId]="trainingPaperId" [outSide]="true"></spk-survey-edit>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          问卷设置
+        </ng-template>
+        <spk-questions *ngIf="paperId" [paperId]="trainingPaperId" [outSide]="true"></spk-questions>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

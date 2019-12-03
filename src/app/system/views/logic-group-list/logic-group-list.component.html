@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="page-header" *spkAuthzIf="{hasPermission: 'SYSTEM'}">
+        <h3 class="page-title">用户组管理
+            <small>管理此站点上的用户组。使用用户组可以简化用户管理, 便于批量注册用户</small>
+        </h3>
+
+        <div class="actions pull-right">
+
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table [data]="logicGroups?.content" [columns]="columns" [pagination]="logicGroups" [loading]="loading" (reload)="loadData($event)"
+            selectType="checkbox" [(selection)]="selection">
+
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <nz-input name="searchtext" [nzPlaceHolder]="'请输入用户组名'" [(ngModel)]="searchtext"></nz-input>
+                    </div>
+                    <div class="form-group" style="width:200px;margin-left:10px;">
+                        <spk-user-group-select name="userGroupIds" [(ngModel)]="userGroupIds"></spk-user-group-select>
+                    </div>
+
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+            <ng-template #listTools>
+                <!-- <div>{{row.isPutout ? '已发布' : '未发布'}}</div>-->
+                <button type="button" class="btn btn-primary" (click)="openPapersDialogCreate()">创建用户组</button>
+                <button class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+            </ng-template>
+
+            <ng-template #rowActions let-row="row">
+
+                <div *ngIf="!row.isPutout">
+                    <a href="javascript:;" [routerLink]="[row.id, 'edit']">管理</a>
+                    <span>|</span>
+                    <a href="javascript:;" (click)="openPapersDialogUpdate(row.id)">编辑</a>
+                    <span>|</span>
+                    <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row,true)">
+                        <a nz-popconfirm class="text-danger">删除</a>
+                    </nz-popconfirm>
+                    <!--       <a href="javascript:;" (click)="delete(row)">删除</a> -->
+                </div>
+                <div *ngIf="row.isPutout">
+                    <span>管理</span>
+                    <span>|</span>
+                    <span>编辑</span>
+                    <span>|</span>
+                    <span>删除</span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                {{getFullNamePath(row?.userGroup?.namePath)}}
+            </ng-template>
+            <ng-template cuiColTpl="isPutout" let-row="row">
+                <nz-tag (click)="ispublish(row);" *ngIf="row.isPutout" [nzColor]="'#87d068'">是</nz-tag>
+                <nz-tag (click)="ispublish(row);" *ngIf="!row.isPutout" [nzColor]="'#f50'">否</nz-tag>
+                <!-- <a (click)="ispublish(row);" *ngIf="!row.isPutout" class="badge badge-secondary">否</a>
+                <a (click)="ispublish(row);" *ngIf="row.isPutout" class="badge badge-success">是</a> -->
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">{{row.createdDate | date: 'yyyy-MM-dd HH:mm'}}</ng-template>
+            <ng-template #actionGroup let-row="row">
+                <div class="action-group">
+                    <button class="btn btn-outline-danger" (click)="delete(null, false)">批量删除</button>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+
+<ng-template #logicGroupFormLookup>
+    <div>
+        <spk-logic-group-lookup-form [loading]="loading" [isCreate]="isCreate" [logicGroup]="logicGroup" [modalSubject]="modalSubject"
+            (doSubmit)="onSubmit($event)"></spk-logic-group-lookup-form>
+    </div>
+</ng-template>

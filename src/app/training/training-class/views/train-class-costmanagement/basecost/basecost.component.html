@@ -1,0 +1,194 @@
+<div class="base-cost-box">
+    <div class="select-body">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadData($event)">
+
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body">
+                                <div nz-form-control>
+                                    <nz-input formControlName="trainFeeType" [nzPlaceHolder]="'请输入费用类型'"> </nz-input>
+                                </div>
+                                <div class='simple-search-bar-search-box'>
+                                    <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询</button>
+                                    <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> -->
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+
+
+                <ng-template #listTools>
+                    <div class="btn-group min-height">
+                        <!-- <span style="line-height:28px;margin-right:4px;display:inline-block">费用复核状态：{{'未申请'}}</span> -->
+
+                        <button [disabled]="trainBaseFeeStatus" (click)="showmodal()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="iconfont icon-tianjia-copy"></i> 添加</span>
+                        </button>
+                        <button [disabled]="trainBaseFeeStatus" (click)="mutipledelete()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="iconfont icon-shanchu"></i> 删除</span>
+                        </button>
+                        <button [disabled]="trainBaseFeeStatus" (click)="pullcost()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="anticon anticon-download"></i> 拉取费用</span>
+                        </button>
+                        <button [disabled]="trainBaseFeeStatus" (click)="applicationreview()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="anticon anticon-customer-service"></i> 费用复核申请</span>
+                        </button>
+                        <button [disabled]="!trainBaseFeeStatus" (click)="handelRevokeReview()" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:CANCEL_CHECK'}"
+                            nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="anticon anticon-customer-service"></i> 撤销费用复核</span>
+                        </button>
+                        <button (click)="exportcost()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="iconfont icon-daochu1"></i> 导出费用</span>
+                        </button>
+                    </div>
+
+                </ng-template>
+
+                <ng-template cuiColTpl="description" let-row="row">
+                    <span>{{row.description}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="branches" let-row="row">
+                    <span *ngIf="row.name">{{row.name}}</span>
+                    <span *ngIf="!row.name">{{row.trainFeeType?.name}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="price" let-row="row">
+                    <span>{{row.fee|| '0.00'}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="isFromSAP" let-row="row">
+                    <span *ngIf="row.isFromSAP" style="color:red">是</span>
+                    <span *ngIf="!row.isFromSAP" style="color:green">否</span>
+                </ng-template>
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <!-- 只要为true就不可以进行编辑 -->
+                    <i title="编辑" *ngIf="!trainBaseFeeStatus&&!row.isFromSAP" (click)="viewdetail(row.id)" class="iconfont icon-bianji-copy"
+                        style="cursor:pointer;color:#007bbf;"></i>
+                    <i title="从SAP拉取，审核通过不可编辑" *ngIf="trainBaseFeeStatus&&row.isFromSAP" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#666;"></i>
+                    <i title="审核通过不可编辑" *ngIf="trainBaseFeeStatus&&!row.isFromSAP" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#666;"></i>
+                    <i title="从SAP拉取不可编辑" *ngIf="!trainBaseFeeStatus&&row.isFromSAP" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#666;"></i>
+                </ng-template>
+                <ng-template #actionGroup>
+                    <div style="line-height:36px;padding-left:20px;color:red;font-size:14px;font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">总计：{{feeCounts}}元</div>
+                </ng-template>
+
+            </cui-data-table>
+        </nz-spin>
+    </div>
+</div>
+
+<nz-modal *ngIf="isVisible" [nzZIndex]="1001" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'添加费用'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)">
+            <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="editspinning">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>费用类型</label>
+                    </div>
+                    <div nz-col nz-form-control [nzSpan]="12" [nzValidateStatus]="validateForm.controls.trainFeeType">
+                        <nz-select formControlName="trainFeeType" [nzPlaceHolder]="'请选择费用'" nzAllowClear [nzShowSearch]="true">
+                            <nz-option *ngFor="let option of options" [nzLabel]="option.name" [nzValue]="option.id">
+                            </nz-option>
+                        </nz-select>
+                        <!-- <nz-input formControlName="name" [nzType]="'text'" [nzPlaceHolder]="'请选择费用名称'" [nzSize]="'large'"> -->
+                        <!-- </nz-input> -->
+                        <div nz-form-explain *ngIf="validateForm.controls.trainFeeType.dirty&&validateForm.controls.trainFeeType.hasError('required')">请输入费用名称!</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>费用金额</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.fee">
+                        <nz-input formControlName="fee" [nzType]="'text'" [nzPlaceHolder]="'请输入费用金额'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.fee.dirty&&validateForm.controls.fee.hasError('required')">请输入金额!</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.fee.dirty&&validateForm.controls.fee.hasError('pattern')">输入有误!</div>
+
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-col [nzSpan]="7" nz-form-label>
+                        <label>描述</label>
+                    </div>
+                    <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.description">
+                        <nz-input formControlName="description" [nzRows]="2" [nzType]="'textarea'" [nzPlaceHolder]="'请写入描述'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.description.dirty&&validateForm.controls.description.hasError('maxlength')">描述不能超过500字!</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                        <button [nzLoading]="submitloading" nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!validateForm.valid">提交</button>
+                        <button nz-button [nzSize]="'large'" (click)="resetForm($event)">重置</button>
+                    </div>
+                </div>
+            </nz-spin>
+        </form>
+    </ng-template>
+</nz-modal>
+
+<nz-modal [nzWidth]="800" class="pull-modal" *ngIf="isVisiblePull" [nzVisible]="isVisiblePull" [nzTitle]="'拉取费用'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancelPull($event)" [nzConfirmLoading]="addPullState" (nzOnOk)="handleOkPull($event)">
+    <ng-template #modalContent>
+        <div class="header-box">
+            <div class="input-box">
+                <nz-input [(ngModel)]="inputValue" [nzPlaceHolder]="'请输入费用编号'" (ngModelChange)="_console($event)"></nz-input>
+                <div *ngIf="showTip" class="error-tip">费用编号输入有误</div>
+            </div>
+            <button (click)="pullcostdata()" [nzLoading]="pullcostloading" nz-button [nzType]="'primary'">
+                <span>拉取</span>
+            </button>
+        </div>
+        <div class="cost-list">
+            <div class="select-body">
+                <nz-spin [nzSpinning]="pullspinning" [nzTip]="'正在读取数据...'">
+                    <div class="no-data" *ngIf="!(pulltestListData&&pulltestListData.length)">
+                        <i class="anticon anticon-frown-o"></i>
+                        <span>暂无数据！</span>
+                    </div>
+                    <div *ngIf="pulltestListData&&pulltestListData.length" class="cost-table-list">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <!-- <td>员工编号</td>
+                                <td>员工姓名</td> -->
+                                    <td>费用类型名称</td>
+                                    <td>费用类型</td>
+                                    <td>费用金额</td>
+                                    <!-- <td>操作</td> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of pulltestListData;let i = index">
+                                    <!-- <td>{{item.username}}</td>
+                                <td>{{item.displayName}}</td> -->
+
+                                    <td>{{item.trainFeeType? item.trainFeeType.name :'--'}}</td>
+                                    <td>{{item.trainFeeType? item.trainFeeType.code :'--'}}</td>
+                                    <td>{{item.fee}}</td>
+                                    <!-- <td>
+                                    <i style="color:red;cursor:pointer;" title="删除" class="anticon anticon-delete"></i>
+                                </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </nz-spin>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>

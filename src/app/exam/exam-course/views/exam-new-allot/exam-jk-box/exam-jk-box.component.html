@@ -1,0 +1,96 @@
+<div class="queryTools-box">
+    <label for="userName" style="margin-left: 20px;">用户名：</label>
+    <nz-input style="width:120px;margin-right:40px;" [(ngModel)]="username"></nz-input>
+    <label for="name">姓名：</label>
+    <nz-input style="width:120px;margin-right:40px;" class="name-text" [(ngModel)]="displayName"></nz-input>
+    <button nz-button [nzType]="'primary'" (click)="JKloadList()">
+        <span>搜索</span>
+    </button>
+</div>
+<cui-data-table #tableHandle [columns]="JKcolumns" [data]="JKcolumnsData" (reload)="JKloadList($event)" class="JKTable" [loading]="JKListLoading"
+    [pagination]="JKpagination" [selectType]="'checkbox'" [(selection)]="selection" (selectionChange)="selectionChange()">
+    <!-- <ng-template #simpleSearch>
+                       <ng-container>
+                           <div class="btn-group">
+                               <button type="button" class="btn btn-primary" (click)="skipAddExam()">
+                                   <i class="fa fa-plus"></i> 导入分配</button>
+                           </div>
+                       </ng-container>
+                   </ng-template> -->
+    <ng-template #listTools>
+        <button nz-button [nzType]="'primary'" (click)="ShowEditJKcode=true">设置监考码</button>
+        <button nz-button [nzType]="'default'" (click)="clearJKcode()">清除监考码</button>
+        <nz-dropdown [nzTrigger]="'click'">
+            <button nz-button nz-dropdown>
+                <span>批量操作</span>
+                <i class="anticon anticon-down"></i>
+            </button>
+            <ul nz-menu>
+                <li nz-menu-item>
+                    <a (click)="ShowEditJKtime=true">设置监考时间</a>
+                </li>
+                <li nz-menu-item>
+                    <a target="_blank" (click)="clearJKtime()">清除监考时间</a>
+                </li>
+            </ul>
+        </nz-dropdown>
+        <button nz-button [nzType]="'primary'" style="width:70px;" (click)="JKaddList($event)">添加</button>
+        <spk-user-lookup #JKAdd [(ngModel)]="JKuserSelectData" (ok)="JKuserChangeHandler($event,row)"></spk-user-lookup>
+        <!-- <button type="button" class="btn btn-outline-primary" (click)="JKremoveLists(selection)">删除</button> -->
+    </ng-template>
+    <ng-template cuiColTpl="name" let-row="row">
+        <div>{{row.name?row.name:'--'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="jkCode" let-row="row">
+        <div>{{row.jkCode?row.jkCode:'--'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="administrator" let-row="row">
+        <div>{{row.administrator?row.administrator:'--'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="createdDate" let-row="row">
+        <div>{{row.createdDate|dateMoment:'YYYY-MM-DD HH:mm'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="startTime" let-row="row">
+        <div>{{row.startTime?(row.startTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="endTime" let-row="row">
+        <div>{{row.endTime?(row.endTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+    </ng-template>
+    <ng-template cuiColTpl="actSet" let-row="row">
+        <a class="text-primary" (click)="JKremove(row)">删除</a>
+    </ng-template>
+</cui-data-table>
+<nz-modal [nzVisible]="ShowEditJKcode" [nzTitle]="'设置监考码'" [nzContent]="JKcodeContent" (nzOnCancel)="ShowEditJKcode=false"
+    (nzOnOk)="submitJKcode()" [nzWidth]="'600px'">
+    <ng-template #JKcodeContent>
+        <div nz-row class="tips">提示：所有监考人监考码保持一致，统一设置</div>
+        <div nz-row class="JK-code-content">
+            <div nz-col [nzSpan]="6" class="text-right">
+                <label for="JKcode">监考码：</label>
+            </div>
+            <div nz-col [nzSpan]="14">
+                <input type="text" [(ngModel)]="JKcode" class="ant-input" maxlength="5" style="width:100%" placeholder="请输入监考码" />
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+<nz-modal [nzVisible]="ShowEditJKtime" [nzTitle]="'设置监考时间'" [nzContent]="JKtimeContent" (nzOnCancel)="ShowEditJKtime=false"
+    (nzOnOk)="submitJKtime()" [nzWidth]="'600px'">
+    <ng-template #JKtimeContent>
+        <div nz-row class="tips">提示:监考时间默认对所有监考人员生效，已勾选监考人员的，只对选中的人员有效。</div>
+        <div nz-row class="JK-code-content">
+            <div nz-row class="proctor-line">
+                <div nz-col [nzSpan]="4" class="text-right">
+                    <label for="startdate">监考时间:</label>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="startdate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入监考开始时间'"></spk-qm-datepicker>
+                </div>
+                <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="enddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入监考结束时间'"></spk-qm-datepicker>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>

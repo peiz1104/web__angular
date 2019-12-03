@@ -1,0 +1,21 @@
+:host::ng-deep {
+    .train-reglist-box {
+        .form-box {
+            margin: 0 auto;
+            width: 100%;
+            padding: 0px 16px;
+        }
+        .active {
+            color: #007bbf;
+        }
+        button {
+            cursor: pointer;
+        }
+        .complex-search-bar-search-box {
+            left: 60px;
+        }
+        .list-tool-bar {
+            margin-right: 10px;
+        }
+    }
+}

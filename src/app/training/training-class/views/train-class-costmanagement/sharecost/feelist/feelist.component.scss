@@ -1,0 +1,39 @@
+:host ::ng-deep {
+    .fee-list-box {
+        .cost-table-list {
+            table {
+                min-width: 100%;
+                border: 1px solid #ddd;
+                border-right: none;
+                border-bottom: none;
+                border-spacing: 0;
+                thead {
+                    background: #e9ecef;
+                }
+                tr {
+                    background: #f9f9f9;
+                }
+                td {
+                    height: 34px;
+                    text-align: center;
+                    border-right: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    margin: 0;
+                    padding: 0 10px;
+                }
+            }
+        }
+        .no-data {
+            font-size: 18px;
+            line-height: 36px;
+            text-align: center;
+            i {
+                color: #007bbf;
+                font-size: 22px;
+            }
+            span {
+                color: #aaa;
+            }
+        }
+    }
+}

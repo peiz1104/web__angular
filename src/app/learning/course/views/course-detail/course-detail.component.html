@@ -1,0 +1,81 @@
+<!-- <cui-layout>
+    <cui-layout-sider width="140" style="background:#f8f8fa">
+        <div style="background: #f0f3fa;">
+            <a class="text-center d-block p-4" [routerLink]="['../list']">
+                <button type="button" class="btn btn-light">返回列表
+                    <i class="fa fa-level-up"></i>
+                </button>
+            </a>
+        </div>
+
+        <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+            <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">属性</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaOutline.isActive">
+                <a [routerLink]="['./', 'outline']" routerLinkActive #rlaOutline="routerLinkActive">大纲</a>
+            </li>
+            <li *ngIf="course&&course.authorization=='Y'" nz-menu-item [nzSelected]="rlaTeachers.isActive">
+                <a [routerLink]="['./', 'pageTeachers']" routerLinkActive #rlaTeachers="routerLinkActive">授课资格</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaMaterials.isActive">
+                <a [routerLink]="['./', 'materials']" routerLinkActive #rlaMaterials="routerLinkActive">资料</a>
+            </li>
+            <li nz-menu-item [nzSelected]="rlaStrategy.isActive">
+                <a [routerLink]="['./', 'strategy']" routerLinkActive #rlaStrategy="routerLinkActive">完成条件</a>
+            </li>
+            <li nz-submenu class="d-none">
+            </li>
+        </ul>
+    </cui-layout-sider>
+
+    <cui-layout>
+        <cui-layout-content>
+            <router-outlet></router-outlet>
+        </cui-layout-content>
+    </cui-layout>
+</cui-layout> -->
+<!-- ie10下cui-layout布局有问题 -->
+<div class="course-detail-box">
+    <div class="course-detail-left">
+        <cui-layout-sider width="140" style="background:#f8f8fa">
+            <div style="background: #f0f3fa;">
+                <a class="text-center d-block p-4" [routerLink]="['../list']">
+                    <button type="button" class="btn btn-light">返回列表
+                        <i class="fa fa-level-up"></i>
+                    </button>
+                </a>
+            </div>
+
+            <ul *ngIf="!menuIsCollapsed" nz-menu [nzMode]="'inline'" style="background:#f8f8fa">
+                <li nz-menu-item [nzSelected]="rlaProperties.isActive">
+                    <a [routerLink]="['./', 'edit']" routerLinkActive #rlaProperties="routerLinkActive">属性</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaOutline.isActive">
+                    <a [routerLink]="['./', 'outline']" routerLinkActive #rlaOutline="routerLinkActive">大纲</a>
+                </li>
+                <li *ngIf="course&&course.authorization=='Y'" nz-menu-item [nzSelected]="rlaTeachers.isActive">
+                    <a [routerLink]="['./', 'pageTeachers']" routerLinkActive #rlaTeachers="routerLinkActive">授课资格</a>
+                </li>
+                <li nz-menu-item [nzSelected]="rlaMaterials.isActive">
+                    <a [routerLink]="['./', 'materials']" routerLinkActive #rlaMaterials="routerLinkActive">资料</a>
+                </li>
+                <!-- <li nz-menu-item>
+                    <a disabled>测试</a>
+                </li> -->
+                <li nz-menu-item [nzSelected]="rlaStrategy.isActive">
+                    <a [routerLink]="['./', 'strategy']" routerLinkActive #rlaStrategy="routerLinkActive">完成条件</a>
+                </li>
+                <!-- <li nz-menu-item [nzSelected]="rlaStrategy.isActive">
+                    <a [routerLink]="['./', 'trial']" routerLinkActive #rlaTrial="routerLinkActive">试看内容</a>
+                </li> -->
+                <li nz-submenu class="d-none">
+                    <!-- 修复缩进 -->
+                </li>
+            </ul>
+        </cui-layout-sider>
+    </div>
+    <div class="course-detail-content">
+        <router-outlet></router-outlet>
+    </div>
+</div>

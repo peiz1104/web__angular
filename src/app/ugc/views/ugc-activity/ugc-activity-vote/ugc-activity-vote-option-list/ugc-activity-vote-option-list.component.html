@@ -1,0 +1,120 @@
+
+
+<cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+    [(selection)]="selection">
+
+    <ng-template #simpleSearch>
+        <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+    </ng-template>
+    <!-- <ng-template #listTools>
+        <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+    </ng-template> -->
+
+    <ng-template cuiColTpl="title" let-row="row">
+        <a class="text-primary">{{row.work.courseName}}</a>
+    </ng-template>
+
+
+    <ng-template cuiColTpl="category" let-row="row">
+        <ng-container *ngIf="row.work.category != null && row.work.category.parent == null"> {{row.work.category.name}}</ng-container>
+        <ng-container *ngIf="row.work.category != null && row.work.category.parent != null">{{row.work.category.parent.name }}/{{row.work.category.name}}</ng-container>
+    </ng-template>
+
+    <ng-template cuiColTpl="owner" let-row="row">
+        {{row.work.ownerUser.displayName ? row.work.ownerUser.displayName : row.work.ownerUser.username }}
+    </ng-template>
+
+
+    <ng-template cuiColTpl="votes" let-row="row">
+        {{row.votes || 0}}
+    </ng-template>
+
+    <ng-template cuiColTpl="rowActions" let-row="row">
+        <a class="text-danger" (click)="delete([row])">取消评选</a>
+    </ng-template>
+
+</cui-data-table>
+
+
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-item>
+                <div nz-form-control>
+                    <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入作品标题'"> </nz-input>
+                </div>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    搜索</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #theListTools>
+    <button type="button" class="btn btn-primary"  (click)="addWorks()">
+        <i class="fa fa-plus"></i> 添加作品</button>
+    <button type="button" class="btn btn-danger" [disabled]="!selection || selection.length == 0" (click)="delete()">
+        取消评选</button>
+</ng-template>
+
+
+
+<nz-modal [nzWidth]="800" [nzVisible]="showWorks" [nzTitle]="'选择作品'" [nzContent]="modalContent"  [nzFooter]="modalFooters" (nzOnCancel)="handleCancel($event)" >
+    <ng-template #modalContent>
+        <div class="select-person-matter clearfix">
+            <div class="select-person-right">
+        <cui-data-table *ngIf="showWorks" #tableWork [columns]="workColumns" [data]="workData?.content" [pagination]="workData" [loading]="showWorkLoading" selectType="checkbox" [(selection)]="selectionWorks" (reload)="loadWorksData()">
+            
+            <ng-template #simpleSearchWork>
+                <ng-container >
+                        <form nz-form [formGroup]="_searchWorkForm" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body">
+                                <div nz-form-item>
+                                    <div nz-form-control>
+                                        <nz-input formControlName="searchText" [nzPlaceHolder]="'请输入标题'"> </nz-input>
+                                    </div>
+                                </div>
+                                <div class='simple-search-bar-search-box'>
+                                    <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                        搜索</button>
+                                </div>
+                            </div>
+                        </form>
+
+                </ng-container>
+            </ng-template>
+
+            <!-- <ng-template #workListTools>
+                <ng-container *ngTemplateOutlet="theWorkListTools"></ng-container>
+            </ng-template> -->
+
+            <ng-template cuiColTpl="title" let-row="row">
+                <a class="text-primary">{{row.title}}</a>
+            </ng-template>
+            <ng-template cuiColTpl="owner" let-row="row">
+                {{row.ownerUser.displayName ? row.ownerUser.displayName : row.ownerUser.username }}
+            </ng-template>
+            <ng-template cuiColTpl="category" let-row="row">
+                {{row.category !=null ? row.category.name:"" }}
+            </ng-template>
+        
+        </cui-data-table>
+            </div></div>
+
+
+
+    </ng-template>
+    <ng-template #modalFooters>
+        <button type="button" class="btn btn-primary" (click)="confirm($event)">
+            <i class="fa fa-plus"></i> 确定</button>
+        <button type="button" class="btn btn-danger" (click)="handleCancel($event)">
+            取消</button>
+    </ng-template>
+<!-- <ng-template #modalFooter>
+    <button nz-button [nzType]="'primary'" (click)="sublimtPerson($event)">确 定</button>
+</ng-template> -->
+    
+</nz-modal>
+

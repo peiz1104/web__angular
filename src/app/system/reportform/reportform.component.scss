@@ -1,0 +1,25 @@
+:host ::ng-deep {
+    .report-form-works {
+        width: 100%;
+        margin: 0 auto;
+        min-height: 400px;
+        .content-report {
+            width: 100%;
+            min-height: 400px;
+            text-align: center;
+            margin-top: 50px;
+            .descript-message {
+                text-align: center;
+                height: 40px;
+                line-height: 40px;
+                color: #007bbf;
+                font-size: 16px;
+                font-family: cursive;
+                font-weight: 500;
+                i {
+                    font-size: 22px;
+                }
+            }
+        }
+    }
+}

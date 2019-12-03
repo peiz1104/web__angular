@@ -1,0 +1,19 @@
+<div class="assist-cui-layout">
+    <div class="assist-cui-header">
+        <spk-assist-header [(isCollapsed)]="isCollapsed"></spk-assist-header>
+    </div>
+    <!-- [ngClass]="ieDrageStatus?'low-index assist-content-layout':'heigh-index assist-content-layout'" -->
+    <div class="assist-content-layout">
+        <cui-layout-sider *ngIf="false" [collapsable]="true" [width]="220" [collapsedWidth]="64" [(collapsed)]="isCollapsed" [trigger]="null"
+            style="background: #001529;" [ngStyle]="{'overflow-y': (isCollapsed ? 'unset' : 'auto')}">
+            <ul nz-menu [nzMode]="isCollapsed ? 'vertical' : 'inline'" [nzTheme]="'dark'" [nzInlineCollapsed]="isCollapsed">
+                <spk-nav-left [isCollapsed]="isCollapsed" [navItems]="navItems"></spk-nav-left>
+            </ul>
+        </cui-layout-sider>
+        <div class="main-content">
+            <div class="train-class-detail-assit">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+.basic-center{
+    .basic-center-content{
+        padding: 10px 20px;
+    }
+}
+:host ::ng-deep{
+    .ant-tabs-bar{
+        margin-bottom: 0;
+    }
+}

@@ -1,0 +1,196 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 年度学时规则列表</small>
+        </h3>
+    </div>
+</div>
+<div class="hour-rule-list">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="temSimpleSearch">
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <button [disabled]="isCarryover||isRunable" *spkAuthzIf="{hasPermission: 'PERIOD:TASK:ADD'}" (click)="addhourrule($event)"
+                    [disabled]="!options" nz-button [nzType]="'primary'">
+                    <i class="iconfont icon-tianjia" style="font-size:12px"></i> 添加年度学时规则</button>
+                <button [disabled]="isCarryover||isRunable" *spkAuthzIf="{hasPermission: 'PERIOD:TASK:REMOVE'}" type="button" nz-button [nzType]="'primary'"
+                    (click)="mutipledelete($event)">
+                    <i class="iconfont icon-shanchu"></i> 删除</button>
+            </ng-template>
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span *spkAuthzIf="{hasPermission: 'PERIOD:TASK:EDIT'}; else otherEditDisplay">
+                    <span *ngIf="!isRunable&&!isCarryover">
+                        <i (click)="editHourRule(row)" class="iconfont icon-bianji-copy" title="编辑" style="color:#007bbf;cursor:pointer"></i>
+                    </span>
+                </span>
+                <ng-template #otherEditDisplay>
+                    <span>
+                        <i class="iconfont icon-bianji-copy" title="不可编辑" style="color:#aaa;cursor:pointer"></i>
+                    </span>
+                </ng-template>
+                <span *ngIf="isRunable || isCarryover">
+                    <i class="iconfont icon-bianji-copy" title="不可编辑" style="color:#aaa;cursor:pointer"></i>
+                </span>
+                <span *spkAuthzIf="{hasPermission: 'PERIOD:TASK:DELETE'}; else otherDeleteDisplay">
+                    <span *ngIf="!isRunable&&!isCarryover">
+                        <i (click)="deleteSingle([row.id])" class="iconfont icon-shanchu" title="删除" style="color:red;cursor:pointer"></i>
+                    </span>
+                </span>
+                <ng-template #otherDeleteDisplay>
+                    <span>
+                        <i class="iconfont icon-shanchu" title="不可删除" style="color:#aaa;cursor:pointer"></i>
+                    </span>
+                </ng-template>
+                <span *ngIf="isRunable || isCarryover">
+                    <i class="iconfont icon-shanchu" title="不可删除" style="color:#aaa;cursor:pointer"></i>
+                </span>
+            </ng-template>
+            <ng-template cuiColTpl="adduser" let-row="row">
+                <span *spkAuthzIf="{hasPermission: 'PERIOD:USER:VIEW'}; else otherDisplay">
+                    <i [routerLink]="['../',row.id,nowYear,'viewrule']" class="iconfont icon-renyuantianjia" title="添加人员" style="color:#007bbf;cursor:pointer;font-size:20px"></i>
+                </span>
+                <ng-template #otherDisplay>
+                    <div>
+                        <span>
+                            <i class="iconfont icon-renyuantianjia" title="添加人员" style="color:#757779;font-size:20px"></i>
+                        </span>
+                    </div>
+                </ng-template>
+            </ng-template>
+            <ng-template cuiColTpl="isDefault" let-row="row">
+                <span *spkAuthzIf="{hasPermission: 'PERIOD:TASK:EDIT'}; else otherDefaultDisplay">
+                    <a (click)="onDefault(row.id);" *ngIf="!row.isDefault" class="badge badge-secondary">否</a>
+                    <a (click)="onCancleDefault(row.id);" *ngIf="row.isDefault" class="badge badge-success">是</a>
+                </span>
+                <ng-template #otherDefaultDisplay>
+                    <span>
+                        <a *ngIf="!row.isDefault" class="badge badge-secondary">否</a>
+                        <a *ngIf="row.isDefault" class="badge badge-success">是</a>
+                    </span>
+                </ng-template>
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #temSimpleSearch>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-form-control>
+                <nz-select formControlName="year" [nzPlaceHolder]="'请选择年份'" [nzShowSearch]="true">
+                    <nz-option *ngFor="let value of options" [nzValue]="value.id" [nzLabel]="value.year"></nz-option>
+                </nz-select>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<nz-modal class="add-edit-modal" [nzZIndex]="1003" *ngIf="isVisible" [(nzVisible)]="isVisible" [nzTitle]="editId?'编辑'+nowYear+'年学时规则':'添加'+nowYear+'年学时规则'"
+    (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzFooter]="false" [nzWidth]="600" [nzContent]="modalContent">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="editSpinning" [nzTip]="'正在读取数据...'">
+            <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_save($event,_form.value)">
+                <div class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>学时规则名称</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="16" nz-form-control [nzValidateStatus]="_form.controls.name">
+
+                            <nz-input [nzPlaceHolder]="'请输入学时规则名称'" type="text" formControlName="name"></nz-input>
+                            <div nz-form-explain *ngIf="_form.controls.name.dirty&&_form.controls.name.hasError('required')">
+                                请输入学时规则名称!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>年度学时数</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="16" nz-form-control [nzValidateStatus]="_form.controls.periodNumber">
+                            <nz-input (ngModelChange)="changePeriodNumber($event)" [nzPlaceHolder]="'请输入年度总学时'" class="form-control" formControlName="periodNumber"></nz-input>
+                            <div nz-form-explain *ngIf="_form.controls.periodNumber.dirty&&_form.controls.periodNumber.hasError('required')">
+                                请输入学时!
+                            </div>
+                            <div nz-form-explain *ngIf="_form.controls.periodNumber.dirty&&_form.controls.periodNumber.hasError('pattern')">
+                                输入无效，请输入数字!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="site&&site.id==30" class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>总公司课程学时数</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="16" nz-form-control [nzValidateStatus]="_form.controls.headquartersPeriod">
+                            <nz-input [nzPlaceHolder]="'请输入总公司课程学时数'" class="form-control" formControlName="headquartersPeriod"></nz-input>
+                            <div nz-form-explain *ngIf="_form.controls.headquartersPeriod.dirty&&_form.controls.headquartersPeriod.hasError('required')">
+                                请输入总公司学时!
+                            </div>
+                            <div nz-form-explain *ngIf="_form.controls.headquartersPeriod.dirty&&_form.controls.headquartersPeriod.hasError('pattern')">
+                                输入无效，请输入数字!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="site&&site.id==30" class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>省公司课程最大学时数
+                            </label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="16" nz-form-control [nzValidateStatus]="_form.controls.companyPeriod">
+                            <nz-input [nzPlaceHolder]="'请输入省公司课程最大学时数'" class="form-control" formControlName="companyPeriod"></nz-input>
+                            <div nz-form-explain *ngIf="_form.controls.companyPeriod.dirty&&_form.controls.companyPeriod.hasError('required')">
+                                请输入省公司课程最大学时数!
+                            </div>
+                            <div nz-form-explain *ngIf="_form.controls.companyPeriod.dirty&&_form.controls.companyPeriod.hasError('pattern')">
+                                输入无效，请输入数字!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="site&&site.id==30" class="form-group row">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="8">
+                            <label nz-form-item-required>授课可获得最大学时数</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="16" nz-form-control [nzValidateStatus]="_form.controls.teacherPeriod">
+                            <nz-input [nzPlaceHolder]="'请输入授课可获得最大学时数'" class="form-control" formControlName="teacherPeriod"></nz-input>
+                            <div nz-form-explain *ngIf="_form.controls.teacherPeriod.dirty&&_form.controls.teacherPeriod.hasError('required')">
+                                请输入授课可获得最大学时数!
+                            </div>
+                            <div nz-form-explain *ngIf="_form.controls.teacherPeriod.dirty&&_form.controls.teacherPeriod.hasError('pattern')">
+                                输入无效，请输入数字!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row submit-btn">
+                    <div nz-form-item nz-row>
+                        <div nz-col [nzOffset]="12" [nzSpan]="7" nz-form-control>
+                            <button [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </nz-spin>
+    </ng-template>
+
+</nz-modal>

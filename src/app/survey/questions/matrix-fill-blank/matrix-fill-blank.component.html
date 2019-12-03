@@ -1,0 +1,28 @@
+<div class="card-body mb-1" *ngIf="question.isShow && ((question.isView  && !question.hasLogic) || !question.isView)">
+  <h4 class="card-title">{{idx+1}}、{{question.name}}
+    <span class="text-danger" *ngIf="question.required">*</span>
+  </h4>
+  <div class="row my-2" *ngFor="let q of question.leftQuestions;let i=index;">
+    <div class="row ml-4 mt-1">
+      <h4 class="mr-1">{{q.name}}</h4>
+      <input *ngIf="!question.isView" [name]="i" [type]="text" readonly>
+      <input *ngIf="question.isView" type="text" [ngModel]="fillBlank" (ngModelChange)="onJumpSubject(option,foo,q)" #foo/>
+    </div>
+  </div>
+  <div *ngIf="question.hasDesc" class="py-2 row ml-1">
+    <span class="text-danger">提示：</span>
+    <div [innerHtml]="question.innerDescription"></div>
+  </div>
+  <div class="card-action" [ngClass]="{'visible': question.isEdit}">
+
+    <spk-question-action [question]="question" [idx]="idx"></spk-question-action>
+
+    <div class="edit-question" *ngIf="question.isEdit">
+      <spk-question-edit [question]="question" [idx]="idx"></spk-question-edit>
+      <spk-matrix-fill-option [question]="question" [idx]="idx"></spk-matrix-fill-option>
+
+      <div class="d-flex justify-content-end">
+        <a class="btn btn-warning btn-block" (click)="onSave();">完成编辑</a>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,49 @@
+/*
+ * @Author: mozhengqian
+ * @Date: 2017-11-21 10:26:48
+ * @Last Modified by:   mozhengqian
+ * @Last Modified time: 2017-11-21 10:26:48
+ */
+
+:host::ng-deep {
+    .certificate-edit-box {
+        .select-body {
+            .certificate-edit-form-box {
+                .certificate-edit-content {
+                    .ant-card {
+                        width: 75%;
+                        margin: 15px auto;
+                        .ant-card-body {
+                            // min-height: 350px;
+                        }
+                        .ant-card-extra {
+                            top: 8px;
+                        }
+                    }
+                    .cui-fileupload-choose {
+                        .form-control-file {
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            width: 100%;
+                        }
+                    }
+                    .certificate-form-row {
+                        min-height: 55px;
+                        .row-li {
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .ant-input-group-addon {
+                            margin: 0;
+                            padding: 0;
+                        }
+                    }
+                }
+                .certificate-edit-btn-box {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}

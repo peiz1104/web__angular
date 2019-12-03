@@ -1,0 +1,256 @@
+:host ::ng-deep {
+    .homepage {
+        overflow: auto;
+        height: 100%;
+        .banner {
+            width: 100%;
+            min-height: 501px;
+            background: url(../../assets/images/banner.png) no-repeat 0 0;
+            background-size: 100% 100%;
+            overflow: hidden;
+            .banner_menu {
+                width: 1134px;
+                min-height: 400px;
+                margin: 36px auto;
+                overflow: hidden;
+                .menu {
+                    width: 262px;
+                    height: 252px;
+                    margin-left: 20px;
+                    margin-top: 20px;
+                    float: left;
+                    background: #8d8b8e;
+                    background: rgba(120, 120, 120, 0.3);
+                    cursor: pointer;
+                    transition: box-shadow .3s;
+                    transition: transform .8s;
+                    &:hover {
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, .7);
+                        transform: translateY(-8px);
+                    }
+                    img {
+                        width: 81px;
+                        height: 86px;
+                        display: block;
+                        float: left;
+                        margin-top: 44px;
+                        margin-left: 34px; // cursor: text;
+                        cursor: text;
+                    }
+                    .damand {
+                        display: block;
+                        float: left;
+                        margin-left: 22px;
+                        margin-top: 38px;
+                        width: 124px;
+                        .color {
+                            color: #ffffff;
+                            transition: color linear 0.5s;
+                        }
+                        .bank {
+                            width: 124px;
+                            height: 10px;
+                            border-top: 1px solid #47aeff;
+                            display: block;
+                        }
+                        p {
+                            font-size: 16px;
+                            color: #ffffff;
+                            text-align: center;
+                            line-height: 30px;
+                            cursor: text;
+                        }
+                        ul {
+                            // width: 86px;
+                            margin-left: 20px;
+                        }
+                        li {
+                            list-style-type: disc;
+                            font-size: 14px;
+                            color: #c8c8c8;
+                            line-height: 22px;
+                            transition: color linear 1s;
+                        }
+                        .survey-color:hover {
+                            .color {
+                                color: #C68F5F;
+                            }
+                            color: #C68F5F;
+                        }
+                        .planning-color:hover {
+                            color: #BF05ED;
+                            .color {
+                                color: #BF05ED;
+                            }
+                        }
+                        .training-color:hover {
+                            color: #92DD66;
+                            .color {
+                                color: #92DD66;
+                            }
+                        }
+                        .exam-color:hover {
+                            color: #FFD500;
+                            .color {
+                                color: #FFD500;
+                            }
+                        }
+                        .library-color:hover {
+                            color: #63B9FB;
+                            .color {
+                                color: #63B9FB;
+                            }
+                        }
+                        .teacher-color:hover {
+                            color: #67E2C1;
+                            .color {
+                                color: #67E2C1;
+                            }
+                        }
+                        .learning-color:hover {
+                            color: #0562ED;
+                            .color {
+                                color: #0562ED;
+                            }
+                        }
+                        .system-color:hover {
+                            color: #09BE64;
+                            .color {
+                                color: #09BE64;
+                            }
+                        }
+                        .course-color:hover {
+                            color: #DE741F;
+                            .color {
+                                color: #DE741F;
+                            }
+                        }
+                        .period-color:hover {
+                            color: #E3136B;
+                            .color {
+                                color: #E3136B;
+                            }
+                        }
+                        .development-color:hover {
+                            color: #86D924;
+                            .color {
+                                color: #86D924;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .homeContent {
+            width: 1190px;
+            min-height: 20px;
+            margin: 0 auto;
+            overflow: hidden;
+            .contentHead {
+                height: 24px;
+                border-left: 2px solid #108e99;
+                padding-left: 4px;
+                margin-top: 22px;
+                font-weight: bold;
+                color: #000000;
+            }
+            .homeAgency {
+                width: 1190px;
+                height: 590px;
+                margin-top: 20px;
+                overflow: hidden;
+                .AgentInformation_left {
+                    color: #246db6;
+                    font-size: 14px;
+                    margin-left: 10px;
+                }
+                .AgentInformation_more {
+                    float: right;
+                    display: block;
+                    margin-right: 10px;
+                    color: #9f9f9f;
+                }
+                .notice {
+                    color: #ff0000;
+                    font-size: 12px;
+                    line-height: 18px;
+                }
+                .RecentNotice {
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #353535;
+                }
+                .time {
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #a0a0a0;
+                }
+                .word {
+                    color: #858585;
+                    font-size: 12px;
+                    text-indent: 25px
+                }
+                .AgentInformationHead {
+                    height: 40px;
+                    line-height: 40px;
+                    border-bottom: 1px solid #cac8c8;
+                }
+                .left {
+                    float: left;
+                    width: 766px;
+                    height: 590px;
+                    .AgentInformation {
+                        width: 766px;
+                        height: 342px;
+                        border: 1px solid #cac8c8;
+                        .AgentInformationBottom {
+                            width: 766px;
+                            .AgentInformationBottomCon {
+                                width: 726px;
+                                height: 233px;
+                                margin: 20px;
+                            }
+                        }
+                    }
+                    .useHelp {
+                        height: 227px;
+                        margin-top: 20px;
+                        border: 1px solid #cac8c8;
+                        .useHelpBottom {
+                            width: 766px;
+                            .useHelpBottomCon {
+                                width: 726px;
+                                height: 113px;
+                                margin: 20px;
+                            }
+                        }
+                    }
+                }
+                .right {
+                    float: left;
+                    height: 590px;
+                    width: 400px;
+                    margin-left: 20px;
+                    border: 1px solid #cac8c8;
+                    .MessageNotification {
+                        width: 400px;
+                        .MessageNotificationCon {
+                            height: 513px;
+                            margin: 20px;
+                            width: 360px;
+                        }
+                    }
+                }
+            }
+        }
+        .bottom {
+            width: 100%;
+            height: 126px;
+            background: #474443;
+            color: #ffffff;
+            text-align: center;
+            font-size: 12px;
+            padding-top: 38px;
+        }
+    }
+}

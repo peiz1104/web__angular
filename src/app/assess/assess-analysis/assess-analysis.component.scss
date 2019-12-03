@@ -1,0 +1,67 @@
+.option-css {
+    margin-left: 20px;
+}
+.question-css {
+    font-weight: bold;
+}
+.question-header {
+    font-weight: bold;
+    color: black !important;
+}
+
+.title{
+    font-size:14px;
+}
+.title-item {
+    padding: 19px 0 24px;
+    border-bottom: 1px dashed #e6e6e6;
+}
+.title dt, 
+.title dd {
+    float: left;
+    line-height: 1.5;
+    font-weight: bold;
+}
+.title dd span {
+    color: #999;
+    margin-left: 10px;
+}
+.radiu-box {
+    border-radius: 8px;
+    overflow: auto;
+    border: solid 1px #dadbdc;
+}
+.the-table {
+    text-align: center;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 14px;
+}
+.count {
+    padding-top: 12px;
+}
+.the-table tbody tr td {
+    padding: 8px 4px 4px;
+    padding: 6px 4px\9;
+    line-height: 1.5;
+}
+.the-table th, .the-table td {
+    border-right: 1px solid #dadbdc;
+    border-bottom: 1px solid #dadbdc;
+    padding: 0 16px;
+}
+.the-table tbody a {
+    text-decoration: underline;
+}
+a {
+    background: transparent;
+    text-decoration: none;
+    color: #1ea0fa;
+}
+
+:host ::ng-deep .ant-modal{
+    .ant-modal-content{
+        width: 800px;
+    }
+    
+}

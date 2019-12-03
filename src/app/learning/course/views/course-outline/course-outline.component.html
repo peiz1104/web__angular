@@ -1,0 +1,62 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">[{{course.code}}]{{course.name}}: 大纲</h3>
+
+    <div class="actions pull-right">
+      <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+    </div>
+  </div>
+
+  <div class="page-body">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="true">
+      <div alert-body>
+          课程大纲是课程学习内容，可以是在线的学习资源，对于直播课程和面授课程，指课堂内容安排。 <br>
+          课程可以由多个章或节组成，其中一个章可以包括多个节，节可以包含课件内容。
+      </div>
+    </nz-alert>
+    
+    <nz-spin nzTip="正在读取数据..." [nzSpinning]="loading" style="display: block;">
+        <spk-rco-item *ngIf="rcoIndex && rcoIndex.length > 0; else blankOutlineInfo" [(rcos)]="rcoIndex" [courseId]="course.id"></spk-rco-item>
+        <ng-template #blankOutlineInfo>
+          <div *ngIf="!loading">
+              没有课程大纲
+          </div>
+        </ng-template>
+    </nz-spin>
+    
+    <!-- <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <cui-alert [value]="msg"></cui-alert> -->
+          <!-- <div class="actions">
+            <button type="button" class="btn btn-outline-primary" (click)="addTopicGroup()"><i class="fa fa-plus"></i> 添加组</button>
+            <button type="button" class="btn btn-outline-primary" (click)="addTopic()"><i class="fa fa-plus"></i> 添加内容</button>
+            <button type="button" class="btn btn-outline-primary" disabled><i class="fa fa-clone"></i> 通过复制添加</button>
+            <button type="button" class="btn btn-outline-primary" disabled><i class="fa fa-link"></i> 通过引用添加</button>
+            <nz-popover [nzTitle]="'提示'" [nzTrigger]="'hover'">
+              <button nz-popover type="button" class="btn btn-outline-primary" [routerLink]="['./import']"><i class="fa fa-upload"></i> 导入</button>
+              <ng-template #nzTemplate>
+                  <p>
+                    <span class="text-info"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                    <span class="text-info">导入课件大纲会覆盖已有的课件大纲，</span> <br/>
+                    <span class="text-warning ml-3">请慎重操作！</span>
+                    <- 后期逻辑改为追加、合并和覆盖三种 ->
+                  </p>
+              </ng-template>
+            </nz-popover>
+            <button type="button" class="btn btn-outline-primary" disabled><i class="fa fa-download"></i> 导出</button>
+          </div> -->
+
+          <!-- <div>
+            <ng-container *ngIf="rcoIndex">
+              <spk-rco-item [(rcos)]="rcoIndex" ></spk-rco-item>
+            </ng-container>
+            <ng-container *ngIf="!rcoIndex">
+              <span>没有大纲信息，请点击添加按钮添加！</span>
+            </ng-container>
+          </div> -->
+        <!-- </div>
+      </div>
+    </div> -->
+  </div>
+</div>

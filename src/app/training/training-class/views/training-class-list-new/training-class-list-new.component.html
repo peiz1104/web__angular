@@ -1,0 +1,488 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">培训班列表</h5>
+    </div>
+</div>
+<form *ngIf="!isFormDisplay" nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'"
+    class="cui-data-table-form-box">
+    <div nz-row class="cui-data-table-form-body">
+        <div nz-form-control style="margin-left: 30px;">
+            <nz-input formControlName="name" [nzPlaceHolder]="'培训班名称'"> </nz-input>
+        </div>
+        <div class='simple-search-bar-search-box'>
+            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                <i class="fa fa-search"></i>查询</button>
+            <button type="button" class="btn btn-link" (click)="resetForms($event)">高级查询</button>
+        </div>
+    </div>
+</form>
+<form *ngIf="isFormDisplay" nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'"
+    class="cui-data-table-form-box">
+    <div class="cui-data-table-form-body">
+        <div nz-row>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name">班级名称</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="name" [nzPlaceHolder]="'请输入培训班名称'"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="ownProject">所属组织</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <spk-user-group-select mode="multiple" formControlName="ownProject"></spk-user-group-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="isRelease">培训状态</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-select formControlName="isRelease" [nzPlaceHolder]="'请选择'" nzAllowClear [nzShowSearch]="true">
+                            <nz-option [nzLabel]="'未发布'" [nzValue]="1"></nz-option>
+                            <nz-option [nzLabel]="'已发布'" [nzValue]="2"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-row>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="startDate">开始时间</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-datepicker style="width: 49%;" formControlName="startDateBegin" (ngModelChange)="_startDateBeginChange()" [nzDisabledDate]="_disabledStartDateBegin"
+                            [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'起始'"></nz-datepicker>
+                        <nz-datepicker style="width: 49%;" formControlName="startDateEnd" (ngModelChange)="_startDateEndChange()" [nzDisabledDate]="_disabledStartDateEnd"
+                            [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'结束'"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="endDate">结束时间</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-datepicker style="width: 49%;" formControlName="endDateBegin" (ngModelChange)="_endDateBeginChange()" [nzDisabledDate]="_disabledEndDateBegin"
+                            [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'起始'"></nz-datepicker>
+                        <nz-datepicker style="width: 49%;" formControlName="endDateEnd" (ngModelChange)="_endDateEndChange()" [nzDisabledDate]="_disabledEndDateEnd"
+                            [nzShowTime]="false" [nzFormat]="'YYYY-MM-DD'" [nzPlaceHolder]="'结束'"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="planTypes">计划类型</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-select nzAllowClear formControlName="planTypes" [nzPlaceHolder]="'请选择计划类型'" [nzNotFoundContent]="'无法找到'" [nzShowSearch]="true">
+                            <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                            </nz-option>
+                            <nz-option [nzLabel]="'境内内部'" [nzValue]="'CT'">
+                            </nz-option>
+                            <nz-option [nzLabel]="'境内外部'" [nzValue]="'CD'">
+                            </nz-option>
+                            <nz-option [nzLabel]="'境外内部'" [nzValue]="'OT'">
+                            </nz-option>
+                            <nz-option [nzLabel]="'境外外部'" [nzValue]="'OD'">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="planName">计划名称</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="planName" [nzPlaceHolder]="'请输入计划名称'"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="trainingLevel">培训级别</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-cascader [nzChangeOnSelect]="true" [nzAllowClear]="true" [nzPlaceHolder]="'请选择培训级别'" formControlName="trainingLeve" [nzOptions]="_options"
+                            (nzChange)="_console($event)">
+                        </nz-cascader>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="stage">培训阶段</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-select (ngModelChange)="chageStage($event)" nzAllowClear formControlName="stage" [nzPlaceHolder]="'请选择培训状态'" [nzShowSearch]="true">
+                            <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                            </nz-option>
+                            <nz-option [nzLabel]="'筹备阶段'" [nzValue]="'PREPARE'">
+                            </nz-option>
+                            <nz-option [nzLabel]="'实施阶段'" [nzValue]="'IN_PROGRESS'">
+                            </nz-option>
+                            <nz-option [nzLabel]="'结班阶段'" [nzValue]="'FINISHED'">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="planYear">计划年份</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-select nzAllowClear formControlName="planYear" [nzPlaceHolder]="'请选择计划年份'" [nzShowSearch]="true">
+                            <nz-option [nzLabel]="'全部'" [nzValue]="''"></nz-option>
+                            <nz-option [nzLabel]="nowYear-5" [nzValue]="nowYear-5"></nz-option>
+                            <nz-option [nzLabel]="nowYear-4" [nzValue]="nowYear-4"></nz-option>
+                            <nz-option [nzLabel]="nowYear-3" [nzValue]="nowYear-3"></nz-option>
+                            <nz-option [nzLabel]="nowYear-2" [nzValue]="nowYear-2"></nz-option>
+                            <nz-option [nzLabel]="nowYear-1" [nzValue]="nowYear-1"></nz-option>
+                            <nz-option [nzLabel]="nowYear" [nzValue]="nowYear"></nz-option>
+                            <nz-option [nzLabel]="nowYear+1" [nzValue]="nowYear+1"></nz-option>
+                            <nz-option [nzLabel]="nowYear+2" [nzValue]="nowYear+2"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="leaderSearch">执行人</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="leaderSearch" [nzPlaceHolder]="'请输入执行人姓名或工号'"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="performerSearch">负责人</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="performerSearch" [nzPlaceHolder]="'请输入负责人姓名或工号'"></nz-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cui-data-table-form-row" style="position:relative;height:50px;">
+            <div class='complex-search-bar-search-box' style="bottom:0px">
+                <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+                <button type="button" class="btn btn-link" (click)="resetFormEasys($event)">简单查询</button>
+            </div>
+        </div>
+    </div>
+</form>
+<div style="overflow:hidden;margin-bottom: 10px;position:relative">
+
+    <!-- <button nz-button [nzType]="'primary'" (click)="handleCheckedAll()" class="checkedAll" *ngIf="!isList">
+        <span>全选</span>
+    </button> -->
+    <div style="float: right;margin-right: 30px;">
+        <button type="button" class="btn btn-primary" [routerLink]="['../add']" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:ADD'}">
+            <i class="fa fa-plus"></i> 创建培训班</button>
+        <button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:EDIT'}" (click)="publish()">发布</button>
+        <button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:EDIT'}" (click)="disPublish()">取消发布</button>
+        <button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:CREATE'}" (click)="archive()">结班</button>
+        <button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:DELETE'}" (click)="disArchive()">取消结班</button>
+        <button type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:REMOVE'}" (click)="delete()">删除</button>
+
+
+        <!-- <span (click)="handelNotList()" *ngIf="!isList" style="cursor:pointer;">
+            <img src="assets/images/notlist.png" alt="">
+        </span>
+        <span (click)="handelIsList()" *ngIf="isList" style="cursor:pointer;">
+            <img src="assets/images/list.png" alt="">
+        </span> -->
+        <span style="cursor:pointer;display:inline-block" (click)="handelNotList()">
+            <img [src]="isList?'assets/images/show_list_has.png':'assets/images/show_list_no.png'" alt="">
+        </span>
+        <span style="margin-left:-5px;cursor:pointer;display:inline-block" (click)="handelIsList()">
+            <img [src]="listState?'assets/images/list_has.png':'assets/images/list_no.png'" alt="">
+        </span>
+    </div>
+    <div *ngIf="!isList" class="checked-all" style="padding-left:18px;position:absolute;top:12px;">
+        <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+        </label>
+        <span style="margin-left:-2px;cursor:pointer" (click)="_checkAll(!_allChecked)">全选</span>
+    </div>
+</div>
+<div class="px-4" *ngIf="isList">
+    <div class="page-body">
+        <nz-alert *ngIf="selection && selection.length" [nzType]="'info'" [nzMessage]="'您已选择 ' + selection.length + ' 项，请选择列表工具栏中的 “批量操作” 完成您的操作。'"
+            [nzShowIcon]="true" class="mb-3"></nz-alert>
+
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [loading]="loading" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #complexSearch>
+                <ng-container *ngTemplateOutlet="complexSearchBox"></ng-container>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="name" let-row="row">
+                <a class="text-primary" (click)="handelClickName(row)">{{row.name}}</a>
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                {{row.startDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">
+                {{row.endDate | date: 'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="status" let-row="row">
+                {{row.isArchived?'已结班':(row.isPublished?'已发布':'未发布')}}
+            </ng-template>
+            <ng-template cuiColTpl="message" let-row="row">
+                <a [routerLink]="['../assist', row.id]" routerLinkActive #rlaMessages="routerLinkActive">班级通知</a>
+            </ng-template>
+            <ng-template cuiColTpl="exam" let-row="row">
+                <a (click)="goExame(row.id,row.trainingLevel,'exam')" routerLinkActive #rlaMessages="routerLinkActive">班级考试</a>
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <ng-container *ngTemplateOutlet="colRowActions; context: {row: row}"></ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="performers" let-row="row">
+                {{row.performer!=null?row.performer.displayName:''}}
+                <!-- <span *ngFor="let item of row.performer;let n=index">
+                    <span>{{item.displayName}}</span>
+                    <span *ngIf="n!==row.leaders.length-1">,</span>
+                </span> -->
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>
+<ng-template #colRowActions let-row="row">
+    <a target="_blank" [routerLink]="['../', row.id]" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:EDIT'}">管理</a>
+</ng-template>
+<!-- 行 -->
+
+<!-- 行 -->
+<div *ngIf="listState">
+    <div class="bank"></div>
+    <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="loading">
+        <div style="min-height: 50px;width:100%;overflow:hidden;">
+            <div *ngFor="let item of datatTraining">
+                <div class="trainingClassContent">
+                    <span style="display: block;float: left;margin-left: 20px;line-height: 90px;">
+                        <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="singlechecked($event,item)"></label>
+                    </span>
+                    <span class="img">
+                        <img [src]="item.imageUrl !== 'undefined' && item.imageUrl  ? item.imageUrl : 'assets/images/training.png'" alt="">
+                    </span>
+                    <div class="rightCon">
+                        <div class="item">
+                            <span>
+                                <!-- 班级名称： -->
+                                <i [title]="item.name" class="name" (click)="handelClickName(item)">{{item.name}}</i>
+                            </span>
+                            <span>
+                                ID：{{item.id}}
+                            </span>
+                            <span>
+                                地点：{{item.address}}
+                            </span>
+
+                        </div>
+                        <div class="item">
+                            <span>
+                                起止时间：{{item.startDate | date: 'yyyy-MM-dd'}}至{{item.endDate | date: 'yyyy-MM-dd'}}
+                            </span>
+
+                            <span>
+                                状态：{{item.isArchived?'已结班':(item.isPublished?'已发布':'未发布')}}
+                            </span>
+                            <span>
+                                培训班人数：{{item.regPersonNumber}}
+                            </span>
+                            <span>
+                                <a [routerLink]="['../assist', item.id]">班级通知</a>
+                            </span>
+                        </div>
+                        <div class="item">
+                            <span [title]="item.userGroup.namePath">
+                                所属组织：{{item.userGroup.namePath}}
+                            </span>
+                            <span style="width:40%">
+                                <i style="font-style:normal"> 执行人： {{item.performer&&item.performer.displayName}}</i>
+                                <i style="font-style:normal" *ngIf="item?.performer?.username">({{item.performer!=null?item.performer.username:''}})</i>
+                            </span>
+                            <span>
+                                <a style="color:#007bbf" (click)="goExame(item.id,item.trainingLevel,'exam')">班级考试</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="edit">
+                        <!-- <button (click)="goClassLearn(item.id)" type="button" class="btn btn-primary" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:EDIT'}">管理</button> -->
+                        <a *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:EDIT'}" target="_blank" class="btn-edit" [routerLink]="['../', item.id]">管理</a>
+                    </div>
+                </div>
+                <div class="bank"></div>
+            </div>
+        </div>
+        <div style="overflow:hidden;margin-bottom: 50px;">
+            <div class="page" *ngIf="datatTraining.length">
+                <nz-pagination nzShowTotal [(nzPageIndex)]="pageIndexTrain" [nzPageSize]="nzPageSize" [nzTotal]="totalTrain" (nzPageIndexChange)="handelChangePage($event)"></nz-pagination>
+            </div>
+        </div>
+        <div style="text-align:center;line-height:30px;min-height:100px" *ngIf="datatTraining.length==0">
+            <span style="color:#28a745;font-size:1.33em" class="fa fa-lg fa-info-circle text-success"></span>
+            <span style="font-size:1.25em">没有查询到符合条件的记录</span>
+        </div>
+    </nz-spin>
+</div>
+
+<!-- 行 -->
+<nz-modal *ngIf="isVisibleExport" [nzZIndex]="1001" [nzVisible]="isVisibleExport" [nzWrapClassName]="'listTab'" [nzTitle]="'培训班信息'"
+    [nzContent]="modalExport" (nzOnCancel)="handleCancelExport($event)" (nzOnOk)="handleOkExport($event)">
+
+    <ng-template #modalExport>
+        <button nz-button [nzType]="'primary'" (click)="handelExport()">
+            <span>导出报名表</span>
+        </button>
+        <nz-tabset>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    基本信息
+                </ng-template>
+                <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="informLoading">
+                    <div style="min-height:100px" class="information">
+                        <div *ngIf="informationData" class="infor">
+                            <span>
+                                培训班名称：{{informationData.name}}
+                            </span>
+                            <span>
+                                培训班编号：{{informationData.code}}
+                            </span>
+                            <span>
+                                开始时间：{{informationData.startDate | date: 'yyyy-MM-dd : hh-mm'}}
+                            </span>
+                            <span>
+                                结束时间：{{informationData.endDate | date: 'yyyy-MM-dd : hh-mm'}}
+                            </span>
+                            <span>
+                                培训地点：{{informationData.address}}
+                            </span>
+                            <span>
+                                主办单位：{{informationData.userGroupName}}
+                            </span>
+                            <span>
+                                协办单位：{{informationData.undertakeDeptName}}
+                            </span>
+                            <span>
+                                培训方式：{{trainingType(informationData.trainingType)}}
+                            </span>
+                            <span>
+                                培训班执行人：
+                                <i *ngFor="let item of informationData.performers">
+                                    {{item.displayName}}
+                                </i>
+
+                            </span>
+                            <span>
+                                培训班负责人：
+                                <i *ngFor="let item of informationData.leaders">
+                                    {{item.displayName}}
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                </nz-spin>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    培训课程
+                </ng-template>
+                <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="informLoadingCourseList">
+                    <div style="min-height:100px" class="information" *ngIf="courseListData">
+                        <div class="title table-head">
+                            <!-- <span>缩略图</span> -->
+                            <span class="big-title">名称</span>
+                            <!-- <span>编码</span> -->
+                            <span class="middle-title">类型</span>
+                            <span class="small-title">学时</span>
+                            <span>所属分类</span>
+                        </div>
+                        <div class="title" *ngFor="let item of courseListData">
+                            <!-- <span>
+                                    <img cui-lazy-load [src]="item.imageUrl" [alt]="item.name" width="72px" height="42px">
+                                </span> -->
+                            <span class="big-title-td" style="padding-left:8px;">{{item.name}}</span>
+                            <!-- <span>{{item.code}}</span> -->
+                            <span class="middle-title-td">{{courseType(item.courseType)}}</span>
+                            <span style="text-align:center" class="small-title-td">{{item.period}}</span>
+                            <span>{{item.category.name}}</span>
+                        </div>
+                        <div style="text-align:right">
+                            <nz-pagination [nzPageIndex]="pageIndex" [nzTotal]="total" [nzPageSize]="pageSize" (nzPageIndexChange)="handelPageIndex($event)"></nz-pagination>
+                        </div>
+                    </div>
+                </nz-spin>
+
+            </nz-tab>
+        </nz-tabset>
+    </ng-template>
+</nz-modal>
+<ng-template #endClassDialog>
+
+    <h5 style="color:green;font-size:16px;font-weight:bold;line-height:34px">可结班结果：</h5>
+    <div class="success-tip">可以结班
+        <span style="color:green;font-weight:bold">（{{endclassSuccessData.length}}）</span>个
+        <span *ngIf="endclassSuccessData.length&&endClassErrorData.length!==0" style="color:orange;padding-left:16px;">点击确定按钮只对所选项中可以结班的培训班结班</span>
+        <span *ngIf="endClassErrorData.length==0&&!!endclassSuccessData.length" style="padding-left:16px;color:green">所选培训班无不可结班项，点击确定按钮进行结班</span>
+        <span *ngIf="!endclassSuccessData.length" style="color:orange;padding-left:16px;">所选的培训班无一符合结班要求，请按错误提示修改后结班！</span>
+    </div>
+    <h5 style="color:red;font-size:16px;font-weight:bold;line-height:34px">结班失败结果：</h5>
+    <div class="fail-tip">结班失败
+        <span style="color:red;font-weight:bold">（{{endClassErrorData.length}}）</span>个
+    </div>
+    <div *ngIf="endClassErrorData.length">
+        <div *ngFor="let item of endClassErrorData;let i=index">
+            <div style="line-height:30px">{{i+1}}、培训班
+                <span style="color:#007bbf">{{item.name}}</span> 结班失败原因：</div>
+            <span style="padding-left:16px;line-height:26px;color:red" *ngIf="item.trainBaseFeeStatus=='N'">基本费用未复核
+                <i *ngIf="item.apportionFeeStatus=='N'||item.documentStatus=='N'||item.teacherRecordStatus=='N'||item.evaluationRateStatus=='N'">;</i>
+            </span>
+            <!-- <span style="padding-left:16px;line-height:26px;color:red" *ngIf="item.apportionFeeStatus=='N'">分摊费用未复核
+                <i *ngIf="item.documentStatus=='N'||item.teacherRecordStatus=='N'||item.evaluationRateStatus=='N'">;</i>
+            </span> -->
+            <span style="padding-left:16px;line-height:26px;color:red" *ngIf="item.documentStatus=='N'">文档未复核
+                <i *ngIf="item.teacherRecordStatus=='N'||item.evaluationRateStatus=='N'">;</i>
+            </span>
+            <span style="padding-left:16px;line-height:26px;color:red" *ngIf="item.teacherRecordStatus=='N'">授课记录未复核
+                <i *ngIf="item.evaluationRateStatus=='N'">;</i>
+            </span>
+            <span style="padding-left:16px;line-height:26px;color:red" *ngIf="item.evaluationRateStatus=='N'">评估不合格</span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #endClassTitle>
+    <h4 style="color:#007bbf">结班结果</h4>
+</ng-template>

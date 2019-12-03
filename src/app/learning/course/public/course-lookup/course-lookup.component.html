@@ -1,0 +1,113 @@
+<ng-container *ngIf="!echoTpl">
+    <div *ngIf="value" class="course-mata-info">
+        <div class="media">
+            <img cui-lazy-load [src]="value.imageUrl" [alt]="value.name" class="mr-3" width="72px" height="42px">
+            <div class="media-body">
+                <h5 class="mt-0">{{value.name}}</h5>
+                <div class="mt-2">
+                    <span>课程编码: {{value.code}}</span>
+          			<br/>
+                    <span>所属分类: {{value.category?.name}}</span>
+          			<br/>
+                    <span>学时: {{value.period}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="handle">
+            <a *ngIf="!disabled" (click)="!disabled && openLookup()">重新选择</a>
+            <nz-popover *ngIf="disabled" [nzTitle]="'说明'" [nzTrigger]="'focus'">
+                <button nz-button nz-popover [nzType]="'dashed'" [nzShape]="'circle'">
+                    <i class="anticon anticon-lock"></i>
+                </button>
+	          <ng-template #nzTemplate>
+	            <div>课程培训一旦创建，不能删除或重新选择课程内容信息</div>
+	          </ng-template>
+            </nz-popover>
+        </div>
+    </div>
+
+    <div *ngIf="!value">
+        <button type="button" class="btn btn-primary" [ngClass]="{'disabled': disabled}" (click)="!disabled && openLookup()">
+            <i class="anticon anticon-select"></i> 选择课程</button>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="echoTpl" [ngTemplateOutlet]="echoTpl"></ng-container>
+
+
+<ng-template #lookupDialog>
+    <div>
+        <div *ngIf="showSourceType" class="d-flex">
+            <div nz-form-label>
+                <label nz-form-item-required>使用方式</label>
+            </div>
+            <div nz-form-control>
+                <nz-radio-group [(ngModel)]="sourceType">
+                    <label nz-radio [nzValue]="'REFERENCED'">
+                        <span>同源</span>
+                    </label>
+                    <label nz-radio [nzValue]="'COPIED'">
+                        <span>非同源</span>
+                    </label>
+                </nz-radio-group>
+            </div>
+            <div nz-form-extra class="mt-1">对于在线课程，同源课程学习记录共享，非同源课程学习记录是独立的。</div>
+        </div>
+
+        <cui-data-table [columns]="columns" [data]="courses?.content" [pagination]="courses" [selectType]="multiple ? 'checkbox' :  'radio'"
+            [(selection)]="selection" [loading]="loading" (reload)="loadList($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container [ngTemplateOutlet]="simpleSearchTpl"></ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="thumbnail" let-row="row">
+                <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+            </ng-template>
+            <ng-template cuiColTpl="nameAndCode" let-row="row">
+	          <h5>{{row.name}}</h5>
+	          <span>{{row.code}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="typeAndDuration" let-row="row">
+                <div>{{_getCourseTypeText(row.courseType)}}</div>
+                <div>学时: {{row.period}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="orgAndCate" let-row="row">
+                <div>{{row.userGroup?.name}}</div>
+                <div>{{row.category?.name}}</div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+
+    <div class="customize-footer">
+        <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="ok($event)" [nzLoading]="submitting">
+            确 定
+        </button>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="cancel($event)">
+            取 消
+        </button>
+    </div>
+
+    <ng-template #simpleSearchTpl>
+        <form nz-form [formGroup]="searchForm" (ngSubmit)="_submitSearchForm($event, searchForm.value)" [nzLayout]="'inline'">
+      
+	      <div nz-form-item style="width:180px;">
+	        <div  nz-form-control style="width:100%;"> 
+	          <spk-user-group-select formControlName="userGroup" ></spk-user-group-select>
+	        </div>
+	      </div>
+  
+	      <div nz-form-item style="width:180px;">
+	        <div  nz-form-control style="width:100%;"> 
+	          <spk-category-select formControlName="category"></spk-category-select>
+	        </div>
+	      </div>
+            <div nz-form-item>
+                <div nz-form-control>
+                    <input type="text" nz-input formControlName="searchText" placeholder="请输入课程名称">
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" (click)="_submitSearchForm($event, searchForm.value)"> 搜 索 </button>
+        </form>
+    </ng-template>
+</ng-template>

@@ -1,0 +1,282 @@
+<div>
+  <nz-steps [(nzCurrent)]="currentStep">
+    <nz-step [nzTitle]="'文件和选项'"></nz-step>
+    <nz-step [nzTitle]="'内容属性'"></nz-step>
+    <nz-step [nzTitle]="'分析保存'"></nz-step>
+    <nz-step [nzTitle]="'完成'"></nz-step>
+  </nz-steps>
+
+  <nz-tabset class="step-content mt-5" [(nzSelectedIndex)]="currentStep" style="min-height: 420px;">
+    <nz-tab>
+      <ng-container [ngTemplateOutlet]="fileAndOption"></ng-container>
+    </nz-tab>
+    <nz-tab>
+      <ng-container [ngTemplateOutlet]="properties"></ng-container>
+    </nz-tab>
+    <nz-tab>
+      <ng-container [ngTemplateOutlet]="analyzeAndSave"></ng-container>
+    </nz-tab>
+    <nz-tab>
+      <ng-container [ngTemplateOutlet]="finish"></ng-container>
+    </nz-tab>
+  </nz-tabset>
+
+  <ng-container [ngTemplateOutlet]="[fileAndOptionAction, propertiesAction, analyzeAndSaveAction, finishAction][currentStep]"></ng-container>
+</div>
+
+<ng-template #fileAndOption>
+  <form nz-form *ngIf="fileForm" [formGroup]="fileForm" [nzLayout]="'horizontal'">
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label>内容类型</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="18">
+        <nz-radio-group formControlName="standard" (ngModelChange)="onStandardChange($event)" [nzSize]="'large'">
+          <label nz-radio [nzValue]="'CMI'" class="d-block mb-2 font-weight-bold">
+            <span class="font-weight-bold">{{_STANDARDS['CMI'].label}}</span>
+            <span class="d-block font-weight-light text-secondary ml-4 px-2" style="line-height: 1;">{{_STANDARDS['CMI'].extra}}</span>
+          </label>
+          <label nz-radio [nzValue]="'AUTO'" class="d-block mb-2 font-weight-bold">
+            <span class="font-weight-bold">{{_STANDARDS['AUTO'].label}}</span>
+            <span class="d-block font-weight-light text-secondary ml-4 px-2" style="line-height: 1;">{{_STANDARDS['AUTO'].extra}}</span>
+          </label>
+          <label nz-radio [nzValue]="'VIDEO'" class="d-block mb-2 font-weight-bold">
+            <span class="font-weight-bold">{{_STANDARDS['VIDEO'].label}}</span>
+            <span class="d-block font-weight-light text-secondary ml-4 px-2" style="line-height: 1;">{{_STANDARDS['VIDEO'].extra}}</span>
+          </label>
+          <label nz-radio [nzValue]="'DOC'" class="d-block mb-2 font-weight-bold">
+            <span class="font-weight-bold">{{_STANDARDS['DOC'].label}}</span>
+            <span class="d-block font-weight-light text-secondary ml-4 px-2" style="line-height: 1;">{{_STANDARDS['DOC'].extra}}</span>
+          </label>
+        </nz-radio-group>
+      </div>
+    </div>
+
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label nz-form-item-required>课件文件</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="16">
+        <nz-spin [nzTip]="'正在校验文件...'" [nzSize]="'small'" [nzSpinning]="fileValidating">
+          <cui-fileupload #fileuploader mode="file" name="file" url="/api/upload/file" [auto]="true" [maxFileSize]="maxFileSize" (uploadComplete)="onUploadComplete($event)"
+            [accept]="fileControlInfo?.accept"></cui-fileupload>
+          <div nz-form-extra>{{fileControlInfo.extra}}</div>
+          <br>
+          <div nz-form-explain *ngIf="fileValidError">
+            {{fileValidError}}
+          </div>
+        </nz-spin>
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+<ng-template #fileAndOptionAction>
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" [disabled]="fileForm.invalid" (click)="next()">
+      下一步
+    </button>
+    <button nz-button [nzType]="'default'" (click)="onCancel($event)">
+      取 消
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #properties>
+  <form *ngIf="propertyForm" [formGroup]="propertyForm" class="form-horizontal">
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label nz-form-item-required>课件名称</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="18" [nzValidateStatus]="propertyForm.controls['title']">
+        <input nz-input formControlName="title" [nzDisabled]="isCmi" maxlength="50" [placeholder]="isCmi ? '从标准课件包解析' : '请输入内容标题'">
+        <div nz-form-explain *ngIf="propertyForm.controls['title']?.dirty&&propertyForm.controls['title']?.hasError('required')">课件名称不能为空</div>
+      </div>
+    </div>
+
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label nz-form-item-required>起始地址</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="18" [nzValidateStatus]="propertyForm.controls['startingUrl']">
+        <input nz-input formControlName="startingUrl" [nzDisabled]="!isSimpleZip" maxlength="200" [placeholder]="isSimpleZip ? '请输入内容起始地址' : (isCmi ? '从标准课件包解' : '将由系统自动生成')">
+        <div nz-form-explain *ngIf="propertyForm.controls['startingUrl']?.dirty&&propertyForm.controls['startingUrl']?.hasError('required')">起始文件不能为空</div>
+        <div nz-form-explain *ngIf="propertyForm.controls['startingUrl']?.dirty&&propertyForm.controls['startingUrl']?.hasError('forbiddenFileType')">起始文件格式不支持，仅支持html文件(*.htm, *.html)</div>
+        <div nz-form-explain *ngIf="propertyForm.controls['startingUrl']?.dirty&&propertyForm.controls['startingUrl']?.hasError('forbiddenUrl')">上传的内容包不存在指定的起始文件</div>
+      </div>
+    </div>
+
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label>描述</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="18">
+        <textarea nz-input formControlName="description" [nzDisabled]="isCmi" rows="4" [placeholder]="isCmi ? '从标准课件包解析' : '请输入内容描述信息'"></textarea>
+      </div>
+    </div>
+
+    <div nz-form-item nz-row>
+      <div nz-form-label nz-col [nzSpan]="4">
+        <label>跟踪类型</label>
+      </div>
+      <div nz-form-control nz-col [nzSpan]="18">
+        <nz-radio-group formControlName="trackingType" [nzSize]="'large'">
+          <label nz-radio [nzValue]="'AUTO'" [nzDisabled]="isVideo || isDoc" class="font-weight-bold">
+            <span>不跟踪</span>
+          </label>
+          <label nz-radio [nzValue]="'CMI'" [nzDisabled]="isVideo || isDoc" class="font-weight-bold">
+            <span>SCORM 1.2</span>
+          </label>
+          <label nz-radio [nzValue]="'VIDEO'" [nzDisabled]="!isVideo" class="font-weight-bold">
+            <span>视频</span>
+          </label>
+          <label nz-radio [nzValue]="'DOC'" [nzDisabled]="!isDoc" class="font-weight-bold">
+            <span>文档</span>
+          </label>
+
+          <div class="font-weight-light text-secondary" style="line-height: 1;">
+            <i class="fa fa-info text-info"></i> 此选项的值根据上一步骤中设置的选项自动生成</div>
+        </nz-radio-group>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #propertiesAction>
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" (click)="prev()">
+      上一步
+    </button>
+    <button nz-button [nzType]="'primary'" [disabled]="!propertyForm || propertyForm.invalid" (click)="next()">
+      下一步
+    </button>
+    <button nz-button [nzType]="'default'" (click)="onCancel($event)">
+      取 消
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #analyzeAndSave>
+  <div *ngIf="propertyForm && propertyForm.valid" class="row justify-content-md-center">
+    <div class="col col-lg-8">
+      <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="false">
+        <div alert-body>
+          <p>课件内容包已上传到服务器，并成功地进行了分析，导入后将完成下面所列的操作，单击“下一步”以导入对象。</p>
+        </div>
+      </nz-alert>
+
+      <div *ngIf="isCmi" class="analyze-info">
+        <h5>
+          <i class="anticon anticon-double-right"></i> 创建内容对象</h5>
+        <ul>
+          <li *ngFor="let item of imsmanifest" class="text-info" [style.padding-left.em]="item.depth * 2">
+            <i class="anticon" [ngClass]="{'anticon-folder-open': item.contentType == 'TOPIC_GROUP', 'anticon-book': item.contentType == 'TOPIC'}"></i>
+            <span>{{item.title}}</span>
+          </li>
+        </ul>
+        <h5>
+          <i class="anticon anticon-double-right"></i> 将从课件内容包中提取文件</h5>
+        <ul class="file-entries">
+          <li *ngFor="let item of fileEntries">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="isSimpleZip" class="analyze-info">
+        <h5>
+          <i class="anticon anticon-double-right"></i> 创建内容对象</h5>
+
+        <p class="text-info" style="padding-left: 2em;">
+          <i class="anticon anticon-book"></i>
+          <span>{{propertyForm.value['title']}}</span>
+        </p>
+
+        <h5>将从课件内容包中提取文件</h5>
+        <ul class="file-entries">
+          <li *ngFor="let item of fileEntries">
+            {{item}}
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="isVideo" class="analyze-info">
+        <h5>
+          <i class="anticon anticon-double-right"></i> 创建内容对象</h5>
+        <p class="text-info" style="padding-left: 2em;">
+          <i class="anticon anticon-video-camera"></i>
+          <span>{{propertyForm.value['title']}}</span>
+        </p>
+
+        <h5><i class="anticon anticon-double-right"></i>内容文件格式转码和清晰度转码</h5>
+        <p style="padding-left: 2em;">内容格式转码和清晰度转码比较耗时，将在后台异步进行，转码状态将会实时反馈到管理界面，可以通过
+          <a>转码任务监控</a>功能查看进度和状态信息。</p>
+      </div>
+
+      <div *ngIf="isDoc" class="analyze-info">
+        <h5>
+          <i class="anticon anticon-double-right"></i> 创建内容对象</h5>
+        <p class="text-info" style="padding-left: 2em;">
+          <i class="anticon anticon-file-text"></i>
+          <span>{{propertyForm.value['title']}}</span>
+        </p>
+
+        <h5>
+          <i class="anticon anticon-double-right"></i> 内容文件格式转码</h5>
+        <p style="padding-left: 2em;">内容格式转码比较耗时，将在后台异步进行，转码状态将会实时反馈到管理界面，可以通过
+          <a>转码任务监控</a>功能查看进度和状态信息。</p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #analyzeAndSaveAction>
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" [disabled]="submiting" (click)="prev()">
+      上一步
+    </button>
+    <button nz-button [nzType]="'primary'" (click)="doImport()" [nzLoading]="submiting">
+      下一步
+    </button>
+    <button nz-button [nzType]="'default'" [disabled]="submiting" (click)="onCancel($event)">
+      取 消
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #finish>
+
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-8">
+        <div *ngIf="!importError" style="text-align: center;">
+          <i class="anticon anticon-check-circle" style="color: #52c41a; font-size: 72px;"></i>
+          <h3 class="mt-3" style="font-size: 24px;">操作成功</h3>
+          <p class="mx-auto mt-3 mb-4">
+            导入课件内容成功, 你可以选择完成操作或者继续上传。
+          </p>
+        </div>
+
+        <div *ngIf="importError" style="text-align: center;">
+          <i class="anticon anticon-close-circle" style="color: #f04134; font-size: 72px;"></i>
+          <h3 class="mt-3" style="font-size: 24px;">操作失败</h3>
+          <p class="mx-auto mt-3 mb-4">
+            {{importError}}。你可以选择完成放弃操作或者选择重新上传重新尝试。
+          </p>
+        </div>
+    </div>
+  </div>
+
+
+</ng-template>
+
+<ng-template #finishAction>
+  <div class="customize-footer">
+    <button nz-button [nzType]="'primary'" (click)="onOk()">
+      完 成
+    </button>
+    <button nz-button [nzType]="'default'" (click)="reset()">
+      {{importError ? '重新上传' : '继续上传' }}
+    </button>
+  </div>
+</ng-template>

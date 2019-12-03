@@ -1,0 +1,81 @@
+:host ::ng-deep {
+    .childrenplan-form-box {
+        .childrenplan-form-body {
+            width: 90%;
+            margin: 0 auto;
+            .li{
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+            .ant-row {
+                width: 47%!important;
+                display: inline-block!important;
+                min-height: 48px!important;
+                margin: 5px!important;
+                .ant-form-item-label {
+                    label {
+                        color: #666666!important;
+                    }
+                }
+                .ant-form-item-control-wrapper {
+                    margin-bottom: 20px;
+                }
+            }
+            .tabs-title {
+                // text-align: center;
+                margin-bottom: 15px;
+                h3 {
+                    margin-left: 120px;
+                    color: #0269ca;
+                    font-size: 16px;
+                    &:before {
+                        content: '|';
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+        .childrenplan-form-body2 {
+            width: 800px;
+            margin: 0 20%;
+        }
+    }
+    .layout-tips {
+        line-height: 28px;
+        padding-left: 5px;
+    }
+    .ant-input-wrapper {
+        width: 100%;
+    }
+    .ant-input-number {
+        width: 100%;
+    }
+    .ant-select {
+        width: 100%;
+    }
+    .tabs-box {
+        margin-top: 20px;
+    }
+    .tabs-body {
+        width: 50%;
+        margin: 0 auto;
+    }
+    .ant-tabs-nav-container {
+        text-align: center;
+    }
+    .add-center {
+        text-align: center;
+        margin: 10px 0;
+        button {
+            margin-right: 10px;
+        }
+    }
+    .add-red {
+        color: red;
+        margin: 0 5px;
+    }
+    .add-btn-div {
+        background: #f7f5f5;
+        padding: 10px 0;
+    }
+}

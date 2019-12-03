@@ -1,0 +1,22 @@
+<div class="declare-period-works">
+    <nz-tabset (nzSelectChange)="changetabselect($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                {{'部门学时申报'}}
+            </ng-template>
+            <spk-period-department *ngIf="tabIndex==0"></spk-period-department>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                {{'学时审核'}}
+            </ng-template>
+            <spk-period-declare *ngIf="tabIndex==1"></spk-period-declare>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                {{'学时任务查看'}}
+            </ng-template>
+            <spk-period-history *ngIf="tabIndex==2"></spk-period-history>
+        </nz-tab>
+    </nz-tabset>
+</div>

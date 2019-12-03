@@ -1,0 +1,33 @@
+:host::ng-deep {
+    .test-list-body {
+        .page-info {
+            border: none;
+            padding: 0;
+            .page-info-select {
+                width: 300px;
+            }
+        }
+        .select-body {
+            margin: 5px 15px;
+            min-height: 500px;
+        }
+        .cui-data-table-wrap{
+            th,td{
+                word-break: break-all;
+            }
+            .data-table-no-data-wrap{
+                text-align: center;
+            }
+            .text-center{
+                div{
+                    display: inline-block;
+                    width: 100%;
+                    max-width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+ }

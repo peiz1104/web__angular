@@ -1,0 +1,357 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 学员学时审核管理</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../../']">返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="aduit-pass-refuse-box">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <div class="detail-message">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">学时信息</h5>
+                    <div *ngIf="paramsData" class="row">
+                        <div class="col-6 push-6 order-1">
+                            <div class="form-group first-box row">
+                                <div nz-form-item nz-row>
+                                    <div class="show-name" nz-form-label nz-col [nzSpan]="10">
+                                        <label>员工编号</label>
+                                    </div>
+                                    <div class="show-content" nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.user?.username}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>所属组织</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{getNamePath(paramsData?.user?.userGroup?.namePath)}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>审核人组织</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{getNamePath(paramsData?.declareUser?.userGroup?.namePath)}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训主题</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.periodTrainingTheme?.name}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>开始时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.startDate|date:'yyyy-MM-dd'}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训天数</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.trainDays}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训类型</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.periodTrainingType?.name}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训形式</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.trainForm=='ONLINE'?'在线培训':(paramsData.trainForm=='FACE_TO_FACE'?'面授培训':(paramsData.trainForm=='BLEND'?'混合培训':'其他培训'))}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训人数</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.trainPeople}}</span>
+                                         <input type="text" name="year" class="form-control" formControlName="year"> 
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训来源</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.periodTrainingSource?.name}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6 push-6 order-2">
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>员工姓名</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.user?.displayName}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>审核人编号</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.declareUser?.username}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训名称</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.trainName}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训内容</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span [title]="paramsData.trainContent">{{paramsData.trainContent}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>结束时间</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.endDate|date:'yyyy-MM-dd'}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训学时数</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.periodNumber}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训方式</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData.periodTrainingWey?.name}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>培训地点</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{paramsData?.trainPlace}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label>主办单位</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <span>{{getNamePath(paramsData?.userGroup?.namePath)}}</span>
+                                        <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="10">
+                                        <label for="">附件</label>
+                                    </div>
+                                    <div nz-form-control nz-col [nzSpan]="12">
+                                        <ul *ngIf=" paramsData.attachs&&paramsData.attachs.length" class="file-list-upload">
+                                            <li *ngFor="let item of paramsData.attachs" class="file-item upload-success">
+                                                <span class="show-item">
+
+                                                    <a [href]="item.relativePath" [download]="item.originFileName">
+                                                        <strong>{{item.originFileName}}</strong>
+                                                    </a>
+                                                </span>
+                                                <span></span>
+                                                <div class="progress" style="height: 3px;">
+                                                    <div class="progress-bar progress-bar-striped bg-success" style="width: 100%;"></div>
+                                                </div>
+                                                <!-- <span (click)="removeUploadfile(item.relativePath)" class="item-remove">✕</span> -->
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="btn-group-pass-refuse">
+                        <button *ngIf="isSingleUser" [nzLoading]="btnpass" nz-button [nzType]="'primary'" (click)="pass($event,'pass')">通过</button>
+                        <button *ngIf="isSingleUser" [nzLoading]="btnrefuse" nz-button [nzType]="'primary'" (click)="refuse($event,'refuse')">拒绝</button>
+                        <button *ngIf="!isSingleUser" [nzLoading]="btnpass" nz-button [nzType]="'primary'" (click)="moreRefuse()">审核</button>
+                        <button nz-button [nzType]="'primary'" (click)="goBackAduit()">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-spin>
+</div>
+<nz-modal *ngIf="isVisible" [nzZIndex]="1002" [nzVisible]="isVisible" [nzTitle]="'审核意见'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <textarea placeholder="请输入审批意见！" [(ngModel)]="textcontent" name="textvalue" id="review" cols="30" rows="6"></textarea>
+    </ng-template>
+</nz-modal>
+<!-- 人员列表 -->
+<nz-modal class="user-list-modal" [nzZIndex]="1002" [nzFooter]="false" [nzWidth]="900" *ngIf="userListVisible" [nzVisible]="userListVisible"
+    [nzTitle]="'学时审核人员列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancelUserList($event)" (nzOnOk)="handleOkUserList($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="userSpinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadUserListData($event)">
+
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body">
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="username">名称</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="username" [nzPlaceHolder]="'输入名称'"> </nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="idcardNumber">工号</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="idcardNumber" [nzPlaceHolder]="'输入工号'"> </nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div nz-form-control>
+                                    <nz-input formControlName="username" [nzPlaceHolder]="'名称...'"> </nz-input>
+                                </div> -->
+                                <div class="cui-data-table-form-row">
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                        <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template cuiColTpl="username" let-row="row">
+                    <span>{{row.user?.username}}</span>
+                </ng-template>
+
+                <ng-template cuiColTpl="displayName" let-row="row">
+                    <span>{{row.user?.displayName}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="group" let-row="row">
+                    <span>{{getNamePath(row.user?.userGroup?.namePath)}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="status" let-row="row">
+                    <span *ngIf="row.status=='M'" style="color:orange">待审核</span>
+                    <span *ngIf="row.status=='P'" style="color:green">审核通过</span>
+                    <span *ngIf="row.status=='R'" style="color:red">审核拒绝</span>
+                </ng-template>
+            </cui-data-table>
+        </nz-spin>
+        <div class="butn-group">
+            <button *spkAuthzIf="{hasPermission: 'PERIOD:AUDIT:SECOND'}" [nzLoading]="cpbtnstate" (click)="chooseUserPass()" nz-button
+                [nzType]="'primary'">
+                <span>通过</span>
+            </button>
+            <button *spkAuthzIf="{hasPermission: 'PERIOD:AUDIT:SECOND'}" [nzLoading]="crbtnstate" (click)="chooseUserRefuse()" nz-button
+                [nzType]="'primary'">
+                <span>拒绝</span>
+            </button>
+        </div>
+    </ng-template>
+
+</nz-modal>

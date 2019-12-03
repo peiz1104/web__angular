@@ -1,0 +1,51 @@
+<div class="step-research-box">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h3 class="page-title">研发管理
+                <small>| 研发项目阶段步骤</small>
+            </h3>
+            <div class="actions pull-right">
+                <button [routerLink]="['../../']" type="button" class="btn btn-light">
+                    <span>
+                        返回列表
+                        <i class="fa fa-level-up"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="step-detail">
+        <nz-tabset (nzSelectChange)="changetable($event)">
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    研发信息
+                </ng-template>
+                <spk-researchmessgae [id]="devId" [phaseId]="phaseId" *ngIf="tableIndex==0">0</spk-researchmessgae>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    人员配置
+                </ng-template>
+                <spk-researchstaffing [id]="devId" [phaseId]="phaseId" *ngIf="tableIndex==1">1</spk-researchstaffing>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    经费管理
+                </ng-template>
+                <spk-researchfeemanage [id]="devId" [phaseId]="phaseId" *ngIf="tableIndex==2">2</spk-researchfeemanage>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    研发成果
+                </ng-template>
+                <spk-researchachievements *ngIf="tableIndex==3">3</spk-researchachievements>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>
+                    阶段评估
+                </ng-template>
+                <spk-researchassessment [id]="devId" [phaseId]="phaseId" *ngIf="tableIndex==4">4</spk-researchassessment>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

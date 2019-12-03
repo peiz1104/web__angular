@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">内容服务器列表
+            <small>管理系统内容服务器</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" [routerLink]="['../', 'add']">
+                    <i class="fa fa-plus"></i> 创建内容服务器</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="servers?.content" [pagination]="servers" selectType="checkbox" [(selection)]="checkServers"
+            (reload)="reload($event)" [loading]="loading">
+            <ng-template #simpleSearch>
+                <form *ngIf="server" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="name" [(ngModel)]="server.name" placeholder="请输入内容服务器名称">
+                    </div>
+                    <div class="form-group">
+                        <select name="isDeleted" class="form-control" [(ngModel)]="server.isDeleted">
+                            <option value="">全部</option>
+                            <option value="true">已删除</option>
+                            <option value="false">未删除</option>
+                        </select>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="searchServer()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template cuiColTpl="isEnabled" let-row="row">
+                <span class="text-success" *ngIf="row.enabled">可用</span>
+                <span class="text-danger" *ngIf="!row.enabled">不可用</span>
+            </ng-template>
+            <ng-template cuiColTpl="useSecureFtp" let-row="row">
+                <span class="text-success" *ngIf="row.useSecureFtp">启用</span>
+                <span class="text-danger" *ngIf="!row.useSecureFtp">未启用</span>
+            </ng-template>
+            <ng-template cuiColTpl="isDefault" let-row="row">
+                <span class="text-success" *ngIf="row.isDefault">是</span>
+                <span class="text-danger" *ngIf="!row.isDefault">否</span>
+            </ng-template>
+            <ng-template cuiColTpl="isDeleted" let-row="row">
+                <span class="text-danger" *ngIf="row.isDeleted">已删除</span>
+                <span class="text-success" *ngIf="!row.isDeleted">未删除</span>
+            </ng-template>
+
+            <ng-template #rowActions let-row="row">
+                <a title="编辑" href="javascript:;" [routerLink]="['../', row.id, 'edit']">
+                    <i style="font-size:16px" class="iconfont icon-bianji-copy"></i>
+                </a>
+                <a title="删除" href="javascript:;" *ngIf="!row.isDeleted" class="text-danger" (click)="delete(row)">
+                    <i style="font-size:16px;color:red" class="anticon anticon-delete"></i>
+                </a>
+                <span title="删除" title="" class="text-secondary" *ngIf="row.isDeleted">
+                    <i style="font-size:16px" class="anticon anticon-delete"></i>
+                </span>
+            </ng-template>
+
+            <ng-template #actionGroup>
+                <button class="btn btn-danger" (click)="delete()">批量删除</button>
+                <button type="button" class="btn btn-light">启用</button>
+                <button type="button" class="btn btn-light">停用</button>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

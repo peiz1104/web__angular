@@ -1,0 +1,45 @@
+.container-fluid {
+    padding-top: 1rem;
+}
+
+:host ::ng-deep {
+    .add-form-box {
+        .add-select {
+            width: 80px;
+            float: right;
+            margin-right: 10px;
+        }
+        .add-select-label {
+            line-height: 28px;
+        }
+    }
+    .add-center {
+        text-align: center;
+        margin: 10px 0;
+        button {
+            margin-right: 10px;
+        }
+    }
+    .add-red {
+        color: red;
+        margin: 0 5px;
+    }
+    .ant-input-number {
+        width: 200px;
+    }
+    .add-btn-div {
+        background: #f7f5f5;
+        padding: 10px 0;
+    }
+    .ant-input {
+        width: 200px;
+    }
+    .float-left {
+        float: left;
+    }
+    .select-type {
+        float: left;
+        width: 150px;
+        margin: 0 10px;
+    }
+}

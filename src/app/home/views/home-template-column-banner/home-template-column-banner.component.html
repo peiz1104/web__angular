@@ -1,0 +1,25 @@
+<div class="home-box clearfix">
+  <div class="home-banner">
+    <div  class='banner-set-box' *ngIf="bannerInfo&&bannerInfo?.length>0">
+      <nz-carousel #carousel [nzAutoPlay]="true">
+        <div nz-carousel-content *ngFor="let item of bannerInfo" class="banner-box">
+          <a class="banner-img">
+              <img class="img-url" [src]="item?.imageUrl"  onerror="this.src='assets/images/default/banner.png'"/>
+          </a>
+        </div>
+      </nz-carousel>
+      <span class="com-btn banner-i-left" (click)="goPrev(carousel)">
+        <img src="assets/images/prev.png">
+      </span>
+      <span class="com-btn banner-i-right" (click)="goNext(carousel)">
+        <img src="assets/images/next.png">
+      </span>
+    </div>
+    <div class="banner-defor-box" *ngIf="bannerInfo?.length < 1">
+      <spk-home-template-defaultbox></spk-home-template-defaultbox>
+    </div>
+  </div>
+  <div class="home-notice">
+    <spk-home-template-column-notice></spk-home-template-column-notice>
+  </div>
+</div>

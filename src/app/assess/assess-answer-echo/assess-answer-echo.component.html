@@ -1,0 +1,122 @@
+<div class="container mt-3 questions">
+    <h1 class="text-center mt-4">{{paperInfo?.name}}</h1>
+    <div *ngFor="let question of questions;let i=index;" class="que-box mt-4" [ngSwitch]="question.type">
+        <div class="question-one">
+            <h4 class="card-title" *ngSwitchCase="'SINGLE'"> 第{{i+1}}题：【单选题】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'MULTIPLE'"> 第{{i+1}}题：【多选题】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'SINGLE_FILL'"> 第{{i+1}}题：【单项填空】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'MULTIPLE_FILL'"> 第{{i+1}}题：【多项填空】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'SHORT_ANSWER'"> 第{{i+1}}题：【简答题】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'MATRIX_SINGLE'"> 第{{i+1}}题：【矩阵单选】{{question.name}}</h4>
+            <h4 class="card-title" *ngSwitchCase="'MATRIX_MULTIPLE'"> 第{{i+1}}题：【矩阵多选】{{question.name}}</h4>
+            <!-- 单选 -->
+            <div class="card-answer" *ngIf="question.type == 'SINGLE'">
+                <nz-radio-group class="ant-radio-group">
+                    <div class="my-row">
+                        <div class="col-one" *ngFor="let option of question.options;">
+                            <img *ngIf="option.imgPath" src="{{option.imgPath}}" style="width:150px;" />
+                            <span class="ant-radio {{option.defaultOpt? 'ant-radio-checked' : ''}}">
+                                <span class="ant-radio-inner"></span>
+                            <input type="radio" class="ant-radio-input">
+                            </span>
+                            {{option.name}}
+                        </div>
+                    </div>
+                </nz-radio-group>
+            </div>
+            <!-- 多选 -->
+            <div class="card-answer" *ngIf="question.type == 'MULTIPLE'">
+                <nz-radio-group class="ant-radio-group">
+                    <div class="my-row">
+                        <div class="col-one" *ngFor="let option of question.options;">
+                            <img *ngIf="option.imgPath" src="{{option.imgPath}}" style="width:150px;" />
+                            <label nz-checkbox [(ngModel)]="option.defaultOpt" [nzDisabled]="true">
+                          {{option.name}}
+                        </label>
+                        </div>
+                    </div>
+                </nz-radio-group>
+            </div>
+            <!-- 矩阵单选 -->
+            <div class="card-answer" *ngIf="question.type == 'MATRIX_SINGLE'">
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col matrix-css" *ngFor="let o of question.options;">
+                        {{o.name}}
+                    </div>
+                </div>
+                <div class="row my-2" *ngFor="let leftQ of question.leftQuestions">
+                    <div class="col">
+                        <h4 class="matrix-css">{{leftQ.name}}</h4>
+                    </div>
+                    <div class="col" *ngFor="let o of leftQ.options">
+                        <label class="ant-radio-wrapper">
+                        <span class="ant-radio {{o.defaultOpt? 'ant-radio-checked' : ''}}">
+                            <span class="ant-radio-inner"></span>
+                            <input type="radio" class="ant-radio-input">
+                        </span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <!-- 矩阵多选 -->
+            <div class="card-answer" *ngIf="question.type == 'MATRIX_MULTIPLE'">
+                <div class="row">
+                    <div class="col">
+                    </div>
+                    <div class="col matrix-css" *ngFor="let o of question.options;">
+                        {{o.name}}
+                    </div>
+                </div>
+                <div class="row my-2" *ngFor="let leftQ of question.leftQuestions">
+                    <div class="col">
+                        <h4 class="matrix-css">{{leftQ.name}}</h4>
+                    </div>
+                    <div class="col" *ngFor="let o of leftQ.options">
+                        <label nz-checkbox [(ngModel)]="o.defaultOpt" [nzDisabled]="true"></label>
+                    </div>
+                </div>
+            </div>
+            <!-- 填空 -->
+            <div *ngIf="question.type == 'SINGLE_FILL'">
+                <div class="fill-blank">
+                    <div class="card-answer ">
+                        <div class="my-dis" *ngFor="let o of question.options">
+                            <nz-input class="ant-input-wrapper" [ngModel]="o?.content" [nzDisabled]="true">
+                                <input class="ant-input" type="text">
+                            </nz-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="question.type == 'MULTIPLE_FILL'">
+                <div class="card-answer">
+                    <div *ngFor="let o of question.options">
+                        <div class="answer-one row clearfix" style="margin-top: 20px;">
+                            <span style="line-height: 26px;">{{o.name}} ：</span>
+                            <div>
+                                <nz-input class="ant-input-wrapper" [ngModel]="o?.content" [nzDisabled]="true">
+                                    <input class="ant-input" type="text">
+                                </nz-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="question.type == 'SHORT_ANSWER'">
+                <div class="fill-blank">
+                    <div class="card-answer ">
+                        <div class="my-dis" *ngFor="let o of question.options">
+                            <textarea rows="4" [value]="o?.content? o?.content : ''" style="width: 200%" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loading text-center mt-5 mb-5 text-primary" *ngIf="loading">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>

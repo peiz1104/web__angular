@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">部门管理
+      <small></small>
+    </h3>
+
+    <div class="actions pull-right">
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="card mb-3" *ngIf="activedGroup">
+      <div class="card-body">
+        <h5 class="card-title d-inline-block">[{{activedGroup?.code || activedGroup?.id}}] {{activedGroup?.name}}</h5>
+        <ng-container *ngIf="activedGroup?.type == 'USER_GROUP'">
+          <a class="d-inline-block ml-3" [routerLink]="[activedGroup.id, 'edit']" *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:EDIT'}">
+            <i class="fa fa-pencil"></i> 修改</a>
+          <a class="d-inline-block ml-3 text-danger" href="javascript:;" (click)="delete(activedGroup?.id)" *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:REMOVE'}">
+            <i class="fa fa-trash"></i> 删除</a>
+        </ng-container>
+        <p class="mb-0">{{activedGroup?.description || '暂无描述'}}</p>
+        <!-- <dl class="row">
+              <dt class="col-sm-2 text-right">部门编码</dt>
+              <dd class="col-sm-10">{{activedGroup?.code}}</dd>
+
+              <dt class="col-sm-2 text-right">部门名称</dt>
+              <dd class="col-sm-10">{{activedGroup?.name}}</dd>
+
+              <dt class="col-sm-2 text-right">部门简介</dt>
+              <dd class="col-sm-10">{{activedGroup?.description}}</dd>
+            </dl> -->
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs mt-4 mb-3" id="pills-tab" role="tablist">
+      <!-- <li class="nav-item">
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-expanded="true">属性</a>
+          </li> -->
+      <li class="nav-item">
+        <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+          aria-expanded="true">子级部门</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="row mb-2">
+          <div class="col">
+            <form class="form-inline">
+              <div class="form-group">
+                <nz-input name="searchtext" [nzPlaceHolder]="'按名称或编码搜索'" [(ngModel)]="searchtext"></nz-input>
+              </div>
+              <div class="form-group ml-2">
+                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+              </div>
+            </form>
+          </div>
+          <div class="col ml-auto text-right">
+            <button type="button" class="btn btn-outline-primary" [routerLink]="['add', {activedGroupId: (activedGroup && activedGroup.type == 'USER_GROUP' ? activedGroup.id : '')}]">
+              <i class="fa fa-plus"></i> 创建部门</button>
+            <button type="button" class="btn btn-outline-primary" [routerLink]="['../', 'import']">
+              <i class="fa fa-upload"></i> 批量导入</button>
+            <button class="btn btn-outline-primary" *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:EXPORT'}" (click)="userGroupExport()"
+              [disabled]="exportShow">
+              <i class="fa fa-download"></i> 导出部门</button>
+              <button class="btn btn-danger" (click)="delete(null, false)">批量删除</button>
+
+          </div>
+        </div>
+
+        <cui-data-table [columns]="columns" [data]="subGroups" selectType="checkbox" [loading]="loading" (select)="onSelect($event)">
+          <ng-template cuiColTpl="userGroup" let-row="row">
+                <spk-user-group-popover [userGroup]="row" placement="bottom">
+                    <ng-template #echoTpl>
+                        <div style="width:200px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                            {{row.name}}
+                        </div>
+                    </ng-template>
+                  </spk-user-group-popover>
+          </ng-template>
+          <ng-template cuiColTpl="displaySort" let-row="row">
+            <ng-container *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:EDIT'}">
+              <a class="text-primary" (click)="moveUp(row.id)">上移</a>
+              <span>|</span>
+              <a class="text-primary" (click)="moveDown(row.id)">下移</a>
+            </ng-container>
+          </ng-template>
+          <ng-template cuiColTpl="regionType" let-row="row">
+            <span *ngIf="row.regionType == 'PARENT'">总公司</span>
+            <span *ngIf="row.regionType == 'PROVINCE'">省公司</span>
+            <span *ngIf="row.regionType == 'PREFECTURE'">地市公司</span>
+          </ng-template>
+          <ng-template cuiColTpl="actions" let-row="row">
+            <div class="text-right">
+              <a [routerLink]="[row.id, 'edit', {activedGroupId: activedGroup?.type === 'USER_GROUP' ? (activedGroup?.id || '') : ''}]"
+                *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:EDIT'}">编辑</a>
+              <span>|</span>
+              <nz-popconfirm [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id, true)">
+                <a nz-popconfirm href="javascript:;" class="text-danger">删除</a>
+              </nz-popconfirm>
+            </div>
+          </ng-template>
+          <ng-template #actionGroup>
+              <button class="btn btn-outline-danger" (click)="delete(null, false)">批量删除</button>
+          </ng-template>
+        </cui-data-table>
+      </div>
+    </div>
+  </div>
+</div>

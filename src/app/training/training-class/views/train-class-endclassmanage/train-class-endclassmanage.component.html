@@ -1,0 +1,42 @@
+<div class="train-end-class-manage">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>结班管理</small>
+            </h5>
+        </div>
+    </div>
+    <nz-tabset style="padding-left:12px;" [nzTabPosition]="'top'" [nzType]="'card'" (nzSelectChange)="changetabselect($event)">
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                班级评估
+            </ng-template>
+            <spk-train-class-evaluation [traingId]="traingId"></spk-train-class-evaluation>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                授课管理
+            </ng-template>
+            <spk-training-class-teaching-management [traingId]="traingId"></spk-training-class-teaching-management>
+        </nz-tab>
+
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                费用管理
+            </ng-template>
+            <spk-train-class-costmanagement *ngIf="tabIndex==2"></spk-train-class-costmanagement>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                证书管理
+            </ng-template>
+            <spk-training-class-newcertificate *ngIf="tabIndex==3"></spk-training-class-newcertificate>
+        </nz-tab>
+        <nz-tab>
+            <ng-template #nzTabHeading>
+                文档信息
+            </ng-template>
+            <spk-train-document-infromation *ngIf="tabIndex==4"></spk-train-document-infromation>
+        </nz-tab>
+    </nz-tabset>
+</div>

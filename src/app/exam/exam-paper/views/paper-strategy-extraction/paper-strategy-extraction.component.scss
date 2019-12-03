@@ -1,0 +1,73 @@
+:host::ng-deep {
+    .random-strategy-extraction {
+        padding: 0 10px;
+        .text {
+            color: red;
+        }
+        .btn-group {
+            text-align: center;
+            padding: 20px 0;
+            display: block;
+            .ant-btn {
+                display: inline-block;
+                margin: 0 10px;
+            }
+        }
+        .paper-header {
+            overflow: hidden;
+            padding: 10px;
+            border-bottom: 1px solid #1b6aaa;
+            .paper-title {
+                h4 {
+                    font-weight: bold;
+                }
+                .paper-status {
+                    margin-top: 10px;
+                }
+                .color-publish {
+                    color: #dc5943;
+                }
+            }
+        }
+        .input-number {
+            width: 50% !important;
+        }
+        .select-body {
+            margin-top: 14px;
+            .list-search-bar {
+                min-height: 0;
+                .seconds {
+                    background: #eeeeee;
+                    padding: 6px;
+                    position: relative;
+                    left: -11px;
+                }
+                .ant-input-number {
+                    width: 80%;
+                    .ant-input-number-input {
+                        width: 80%;
+                    }
+                }
+                .complex-search-bar-search-box {
+                    margin-left: -40px;
+                    .border {
+                        border-top: 1px solid #aaa;
+                    }
+                }
+            }
+            .ant-form-explain {
+                color: #f04134;
+            }
+            .parition-strategy {
+                font-size: 16px;
+                padding: 10px 0px;
+                color: #e9680d;
+            }
+            .rand-score {
+                .ng-invalid {
+                    border: 1px solid #e9680d;
+                }
+            }
+        }
+    }
+}

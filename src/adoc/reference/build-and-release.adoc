@@ -1,0 +1,46 @@
+[[build-and-release]]
+= 构建和发布
+
+[WARNING]
+====
+由于工程并未进入到发布测试阶段，工程的构建发布脚本均不完善，因此，此章节的内容只是部分不成熟的设想，不能直接使用。
+
+*此章节内容将在相关过程和脚本添加后完善。*
+====
+
+== 手工构建和发布
+
+=== 发布应用
+
+.全部发布
+[source,bash]
+----
+npm run release
+----
+
+.发布示例工程
+[source,bash]
+----
+npm run release-showcase
+----
+
+.发布 webjar
+[source,bash]
+----
+gradle uploadArchives
+# TODO: 后续将 gradle 命令整合到 npm 脚本中 
+----
+
+.生成文档
+[source,bash]
+----
+gradle asciidoctor
+----
+
+== 通过 CI/CD 工具 自动构建和发布
+
+// TODO: 待补充
+
+== 提交发布到 PMS
+
+// TODO: 待补充

@@ -1,0 +1,37 @@
+<div class="new-home-application">
+    <div class="panel-header">
+        <div *ngIf="!parentId">全部菜单</div>
+        <div *ngIf="parentId">
+            <span style="cursor:pointer" (click)="goUpperLevel()">
+                <i class="iconfont icon-fanhui1"></i>
+                <span style="font-size:12px">返回</span>
+                <strong>{{dropIconAndName.name}}</strong>
+            </span>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="product-block">
+            <div class="block-content">
+                <a *ngFor="let item of currentApplication" (click)="applicationShow(item)">
+                    <div *ngIf="item.requirePermission">
+                        <div *spkAuthzIf="item.requirePermission" class="ant-col-4 appItem">
+                            <div class="appItemIcon">
+                                <img src="./assets/images/all_app1.png" alt="">
+                            </div>
+                            {{item.name}}
+                        </div>
+                    </div>
+                    <div *ngIf="!item.requirePermission">
+                        <div class="ant-col-4 appItem">
+                            <div class="appItemIcon">
+                                <img src="./assets/images/all_app1.png" alt="">
+                            </div>
+                            {{item.name}}
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

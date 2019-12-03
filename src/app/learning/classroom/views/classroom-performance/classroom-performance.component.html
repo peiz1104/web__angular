@@ -1,0 +1,64 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">{{classroom?.name}}: 学习情况 <small></small></h3>
+
+    <div class="actions pull-right">
+      <!-- <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回课程列表 <i class="fa fa-level-up"></i></button> -->
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- 暂时隐藏页面提示信息 -->
+    <!-- <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzCloseable]="true" class="mb-3">
+      <div alert-body>
+        学员完成状态旁的星号 (*) 表示存在注释。 更新学员的成绩状态时可查看该注释。          
+      </div>
+      <div alert-description></div>
+    </nz-alert> -->
+
+    <cui-data-table [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [loading]="loading" (reload)="loadData($event)" [(selection)]="selection">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <nz-select style="width: 120px;" name="status" [(ngModel)]="searchBy.status" [nzPlaceHolder]="'学习状态'">
+              <nz-option [nzLabel]="'学习状态'" [nzValue]="''">
+              </nz-option>
+              <nz-option *ngFor="let ls of _learnStatus" [nzLabel]="ls.label" [nzValue]="ls.value">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="form-goup ml-2">
+            <nz-input name="username" [nzPlaceHolder]="'请输入用户名或姓名'" [(ngModel)]="searchBy.username"></nz-input>
+          </div>
+          
+          <button type="button" class="btn btn-primary ml-2" (click) = "loadData()">搜索</button>
+        </form>
+      </ng-template>
+     
+      <ng-template #listTools>
+          <button type="button" class="btn btn-outline-primary" (click) = "refresh()"><i class="fa fa-refresh"></i>刷新状态</button>
+          <button type="button" class="btn btn-outline-primary" (click) = "exportCreate()" [disabled] = "exportShow"><i class=" "></i> 导出</button>
+      </ng-template>
+     
+      <ng-template cuiColTpl="progress" let-row="row">
+        <nz-progress [ngModel]="getProgress(row.progress)" [nzStrokeWidth]="5"></nz-progress>
+      </ng-template>
+      <ng-template cuiColTpl="totalTime" let-row="row">
+        {{formatSeconds(row.totalTime)}}
+      </ng-template>
+      <ng-template cuiColTpl="lastModifiedDate" let-row="row">
+        {{row.lastModifiedDate | date: 'yyyy-MM-dd HH:mm:ss'}}
+      </ng-template>
+      <ng-template cuiColTpl="status" let-row="row">
+        <ng-container [ngSwitch]="row.status">
+          <div *ngSwitchCase="'I'">学习中</div>
+          <div *ngSwitchCase="'C'">已完成</div>
+          <div *ngSwitchCase="'P'">已通过</div>
+          <div *ngSwitchCase="'F'">未通过</div>
+          <div *ngSwitchDefault>未学习</div>
+        </ng-container>
+      </ng-template>
+    </cui-data-table>
+
+  </div>
+</div>

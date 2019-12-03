@@ -1,0 +1,53 @@
+:host::ng-deep {
+    .paper-home-body {
+        .preview-class {
+            .ant-btn-ghost {
+                display: none;
+            }
+        }
+        .btn-link {
+            cursor: pointer;
+        }
+        .list-search-bar {
+            margin-bottom: 16px;
+        }
+        .action-group {
+            display: none;
+        }
+        .ant-modal-body {
+            height: 500px;
+            overflow-x: auto;
+        }
+        .exam-casual {
+            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .page-info {
+            border: none;
+            padding: 0;
+            .page-info-select {
+                width: 300px;
+                .ant-modal-body {
+                    height: 430px;
+                    overflow-x: auto;
+                }
+            }
+        }
+        .select-body {
+            margin: 5px 15px;
+            .align-middle {
+                text-overflow: inherit;
+            }
+        }
+        .anticon-edit {
+            color: #fb8a00;
+        }
+        .anticon-eye {
+            color: #578abd;
+        }
+    }
+}

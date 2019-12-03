@@ -1,0 +1,202 @@
+<div class="research-achievements">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="name" placeholder="请输入成果名称">
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="searchData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="addstpachieve($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia" style="font-size:12px"></i>
+                        <span>添加</span>
+                    </button>
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="mutipledelete($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-shanchu"></i>
+                        <span>删除</span>
+                    </button>
+                    <!-- <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="coursereview($event)" nz-button [nzType]="'primary'">
+                                    <span>课时量复核申请</span>
+                                </button> -->
+                </div>
+            </ng-template>
+
+            <ng-template cuiColTpl="fileName" let-row="row">
+                <span title="下载" (click)="downLoad(row)" style="color:#007bff;cursor:pointer" *ngIf="row.documentInfo&&row.documentInfo.originFileName">{{row.fileName}}</span>
+                <span title="无上传文件不可下载" style="color:#888;cursor:pointer" *ngIf="!row.documentInfo|| !row.documentInfo.originFileName">{{row.fileName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="name" let-row="row">
+                <span title="查看" style="color:#007bff;cursor:pointer" (click)="showdetailModal(row)">{{row.name}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="remark" let-row="row">
+                <span>{{row.remark}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="createDate" let-row="row">
+                <span>{{row.createdDate | date:'yyyy-MM-dd HH:mm'}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="createBy" let-row="row">
+                <span>{{row.createdByDisplayName}}</span>
+            </ng-template>
+
+
+
+            <ng-template cuiColTpl="actions" let-row="row">
+                <span *ngIf="devStatus=='END'|| devStatus=='CANCEL'">
+                    <i title="不可编辑" style="color:#888;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+                </span>
+                <span *ngIf="devStatus!='END'&& devStatus!='CANCEL'">
+                    <i title="编辑" (click)="editCourse(row)" style="color:#007bbf;cursor:pointer" class="iconfont icon-bianji-copy"></i>
+                </span>
+                <a class="text-info" *ngIf="row.documentInfo.isPreview && row.documentInfo.transcodeStatus == 'COMPLETE'" [routerLink]="['/development/research/file/look', row.documentInfo.id 
+                ]">预览</a>
+            </ng-template>
+
+        </cui-data-table>
+    </nz-spin>
+</div>
+<!-- 添加附加成果 -->
+<nz-modal class="add-modal" [nzWidth]="900" [nzZIndex]="999" [nzFooter]="false" *ngIf="isVisible" [nzVisible]="isVisible"
+    [nzTitle]="editId?'编辑':'添加'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+            <div class="form-name-box">
+                <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 push-6 order-1">
+
+                                        <div class="form-group row">
+                                                <div nz-form-item nz-row>
+                                                    <div nz-form-label nz-col [nzSpan]="8">
+                                                        <label nz-form-item-required>阶段评估</label>
+                                                    </div>
+                                                    <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.name">
+                                                        <nz-input [nzPlaceHolder]="'请填写阶段评估'" formControlName="name"></nz-input>
+                                                        <div nz-from-explain *ngIf="_form.controls.name.dirty&&_form.controls.name.hasError('required')"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>附件名</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请输入附件名称'" formControlName="fileName"></nz-input>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-6 pull-6 order-2">
+                               
+
+                                    <div class="form-group row" *ngIf="editId?fasle:true">
+                                            <div nz-form-item nz-row>
+                                                <div nz-form-label nz-col [nzSpan]="8">
+                                                    <label nz-form-item-required>上传附件</label>
+                                                </div>
+                                                <div nz-form-control nz-col [nzSpan]="14" nz-form-control [nzValidateStatus]="_form.controls.personType">
+    
+                                                    <div class="upload-file-custom">
+                                                        <cui-fileupload name="file" mode="file" url="/api/documents/upload" [auto]="true" (uploadComplete)="initDocument($event)"></cui-fileupload>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>阶段备注</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <textarea rows="3" cols="20" placeholder="请输入阶段备注" type="textarea" class="form-control textarea-control" formControlName="remark">
+                                                        </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                                                <button [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存</button>
+                                                <span (click)="handleCancel($event)" class="cancel-btn">取消</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>
+
+<nz-modal class="modal-detail" [nzWidth]="900" [nzVisible]="showModalisVisible" [nzTitle]="showdetailData.name" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancelModal($event)" (nzOnOk)="handleOkModal($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="modalspinning" [nzTip]="'正在读取数据...'">
+            <div class="card">
+                <div class="personal-message-list">
+                    <div class="left">
+                        <div class="single-box">
+                            <span class="lable">评估名称：</span>
+                            <span class="content">{{showdetailData.name}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">创建时间：</span>
+                            <span class="content">{{showdetailData.createdDate}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">创建人：</span>
+                            <span class="content">{{showdetailData.createdByDisplayName}}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="right">
+                        <div class="single-box">
+                            <span class="lable">文件名：</span>
+                            <span class="content">{{showdetailData.fileName}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">文件大小：</span>
+                            <span class="content">{{showdetailData?.documentInfo?.prettyFileSize}}</span>
+                        </div>
+                        <div class="single-box">
+                            <span class="lable">评估描述：</span>
+                            <span class="content">第{{showdetailData.remark}}阶段</span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

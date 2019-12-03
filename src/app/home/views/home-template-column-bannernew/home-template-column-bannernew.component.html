@@ -1,0 +1,35 @@
+<div class="china-life-new-banner">
+    <div class="left-course-tree-box" [ngStyle]="{'background-color':getLeftRightColor.leftColor ? getLeftRightColor.leftColor : '#fefefe' }">
+        <div class="course-tree">
+          <img src="assets/images/course_tree.png"/>
+        </div>
+    </div>
+    <div class="center-banner-box">
+        <div class="home-banner">
+            <nz-spin [nzSpinning]="loading">
+                <div class='banner-set-box' *ngIf="bannerInfo?.length > 0">
+                    <nz-carousel #carousel [nzAutoPlay]="true" >
+                        <div nz-carousel-content *ngFor="let data of bannerInfo" class="banner_box">
+                            <a class="banner_img" id='bannerImgBox'>
+                                <img style="width:100%;" [src]="data?.imageUrl"  onerror="this.src='assets/images/default/banner.png'"/>
+                            </a>
+                        </div>
+                    </nz-carousel>
+                    <ul class="slick-other-dots">
+                        <li *ngFor="let item of bannerInfo;let i = index" [ngClass]="carouselCurrentIndex==i?'slick-active':'no-choose'"></li>
+                    </ul>
+                    <i class="iconfont icon-fanhui1 banner-i-left"></i>
+                    <i class="iconfont icon-icon-- banner-i-right"></i>
+                </div>
+                <div class="banner-defor-box" *ngIf="bannerInfo?.length < 1">
+                    <spk-home-template-defaultbox></spk-home-template-defaultbox>
+                </div>
+            </nz-spin>
+        </div>
+    </div>
+    <div class="right-message-box" [ngStyle]="{'background-color':getLeftRightColor.rightColor ? getLeftRightColor.rightColor :'#fefefe' }">
+        <div class="message-info-box">
+            <img src="assets/images/message_box.png"/>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 查看人员列表</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../../','hourdeclarationlist']">返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="person-list-box">
+    <div class="top-bread">
+        <!-- <nz-breadcrumb class="bread">
+            <nz-breadcrumb-item>
+                您所在位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                学时管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../','hourdeclarationlist']">学员学时申报管理列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a class="active">查看人员列表</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>查看人员列表</small>
+            </h5>
+        </div> -->
+    </div>
+    <div class="person-list-box">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                    [(selection)]="selection" (reload)="loadData($event)">
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-col [nzSpan]="5" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-col [nzSpan]="21">
+                                                <nz-input formControlName="username" [nzPlaceHolder]="'请输入工号'"> </nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="cui-data-table-form-row">
+                                        <div class='simple-search-bar-search-box'>
+                                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+
+                    <ng-template #complexSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="trainName">姓名</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="username" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="idcardNumber">工号</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="idcardNumber" [nzPlaceHolder]="'请输入工号'"> </nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cui-data-table-form-row">
+                                        <div class='complex-search-bar-search-box'>
+                                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询
+                                            </button>
+                                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                            <spk-user-lookup #userLookup *ngIf="matchUser" (ok)="userLookupOk($event)">
+                                <ng-template #echoTpl>
+                                    <button *spkAuthzIf="{hasPermission: 'PERIOD:DECLARE_OTHER:EDIT'}" [title]="status=='P'?'已提交不可增加':''" [disabled]="status=='P'"
+                                        nz-button [nzType]="'primary'" (click)="userLookup.openLookup()">
+                                        <i class="iconfont icon-tianjia-copy"></i> 批量增加</button>
+                                    <!-- <button type="button" class="btn btn-outline-primary" (click)="userLookup.openLookup()">添加用户</button> -->
+                                </ng-template>
+                            </spk-user-lookup>
+
+                            <button *spkAuthzIf="{hasPermission: 'PERIOD:DECLARE_OTHER:EDIT'}" [title]="status=='P'?'已提交不可删除':''" [disabled]="status=='P'"
+                                nz-button [nzType]="'primary'" (click)="batchdelete($event)">
+                                <i class="iconfont icon-shanchu"></i>
+                                批量删除</button>
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="username" let-row="row">
+                        <span>{{row.user.username}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <span *spkAuthzIf="{hasPermission: 'PERIOD:DECLARE_OTHER:EDIT'}">
+                            <i *ngIf="status=='N'" title="删除" style="cursor: pointer;font-size:16px;color:red;" (click)="singledelete(row.id)" class="iconfont icon-shanchu"></i>
+                        </span>
+                        <i *ngIf="status=='P'" title="已提交不可删除" style="cursor:pointer;color:#aaa;" class="iconfont icon-shanchu"> </i>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="displayName" let-row="row">
+                        <span>{{row.user.displayName}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="phoneNumber" let-row="row">
+                        {{row.user.phoneNumber}}
+                    </ng-template>
+                    <ng-template cuiColTpl="sex" let-row="row">
+                        <span *ngIf="row.user.sex=='MALE'" style="color:blue;">男</span>
+                        <span *ngIf="row.user.sex=='FAMALE'" style="color:red">女</span>
+
+                    </ng-template>
+                    <ng-template cuiColTpl="group" let-row="row">
+                        {{getUserGroup(row.user?.userGroup?.namePath)}}
+                    </ng-template>
+                    <ng-template cuiColTpl="status" let-row="row">
+                        <span>{{row.status=='N'?'未提交':row.status=='M'?'二级审核':row.status=='A'?'待审核':row.status=='P'?'审核通过':row.status=='R'?'审核拒绝':'--'}}</span>
+                    </ng-template>
+                    <!-- <ng-template #actionGroup>
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                        <span>批量操作</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item">批量删除</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item">批量创建</a>
+                                        <a class="dropdown-item">批量导入</a>
+                                    </div>
+                                </div>
+                            </ng-template> -->
+
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

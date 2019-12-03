@@ -1,0 +1,134 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">好课管理
+      <small>从当前站点已发布课程培训中推荐好课及已推荐好课管理</small>
+    </h3>
+  </div>
+  <div class="page-body">
+    <nz-tabset (nzSelectChange)="_tabChange($event)">
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          好课管理
+        </ng-template>
+        <div>
+          <cui-data-table #recommendTable [columns]="recommendColumns" [data]="recommends?.content" [pagination]="recommends" selectType="checkbox"
+            (select)="onSelect($event)"  (reload)="loadRecommends($event)" [loading]="recommendLoading">
+            <ng-template #simpleSearch>
+              <form class="form-inline">
+                <div class="form-group">
+                  <nz-input name="offeringName" [nzPlaceHolder]="'请输入好课名称'" [(ngModel)]="offeringRecommend.offeringName"></nz-input>
+                </div>
+                <div class="form-group ml-2">
+                  <button type="button" class="btn btn-primary" (click)="loadRecommends()">搜索</button>
+                </div>
+              </form>
+            </ng-template>
+            <ng-template cuiColTpl="moveTpl" let-row="row">
+              <a href="javascript:void();" *ngIf="row.up" (click)="move(row.id,'up')">上移</a>
+              <span>|</span>
+              <a href="javascript:void();" *ngIf="row.down" (click)="move(row.id,'down')">下移</a>
+            </ng-template>
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <nz-popconfirm [nzTitle]="'确定要取消推荐吗？'" (nzOnConfirm)="cancelRecommends(row.id, true)">
+                    <a nz-popconfirm class="text-danger">取消推荐</a>
+                </nz-popconfirm>
+              <!-- <a href="javascript:void()" (click)="cancelRecommends(row.id)">取消推荐</a> -->
+            </ng-template>
+            <ng-template #listTools>
+                <div class="actions pull-right">
+                    <button class="btn btn-danger" (click)="cancelRecommends(null, false)">批量取消推荐</button>
+                </div>
+            </ng-template>
+            <ng-template #actionGroup>
+              <button class="btn btn-outline-danger" (click)="cancelRecommends(null, false)">批量取消推荐</button>
+            </ng-template>
+          </cui-data-table>
+        </div>
+      </nz-tab>
+      <nz-tab>
+        <ng-template #nzTabHeading>
+          可推荐课程
+        </ng-template>
+        <div>
+          <cui-data-table #classroomTable [columns]="classroomColumns" [data]="classrooms?.content" [pagination]="classrooms" selectType="checkbox"
+            [(selection)]="checkedClassrooms" (reload)="loadClassrooms($event)" [loading]="classroomLoading">
+            <ng-template #complexSearch>
+              <form class="search-bar">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group row">
+                      <label class="col-form-label col-3">名称</label>
+                      <div class="col-9">
+                        <nz-input name="name" [nzPlaceHolder]="'请输入课程培训名称'" [(ngModel)]="searcher.name"></nz-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group row">
+                      <label class="col-form-label col-3">所属组织</label>
+                      <div class="col-9">
+                        <spk-user-group-select name="userGroup.name" [(ngModel)]="searcher.userGroup"></spk-user-group-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group row">
+                      <div class=" col-9 offset-3">
+                        <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+                            <label nz-checkbox [(ngModel)]="includeChildren" name="includeChildren">
+                                <span>包含下级组织</span>
+                              </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group row mb-0">
+                      <div class="col-3 offset-1">
+                        <button type="button" class="btn btn-primary" (click)="loadClassrooms()">搜索</button>
+                        <button type="reset" class="btn ">清空</button>
+                        <a href="javascript:;" class="btn btn-link" (click)="classroomTable.isComplexSearch=false">普通搜索</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+              <form class="form-inline">
+                <div class="form-group">
+                  <nz-input name="name" [nzPlaceHolder]="'请输入课程培训名称'" [(ngModel)]="searcher.name"></nz-input>
+                </div>
+                <div class="form-group ml-2">
+                  <button type="button" class="btn btn-primary" (click)="loadClassrooms()">搜索</button>
+                  <a href="javascript:;" class="btn btn-link" (click)="classroomTable.isComplexSearch=true">高级搜索</a>
+                </div>
+              </form>
+            </ng-template>
+            <ng-template cuiColTpl="rowActions" let-row="row">
+                <nz-popconfirm [nzTitle]="'确定要推荐吗？'" (nzOnConfirm)="batchRecommend(row, true)">
+                    <a nz-popconfirm class="text-primary">推荐</a>
+                </nz-popconfirm>
+              <!-- <a href="javascript:void();" (click)="batchRecommend(row)">推荐</a> -->
+            </ng-template>
+            <ng-template cuiColTpl="classroom-start-date" let-row="row">
+              <span>{{row.startDate | date: 'yyyy-MM-dd' }}</span>
+            </ng-template>
+            <ng-template cuiColTpl="classroom-end-date" let-row="row">
+              <span>{{row.endDate | date: 'yyyy-MM-dd'}}</span>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="actions pull-right">
+                    <button class="btn btn-primary" (click)="batchRecommend(null, false)">批量推荐</button>
+                </div>
+            </ng-template>
+            <ng-template #actionGroup>
+              <button class="btn btn-outline-primary" (click)="batchRecommend(null, false)">批量推荐</button>
+            </ng-template>
+          </cui-data-table>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>

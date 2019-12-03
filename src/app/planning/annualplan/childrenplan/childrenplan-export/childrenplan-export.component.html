@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small [routerLink]="['../../../','list']">| 年度计划</small>
+            <small>| 导出子计划</small>
+        </h3>
+        <div class="actions pull-right">
+            <button [routerLink]="['../','list']" type="button" class="btn btn-light">
+                <span>
+                    返回列表
+                    <i class="fa fa-level-up"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <!-- <div class="page-header">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../../../', 'list']">年度计划</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['../', 'list']">年度子计划列表</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                导出子计划
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div> -->
+    <div class="page-body">
+        <div>数据导出中,请勿关闭本页面! 下载大量的数据需要一段时间请耐心等待，下载按钮出现时可点击下载。
+        </div>
+        <div>
+            <button *ngIf="this.buttonShow == true" nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="download()">点击下载</button>
+        </div>
+        <div>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" [routerLink]="['../list']">返回</button>
+        </div>
+    </div>
+</div>

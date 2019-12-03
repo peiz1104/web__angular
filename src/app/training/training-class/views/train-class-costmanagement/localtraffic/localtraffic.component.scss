@@ -1,0 +1,14 @@
+:host::ng-deep{
+    .localtraffic-box{
+        button{
+            cursor: pointer;
+            margin-right: 4px;
+        }
+        .complex-search-bar-search-box{
+            margin-left:60px;
+        }
+        .ant-modal-footer{
+            display: none;
+        }
+    }
+}

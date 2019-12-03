@@ -1,0 +1,84 @@
+<div>
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>场地信息</small>
+            </h5>
+        </div>
+    </div>
+    <div nz-col [nzSpan]="21">
+        <form nz-form [formGroup]="validateForm" [nzType]="'horizontal'">
+            <nz-spin [nzSpinning]="isSpinning">
+            </nz-spin>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>场地名称</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.roomName" nzHasFeedback>
+                    <nz-input formControlName="roomName" [nzPlaceHolder]="'请控制字符在20个以内'" [nzType]="'text'" [nzSize]="'large'" [maxlength]='20' (nzBlur)="typeNameBlur()">
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.roomName.dirty&&validateForm.controls.roomName.hasError('required')">场地名称不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.roomName.dirty&&validateForm.controls.roomName.errors?.maxlength">场地名称最多20个字!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.roomName.dirty&&validateForm.controls.roomName.hasError('notUnique')">场地名称已存在!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>场地类型</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <nz-select formControlName="roomType" [nzPlaceHolder]="'请选择'">
+                        <nz-option *ngFor="let option of typeSelect" [nzLabel]="option.label" [nzValue]="option.value">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>场地地址</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="validateForm.controls.roomAddress" nzHasFeedback>
+                    <nz-input formControlName="roomAddress" [nzPlaceHolder]="'请控制字符在20个以内'" [nzType]="'text'" [nzSize]="'large'" [maxlength]='20'>
+                    </nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.roomAddress.dirty&&validateForm.controls.roomAddress.hasError('required')">场地地址不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.roomAddress.dirty&&validateForm.controls.roomAddress.errors?.maxlength">场地地址最多20个字!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="7">
+                    <label nz-form-item-required>最大容量</label>
+                </div>
+
+                <div nz-col [nzSpan]="4" nz-form-control [nzValidateStatus]="validateForm.controls.maximumSeat" nzHasFeedback>
+                    <!-- <nz-input formControlName="maximumSeat"  [nzType]="'text'" [nzSize]="'large'"
+                        [maxlength]='20'>
+                    </nz-input> -->
+                    <nz-input-number formControlName="maximumSeat" [nzMin]="1" [nzMax]="999999" [nzStep]="1" [nzSize]="'large'"></nz-input-number>
+                    <div nz-form-explain *ngIf="validateForm.controls.maximumSeat.dirty&&validateForm.controls.maximumSeat.hasError('required')">最大容量不能为空!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.maximumSeat.dirty&&validateForm.controls.maximumSeat.hasError('mismatch')">最大容量只能为纯数字!</div>
+                    <div nz-form-explain *ngIf="validateForm.controls.maximumSeat.dirty&&validateForm.controls.maximumSeat.hasError('maxlength')">最大容量不能超过六位数!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzSpan]="7" nz-form-label>
+                    <label>备注</label>
+                </div>
+                <div nz-col [nzSpan]="12" nz-form-control>
+                    <nz-input formControlName="remarks" (ngModelChange)="descInput($event)" [nzPlaceHolder]="'请控制字符在200个以内'" [nzRows]="3" [nzType]="'textarea'" [nzSize]="'large'" [maxlength]='200'>
+                    </nz-input>
+                    <div class="input-tip">
+                        {{inputNum}}/200
+                    </div>
+                    <div nz-form-explain style="color:red;margin-top: 5px;" *ngIf="validateForm.controls.remarks.dirty&&validateForm.controls.remarks.errors?.maxlength">类型描述最多200个字!</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" [nzLoading]="isLoading" (click)="submitForm($event,validateForm.value)">保存</button>
+                    <button nz-button [nzSize]="'large'" (click)="reset($event)">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

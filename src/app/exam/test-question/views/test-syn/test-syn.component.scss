@@ -1,0 +1,19 @@
+ :host::ng-deep {
+     .cui-data-table-wrap{
+        th,td{
+            word-break: break-all;
+        }
+        .data-table-no-data-wrap{
+            text-align: center;
+        }
+        .text-center{
+            div,span{
+                display: inline-block;
+                max-width: 100%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+ }

@@ -1,0 +1,78 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">
+            <small>创建课程</small>
+        </h5>
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="[ '../']">返回课程列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="page-body">
+        <div class="container">
+            <div class="card-body">
+                <ng-container [ngTemplateOutlet]="stepForm"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #stepForm>
+    <nz-steps [(nzCurrent)]="currentStep">
+        <nz-step [nzTitle]="'基本信息'"></nz-step>
+        <nz-step [nzTitle]="'章节信息'"></nz-step>
+        <nz-step [nzTitle]="'完成'"></nz-step>
+    </nz-steps>
+    <div [ngTemplateOutlet]="[step0, step1, step2][currentStep]" style="margin: 32px 0;"></div>
+</ng-template>
+
+
+<ng-template #step0>
+    <spk-ugc-example-course-form #courrseForm [actionsViewRef]="courrseFormActions" [(loading)]="loading"
+        (save)="courrseFormSubmit($event)" (cancel)="onCancel($event)">
+
+        <ng-template #courrseFormActions>
+            <button nz-button [nzType]="'primary'" (click)="courrseForm._save($event);" [disabled]="courrseForm.invalid">下一步</button>
+        </ng-template>
+    </spk-ugc-example-course-form>
+</ng-template>
+
+<ng-template #step1>
+    <spk-ugc-chapter-list #workChapter [actionsViewRef]="workChapterActions" [editable]='true' [isCreate]='isCreate' (save)="workChapterSubmit($event)"
+        [course]="ugcExampleCourse.course">
+        <ng-template #workChapterActions>
+            <button nz-button [nzType]="'primary'" (click)="workChapter._save($event);" [disabled]="workChapter.invalid">下一步</button>
+        </ng-template>
+    </spk-ugc-chapter-list>
+</ng-template>
+
+
+<ng-template #step2>
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-8">
+            <div *ngIf="!importError" style="text-align: center;">
+                <i class="anticon anticon-check-circle" style="color: #52c41a; font-size: 72px;"></i>
+                <h3 class="mt-3" style="font-size: 24px;">操作成功</h3>
+                <p class="mx-auto mt-3 mb-4">
+                    导入课件内容成功, 你可以选择完成操作或者继续上传。
+                </p>
+            </div>
+
+            <div *ngIf="importError" style="text-align: center;">
+                <i class="anticon anticon-close-circle" style="color: #f04134; font-size: 72px;"></i>
+                <h3 class="mt-3" style="font-size: 24px;">操作失败</h3>
+                <p class="mx-auto mt-3 mb-4">
+                    {{importError}}。你可以选择完成放弃操作或者选择重新创建重新尝试。
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="customize-footer">
+        <button nz-button [nzType]="'primary'" (click)="onOk()">
+            完 成
+        </button>
+    </div>
+</ng-template>

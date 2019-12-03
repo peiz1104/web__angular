@@ -1,0 +1,112 @@
+<div class="exam-ka-box-body">
+    <div class="table-content">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [loading]="loading" (reload)="KCloadList($event)"
+            [(selection)]="KCselectData" selectType="checkbox">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <div class="queryTools-box">
+                        <label for="userName" style="margin-left: 20px;">用户名：</label>
+                        <nz-input style="width:120px;margin-right:40px;" [(ngModel)]="KCqueryValue.username"></nz-input>
+                        <label for="name">姓名：</label>
+                        <nz-input style="width:120px;margin-right:40px;" class="name-text" [(ngModel)]="KCqueryValue.displayName"></nz-input>
+                        <button nz-button [nzType]="'primary'" (click)="KCloadList()">
+                            <span>搜索</span>
+                        </button>
+                    </div>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <nz-dropdown>
+                    <button nz-button nz-dropdown>
+                        <span>批量操作</span>
+                        <i class="anticon anticon-down"></i>
+                    </button>
+                    <ul nz-menu>
+                        <li nz-menu-item>
+                            <a (click)="ShowEditKCtimeModal()">设置安排时间</a>
+                        </li>
+                        <li nz-menu-item>
+                            <a (click)="clearKCtime()">清除安排时间</a>
+                        </li>
+                    </ul>
+                </nz-dropdown>
+                <button nz-button [nzType]="'primary'" type="button" style="width:70px;" (click)="KCaddList($event)">添加</button>
+                <spk-user-lookup [(ngModel)]="KCuserSelectData" (ok)="KCuserChangeHandler($event,row)"></spk-user-lookup>
+            </ng-template>
+            <!-- <ng-template cuiColTpl="name" let-row="row">
+            <div>{{row.name?row.name:'--'}}</div>
+        </ng-template> -->
+            <ng-template cuiColTpl="name" let-row="row">
+                <nz-tooltip [nzPlacement]="'right'">
+                    <span nz-tooltip class='exam-casual'>{{row.name?row.name:'--' | getText}}</span>
+                    <ng-template #nzTemplate>
+                        <p>{{row.name?row.name:'--'}}</p>
+                    </ng-template>
+                </nz-tooltip>
+            </ng-template>
+            <ng-template cuiColTpl="administrator" let-row="row">
+                <div>{{row.administrator?row.administrator:'--'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                <div>{{row.createdDate|dateMoment:'YYYY-MM-DD HH:mm'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="startTime" let-row="row">
+                <div>{{row.startTime?(row.startTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="endTime" let-row="row">
+                <div>{{row.endTime?(row.endTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="actSet" let-row="row">
+                <nz-select [(ngModel)]="row.KCrangeSelectId" (ngModelChange)="KCrangeSelectChange(row,row.KCrangeSelectId)" style="width: 100px!important;"
+                    [nzPlaceHolder]="'请选择'">
+                    <nz-option [nzLabel]="'安排范围'" [nzValue]="1"></nz-option>
+                    <nz-option *ngIf="row.name" [nzLabel]="'清除安排范围'" [nzValue]="2"></nz-option>
+                    <nz-option [nzLabel]="'删除'" [nzValue]="3"></nz-option>
+                </nz-select>
+                <!-- <a class="text-primary" (click)="KCrangeHandler(row)">安排范围</a>
+                <span nz-table-divider></span>
+                <a class="text-primary" (click)="KCremove(row)">删除</a> -->
+            </ng-template>
+        </cui-data-table>
+        <spk-user-group-select #KCTREE mode="multiple" (selectOk)="KChandleOk($event)"></spk-user-group-select>
+        <nz-modal [nzConfirmLoading]="KCmodalLoading" *ngIf="KCvisible" [nzVisible]="KCvisible" [nzTitle]="'选择范围'" [nzContent]="modalContent"
+            (nzOnCancel)="KChandleCancel($event)" (nzOnOk)="KChandleOk($event)">
+            <ng-template #modalContent>
+                <!--<spk-user-group-tree (selectionChange)="KCSelectionChange($event)"></spk-user-group-tree> -->
+                <!-- <spk-user-group-select [mode]="multiple" [(ngModel)]="managerGroup" (ngModelChange)="changeSite($event)"></spk-user-group-select> -->
+
+            </ng-template>
+
+        </nz-modal>
+    </div>
+
+</div>
+<!-- 设置考场安排时间模块 -->
+<nz-modal [nzVisible]="ShowEditKCtime" [nzTitle]="'设置安排时间'" [nzContent]="JKtimeContent" (nzOnCancel)="ShowEditKCtime=false"
+    (nzOnOk)="submitKCtime()" [nzWidth]="'600px'" [nzFooter]="KCPaperFooter">
+    <ng-template #JKtimeContent>
+        <div nz-row class="tips">提示:安排时间默认对所有考场安排人员生效，已勾选考场安排人员的，只对选中的人员有效。</div>
+        <div nz-row class="JK-code-content">
+            <div nz-row class="proctor-line">
+                <div nz-col [nzSpan]="4" class="text-right">
+                    <label for="startdate">安排时间:</label>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="startdate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入安排开始时间'"></spk-qm-datepicker>
+                </div>
+                <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="enddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入安排结束时间'"></spk-qm-datepicker>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #KCPaperFooter>
+        <button nz-button [nzType]="'default'" (click)="ShowEditKCtime=false">
+            <span>取消</span>
+        </button>
+        <button nz-button [nzType]="'primary'" [nzLoading]="KCisLoading" [disabled]="KCisLoading" (click)="submitKCtime()">
+            <span>确定</span>
+        </button>
+    </ng-template>
+</nz-modal>

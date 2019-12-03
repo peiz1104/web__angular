@@ -1,0 +1,270 @@
+:host::ng-deep {
+    .add-test-box {
+        .t-info {
+            img {
+                max-width: 300px;
+                max-height: 300px;
+            }
+        }
+        .preview-class {
+            .ant-spin-show-text {
+                width: 100% !important;
+            }
+            .ant-btn-ghost {
+                display: none;
+            }
+        }
+        .pp-border {
+            margin-top: 10px;
+        }
+        tfoot {
+            display: none;
+        }
+        .exam-paper-list {
+            .method-chuti {
+                float: left;
+            }
+            .exam-paper-header {
+                height: 92px;
+                text-align: center;
+                position: relative;
+                h3 {
+                    height: 92px;
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-top: 30px;
+                    span {
+                        display: block;
+                    }
+                }
+                .score {
+                    font-size: 14px;
+                    font-weight: bold;
+                    position: relative;
+                    top: 4px;
+                }
+                .btn-group {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 20px;
+                    button {
+                        margin-right: 10px;
+                    }
+                }
+                .ant-modal {
+                    width: 800px!important;
+                    .ant-modal-content {
+                        width: 800px;
+                        .ant-modal-footer {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            .ant-spin,
+            .ant-spin-spinning,
+            .ant-spin-show-text {
+                width: 1100px;
+            }
+            .paper-partition-list {
+                box-shadow: 0px 1px 3px;
+                padding: 10px;
+                margin-top: 10px;
+                .test-question-header {
+                    overflow: hidden;
+                    background: #f1f1f1;
+                    border-radius: 5px;
+                    padding: 20px 10px;
+                    .test-introduce {
+                        float: left;
+                        .test-order {
+                            margin-left: 10px;
+                        }
+                    }
+                    .btn-group {
+                        float: right;
+                        button {
+                            margin-right: 10px;
+                        }
+                    }
+                    .test-tip {
+                        color: #ff0000;
+                        clear: both;
+                        padding-top: 10px;
+                    }
+                }
+                .test-list {
+                    background: #f1f1f1;
+                    border-radius: 5px;
+                    padding: 10px 10px;
+                    margin-top: 10px;
+                    .test-header {
+                        background: #f5fafe;
+                        padding: 10px;
+                        overflow: hidden;
+                        .affiliated-institution {
+                            float: left;
+                            text-align: center;
+                            h4 {
+                                padding: 6px 2px;
+                                background: #f7f7f7;
+                                font-size: 14px;
+                            }
+                            .test-des {
+                                word-break: break-all;
+                                padding: 20px 6px;
+                            }
+                        }
+                        .institution {
+                            width: 10%;
+                        }
+                        .categroy {
+                            width: 40%;
+                        }
+                        .type {
+                            width: 10%;
+                        }
+                        .heard {
+                            width: 10%;
+                        }
+                        .counts {
+                            width: 10%;
+                        }
+                        .score {
+                            width: 10%;
+                        }
+                    }
+                    .question-categroy {
+                        background: #f5fafe;
+                        padding: 30px 10px;
+                        position: relative;
+                        margin-top: 10px;
+                        overflow: hidden;
+                        .question-type-score {
+                            .quesiton-score {
+                                color: #388ecb;
+                            }
+                        }
+                        .opear-subject {
+                            position: absolute;
+                            top: 28px;
+                            right: 10px;
+                            span {
+                                margin-right: 10px;
+                                font-size: 18px;
+                                cursor: pointer;
+                            }
+                            .edit {
+                                color: #388ecb;
+                            }
+                            .delete {
+                                color: #fd3a3b;
+                            }
+                            .arrowColor {
+                                color: green;
+                            }
+                            .move-up {
+                                color: #d0d0d0;
+                            }
+                            .move-down {
+                                color: #d0d0d0;
+                            }
+                            .storage {
+                                color: #717272;
+                                font-size: 14px;
+                                cursor: auto;
+                            }
+                        }
+                        .son-question-ctrol {
+                            float: right;
+                            span {
+                                margin-right: 10px;
+                                font-size: 18px;
+                                cursor: pointer;
+                            }
+                            .edit {
+                                color: #388ecb;
+                            }
+                            .move-up {
+                                color: #d0d0d0;
+                            }
+                            .move-down {
+                                color: #d0d0d0;
+                            }
+                        }
+                        .subject {
+                            margin-top: 10px;
+                            line-height: 22px;
+                        }
+                        .show-question {
+                            padding: 20px 10px;
+                            .single-choose {
+                                line-height: 28px;
+                                .answer-question {
+                                    display: inline-block;
+                                }
+                            }
+                        }
+                        .click-show-option {
+                            position: absolute;
+                            bottom: -20px;
+                            left: 50%;
+                            width: 40px;
+                            border-radius: 50%;
+                            text-align: center;
+                            margin-left: -20px;
+                            background: #dadada;
+                            cursor: pointer;
+                            height: 40px;
+                            i {
+                                position: relative;
+                                top: 2px;
+                            }
+                        }
+                    }
+                }
+            }
+            .choose-descript {
+                color: #ff0000;
+                position: absolute;
+                top: 10px;
+                right: 26px;
+            }
+            .custom-partition {
+                color: #ff0000;
+                position: absolute;
+                top: 4px;
+                right: 64px;
+            }
+            .no-data {
+                text-align: center;
+                margin-top: 40px;
+                font-family: "Microsoft Yahei";
+                .anticon-exclamation-circle {
+                    color: #ffbf00;
+                    font-size: 20px;
+                }
+            }
+        }
+        .go-back {
+            margin-top: 40px;
+            height: 40px;
+            position: relative;
+            button {
+                position: absolute;
+                left: 50%;
+                margin-left: -28px;
+            }
+        }
+        .PP-answer {
+            margin-bottom: 5px;
+            display: block;
+        }
+    }
+    .epHtmlText {
+        display: inline !important;
+        &>p:first-child {
+            display: inline-block !important;
+        }
+    }
+}

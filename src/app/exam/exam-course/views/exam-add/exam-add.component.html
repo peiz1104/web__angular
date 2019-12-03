@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <div class="page-header" *ngIf="createOrEditor">
+        <h3 class="page-title">{{target?.name}} :
+            <small>创建考试</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../', 'list']">返回考试列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container">
+            <spk-exam-form [exam]="examDetail" (save)="doSubmit($event)" (cancel)="onCancel($event)" [isCreate]="true" [submitLoading]="submitLoading"></spk-exam-form>
+        </div>
+    </div>
+</div>

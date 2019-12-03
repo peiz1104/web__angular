@@ -1,0 +1,98 @@
+<!-- User Lookup -->
+
+<ng-container *ngIf="echoTpl || inputControlEchoTpl" [ngTemplateOutlet]="echoTpl || inputControlEchoTpl" [ngTemplateOutletContext]="{value: value}"></ng-container>
+
+
+<ng-template #inputControlEchoTpl>
+    <div *ngIf="!echoTpl" class="ant-select ant-select-enabled ant-select-show-search2" [style]="style" [style.width]="'100%'">
+        <div class="ant-select-selection" [ngClass]="{'ant-select-selection--multiple': mode=='multiple', 'ant-select-selection--single': mode=='single'}"
+            (click)="openLookup()">
+            <div class="ant-select-selection__rendered">
+                <div *ngIf="!_value || _value?.length == 0 || (_value&&!_value[0])" class="ant-select-selection__placeholder">{{placeholder}}</div>
+                <div *ngIf="overflow && _value?.length > overflow" class="ant-select-selection__placeholder text-secondary">您已选择{{_value.length}}个讲师</div>
+                <ul *ngIf="isMultiple && (!overflow || _value?.length <= overflow) && (_value&&_value[0])">
+                    <li *ngFor="let u of _value" class="ant-select-selection__choice ng-trigger ng-trigger-tagAnimation">
+                        <div class="ant-select-selection__choice__content">{{u?.displayName}}</div>
+                        <span *ngIf="!hideDelete" class="ant-select-selection__choice__remove" style="top: 0;" (click)="_remove($event,u,_value)"></span>
+                    </li>
+                    <!-- <li class="ant-select-search ant-select-search--inline">
+                      <div class="ant-select-search__field__wrap">
+                          <input type="text" class="ant-select-search__field ng-pristine ng-valid ng-touched">
+                          <span class="ant-select-search__field__mirror"></span>
+                      </div>
+                  </li> -->
+                </ul>
+                <!-- <div *ngIf="!isMultiple && (_value && _value.length > 0)" class="ant-select-selection__placeholder text-secondary">{{_value[0].displayName}}</div>
+                <div *ngIf="ZC && (_value && _value.length > 0)" class="ant-select-selection__placeholder text-secondary">
+                    <div class="ant-select-selection__choice__content">{{ _value[0].displayName}}</div>
+                    <span *ngIf="!hideDelete" class="ant-select-selection__choice__remove" style="top: 0;" (click)="_remove($event,_value[0])"></span>
+                </div> -->
+            </div>
+            <span class="ant-select-arrow"></span>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #lookupModalTitle>
+    <h5>选择人员</h5>
+</ng-template>
+<ng-template #lookupModalContent>
+    <div>
+
+        <cui-layout>
+            <cui-layout-content>
+                <div>
+                    <ng-container [ngTemplateOutlet]="userSelectList"></ng-container>
+                </div>
+            </cui-layout-content>
+        </cui-layout>
+
+    </div>
+</ng-template>
+<ng-template #lookupModalFooter>
+    <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="_ok()"> 确 定 </button>
+        <button type="button" class="btn btn-light" (click)="_cancel()"> 取 消 </button>
+    </div>
+</ng-template>
+
+<ng-template #userSelectList>
+    <div style="min-height: 200px;">
+        <nz-alert *ngIf="selection && selection.length > 0" [nzType]="'info'">
+            <span alert-body>已选则 {{ selection.length}} 个人员，请点击确定按钮完成操作</span>
+            <span alert-description>
+                <ul *ngIf="selection && selection.length" class="d-flex">
+                    <li *ngFor="let sel of selection" class="user-list-choice">
+                        <span>{{sel.displayName}}</span>
+                        <span class="user-list-choice-remove">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </li>
+                </ul>
+            </span>
+        </nz-alert>
+
+        <cui-data-table #userTable [columns]="columns" [data]="users" [pagination]="pagination" [loading]="tableLoading" [selectType]="selectionType ? selectionType: 'checkbox'"
+            (reload)="loadData($event)" [(selection)]="selection" (selectionChange)="userSelectionChange($event)" [dynamicColumns]="false">
+            <ng-template #simpleSearch>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入人员姓名">
+                        <input style="margin-left:4px" type="text" class="form-control input-lg" name="searchname" [(ngModel)]="searchname" placeholder="请输入用户名">
+                        <spk-user-group-select mode="multiple" style="margin-left:4px;width:240px" name="teacherType" [(ngModel)]="teacherType"></spk-user-group-select>
+                    </div>
+                    <div class="form-group ml-2">
+                        <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                    </div>
+                </form>
+            </ng-template>
+
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <span>{{row.userGroup ? row.userGroup.namePath:''}}</span>
+            </ng-template>
+
+        </cui-data-table>
+    </div>
+</ng-template>
+
+<!-- <nz-select [nzMode]="'multiple'" [nzPlaceHolder]="''" [nzAllowClear]="true" [hidden]="true"></nz-select> -->

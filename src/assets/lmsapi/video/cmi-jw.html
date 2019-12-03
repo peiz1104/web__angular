@@ -1,0 +1,161 @@
+<!DOCTYPE html> 
+
+<html>  
+
+  <head>
+
+    <title>mp4_cmi.html</title>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=Yes">
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+	<!--[if lt IE 8 ]><script type="text/javascript" src="../common/js/json2.js"></script><![endif]-->
+    <script type="text/javascript" src="../common/js/jquery1x.js"></script>
+    <script type="text/javascript" src="./jwplayer/jwplayer.js"></script>
+	<style>
+		html,body{ margin:0px; height:100%;width: 100%;padding:0;}
+		.main-frame {
+		    border: medium none;
+		    bottom: 0;
+		    height: 100%;
+		    position: absolute;
+		    top: 0;
+		    width: 100%;
+		}
+	</style>
+
+
+  </head>
+
+  
+	<script type="text/javascript">
+		function GetQueryString(name){
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "gi");
+		    var r = window.location.search.substr(1).match(reg);
+		    if (r != null) return unescape(r[2]); 
+		    return null;
+		}
+		var content = GetQueryString("content");
+		if(content!=null&&content!=''){
+			content = decodeURIComponent(content);
+			url = content;
+		}
+		var playType="";
+		$(window).on("message", function(e){
+			var message = $.parseJSON(e.originalEvent.data);
+			playType=message.playType;
+		});
+		/**
+		 * @remark 初始化数据
+		 */
+		function initCMIData(){
+			isInit = true;
+			send();
+		}
+		var thePlayer;  //保存当前播放器以便操作 
+        $(function() { 
+            thePlayer = jwplayer('video').setup({
+                flashplayer: './jwplayer/jwplayer.flash.swf', 
+                sources : [{"label":"MP4","file":content}],
+    			// [{"label":"标清","file":"http://content.asdga.com/ab.mp4"}]
+                startparam:"start",
+                width: "100%", 
+                height: "100%", 
+                dock: false,
+                events: {
+                    onComplete: function () { // console.log("播放结束!!!");  // IE下console报错，所以注释
+					 },
+                    onVolume: function () { //console.log("声音大小改变!!!"); 
+                    },
+                    onReady: function () { //console.log("准备就绪!!!"); 
+                    },
+                    onPlay: function () { //console.log("开始播放!!!"); 
+                    },
+                    onPause: function () { //console.log("暂停!!!"); 
+                    },
+                    onBufferChange: function () { //console.log("缓冲改变!!!"); 
+                    },
+                    onBufferFull: function () { //console.log("视频缓冲完成!!!"); 
+                    },
+                    onError: function (obj) { //console.log("播放器出错!!!" + obj.message); 
+                    },
+                    onFullscreen: function (obj) { 
+                    	if (obj.fullscreen) { 
+                    		//console.log("全屏"); 
+                    	} else { 
+                    		//console.log("非全屏"); 
+                    	} 
+                    },
+                    onMute: function (obj) {}
+                }
+            }); 
+             
+            //播放 暂停 
+            $('.player-play').click(function() { 
+                if (thePlayer.getState() != 'PLAYING') { 
+                    thePlayer.play(true); 
+                    this.value = '暂停'; 
+                } else { 
+                    thePlayer.play(false); 
+                    this.value = '播放'; 
+                } 
+            }); 
+             
+            //停止 
+            $('.player-stop').click(function() { thePlayer.stop(); }); 
+             
+            //获取状态 
+            $('.player-status').click(function() { 
+                var state = thePlayer.getState(); 
+                var msg; 
+                switch (state) { 
+                    case 'BUFFERING': 
+                        msg = '加载中'; 
+                        break; 
+                    case 'PLAYING': 
+                        msg = '正在播放'; 
+                        break; 
+                    case 'PAUSED': 
+                        msg = '暂停'; 
+                        break; 
+                    case 'IDLE': 
+                        msg = '停止'; 
+                        break; 
+                } 
+                alert(msg); 
+            }); 
+            //获取播放进度 
+            $('.player-current').click(function() { alert(thePlayer.getPosition()); }); 
+     
+            //跳转到指定位置播放 
+            $('.player-goto').click(function() { 
+                if (thePlayer.getState() != 'PLAYING') {    //若当前未播放，先启动播放器 
+                    thePlayer.play(); 
+                } 
+                thePlayer.seek(30); //从指定位置开始播放(单位：秒) 
+            }); 
+            //获取视频长度 
+            $('.player-length').click(function() { alert(thePlayer.getDuration()); }); 
+            
+            thePlayer.play(true);
+            
+        }); 
+	</script>
+
+  <body style="margin:0;padding:0;overflow:auto;" onload="initCMIData();">
+	<!-- 视频播放 -->
+    <div style="width: 95%; height: 95%; align="center">
+	   <div id="video"></div>
+    </div>
+	<input type="hidden" class="player-play" value="播放" />
+	<input type="hidden" class="player-stop" value="停止" />
+	<input type="hidden" class="player-status" value="取得状态" />
+	<input type="hidden" class="player-current" value="当前播放秒数" />
+	<input type="hidden" class="player-goto" value="转到第30秒播放" />
+	<input type="hidden" class="player-length" value="视频时长(秒)" />
+  </body>
+</html>
+

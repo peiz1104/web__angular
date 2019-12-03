@@ -1,0 +1,34 @@
+<div class="diff-list-body">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">
+                <small>试题难度列表</small>
+            </h5>
+        </div>
+    </div>
+    <div class="select-body">
+        <cui-data-table #tableHandle [columns]="columns" [data]="columnsData" [pagination]="pagination" [loading]="isSpinning" (reload)="getDifficultyListData($event)"
+            [tabIndex]="tabIndex">
+            <ng-template #listTools>
+                <div>
+                    <button type="button" class="btn btn-primary m-r" (click)="refresh()">
+                        <i class="fa fa-refresh"></i> 刷新</button>
+                    <button type="button" *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}" class="btn btn-primary" (click)="handleDifficulty()">
+                        <i class="fa fa-plus"></i> 添加试题难度</button>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="isStart" let-row="row">
+                <div>{{row.isStart == true ? '已发布': '未发布'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="option" let-row="row">
+                <!-- <a class="text-primary"  style="width: 48px;display: inline-block;" *ngIf="!row.isStart" (click)="handleIsstart(row)">发布</a>
+                    <a class="text-primary" *ngIf="row.isStart" (click)="handleIsstart(row)">取消发布</a> -->
+                <a class="text-primary" *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}" (click)="handleIsstart(row)">{{row.isStart?'取消发布':'发布'}}</a>
+                <span nz-table-divider  *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}"></span>
+                <a class="text-primary" *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}" (click)="handleDifficulty(row)">编辑</a>
+                <span nz-table-divider  *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}" ></span>
+                <a class="text-danger"  *spkAuthzIf="{hasPermission:'EXAM:SETTING:DIFFICULTY'}" (click)="showConfirm(row)">删除</a>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

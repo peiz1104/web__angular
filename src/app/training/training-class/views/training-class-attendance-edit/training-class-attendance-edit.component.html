@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div class="page-header">
+      <h3 class="page-title">{{trainingName}}: 修改课堂表现信息</h3>
+      <div class="actions pull-right">
+        <button class="btn btn-secondary" [routerLink]="['../../','list']">返回课堂表现列表 <i class="fa fa-level-up"></i></button>
+      </div>
+    </div>
+  </div>
+  
+  <div>
+    <div class="page-body">
+      <div class="container">
+            <div class="alert alert-danger" *ngIf="err">{{err}}</div>             
+            <spk-training-class-attendance-form [trainClassAttendance]="trainClassAttendance" (doSubmit)="onSubmit($event)"></spk-training-class-attendance-form>    
+      </div>
+    </div>
+  </div>

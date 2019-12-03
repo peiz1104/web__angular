@@ -1,0 +1,74 @@
+<div class="from-box">
+    <div class="header-list-box">
+        <!-- <h5>{{typename=='trainthemeadd'?'培训主题':(typename=='trainchanel'?'培训方式':(typename=='traintsource'?'培训来源':'培训类型'))}}修改创建</h5> -->
+        <div class="go-back-list">
+            <button type="button" class="btn btn-light" (click)="goBackList($event)">返回列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div>
+    </div>
+    <div class="header-box">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>{{typename=='trainthemeadd'? '培训主题名称':(typename=='trainchanel'?'培训形式名称':(typename=='traintsource'?'培训来源名称':'培训类型名称'))}}</label>
+                    </div>
+                    <div nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="validateForm.controls.name" nzHasFeedback>
+                        <nz-input (ngModelChange)="changename($event)" formControlName="name" [nzType]="'text'" [nzPlaceHolder]="'请填写培训类型名称'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">请填写培训类型名称!</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>上级分类</label>
+                    </div>
+                    <div nz-col [nzSpan]="10" nz-form-control>
+                        <spk-categoryselect placeholder="请选择分类" [filterId]="editid" [api]="url" formControlName="parent"></spk-categoryselect>
+                        <!-- <nz-cascader [nzChangeOnSelect]="true" [nzPlaceHolder]="'请选择层级分类！'" formControlName="parent" [nzOptions]="_options" [(ngModel)]="_value"
+                            (ngModelChange)="_console($event)" (nzChange)="_console($event)">
+                        </nz-cascader> -->
+                    </div>
+                </div>
+                <div *ngIf="showstate" nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label for="">方式选择</label>
+                    </div>
+                    <div nz-col [nzSpan]="10" nz-form-control>
+                        <nz-select (ngModelChange)="choosemethod($event)" formControlName="billingType" [nzSize]="'large'">
+                            <nz-option [nzLabel]="'按天'" [nzValue]="0"></nz-option>
+                            <nz-option [nzLabel]="'按次数'" [nzValue]="1"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div *ngIf="showstate" nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label for="">权重</label>
+                    </div>
+                    <div nz-col [nzSpan]="10" nz-form-control>
+                        <nz-input-number formControlName="weight" [(ngModel)]="demoValue" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label>描述内容</label>
+                    </div>
+                    <div nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="validateForm.controls.description">
+                        <nz-input (ngModelChange)="changeDiscription($event)" formControlName="description" [nzPlaceHolder]="'请填写培训类型描述内容！'" [nzType]="'textarea'"
+                            [nzSize]="'large'">
+                        </nz-input>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                        <button *spkAuthzIf="{hasPermission: 'PERIOD:TRAINING_TYPE:EDIT'}" [nzLoading]="btnstate" nz-button [nzType]="'primary'"
+                            [nzSize]="'large'" [disabled]="!validateForm.valid">保存</button>
+                        <button nz-button [nzSize]="'large'" (click)="resetForm($event)">重置</button>
+                    </div>
+                </div>
+            </form>
+        </nz-spin>
+    </div>
+</div>

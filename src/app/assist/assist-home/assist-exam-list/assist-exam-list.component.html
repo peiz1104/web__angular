@@ -1,0 +1,60 @@
+<nz-card [nzLoading]="false">
+    <ng-template #body>
+        <div style="margin: -24px;">
+            <nz-tabset [(nzSelectedIndex)]="currentTab" (nzSelectChange)="tabChange($event)">
+                <nz-tab *ngFor="let tab of tabs; let index = index;">
+                    <ng-template #nzTabHeading>
+                        <div style="line-height: 32px;">{{tab.name}}</div>
+                    </ng-template>
+                    <div style="padding: 24px; margin-top: 6px;">
+                        <!-- *ngIf="isActive(tab.type)" -->
+                        <ng-container *ngTemplateOutlet="examViewList; context: {$implicit: tab}"></ng-container>
+                    </div>
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </ng-template>
+</nz-card>
+
+<ng-template #examViewList let-tab>
+    <!-- {{tab.name}} -->
+    <!-- <div *ngIf="isActive(tab.type)"> -->
+    <nz-card *ngFor="let item of examList" class="mb-3">
+        <ng-template #body>
+            <ng-container *ngTemplateOutlet="examViewListItem; context: {$implicit: tab, item: item}"></ng-container>
+        </ng-template>
+    </nz-card>
+    <div *ngIf="!examList|| examList.length==0" class="no-data">
+        <i class="iconfont icon-frowno"></i>
+        <span>暂无记录！</span>
+    </div>
+    <!-- </div> -->
+</ng-template>
+
+<ng-template #examViewListItem let-tab let-item="item">
+
+    <div class="d-flex" style="height: 120px; margin: -24px;">
+        <div style="width: 200px; height: 120px;">
+            <img [src]="item?.images" [alt]="item?.examName" width="200" height="120">
+        </div>
+        <div style="padding: 12px 24px;">
+            <h5 style="line-height: 1.5">{{item?.examName}}</h5>
+            <button class="pull-right" nz-button [nzType]="'primary'" (click)="tab.action(item)">进入{{tab.actionName}}</button>
+            <div>
+                <p>
+                    <span>考试开始时间：</span>{{(item.examStartTime | date : 'yyyy-MM-dd HH:mm')||'暂无'}}</p>
+                <p>
+                    <span>允许进入截止时间：</span>{{(item.enterExamTime | date : 'yyyy-MM-dd HH:mm' )||'暂无'}}</p>
+                <p>
+                    <span>{{strName}}开始时间：</span>{{(item?.startTime | date : 'yyyy-MM-dd HH:mm' )||'不限'}}
+                    <!-- </p>
+          <p> -->
+                    <span>{{strName}}结束时间：</span>{{(item?.endTime | date : 'yyyy-MM-dd HH:mm' )||'不限'}}</p>
+                <p>
+                    <span>来源：</span>{{source || '暂无'}} &emsp;&emsp;&emsp;
+                    <span>试卷类型：</span>{{epType || '暂无'}}
+                </p>
+            </div>
+        </div>
+    </div>
+</ng-template>

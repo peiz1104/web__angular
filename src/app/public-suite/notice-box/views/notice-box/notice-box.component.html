@@ -1,0 +1,13 @@
+<div *ngIf="!noticeBox?.id">
+  <p class="text-secondary"><i class="fa fa-info-circle fa-lg text-info"></i> 通知组件没有初始化，请点击下面的按钮初始化</p>
+  <button nz-button [nzLoading]="loading" class="btn btn-secondary" (click)="initBox()">初始化通知组件</button>
+</div>
+<div *ngIf="noticeBox?.id && operationStatus == operation.list">
+  <spk-notice-list [box]="noticeBox" (toAdd)="toAdd($event)" (toEdit)="toEdit($event)"></spk-notice-list>
+</div>
+<div *ngIf="noticeBox?.id && operationStatus == operation.add">
+  <spk-notice-add [box]="noticeBox" (onSuccessAdd)="onSuccessAdd($event)"></spk-notice-add>
+</div>
+<div *ngIf="noticeBox?.id && operationStatus == operation.edit">
+  <spk-notice-edit [box]="noticeBox" [(notice)]="currentNotice" (onSuccessUpdate)="onSuccessUpdate($event)"></spk-notice-edit>
+</div>

@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">问卷列表
+      <small>选择系统中现有的调查</small>
+    </h3>
+  </div>
+  <div class="page-body">
+    <cui-data-table [columns]="columns" [data]="papers" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination"
+      selectType="radio" (selectionChange)="paperSelectionChange($event)">
+      <ng-template #simpleSearch>
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入问卷名">
+          </div>
+          <div class="form-group ml-2">
+            <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+          </div>
+        </form>
+      </ng-template>
+    </cui-data-table>
+  </div>
+</div>

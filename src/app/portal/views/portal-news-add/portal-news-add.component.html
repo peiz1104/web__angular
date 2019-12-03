@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">新闻资讯
+      <small>管理本站点门户新闻资讯</small>
+    </h3>
+
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../']" [queryParams]="{groupId: groupId}">返回文章列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <div class="card">
+        <div class="card-header d-flex">
+          <h5 class="card-title mt-2">添加文章</h5>
+          <div class="extra ml-auto hide">
+            <!-- <button type="button" class="btn btn-primary">保存</button>
+              <button type="button" class="btn btn-warning">预览</button>
+              <button type="button" class="btn btn-light">取消</button> -->
+          </div>
+        </div>
+        <div class="card-body">
+          <spk-news-article-form [groupId]="groupId" [loading]="loading" (save)="onSave($event)" (cancel)="onCancel($event)"></spk-news-article-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

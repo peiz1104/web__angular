@@ -1,0 +1,42 @@
+<div class="question-box">
+    <div *ngIf="data.baseType!='YDLJ'">
+        <div class="que-type">
+            <span class="type-cn-name">{{data.typeName}}</span>
+            <i></i>
+        </div>
+        <spk-review-answer-box [answer]="answer" [rightKey]="rightKey" [number]="number" [data]="data" (handleImgView)="handleImgView($event)"></spk-review-answer-box>
+    </div>
+    <div *ngIf="data.baseType=='YDLJ'">
+        <div class="que-type">
+            <span class="type-cn-name">{{data.typeName}}</span>
+            <i></i>
+        </div>
+        <div class="que-box que-red">
+            <div class="title">
+                第{{data.que_num}}题,
+                <span class="htmlInline" [innerHtml]="data.casual|innerHtmlPipe">{{data.casual}}</span>
+                ({{data.score}}分)
+            </div>
+            <div class="special" *ngFor="let child of data.childQueList; let i = index;" id="{{number}}-{{i+1}}F">
+                <spk-review-answer-box [answer]="answer" [rightKey]="rightKey" [number]="number" [childNum]="i+1" [data]="child" (handleImgView)="handleImgView($event)"></spk-review-answer-box>
+            </div>
+        </div>
+    </div>
+    <!-- 图片弹出框展示大图 -->
+    <nz-modal [nzVisible]="viewImg" [nzContent]="viewImgContent" [nzFooter]="false" [nzClosable]="false" [nzWrapClassName]="'viewImgModal'"
+        [nzWidth]="'100%'" (nzOnCancel)="handleImgView()">
+        <ng-template #viewImgContent>
+            <div class="back" #imgBox (click)="handleImgView()"></div>
+            <div class="modal-close" title="关闭" (click)="handleImgView()">
+                <i class="anticon anticon-close"></i>
+            </div>
+            <!-- <div class="showImgBox">
+                    </div> -->
+            <img #showImg src="{{viewUrl}}" isNoClick="true" class="showImg" [style.transform]="'rotate('+rotate+'deg)'">
+            <div class="rotateImg">
+                <i class="fa fa-rotate-left" title="左旋转90°" (click)="rotateImg('left')"></i>
+                <i class="fa fa-rotate-right" title="右旋转90°" (click)="rotateImg('right')"></i>
+            </div>
+        </ng-template>
+    </nz-modal>
+</div>

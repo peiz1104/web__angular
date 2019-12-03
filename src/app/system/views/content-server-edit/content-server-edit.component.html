@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">编辑服务</h3>
+    <div class="actions pull-right">
+      <button class="btn btn-secondary" [routerLink]="['../../']">返回内容服务器列表
+        <i class="fa fa-level-up"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="page-body">
+    <div class="container">
+      <div class="alert alert-danger" *ngIf="errormsg">{{errormsg}}</div>
+      <spk-content-server-form [server]="server" [loading]="loading" (doSubmit)="saveServer($event)"></spk-content-server-form>
+    </div>
+  </div>
+</div>

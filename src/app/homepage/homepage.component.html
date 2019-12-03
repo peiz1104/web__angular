@@ -1,0 +1,535 @@
+<div class="homepage">
+    <spk-header>
+    </spk-header>
+
+    <div class="banner">
+        <div class="banner_menu">
+            <div *spkAuthzIf="{hasPermission: ['PLANNING:*']}" class="menu">
+                <img src="./assets/images/home/plan.png" alt="">
+                <span class="damand">
+                    <p>计划管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="planning-color" *spkAuthzIf="{hasPermission: ['PLANNING:ANNUAL_PLAN:*', 'PLANNING:ANNUAL_SUB_PLAN:*']}">
+                            <a class="color" routerLink="/planning/annualplan/list" routerLinkActive="active">年度计划</a>
+                        </li>
+                        <li class="planning-color" *spkAuthzIf="{hasPermission: 'PLANNING:TRAINING_SCHOOL_PLAN:*'}">
+                            <a class="color" routerLink="/planning/trainingschoolplan/list" routerLinkActive="active">研修院计划</a>
+                        </li>
+                        <li class="planning-color" *spkAuthzIf="{hasPermission: ['PLANNING:TRAINING_SCHOOL:*', 'PLANNING:DESIGNATED_PLAN:*', 'PLANNING:SUB_GROUP:*', 'PLANNING:SETTING:ATTRIBUTE','PLANNING:TRANSPORTATION_FEE:*'] }">
+                            <a *spkAuthzIf="{hasPermission: ['PLANNING:TRAINING_SCHOOL:*'] }; else otherOPear" class="color" routerLink="/planning/trainingschool/list"
+                                routerLinkActive="active">基础配置</a>
+                            <ng-template #otherOPear>
+                                <a *spkAuthzIf="{hasPermission: ['PLANNING:DESIGNATED_PLAN:*']}; else nextOPear" class="color" routerLink="/planning/designatedplan/list"
+                                    routerLinkActive="active">基础配置</a>
+                            </ng-template>
+                            <ng-template #nextOPear>
+                                <a *spkAuthzIf="{hasPermission: ['PLANNING:SUB_GROUP:*']}; else lastTwoOpear" class="color" routerLink="/planning/organize"
+                                    routerLinkActive="active">基础配置</a>
+                            </ng-template>
+                            <ng-template #lastTwoOpear>
+                                <a *spkAuthzIf="{hasPermission: ['PLANNING:SETTING:ATTRIBUTE']}; else lastOneOpear" class="color" routerLink="/planning/traininglevel"
+                                    routerLinkActive="active">基础配置</a>
+                            </ng-template>
+                            <ng-template #lastOneOpear>
+                                <a *spkAuthzIf="{hasPermission: ['PLANNING:TRANSPORTATION_FEE:*']}" class="color" routerLink="/planning/traffic" routerLinkActive="active">基础配置</a>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{hasPermission: 'TRAINING:*'}">
+                <img src="./assets/images/home/Implementation.png" alt="">
+                <span class="damand">
+                    <p>培训管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="training-color" *spkAuthzIf="{ hasPermission: 'PLANNING:ANNUAL_SUB_PLAN:VIEW'}">
+                            <a class="color" routerLink="/training/planing" routerLinkActive="active">计划实施</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{  hasPermission: ['TRAINING:RESEARCHPLAN']}">
+                            <a class="color" routerLink="/training/researchplan" routerLinkActive="active">研修院计划实施</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{ hasPermission: ['TRAINING:RESEARCHTBC']}">
+                            <a class="color" routerLink="/training/planmanagement" routerLinkActive="active">研修院班级管理</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{hasPermission: 'TRAINING:TRAINING_CLASS:*'}">
+                            <a class="color" routerLink="/training/class/list" routerLinkActive="active">班级管理</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{hasPermission: 'TRAINING:ENDCLASS:PUSHRAMIS'}">
+                            <a class="color" routerLink="/training/statistics" routerLinkActive="active">统计报表</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{hasPermission: 'TRAINING:REDCLASS:*'}">
+                            <a class="color" routerLink="/training/redclassmanage/redlist" routerLinkActive="active">红班管理</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{hasPermission: 'TRAINING:PROMOTIONUSER:*'}">
+                            <a class="color" routerLink="/training/promotion/proposedpromotion" routerLinkActive="active">拟晋升名单</a>
+                        </li>
+                        <li class="training-color" *spkAuthzIf="{hasPermission: 'TRAINING:PROMOTIONUSER:*'}">
+                            <a class="color" routerLink="/training/promotion/haspromotion" routerLinkActive="active">已晋升名单</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: 'LEARNING:*'}">
+                <img src="./assets/images/home/course.png" alt="">
+                <span class="damand">
+                    <p>课程学习</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="course-color" *spkAuthzIf="{hasPermission: 'LEARNING:COURSE:*'}">
+                            <a class="color" routerLink="/learning/course/list" routerLinkActive="active">课程体系</a>
+                        </li>
+                        <li class="course-color" *spkAuthzIf="{hasPermission: 'LEARNING:CLASSROOM:*'}">
+                            <a class="color" routerLink="/learning/classroom/list" routerLinkActive="active">课程培训</a>
+                        </li>
+                        <li class="course-color" *spkAuthzIf="{hasPermission: 'LEARNING:REPORT:*'}">
+                            <a class="color" routerLink="/learning/classroom/status" routerLinkActive="active">课程学习情况</a>
+                        </li>
+                        <li class="course-color" *spkAuthzIf="{hasPermission: 'LEARNING:CLASSROOM:*'}">
+                            <a class="color" routerLink="/learning/classroom/recommend" routerLinkActive="active">好课管理</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{hasPermission: 'DEVELOPMENT:*'}">
+                <img src="./assets/images/home/development.png" alt="">
+                <span class="damand">
+                    <p>研发管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="development-color" *spkAuthzIf="{hasPermission: 'DEVELOPMENT:EXECUTABLE_PLAN:*'}">
+                            <a class="color" routerLink="/development/implementation/list" routerLinkActive="active">可执行计划</a>
+                        </li>
+                        <li class="development-color" *spkAuthzIf="{hasPermission: 'DEVELOPMENT:GREEN_DREAMP_ROJECT:*'}">
+                            <a class="color" routerLink="/development/research/list" routerLinkActive="active">研发项目</a>
+                        </li>
+
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{hasPermission: ['SURVEY:*', 'ASSESS:*']}">
+                <img src="./assets/images/home/demand.png" alt="">
+                <span class="damand">
+                    <p>调查评估</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="survey-color" *spkAuthzIf="{ hasPermission: ['SURVEY:SURVEY_ACT:*'] }">
+                            <a class="color" routerLink="/survey/surveyPaper" routerLinkActive="active">调查管理</a>
+                        </li>
+                        <li class="survey-color" *spkAuthzIf="{hasPermission: ['SURVEY:SURVEY_PAPER:*']}">
+                            <a class="color" routerLink="/survey/tpl" routerLinkActive="active">调查模板</a>
+                        </li>
+                        <li class="survey-color" *spkAuthzIf="{hasPermission: ['ASSESS:ASSESS_ACT:*']}">
+                            <a class="color" routerLink="/assess/assesses" routerLinkActive="active">评估模板</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <!-- <div class="menu" *spkAuthzIf="{hasPermission: 'ASSESS:*'}">
+                <img src="./assets/images/home/organization.png" alt="">
+                <span class="damand">
+                    <p>评估管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="system-color">
+                            <a class="color" routerLink="/assess/paper" routerLinkActive="active">评估问卷</a>
+                        </li>
+                        <li class="system-color">
+                            <a class="color" routerLink="/assess/assesses" routerLinkActive="active">评估管理</a>
+                        </li>
+
+                    </ul>
+                </span>
+            </div> -->
+
+            <div class="menu" *spkAuthzIf="{hasPermission: 'EXAM:*'}">
+                <img src="./assets/images/home/exam.png" alt="">
+                <span class="damand">
+                    <p>组织考试</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="exam-color" *spkAuthzIf="{hasPermission: 'EXAM:QUESTION:*'}">
+                            <a class="color" routerLink="/exam/test-question/list" routerLinkActive="active">试题管理</a>
+                        </li>
+                        <li class="exam-color" *spkAuthzIf="{hasPermission: 'EXAM:PAPER:*'}">
+                            <a class="color" routerLink="/exam/exam-paper" routerLinkActive="active">试卷管理</a>
+                        </li>
+                        <li class="exam-color" *spkAuthzIf="{hasPermission: 'EXAM:QUESTION:*'}">
+                            <a class="color" routerLink="/exam/examination/list" routerLinkActive="active">考试管理</a>
+                        </li>
+                        <li class="exam-color" *spkAuthzIf="{hasPermission: 'EXAM:SETTING:*'}">
+                            <a class="color" routerLink="/exam/basic-setting" routerLinkActive="active">基础配置</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{hasPermission: 'RESOURCE:*'}">
+                <img src="./assets/images/home/Resources.png" alt="">
+                <span class="damand">
+                    <p>资源管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <!-- <li class="library-color">
+                            <a class="color" routerLink="/library/document/list" routerLinkActive="active">讲师库</a>
+                        </li> -->
+                        <li class="library-color" *spkAuthzIf="{ hasPermission: [ 'RESOURCE:DOCUMENT_LIB:*'] }">
+                            <a class="color" routerLink="/library/document/list" routerLinkActive="active">文档库</a>
+                        </li>
+                        <li class="library-color" *spkAuthzIf="{ hasPermission: [ 'RESOURCE:CERT_LIB:*'] }">
+                            <a class="color" routerLink="/library/certificate" routerLinkActive="active">证书库</a>
+                        </li>
+                        <li class="library-color" *spkAuthzIf="{hasPermission: 'RESOURCE:TRAINBASE:*'}">
+                            <a class="color" routerLink="/library/trainBase" routerLinkActive="active">培训基地</a>
+                        </li>
+                        <li class="library-color" *spkAuthzIf="{hasPermission: ['RESOURCE:CALENDAR:*']}">
+                            <a class="color" routerLink="/library/barfile" routerLinkActive="active">条线文件管理</a>
+                        </li>
+                        <!-- <li class="library-color">
+                            <a class="color" routerLink="/library/image" routerLinkActive="active">图片管理</a>
+                        </li> -->
+                        <!-- <li class="library-color">
+                            <a class="color" routerLink="/library/case" routerLinkActive="active">案例管理</a>
+                        </li> -->
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: 'TEACHER:*'}">
+                <img src="./assets/images/home/teacher.png" alt="">
+                <span class="damand">
+                    <p>讲师库</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="teacher-color" *spkAuthzIf="{hasPermission: 'TEACHER:QUALIFICATION:*'}">
+                            <a class="color" routerLink="/library/teacher/qualification" routerLinkActive="active">任职资格管理</a>
+                        </li>
+                        <li class="teacher-color" *spkAuthzIf="{hasPermission: 'TEACHER:MANAGEMENT:*'}">
+                            <a class="color" routerLink="/library/teacher/main/fulltime" routerLinkActive="active">讲师管理</a>
+                        </li>
+                        <li class="teacher-color" *spkAuthzIf="{hasPermission: 'TEACHER:EMPOWERMENT:*'}">
+                            <a class="color" routerLink="/library/teacher/grant" routerLinkActive="active">讲师授权管理</a>
+                        </li>
+                        <li class="teacher-color" *spkAuthzIf="{hasPermission: 'TEACHER:OFFICE_QUALIFICATIONS:*'}">
+                            <a class="color" routerLink="/library/teacher/employment/documents" routerLinkActive="active">聘任公文管理</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: 'PERIOD:*'}">
+                <img src="./assets/images/home/period.png" alt="">
+                <span class="damand">
+                    <p>学时管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: 'PERIOD:SWITCH:*'}">
+                            <a class="color" routerLink="/classhour/hourswitch" routerLinkActive="active">年度学时开关</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{hasPermission: ['PERIOD:TASK:*', 'PERIOD:USER:*']}">
+                            <a class="color" routerLink="/classhour/hourtask" routerLinkActive="active">年度学时任务</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: 'PERIOD:HISTORY:*'}">
+                            <a class="color" routerLink="/classhour/hourannual" routerLinkActive="active">年度学时查看</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: 'PERIOD:USER_GROUP:*'}">
+                            <a class="color" routerLink="/classhour/grouphour" routerLinkActive="active">机构学时查看</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{  hasPermission: ['PERIOD:DECLARE_OTHER:*','PERIOD:AUDIT:*']}">
+                            <a class="color" routerLink="/classhour/houraduitmanage/hourauditdeclarelist" routerLinkActive="active">学时申报审核</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: ['PERIOD:ASSISTANT:*']}">
+                            <a class="color" routerLink="/classhour/hourassist" routerLinkActive="active">教辅管理</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: ['PERIOD:AUDIT:*', 'PERIOD:DECLARE_OTHER:*']}">
+                            <a class="color" routerLink="/classhour/deparmenthour" routerLinkActive="active">部门学时管理</a>
+                        </li>
+                        <li class="period-color" *spkAuthzIf="{ hasPermission: ['PERIOD:TRAINING_TYPE:*',
+                        'PERIOD:TRAINING_THEME:*', 'PERIOD:TRAINING_WEY:*', 'PERIOD:TRAINING_SOURCE:*']}">
+                            <a *spkAuthzIf="{ hasPermission: ['PERIOD:TRAINING_TYPE:*'] }; else hourFirst" class="color" routerLink="/classhour/hourconfiguration/traintypename"
+                                routerLinkActive="active">配置管理</a>
+                            <ng-template #hourFirst>
+                                <a *spkAuthzIf="{hasPermission: ['PERIOD:TRAINING_THEME:*']}; else hourSencod" class="color" routerLink="/classhour/hourconfiguration/traintitem"
+                                    routerLinkActive="active">配置管理</a>
+                            </ng-template>
+                            <ng-template #hourSencod>
+                                <a *spkAuthzIf="{hasPermission: ['PERIOD:TRAINING_WEY:*']}; else hourThrid" class="color" routerLink="/classhour/hourconfiguration/trainchannel"
+                                    routerLinkActive="active">配置管理</a>
+                            </ng-template>
+                            <ng-template #hourThrid>
+                                <a *spkAuthzIf="{ hasPermission: ['PERIOD:TRAINING_SOURCE:*']}" class="color" routerLink="/classhour/hourconfiguration/trainsource"
+                                    routerLinkActive="active">配置管理</a>
+                            </ng-template>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: 'SYSTEM:*'}">
+                <img src="./assets/images/home/organization.png" alt="">
+                <span class="damand">
+                    <p>组织管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="system-color" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:*'}">
+                            <a class="color" routerLink="/system/user/list" routerLinkActive="active">用户管理</a>
+                        </li>
+                        <li class="system-color" *spkAuthzIf="{hasPermission: 'SYSTEM:USER_GROUP:*'}">
+                            <a class="color" routerLink="/system/user/list" routerLinkActive="active">部门管理</a>
+                        </li>
+                        <li class="system-color" *spkAuthzIf="{hasPermission: 'LEARNING:CLASSROOM:*'}">
+                            <a class="color" routerLink="/system/logicGroup" routerLinkActive="active">用户组管理</a>
+                        </li>
+                        <li class="system-color" *spkAuthzIf="{hasPermission: 'SYSTEM:ROLE:*'}">
+                            <a class="color" routerLink="/system/role" routerLinkActive="active">角色管理</a>
+                        </li>
+                        <li class="system-color" *spkAuthzIf="{hasPermission: 'SYSTEM:PERMISSION:*'}">
+                            <a class="color" routerLink="/system/permission" routerLinkActive="active">授权管理</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: 'PORTAL:*'}">
+                <img src="./assets/images/home/portal.png" alt="">
+                <span class="damand">
+                    <p>门户管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="learning-color" *spkAuthzIf="{hasPermission: 'PORTAL:BANNER:*'}">
+                            <a class="color" routerLink="/portal/banner" routerLinkActive="active">图片库</a>
+                        </li>
+                        <!--  <li class="learning-color" *spkAuthzIf="{hasPermission: 'PORTAL:SITE_NOTICE:*'}">
+                            <a class="color" routerLink="/system/notice-box" routerLinkActive="active">站点公告</a>
+                        </li> -->
+                        <li class="learning-color" *spkAuthzIf="{hasPermission: 'PORTAL:NEWS:*'}">
+                            <a class="color" routerLink="/portal/news" routerLinkActive="active">新闻资讯</a>
+                        </li>
+                        <!-- <li class="learning-color">
+                            <a class="color" routerLink="/portal/footer" routerLinkActive="active">页眉页脚</a>
+                        </li> -->
+                        <li class="learning-color" *spkAuthzIf="{hasPermission: ['PORTAL:HOME_TPL:*']}">
+                            <a class="color" routerLink="/homeconfig/template" routerLinkActive="active">首页配置</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{hasPermission: 'POINT:*'}">
+                <img src="./assets/images/home/Resources.png" alt="">
+                <span class="damand">
+                    <p>积分管理</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="library-color">
+                            <a class="color" routerLink="/points/rule" routerLinkActive="active">积分规则</a>
+                        </li>
+                        <li class="library-color">
+                            <a class="color" routerLink="/points/detaillist" routerLinkActive="active">积分信息</a>
+                        </li>
+                        <li class="library-color">
+                            <a class="color" routerLink="/points/mall" routerLinkActive="active">积分商城</a>
+                        </li>
+                        <li class="library-color">
+                            <a class="color" routerLink="/portal/footer" routerLinkActive="active">积分导入</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+            <div class="menu" *spkAuthzIf="{ hasPermission: ['SETTINGS:*'] }">
+                <img src="./assets/images/home/Basics.png" alt="">
+                <span class="damand">
+                    <p>站点配置</p>
+                    <span class="bank"></span>
+                    <ul>
+                        <li class="learning-color" *spkAuthzIf="{hasPermission: 'SETTINGS:SITE:*'}">
+                            <a class="color" routerLink="/system/site/info" routerLinkActive="active">站点信息</a>
+                        </li>
+                        <!--  <li class="learning-color">
+                            <a class="color" routerLink="/system/site/message" routerLinkActive="active">站点消息</a>
+                        </li> -->
+                        <li class="learning-color">
+                            <a class="color" routerLink="/system/strategy/site/list" routerLinkActive="active">策略配置</a>
+                        </li>
+                        <li class="learning-color">
+                            <a class="color" routerLink="/system/category" routerLinkActive="active">系统分类</a>
+                        </li>
+                        <li class="learning-color">
+                            <a class="color" routerLink="/system/code" routerLinkActive="active">编码配置</a>
+                        </li>
+                        <li class="learning-color">
+                            <a class="color" routerLink="/system/cert-type" routerLinkActive="active">证书分类</a>
+                        </li>
+                    </ul>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <!-- banner end -->
+    <div class="homeContent">
+        <!-- <div class="contentHead">
+            待办事项
+        </div>
+        <div class="homeAgency">
+            <div class="left">
+                <div class="AgentInformation">
+                    <div class="AgentInformationHead">
+                        <span class="AgentInformation_left">待办资讯</span>
+                        <span class="AgentInformation_more">更多</span>
+                    </div>
+                    <div class="AgentInformationBottom">
+                        <div class="AgentInformationBottomCon">
+                            <div>
+                                <h5 class="notice">[缴费通知]</h5>
+                                <h5 class="RecentNotice">近期缴费通知
+                                    <h5 style="float:right;" class="time">[16/11/15]</h5>
+                                </h5>
+                                <p class="word">
+                                    市场部培训一班交通费缴费情况录入情况待查看，需审阅。
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="notice">[计划到期]</h5>
+                                <h5 class="RecentNotice">春游计划到期
+                                    <h5 style="float:right;" class="time">[16/11/15]</h5>
+                                </h5>
+                                <p class="word">
+                                    培训二班的春游计划即将到期，请安排计划进行，需通过。
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="notice">[结业通知]</h5>
+                                <h5 class="RecentNotice">培训一班结业通知
+                                    <h5 style="float:right;" class="time">[16/11/15]</h5>
+                                </h5>
+                                <p class="word">
+                                    最近一期培训班培训一班即将毕业，请录入相关结业信息做审阅，详情见内容。
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="notice">[成绩录入]</h5>
+                                <h5 class="RecentNotice">培训一班考试成绩录入
+                                    <h5 style="float:right;" class="time">[16/11/15]</h5>
+                                </h5>
+                                <p class="word">
+                                    培训一班即将毕业，考试科目已经结束，需录入相关学员考试成绩。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="useHelp">
+                    <div class="AgentInformationHead">
+                        <span class="AgentInformation_left">使用帮助</span>
+                        <span class="AgentInformation_more">更多</span>
+                    </div>
+                    <div class="useHelpBottom">
+                        <div class="useHelpBottomCon">
+                            <div>
+                                <h5 class="notice">[使用帮助1]</h5>
+                                <h5 class="RecentNotice">学员学习使用方法</h5>
+                                <p class="word">
+                                    登录自己的学号账号，进入首页选择自己喜欢的课程进行学习就可以。
+                                </p>
+                            </div>
+                            <div>
+                                <h5 class="notice">[使用帮助2]</h5>
+                                <h5 class="RecentNotice">讲师使用方法</h5>
+                                <p class="word">
+                                    讲师登录自己的账号可以进行课程直播等相关的一些操作。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="AgentInformationHead">
+                    <span class="AgentInformation_left">消息通知</span>
+                    <span class="AgentInformation_more">更多</span>
+                </div>
+                <div class="MessageNotification">
+                    <div class="MessageNotificationCon">
+                        <div>
+                            <h5 class="notice">[考试通知]</h5>
+                            <h5 class="RecentNotice">近期考试通知
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                由于之前的知识学习培训已经结束，市场部组织的技能知识考试近期在下周18号举行，望大家做好准备，具体看详情内容。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[培训班公告]</h5>
+                            <h5 class="RecentNotice">最新一期培训班开课通知
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                如何提高自己技能专业知识的课程讲座第二期培训班在下周一即将开课，请抓紧报名。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[系统通知]</h5>
+                            <h5 class="RecentNotice">系统新闻公告
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                最新一期培训班顺利开课，学员学习热情高涨，详见内容。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[系统通知]</h5>
+                            <h5 class="RecentNotice">近期培训时间调整变更公告
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                由于张老师时间关系问题，将下周二的培训课程顺延至下周六上课培训，望大家周知，谢谢！
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[系统通知]</h5>
+                            <h5 class="RecentNotice">系统新闻公告
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                最新一期培训班新课程即将开课，望学员积极参与其中。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[系统通知]</h5>
+                            <h5 class="RecentNotice">近期培训班结业活动公告
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                由于近期培训的成果显著，大家的努力公司高层都看在眼里特别给本期学员安排一场活动以表扬和鼓励。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 class="notice">[培训班公告]</h5>
+                            <h5 class="RecentNotice">最新一期培训班结业通知
+                                <h5 style="float:right;" class="time">[16/11/15]</h5>
+                            </h5>
+                            <p class="word">
+                                最近的培训一般即将进入结业期，希望各位学员做好接下来的工作准备，把知识运用到工作中去。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div class="bottom">
+        <p>版权所有 © 2018 中国人寿保险（集团）公司</p>
+        <p>Copyright © 2018 China Life Insurance(Group) Company. All rights reserved.</p>
+        <p>京ICP备05024145号 京公网安备110401500015号</p>
+    </div>
+</div>

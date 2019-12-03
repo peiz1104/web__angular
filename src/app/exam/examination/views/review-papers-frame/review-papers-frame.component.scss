@@ -1,0 +1,341 @@
+$radius: 5px;
+$comcolor: #0569b5; //主题颜色i*I
+$defaultColor: #666;
+$bodyWidth: 1200px; //页面内容部分最大宽度
+$bgColor: #f7f5f5; //页面背景色
+$size16: 16px;
+$size14: 14px;
+.exam-frame {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 50px;
+    .exam-title {
+        height: 52px;
+        width: 100%;
+        line-height: 52px;
+        background-color: $comcolor;
+        position: fixed;
+        top: 0px;
+        z-index: 990;
+        text-align: center;
+        .exam-name {
+            font-size: 16px;
+            color: #fff;
+            // float: left;
+            // margin-left: 12px;
+        }
+        .exam-time {
+            position: absolute;
+            left: 50%;
+            width: 180px;
+            height: 52px;
+            margin-left: -90px;
+            color: #fff;
+            // color: red;
+            font-size: 14px;
+            text-align: center;
+            span {
+                // color: #ffc605;
+                color: #e86d6d;
+                font-size: 16px;
+            }
+        }
+        .exam-save {
+            float: right;
+            padding: 3px 16px;
+            line-height: 24px;
+            color: $comcolor;
+            border-radius: 3px;
+            background-color: #fff;
+            margin: 11px 20px 0 0;
+            cursor: pointer;
+        }
+        .exam-their {
+            float: right;
+            padding: 3px 16px;
+            line-height: 24px;
+            color: #fff;
+            border-radius: 3px;
+            background-color: #ffc605;
+            margin: 11px 30px 0 0;
+            cursor: pointer;
+        }
+    }
+    .aside-left {
+        width: 210px;
+        position: fixed;
+        top: 76px;
+        left: 20px;
+        background-color: #fff;
+        box-shadow: 0px 0px 12px #d1d1d1;
+        padding-bottom: 10px;
+        .user {
+            height: 26px;
+            line-height: 26px;
+            font-size: 14px;
+            color: #999;
+            margin-top: 12px;
+            text-indent: 21px;
+            span {
+                float: right;
+                width: 130px;
+                color: #000;
+                font-size: 14px;
+                margin-right: 8px;
+                text-indent: 0px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .user-name {
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #999;
+            text-indent: 34px;
+            span {
+                float: right;
+                width: 130px;
+                color: #000;
+                font-size: 14px;
+                margin-right: 8px;
+                text-indent: 0px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .user-session {
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #999;
+            text-indent: 6px;
+            span {
+                float: right;
+                width: 130px;
+                color: #000;
+                font-size: 14px;
+                margin-right: 8px;
+                text-indent: 0px;
+            }
+        }
+        .cut-screen {
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #999;
+            text-indent: 6px;
+            span {
+                float: right;
+                width: 130px;
+                color: #000;
+                font-size: 14px;
+                margin-right: 8px;
+                text-indent: 0px;
+            }
+        }
+        .cut-num {
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #999;
+            text-indent: 19px;
+            span {
+                float: right;
+                width: 130px;
+                color: #000;
+                font-size: 14px;
+                margin-right: 8px;
+                text-indent: 0px;
+            }
+        }
+        .clues {
+            margin: 0px 12px;
+            font-size: 12px;
+            span {
+                color: red;
+            }
+        }
+        .news {
+            margin: 6px 12px;
+            min-height: 42px;
+            max-height: 100px;
+            overflow: auto;
+            color: #666;
+            background-color: #b7b7b7;
+            cursor: pointer;
+            border-radius: 3px;
+            .message{
+                color:#388ecb;
+                line-height: 20px;
+            }
+            .noMessage{
+                width: 100%;
+                height: 42px;
+                line-height: 42px;
+                text-align: center;
+            }
+        }
+        .answer-box {
+            display: flex;
+            margin: 3px 12px;
+            .answered {
+                height: 20px;
+                .answered-br {
+                    height: 20px;
+                    width: 20px;
+                    float: left;
+                    background-color: $comcolor;
+                    border: 1px solid $comcolor;
+                }
+                .answered-ch {
+                    float: left;
+                    line-height: 22px;
+                    font-size: 12px;
+                    margin: 0px 3px;
+                }
+            }
+            .answer {
+                height: 20px;
+                .answer-br {
+                    height: 20px;
+                    width: 20px;
+                    float: left;
+                    background-color: #fff;
+                    border: 1px solid #d0d0d0;
+                }
+                .answer-ch {
+                    float: left;
+                    line-height: 20px;
+                    font-size: 12px;
+                    margin: 0px 3px;
+                }
+            }
+            .answering {
+                height: 20px;
+                .answering-br {
+                    height: 20px;
+                    width: 20px;
+                    float: left;
+                    background-color: #fff;
+                    border: 1px solid #f67920;
+                    position: relative;
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0px;
+                        right: 0px;
+                        border-top: 2px solid transparent;
+                        border-right: 2px solid #f67920;
+                        border-bottom: 2px solid #f67920;
+                        border-left: 2px solid transparent;
+                    }
+                }
+                .answering-ch {
+                    float: left;
+                    line-height: 22px;
+                    font-size: 12px;
+                    margin-left: 3px;
+                }
+            }
+        }
+        .test-list {
+            margin: 25px 12px 8px;
+            min-height: 50px;
+            max-height: 200px;
+            overflow: auto;
+            .test-num {
+                float: left;
+                height: 20px;
+                width: 20px;
+                margin: 0px 3px 6px 0px;
+                line-height: 18px;
+                color: #666;
+                text-align: center;
+                border: 1px solid #d0d0d0;
+                position: relative;
+                cursor: pointer;
+                user-select: none;
+                &.no {
+                    border: 1px solid #fff;
+                    color: #ddd;
+                }
+                &.respond {
+                    color: #fff;
+                    background-color: $comcolor;
+                    border: 1px solid $comcolor;
+                }
+                &.marked {
+                    border: 1px solid #f67920;
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0px;
+                        right: 0px;
+                        border-top: 2px solid transparent;
+                        border-right: 2px solid #f67920;
+                        border-bottom: 2px solid #f67920;
+                        border-left: 2px solid transparent;
+                    }
+                }
+            }
+        }
+    }
+    .aside-right {
+        margin-top: 76px;
+        margin-left: 246px;
+        min-height: 800px;
+        .test-detail {
+            min-height: 300px;
+            .right-title {
+                height: 42px;
+                background-color: $comcolor;
+                line-height: 42px;
+                color: #fff;
+                font-size: 16px;
+                text-indent: 16px;
+                margin-top: 10px;
+                span {
+                    font-size: 12px;
+                }
+            }
+        }
+        .page {
+            text-align: center;
+            padding: 20px 0;
+            span {
+                display: inline-block;
+                cursor: pointer;
+                border: 1px solid #ddd;
+                padding: 3px 0;
+                position: relative;
+                top: -8px;
+                padding: 3px 8px;
+                &.parim {
+                    background: #388ecb;
+                    color: #fff;
+                }
+            }
+            ul {
+                overflow: hidden;
+                display: inline-block;
+                li {
+                    padding: 3px 8px;
+                    display: inline-block;
+                    border: 1px solid #ddd;
+                    cursor: pointer;
+                    margin: 0 5px;
+                    &.active {
+                        background: $comcolor;
+                        border: 1px solid $comcolor;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+

@@ -1,0 +1,31 @@
+<div class="exam-frame clearfix" id="exam-frame">
+    <div class="exam-title clearfix" id="nav-height">
+        <span class="exam-name">{{paper.examName}}</span>
+        <!-- <span class="exam-time">剩余时间：<span >{{showMinute}}</span> 分钟 <span>{{showSecond}}</span> 秒</span> -->
+    </div>
+    <!-- 左侧考生试卷信息 -->
+    <div class="aside-left">
+        <div class="user">用户名:
+            <span>{{userName}}</span>
+        </div>
+        <div class="user-name">姓名:
+            <span>{{name}}</span>
+        </div>
+        <div class="user-session">考试场次:
+            <span>第{{examSeq}}场</span>
+        </div>
+    </div>
+    <!-- 右侧考试试题 -->
+    <div class="aside-right">
+        <nz-spin [nzSpinning]="isSpinning" [nzTip]="'数据加载中...'">
+            <div class="test-detail">
+                <div class="list-one" *ngFor="let data of renderQuestion; let i = index;">
+                    <div *ngIf="data.part&&data.part.partitionName" class="right-title">{{data.part.partitionName}}
+                    </div>
+                    <spk-review-papers-box [data]="data" [answer]="answers" [rightKey]="rightKey" [number]="data.que_num" id="{{data.que_num}}F">
+                    </spk-review-papers-box>
+                </div>
+            </div>
+        </nz-spin>
+    </div>
+</div>

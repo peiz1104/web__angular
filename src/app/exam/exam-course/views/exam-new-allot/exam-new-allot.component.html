@@ -1,0 +1,558 @@
+<div class="container-fluid">
+    <div class="page-header" *ngIf="createOrEditor">
+        <h3 class="page-title">创建考试
+            <small>分配管理员</small>
+        </h3>
+
+        <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../', 'add']">返回考试列表
+				<i class="fa fa-level-up"></i>
+			</button>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="">
+            <div class="">
+                <div class="card-body">
+                    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                        <nz-tabset (nzSelectedIndexChange)="changeTabs($event)" [(nzSelectedIndex)]="selectedTabIndex">
+                            <nz-tab *ngIf="showTab('JK')" (nzSelect)="showJK=true" (nzDeselect)="showJK=false">
+                                <ng-template #nzTabHeading>监考人员</ng-template>
+                                <div class="tab-body" *ngIf="showJK&&examId">
+                                    <spk-new-exam-jk-box [examId]="examId" [stCode]="'JK'">
+                                    </spk-new-exam-jk-box>
+                                </div>
+                            </nz-tab>
+                            <nz-tab *ngIf="showTab('PJ')" (nzSelect)="showPJ=true" (nzDeselect)="showPJ=false">
+                                <ng-template #nzTabHeading>阅卷人员</ng-template>
+                                <div class="tab-body" *ngIf="showPJ">
+                                    <spk-exam-marking-box #PJMarking [examId]="examId" [markType]="'PJ'" (_PSedit)="PSedit($event)" (_PMedit)="PMedit($event)" (_showGroup)="showGroup($event)" (_bindGroup)="bindGroup($event)" [paperId]="paperId" (_showViewPaper)="showViewPaper($event)" (_PMeditGroup)="PMeditGroup($event)"
+                                        (_showCopyList)="showCopyList($event)" (_showMemberGroup)="_showMemberGroup($event)"></spk-exam-marking-box>
+                                </div>
+                            </nz-tab>
+                            <nz-tab *ngIf="showTab('FP')" (nzSelect)="showFP=true" (nzDeselect)="showFP=false">
+                                <ng-template #nzTabHeading>复评人员</ng-template>
+                                <div class="tab-body" *ngIf="showFP&&examId">
+                                    <spk-exam-marking-box #FPMarking [examId]="examId" [markType]="'FP'" (_PSedit)="PSedit($event)" (_PMedit)="PMedit($event)" (_showViewPaper)="showViewPaper($event)" (_PMeditGroup)="PMeditGroup($event)" (_showGroup)="showGroup($event)" (_bindGroup)="bindGroup($event)"
+                                        [paperId]="paperId" (_showCopyList)="showCopyList($event)" (_showMemberGroup)="_showMemberGroup($event)"></spk-exam-marking-box>
+                                </div>
+                            </nz-tab>
+                            <!--<nz-tab *ngIf="showTab('SP')" (nzSelect)="showSP=true" (nzDeselect)="showSP=false">
+                                <ng-template #nzTabHeading>审核人员</ng-template>
+                                <div class="tab-body SH-box" *ngIf="showSP&&examId">
+                                    <div class="queryTools-box">
+                                        <label for="userName" style="margin-left: 20px;">用户名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" [(ngModel)]="SHqueryValue.username"></nz-input>
+                                        <label for="name">姓名：</label>
+                                        <nz-input style="width:120px;margin-right:40px;" class="name-text" [(ngModel)]="SHqueryValue.displayName"></nz-input>
+                                        <button nz-button [nzType]="'primary'" (click)="SHloadList()">
+											<span>搜索</span>
+										</button>
+                                    </div>
+                                    <cui-data-table #tableHandle [(selection)]="SHselectData" [columns]="SHcolumns" [data]="SHcolumnsData" (reload)="SHloadList($event)" [selectType]="'checkbox'" [loading]="SHListLoading" [pagination]="SHpagination">
+                                        <ng-template #listTools>
+                                            <nz-dropdown>
+                                                <button nz-button nz-dropdown>
+													<span>批量操作</span>
+													<i class="anticon anticon-down"></i>
+												</button>
+                                                <ul nz-menu>
+                                                    <li nz-menu-item>
+                                                        <a (click)="ShowEditSPtimeModal()">设置审核时间</a>
+                                                    </li>
+                                                    <li nz-menu-item>
+                                                        <a (click)="clearSPtime()">清除审核时间</a>
+                                                    </li>
+                                                </ul>
+                                            </nz-dropdown>
+                                            <button nz-button [nzType]="'primary'" type="button" style="width:70px;" (click)="SHaddList($event)">添加</button>
+                                            <spk-user-lookup [(ngModel)]="SHuserSelectData" (ok)="SHuserChangeHandler($event,row)"></spk-user-lookup>-->
+                                            <!-- <button type="button" class="btn btn-outline-primary" (click)="SHremoveLists(selection)">删除</button> -->
+                                        <!--</ng-template>
+                                        <ng-template cuiColTpl="name" let-row="row">
+                                            <div>{{row.name?row.name:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="administrator" let-row="row">
+                                            <div>{{row.administrator?row.administrator:'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="createdDate" let-row="row">
+                                            <div>{{row.createdDate|dateMoment:'YYYY-MM-DD HH:mm'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="startTime" let-row="row">
+                                            <div>{{row.startTime?(row.startTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="endTime" let-row="row">
+                                            <div>{{row.endTime?(row.endTime|dateMoment:'YYYY-MM-DD HH:mm'):'--'}}</div>
+                                        </ng-template>
+                                        <ng-template cuiColTpl="actSet" let-row="row">
+                                            
+                                            <nz-select [(ngModel)]="row.SHrangeSelectId" (ngModelChange)="SHrangeSelectChange(row,row.SHrangeSelectId)" style="width: 100px!important;" [nzPlaceHolder]="'请选择'">
+                                                <nz-option [nzLabel]="'安排范围'" [nzValue]="1"></nz-option>
+                                                <nz-option *ngIf="row.name" [nzLabel]="'清除安排范围'" [nzValue]="2"></nz-option>
+                                                <nz-option [nzLabel]="'删除'" [nzValue]="3"></nz-option>
+                                            </nz-select>-->
+                                            <!-- <a class="text-primary" (click)="SHrangeHandler(row)">审核范围</a>
+                                            <span nz-table-divider></span>
+                                            <a class="text-primary" (click)="SHremove(row)">删除</a> -->
+                                        <!--</ng-template>
+                                    </cui-data-table>
+                                    <spk-user-group-select #SHTREE mode="multiple" (selectOk)="SHhandleOk($event)"></spk-user-group-select>
+                                    
+                                    <nz-modal [nzConfirmLoading]="SHmodalLoading" *ngIf="SHvisible" [nzVisible]="SHvisible" [nzTitle]="'选择范围'" [nzContent]="modalContent" (nzOnCancel)="SHhandleCancel($event)" (nzOnOk)="SHhandleOk($event)">
+                                        <ng-template #modalContent>-->
+                                            <!-- <spk-user-group-tree (selectionChange)="SHSelectionChange($event)"></spk-user-group-tree> -->
+                                       <!-- </ng-template>
+                                    </nz-modal>
+                                </div>
+                            </nz-tab>-->
+                            <nz-tab *ngIf="showTab('KC')" (nzSelect)="showKA=true" (nzDeselect)="showKA=false">
+                                <ng-template #nzTabHeading>考场安排</ng-template>
+                                <div class="tab-body KC-box" *ngIf="showKA&&examId">
+                                    <spk-exam-ka-box [examId]="examId"></spk-exam-ka-box>
+                                </div>
+                            </nz-tab>
+                        </nz-tabset>
+                    </nz-spin>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出层选择待复制题目列表 -->
+<nz-modal [nzVisible]="copyListvisible" [nzTitle]="subjectTitle" [nzFooter]="subjectFooter" (nzOnCancel)="copyListvisible=false" [nzWidth]="'80%'" [nzStyle]="{height:'80%',top:'20px'}">
+    <ng-template #subjectTitle>
+        <div class="text-center">选择题目</div>
+        <cui-data-table [columns]="CopyListColumns" [data]="CopyListColumnsData" selectType="checkbox" [(selection)]="markSlection" [loading]="copyListLoading">
+            <ng-template cuiColTpl="casual" let-row="row">
+                <nz-tooltip [nzPlacement]="'right'">
+                    <span nz-tooltip class='exam-casual'>{{row.casual | getText}}</span>
+                    <ng-template #nzTemplate>
+                        <p>{{row.casual| getText}}</p>
+                    </ng-template>
+                </nz-tooltip>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+    <ng-template #subjectFooter>
+        <button nz-button [nzType]="'primary'" class="copy" (click)="sublimtCopy($event)">确 定</button>
+    </ng-template>
+</nz-modal>
+<!-- 单人阅卷编辑 -->
+<nz-modal [nzVisible]="PSeditModal" [nzTitle]="'编辑'+(copyType=='PJ'?'阅卷':'复评')+'组信息'" [nzContent]="PSeditContent" [nzFooter]="PSeditFooter" [nzClosable]="false">
+    <ng-template #PSeditContent>
+        <div class="PSeditContent">
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    <span style="color:red">*</span> 小组名称：
+                </div>
+                <div nz-col [nzSpan]="14">
+                    <nz-input [(ngModel)]="markGroupName"></nz-input>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    评分规则：
+                </div>
+                <div nz-col [nzSpan]="14">
+                    <nz-select style="width:100%" [ngModel]="'2'" [nzDisabled]="true">
+                        <nz-option *ngFor="let option of PSMarkingOptions" [nzLabel]="option.label" [nzValue]="option.value" [nzDisabled]="option.disabled">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    {{copyType=='PJ'?'阅卷':'复评'}}时间：
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [(ngModel)]="markStartTime" [nzPlaceHolder]="'开始时间'"></spk-qm-datepicker>
+                        </div>
+                        <div nz-col [nzSpan]="2" class="line-height text-center">
+                            至
+                        </div>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [(ngModel)]="markEndTime" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'"></spk-qm-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="submitPSEdit()">
+						确定
+					</button>
+                </div>
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="cancelPSEdit()">
+						取消
+					</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #PSeditFooter>
+    </ng-template>
+</nz-modal>
+<!-- 新增阅卷人组 -->
+<nz-modal [nzVisible]="PMAddGroupModal" [nzTitle]="'新增'+(copyType=='PJ'?'阅卷':'复评')+'组信息'" [nzContent]="PMAddGroupContent" [nzClosable]="false" [nzFooter]="PMAddGroupFooter">
+    <ng-template #PMAddGroupContent>
+        <div class="PSeditContent">
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    <span style="color:red">*</span> 小组名称：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-input [(ngModel)]="markGroupName"></nz-input>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    <span style="color:red">*</span> 评分规则：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-select style="width:100%" [nzPlaceHolder]="'请选择人员'" [(ngModel)]="markScoreMode">
+                        <nz-option *ngFor="let option of copyType=='PJ'?PJPMMarkingOptions:FPPMMarkingOptions" [nzLabel]="option.label" [nzValue]="option.value" [nzDisabled]="option.disabled">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    {{copyType=='PJ'?'阅卷':'复评'}}时间：
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'开始时间'" [(ngModel)]="markStartTime"></spk-qm-datepicker>
+                        </div>
+                        <div nz-col [nzSpan]="2" class="line-height text-center">
+                            至
+                        </div>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'" [(ngModel)]="markEndTime"></spk-qm-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    描述：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-input [(ngModel)]="description" nzType="textarea" [nzRows]="3"></nz-input>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="8" class="text-right">
+                    <span style="color:red">*</span> 分配可阅考生人数：
+                </div>
+                <div nz-col [nzSpan]="14">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="8">
+                            <nz-input-number [(ngModel)]="markUserCount" [nzMin]="-1" [nzStep]="1" (ngModelChange)="changemarkUserCount($event)" [nzMax]="userCount"></nz-input-number>
+                        </div>
+                        <div nz-col [nzSpan]="16">
+                            可分配（{{userCount||0}}）人数
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tips text-center">
+                <div>分配可阅考生人数：-1为不限制，每个组先到先得。</div>
+                <div>设置可阅考生人数，必须考试结束后方可发布。</div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="submitAddGroup()">
+						确定
+					</button>
+                </div>
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="PMAddGroupModal=false">
+						取消
+					</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #PMAddGroupFooter>
+    </ng-template>
+</nz-modal>
+<!-- 编辑阅卷人组 -->
+<nz-modal [nzVisible]="PMEditGroupModal" [nzTitle]="'新增'+(copyType=='PJ'?'阅卷':'复评')+'组信息'" [nzContent]="PMEditGroupContent" [nzClosable]="false" [nzFooter]="PMEditGroupFooter">
+    <ng-template #PMEditGroupContent>
+        <div class="PSeditContent">
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    <span style="color:red">*</span> 小组名称：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-input [(ngModel)]="markGroupName"></nz-input>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    <span style="color:red">*</span> 评分规则：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-select style="width:100%" [nzPlaceHolder]="'请选择人员'" [(ngModel)]="markScoreMode">
+                        <nz-option *ngFor="let option of copyType=='PJ'?PJPMMarkingOptions:FPPMMarkingOptions" [nzLabel]="option.label" [nzValue]="option.value" [nzDisabled]="option.disabled">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    {{copyType=='PJ'?'阅卷':'复评'}}时间：
+                </div>
+                <div nz-col [nzSpan]="18">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'开始时间'" [(ngModel)]="markStartTime"></spk-qm-datepicker>
+                        </div>
+                        <div nz-col [nzSpan]="2" class="line-height text-center">
+                            至
+                        </div>
+                        <div nz-col [nzSpan]="10">
+                            <spk-qm-datepicker [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'结束时间'" [(ngModel)]="markEndTime"></spk-qm-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="6" class="text-right">
+                    描述：
+                </div>
+                <div nz-col [nzSpan]="16">
+                    <nz-input [(ngModel)]="description" nzType="textarea" [nzRows]="3"></nz-input>
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="8" class="text-right">
+                    <span style="color:red">*</span> 分配可阅考生人数：
+                </div>
+                <div nz-col [nzSpan]="14">
+                    <div nz-row>
+                        <div nz-col [nzSpan]="8">
+                            <nz-input-number [(ngModel)]="markUserCount" [nzMin]="-1" [nzStep]="1" (ngModelChange)="changemarkUserCount($event)"></nz-input-number>
+                        </div>
+                        <div nz-col [nzSpan]="16">
+                            可分配（{{userCount||0}}）人数
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tips text-center">
+                <div>分配可阅考生人数：-1为不限制，每个组先到先得。</div>
+                <div>设置可阅考生人数，必须考试结束后方可发布。
+                </div>
+            </div>
+            <div nz-row class="line-block">
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" (click)="submitEditGroup()">
+						确定
+					</button>
+                </div>
+                <div nz-col [nzSpan]="12" class="text-center">
+                    <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="cancelPSEdit()">
+						取消
+					</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #PMEditGroupFooter>
+    </ng-template>
+</nz-modal>
+<!-- 绑定阅卷人组 -->
+<nz-modal [nzVisible]="bindGroupModal" [nzTitle]="'绑定'+(copyType=='PJ'?'阅卷':'复评')+'组'" [nzWidth]="'900px'" [nzContent]="bindGroupContent" [nzFooter]="bindGroupFooter" [nzClosable]="false" (nzOnCancel)="bindGroupModal=false" (nzOnOk)="submitBindGroup()">
+    <ng-template #bindGroupContent>
+        <cui-data-table [columns]="bindGroupColumns" [data]="bindGroupColumnsData" [pagination]="pagination" [(selection)]="bindGroupSelection" selectType="checkbox" [loading]="loading">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="bingGroupSearch" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="markGroupName">组名称</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="markGroupName" [nzPlaceHolder]="'请输入组名称'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="markTeacherCount">人数</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <input type="text" class="ant-input" style="width:100%" formControlName="markTeacherCount" placeholder="请输入人数" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <button type="button" [nzType]="'primary'" nz-button class="btn btn-primary" [nzSize]="'large'" (click)="bindGroupSubmit($event, bingGroupSearch.value)">搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                <div>{{(row.createdDate | dateMoment:'YYYY-MM-DD')||'未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="markTeacherCount" let-row="row">
+                <div>
+                    <span class="pointer" (click)="showGroupMemberModal(row.id)">{{row.markTeacherCount}}人</span>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+    <ng-template #bindGroupFooter>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" (click)="bindGroupModal=false">取消</button>
+        <button nz-button [nzType]="'primary'" [nzLoading]="submitGroupLoading" [nzSize]="'large'" (click)="submitBindGroup()">确定</button>
+    </ng-template>
+</nz-modal>
+<!-- 查看阅卷人组 -->
+<nz-modal [nzVisible]="groupListModal" [nzTitle]="(copyType=='PJ'?'阅卷':'复评')+'组'" [nzWidth]="'900px'" [nzContent]="groupList" [nzClosable]="false" [nzFooter]="groupListModalFooter">
+    <ng-template #groupList>
+        <cui-data-table [columns]="bindGroupColumns" [data]="bindGroupColumnsData" (reload)="loadBindGroup()" [pagination]="pagination" [loading]="loading">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="bingGroupSearch" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="markGroupName">组名称</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="markGroupName" [nzPlaceHolder]="'请输入组名称'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="markTeacherCount">人数</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <input type="text" class="ant-input" style="width:100%" formControlName="markTeacherCount" placeholder="请输入人数" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <button type="button" [nzType]="'primary'" nz-button class="btn btn-primary" [nzSize]="'large'" (click)="bindGroupSubmit($event, bingGroupSearch.value)">搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="createdDate" let-row="row">
+                <div>{{(row.createdDate | dateMoment:'YYYY-MM-DD')||'未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="markTeacherCount" let-row="row">
+                <div>
+                    <span class="pointer" (click)="showGroupMemberModal(row.id)">{{row.markTeacherCount}}人</span>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+    <ng-template #groupListModalFooter>
+        <button nz-button [nzType]="'default'" (click)="groupListModal=false">关闭</button>
+    </ng-template>
+</nz-modal>
+<!-- 单人阅卷查看组内成员 -->
+<nz-modal [nzVisible]="showGroupMember" [nzTitle]="null" [nzWidth]="'900px'" [nzContent]="memberList" [nzClosable]="false" [nzFooter]="GroupMemberFooter">
+    <ng-template #memberList>
+        <cui-data-table [columns]="groupMemberColumns" [data]="groupMemberColumnsData" (reload)="loadGroupMember()" [pagination]="groupMemberPagination" [loading]="loading">
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_MemberSearch" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="username">用户名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <div nz-form-item nz-row>
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="displayName">姓名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                <button type="button" [nzType]="'primary'" nz-button class="btn btn-primary" [nzSize]="'large'" (click)="submitMemberSearch($event, _MemberSearch.value)">搜索</button>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+
+            <ng-template cuiColTpl="creatDate" let-row="row">
+                <div>{{(row.creatDate | dateMoment:'YYYY-MM-DD')||'未定'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="groupNum" let-row="row">
+                <div>
+                    <span class="pointer" (click)="showGroupMemberModal(row.GroupId)">{{row.groupNum}}人</span>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="action" let-row="row">
+                <div>
+                    <div class="half">
+                        <span class="pointer" (click)="showAddUser=true">添加用户</span>
+                    </div>
+                    <span class="half pointer">
+						<span class="pointer">删除组</span>
+                    </span>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </ng-template>
+    <ng-template #GroupMemberFooter>
+        <button nz-button [nzType]="'default'" (click)="closeShowGroupMember()">关闭</button>
+    </ng-template>
+</nz-modal>
+<!-- 弹出层预览试卷 -->
+<nz-modal [nzVisible]="viewPaper" [nzTitle]="'试题列表'" [nzContent]="PaperContent" (nzOnCancel)="viewPaper=false" (nzOnOk)="viewPaper=false" [nzFooter]="PaperFooter" [nzWidth]="'900px'">
+    <ng-template #PaperContent>
+        <spk-test-view [view]="viewPaper" [url]="'/api/exam/mark/setting/getImpersonalQuestion'" [params]="viewPaperParams" [checkbox]="true" (_cancelView)="viewPaper=false" (_addQuestion)="addQuestion($event)"></spk-test-view>
+    </ng-template>
+    <ng-template #PaperFooter>
+    </ng-template>
+</nz-modal>
+<!-- 设置审核时间模块 -->
+<nz-modal [nzVisible]="ShowEditSPtime" [nzTitle]="'设置审核时间'" [nzContent]="JKtimeContent" (nzOnCancel)="ShowEditSPtime=false" (nzOnOk)="submitSPtime()" [nzWidth]="'600px'">
+    <ng-template #JKtimeContent>
+        <div nz-row class="tips">提示:审核时间默认对所有审核人员生效，已勾选审核人员的，只对选中的人员有效。</div>
+        <div nz-row class="JK-code-content">
+            <div nz-row class="proctor-line">
+                <div nz-col [nzSpan]="4" class="text-right">
+                    <label for="startdate">审核时间:</label>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="startdate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入审核开始时间'"></spk-qm-datepicker>
+                </div>
+                <div nz-col [nzSpan]="1" class="ali-c">至</div>
+                <div nz-col [nzSpan]="8">
+                    <spk-qm-datepicker class="w-100" [(ngModel)]="enddate" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'" [nzPlaceHolder]="'请输入审核结束时间'"></spk-qm-datepicker>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>

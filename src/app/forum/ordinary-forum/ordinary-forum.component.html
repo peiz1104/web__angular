@@ -1,0 +1,21 @@
+<ng-container *ngIf="forum">
+  <ul nz-menu [nzMode]="'horizontal'" [nzTheme]="'light'">
+    <li nz-menu-item [routerLink]="['./']" routerLinkActive #rla="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+      [nzSelected]="rla.isActive">
+      <span>讨论区管理</span>
+    </li>
+    <li nz-menu-item [routerLink]="['topic/-1']" routerLinkActive #rla1="routerLinkActive" [nzSelected]="rla1.isActive">
+      <span>话题管理</span>
+    </li>
+    <li nz-menu-item [routerLink]="['impeach']" routerLinkActive #rla2="routerLinkActive" [nzSelected]="rla2.isActive">
+      <span>用户举报</span>
+    </li>
+    <li nz-menu-item [routerLink]="['basicInfo']" routerLinkActive #rla3="routerLinkActive" [nzSelected]="rla3.isActive">
+      <span>基本信息</span>
+    </li>
+  </ul>
+
+  <div class="mt-4">
+    <router-outlet></router-outlet>
+  </div>
+</ng-container>

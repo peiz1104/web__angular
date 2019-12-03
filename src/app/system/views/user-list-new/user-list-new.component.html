@@ -1,0 +1,200 @@
+<div class="with-side">
+    <!-- <div class="side">
+        <div class="side-body" style="width: 20rem; height: 100%; background-color: #F4F6F8;">
+            <div class="card rounded-0" style="height: 100%; background-color: #F4F6F8;">
+                <div class="card-body" style="height: 100%; background-color: #F4F6F8; overflow: hidden;">
+                    <spk-user-group-tree (selectionChange)="onUgSelectionChange($event)"></spk-user-group-tree>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="main">
+
+        <div class="container-fluid">
+            <div class="page-header">
+                <h3 class="page-title">[{{target?.code || target?.id}}] {{target?.name}}: 用户列表
+                    <small>管理系统用户</small>
+                </h3>
+
+                <!-- <div class="actions pull-right">
+                    <div class="btn-group" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}">
+                        <button type="button" class="btn btn-primary" [routerLink]="['../', 'addchinalife']">
+                            <i class="fa fa-plus"></i> 创建用户</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" (click)="handelLink()">
+                                <i class="fa fa-upload"></i> 批量导入</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item disabled" title="暂未实现">
+                                <i class="fa fa-tasks"></i> 查看导入任务</a>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="page-body">
+
+                <ul class="mb-4 d-flex">
+                    <li *ngFor="let it of getPath(target)">/ {{it}} </li>
+                </ul>
+
+                <ul class="nav nav-tabs mt-4 mb-3 d-none" id="pills-tab" role="tablist">
+                    <!-- <li class="nav-item">
+                      <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-expanded="true">属性</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+                            aria-expanded="true">部门成员</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="pills-tabContent">
+                    <cui-data-table #tableHandle [columns]="columns" [data]="users" [pagination]="pagination" [loading]="loading" selectType="checkbox"
+                        (reload)="loadData($event)" (select)="onSelect($event)">
+                        <ng-template #complexSearch>
+                            <form class="search-bar">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-3">用户名</label>
+                                            <div class="col-9">
+                                                <input type="text" name="username" [(ngModel)]="username" class="form-control" placeholder="请输入用户名">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-3">姓名</label>
+                                            <div class="col-9">
+                                                <input type="text" name="displayName" [(ngModel)]="displayName" class="form-control" placeholder="请输入姓名">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-3">手机号</label>
+                                            <div class="col-9">
+                                                <input type="text" name="phoneNumber" [(ngModel)]="phoneNumber" class="form-control" placeholder="请输入手机号">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-3">身份证</label>
+                                            <div class="col-9">
+                                                <input type="text" name="iDcardNumber" [(ngModel)]="iDcardNumber" class="form-control" placeholder="请输入身份证号">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-form-label col-3">邮箱</label>
+                                            <div class="col-9">
+                                                <input type="text" name="email" [(ngModel)]="email"  class="form-control" placeholder="请输入邮箱">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <div class=" col-9 offset-3">
+                                                <div class="form-check mb-2 mr-sm-2 mb-sm-0">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input"> 仅查询本级组织</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group row mb-0">
+                                            <div class="col-3 offset-1">
+                                                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                                                <button type="reset" class="btn ">清空</button>
+                                                <a href="javascript:;" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">普通搜索</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+
+                        <ng-template #simpleSearch>
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入用户名、姓名或邮箱">
+                                </div>
+                                <div class="form-group ml-2">
+                                    <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                                    <a href="javascript:;" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级搜索</a>
+                                </div>
+                            </form>
+                        </ng-template>
+
+                        <ng-template #listTools>               
+                            <button type="button" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}" class="btn btn-primary" (click)="toAdd()" >
+                                <i class="fa fa-plus"></i> 创建用户
+                            </button>
+                            <button type="button" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:ADD'}" class="btn btn-primary" (click)="handelLink()">批量导入
+                            </button>
+                            <button class="btn btn-outline-primary" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EXPORT'}" (click)="userExport()" [disabled]="exportShow">
+                                <i class="fa fa-download"></i> 导出用户</button>
+                         </ng-template>
+
+                        <!-- <ng-template #listTools>
+                            <button (click)="userExport()" class="btn btn-outline-primary">
+                                <i class="fa fa-download"></i> 导出用户</button>
+                        </ng-template> -->
+
+                        <ng-template cuiColTpl="statusCol" let-row="row">
+                            <span class="text-success" *ngIf="row.status=='ACTIVE'">激活</span>
+                            <span class="text-danger" *ngIf="row.status=='LOCKED'">锁定</span>
+                            <span class="text-success" *ngIf="row.status=='LEAVE'">离职</span>
+                            <span class="text-success" *ngIf="row.status=='RETIRE'">退休</span>
+                            <span class="text-success" *ngIf="row.status=='INVALID'">失效</span>
+                            <span class="text-success" *ngIf="row.status=='INACTIVE'">不活动</span>
+                            <span class="text-success" *ngIf="row.status=='SIGN'">签约</span>
+                            <span class="text-success" *ngIf="row.status=='ASSESSMENTPROTECTION'">考核保护</span>
+                            <span class="text-success" *ngIf="row.status=='SURRENDER'">解约</span>
+                            <span class="text-success" *ngIf="row.status=='PREDISSOLUTION'">预解约</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="sex" let-row="row">
+                            <span class="text-primary" *ngIf="row.sex=='MALE'">男</span>
+                            <span class="text-danger" *ngIf="row.sex=='FAMALE'">女</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="userGroup" let-row="row">
+                            <spk-user-group-popover [userGroup]="row.userGroup" placement="left"></spk-user-group-popover>
+                        </ng-template>
+
+                        <ng-template #rowActions let-row="row">
+                            <!-- <a href="javascript:;" [routerLink]="['../', row.id, 'edit']">编辑</a> -->
+                            <i title="编辑" style="color:#007bbf;cursor:pointer" (click)="edituser(row.id)" class="iconfont icon-bianji-copy" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EDIT'}"></i>
+                            <!-- <a href="javascript:;" class="text-danger" (click)="delete(row.id)">删除</a> -->
+                            <i title="删除" (click)="delete(row.id)" class="iconfont icon-shanchu" style="color:red;cursor:pointer" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}"></i>
+                            <a title="重置密码" href="javascript:;" (click)="resetpassword($event,row)" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:EDIT'}">
+                                <i style="color:red" class="iconfont icon-mima"></i>
+                            </a>
+                            <a href="javascript:;" class="text-danger" (click)="simulate(row.username)" *ngIf="isSystemUser()">模拟登录</a>
+                        </ng-template>
+
+                        <ng-template #actionGroup>
+                            <button class="btn btn-danger" (click)="delete()" *spkAuthzIf="{hasPermission: 'SYSTEM:USER:REMOVE'}">批量删除</button>
+                        </ng-template>
+                    </cui-data-table>
+                    <nz-modal [nzVisible]="isVisible" [nzTitle]="'修改密码'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+                        <ng-template #modalContent>
+                            <p style="color:red">{{'你确定要重置'+displayName+'密码'}}</p>
+                            <p style="height:30px;">想设置其它密码，请输入！</p>
+                            <div>
+                                <span>重置密码：</span>
+                                <nz-input style="width:400px" class="input-box" [(ngModel)]="inputValue" (ngModelChange)="_console($event)"></nz-input>
+                            </div>
+                            <p *ngIf="!showTip" style="color:red;padding-left:42px;">密码不符合要求!</p>
+                        </ng-template>
+                    </nz-modal>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

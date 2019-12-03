@@ -1,0 +1,92 @@
+<div class="certificate-edit-box">
+    <div class='top-bread'>
+        <div class="page-header">
+            <h5 class="page-title">{{trainingName}}:
+                <small>讲师信息</small>
+            </h5>
+            <button type="button" class="btn btn-secondary pull-right" [routerLink]="['../']">返回授课讲师列表
+        <i class="fa fa-level-up"></i>
+      </button>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container">
+            <div>
+                <div class="photo-img clearfix">
+                    <img src="assets/images/logo.jpg" alt="" class="src-img" onerror="this.src='assets/images/logo.jpg'" />
+                    <span class="photo-name">讲师姓名：{{teacher?.name}}</span>
+                </div>
+                <div class='row-li clearfix'>
+                    <div class="info">
+                        <span class="code">讲师编码：
+              <span class="t-code">{{teacher?.teacherNo}}</span>
+                        </span>
+                        <span class="code">讲师类型：
+              <span class="t-code">{{teacher?.teacherType == 'INTERNAL'?'内部讲师':'外部讲师'}}</span>
+                        </span>
+                        <span class="code">邮箱：
+              <span class="t-code">{{teacher?.email}}</span>
+                        </span>
+                    </div>
+                    <div class="info">
+                        <span class="code">讲师职级：
+                            <span class="t-code"  *ngIf="teacher?.rank">
+                                    <ng-container *ngIf="teacher.rank == 'I'">预备讲师</ng-container>
+                                    <ng-container *ngIf="teacher.rank  == 'II'">助理讲师</ng-container>
+                                    <ng-container *ngIf="teacher.rank  == 'III'">中级讲师</ng-container>
+                                    <ng-container *ngIf="teacher.rank  == 'IV'">高级讲师</ng-container>
+                            </span>
+                            <span class="t-code"  *ngIf="!teacher?.rank">暂无</span>
+                        </span>
+                        <span class="code">累积学时数：
+              <span class="t-code">{{teacher?.classHour}}</span>
+                        </span>
+                        <span class="code">所属组织：
+              <span class="t-code">{{teacher?.userGroup?.name}}</span>
+                        </span>
+                    </div>
+                    <div class="info">
+                        <span class="code">性别：
+              <span class="t-code">{{teacher?.sex == 'MALE'?'男':'女'}}</span>
+                        </span>
+                        <span class="code">任职时间：
+              <span class="t-code">{{teacher?.startDate  | date: 'yyyy-MM-dd' }}</span>
+                        </span>
+                        <span class="code">手机号码：
+              <span class="t-code">{{teacher?.phoneNumber}}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <cui-data-table [columns]="columns" [data]="courses" [loading]="loading" (reload)="loadData()">
+                        <ng-template cuiColTpl="col2-0" let-row="row">
+                            <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+                        </ng-template>
+                        <ng-template cuiColTpl="col2-1" let-row="row">
+                            <h5>{{row.name}}</h5>
+                            <span>{{row.code}}</span>
+                        </ng-template>
+                        <ng-template cuiColTpl="col2-2" let-row="row">
+                            <div>{{getCourseTypeText(row.courseType)}}</div>
+                            <div>学时: {{row.period}}</div>
+                        </ng-template>
+                        <ng-template cuiColTpl="col2-3" let-row="row">
+                            <div>{{row.userGroup?.name}}</div>
+                            <div>{{row.category?.name}}</div>
+                        </ng-template>
+                        <ng-template cuiColTpl="typeTpl" let-row="row">
+                            <a *ngIf="row.courseType=='ONLINE'">在线课程</a>
+                            <a *ngIf="row.courseType=='LIVE'">直播课程</a>
+                            <a *ngIf="row.courseType=='OFFLINE'">面授课程</a>
+                        </ng-template>
+                        <ng-template cuiColTpl="col2-4" let-row="row">
+                            <div>
+                                <a class="text-primary" [routerLink]="['assess',row.id]">讲师评估管理</a>
+                            </div>
+                        </ng-template>
+                    </cui-data-table>
+                </div>
+            </div>
+        </div>
+    </div>

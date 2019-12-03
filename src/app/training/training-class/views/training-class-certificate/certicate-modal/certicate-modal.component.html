@@ -1,0 +1,33 @@
+<div class="certificate-box">
+    <div class='select-body'>
+        <cui-data-table #tableHandle [columns]="columns" [loading]='loading' [data]="allData.content" [pagination]="allData" selectType="checkbox" [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template cuiColTpl="editTemplate" let-row="row">
+                <i class="fa fa-edit text-primary" [routerLink]="['../','template',row.id,{ imgUrlPath:row.imgUrlPath?row.imgUrlPath:'' }]"></i>
+            </ng-template>
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                        <div nz-row class="cui-data-table-form-body">
+                            <div nz-form-control>
+                                <nz-input formControlName="name" [nzPlaceHolder]="'证书名称'"> </nz-input>
+                            </div>
+                            <div class='simple-search-bar-search-box'>
+                                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>搜索</button>
+                                <!-- <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=true">高级搜索</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+        </cui-data-table>
+    </div>
+    <div class='btn-box'>
+        <button type="button" class="btn btn-primary" (click)="goOk()">
+          <span>确定</span>
+        </button>
+        <button nz-button [nzType]="'default'" (click)="goCancel()">
+          <span>取消</span>
+        </button>
+    </div>
+</div>

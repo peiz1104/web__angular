@@ -1,0 +1,78 @@
+:host::ng-deep {
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    .input-group,.cui-fileupload-choose{
+        .form-control,.p-0{
+            position:relative;
+            div{
+                position:absolute;
+                top:0;
+                span{
+                    position: relative;
+                    top: 0px;
+                }
+            }
+            // line-height: 30px;
+        }
+    }
+    .plan-template {
+        margin: 0 auto;
+        width: 80%;
+        .noborder {
+            border-bottom: 0px!important;
+        }
+        .plan-template-li {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            .plan-template-li-title {
+                // text-align: center;
+                margin-bottom: 15px;
+                h3 {
+                    margin-left: 120px;
+                    color: #0269ca;
+                    font-size: 16px;
+                    &:before {
+                        content: '|';
+                        margin-right: 5px;
+                    }
+                }
+            }
+            .plan-template-li-input-box {
+                text-align: center;
+                position: relative;
+                .input-box {
+                    padding: 4px 7px;
+                    width: 200px;
+                    min-height: 28px;
+                    font-size: 12px;
+                    color: rgba(0, 0, 0, 0.65);
+                    // background-color: #fff;
+                    overflow: hidden;
+                    border-bottom: 1px solid #d9d9d9;
+                    border-radius: 4px;
+                    display: inline-block;
+                    span {
+                        margin-left: 5px;
+                    }
+                }
+                .btn-box {
+                    position: absolute;
+                    margin-left: 10px;
+                    width: 80px;
+                    cursor: pointer;
+                }
+            }
+        }
+        .plan-template-btns {
+            text-align: center;
+            margin-top: 15px;
+        }
+    }
+
+    .box-center {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}

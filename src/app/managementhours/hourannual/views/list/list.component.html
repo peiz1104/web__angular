@@ -1,0 +1,179 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 员工年度学时列表</small>
+        </h3>
+    </div>
+</div>
+<div class="hour-annual-box">
+    <div class="box-lis-form">
+        <div class="select-body">
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <cui-data-table #tableHandle [columns]="currentSiteId!==30?columns:columnscarried" [data]="testListData?.content" [pagination]="testListData"
+                    selectType="checkbox" [(selection)]="selection" (reload)="loadData($event)">
+
+                    <ng-template #simpleSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-select formControlName="year" [nzPlaceHolder]="'请选择年份'" nzAllowClear>
+                                                <nz-option [nzLabel]="nowDate-5" [nzValue]="nowDate-5">
+                                                </nz-option>
+                                                <nz-option [nzLabel]="nowDate-4" [nzValue]="nowDate-4">
+                                                </nz-option>
+                                                <nz-option [nzLabel]="nowDate-3" [nzValue]="nowDate-3">
+                                                </nz-option>
+                                                <nz-option [nzLabel]="nowDate-2" [nzValue]="nowDate-2">
+                                                </nz-option>
+                                                <nz-option [nzLabel]="nowDate-1" [nzValue]="nowDate-1">
+                                                </nz-option>
+                                                <nz-option [nzLabel]="nowDate" [nzValue]="nowDate">
+                                                </nz-option>
+                                            </nz-select>
+                                        </div>
+                                    </div>
+                                    <div class='simple-search-bar-search-box'>
+                                        <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                        <button *ngIf="true" type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #complexSearch>
+                        <ng-container>
+                            <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                                <div nz-row class="cui-data-table-form-body">
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="year">年份</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-select formControlName="year" [nzPlaceHolder]="'请选择年份'" nzAllowClear>
+                                                    <nz-option [nzLabel]="nowDate-5" [nzValue]="nowDate-5">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="nowDate-4" [nzValue]="nowDate-4">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="nowDate-3" [nzValue]="nowDate-3">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="nowDate-2" [nzValue]="nowDate-2">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="nowDate-1" [nzValue]="nowDate-1">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="nowDate" [nzValue]="nowDate">
+                                                    </nz-option>
+
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="username">工号</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="username" [nzPlaceHolder]="'请输入工号'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="displayName">姓名</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="">组织</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <spk-user-group-select mode="multiple" formControlName="userGroup" [(ngModel)]="searchBy.userGroup"></spk-user-group-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="6">
+                                                <label for="">是否合格</label>
+                                            </div>
+                                            <div nz-col [nzSpan]="18">
+                                                <nz-select formControlName="isStandard" [nzPlaceHolder]="'请选择是否合格'" nzAllowClear>
+                                                    <nz-option [nzLabel]="'全部'" [nzValue]="''">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'合格'" [nzValue]="'1'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'不合格'" [nzValue]="'0'">
+                                                    </nz-option>
+                                                    <!-- <nz-option [nzLabel]="'未分配'" [nzValue]="'-1'">
+                                                    </nz-option> -->
+                                                </nz-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="cui-data-table-form-row">
+                                        <div class='complex-search-bar-search-box'>
+                                            <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                                <i class="fa fa-search"></i>查询</button>
+                                            <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template #listTools>
+                        <div class="btn-group">
+                            <button *spkAuthzIf="{hasPermission: 'PERIOD:HISTORY:VIEW'}" [title]="testListData&&testListData.content.length==0?'无数据不可导':''"
+                                [disabled]="testListData&&testListData.content.length==0" (click)="export($event)" nz-button
+                                [nzType]="'primary'">
+                                <i class="iconfont icon-daochu"></i> 导出</button>
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="actions" let-row="row">
+                        <i *ngIf="!row.year" title="无年份不可查看" style="font-size:16px;color:#aaa;cursor:pointer" class="iconfont icon-chakan1"></i>
+                        <i *ngIf="row.year" title="查看详情" style="font-size:16px;cursor: pointer;color:#007ffb" (click)="preview(row.user.id,row.year)"
+                            class="iconfont icon-chakan1"></i>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="username" let-row="row">
+                        <span>{{row.user?.username}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="userGroup" let-row="row">
+                        <span>{{row.user?.userGroup?.namePath}}</span>
+                    </ng-template>
+
+                    <ng-template cuiColTpl="displayName" let-row="row">
+                        <span>{{row.user?.displayName}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="periodTaskNumber" let-row="row">
+                        <span>{{row.periodInfo||'没有分配学时任务'}}</span>
+                        <span style="border:1px solid #a5a5a5;position:relative;margin: 0px 4px 0px 2px;"></span>
+                        <span>{{row.periodTaskNumber}}</span>
+                    </ng-template>
+                    <ng-template cuiColTpl="qualified" let-row="row">
+                        <span *ngIf="row.periodTaskNumber>=0">
+                            <span *ngIf="row.periodTaskNumber!=null && (row.hadPeriod + row.carriedForwardPeriod -row.periodTaskNumber)>=0" style="color:green">合格</span>
+                            <span *ngIf="row.periodTaskNumber==null || (row.hadPeriod + row.carriedForwardPeriod -row.periodTaskNumber)<0" style="color:red">不合格</span>
+                        </span>
+                        <span style="color:orange" *ngIf="row.periodTaskNumber==null||row.periodTaskNumber===false||row.periodTaskNumber=='false'">
+                            未分配
+                        </span>
+                    </ng-template>
+
+                </cui-data-table>
+            </nz-spin>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,225 @@
+<div class="achievement-body">
+
+    <ng-template #complexSearchBox>
+        <form nz-form [formGroup]="Resultsgunli" (ngSubmit)="submitForm($event,Resultsgunli.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+            <div nz-row class="cui-data-table-form-body">
+                <div nz-col [nzSpan]="10" class="cui-data-table-form-row" [nzOffset]="2">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label>用户名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input formControlName="user.username" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="10" class="cui-data-table-form-row" [nzOffset]="2">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label>姓名</label>
+                        </div>
+                        <div nz-col [nzSpan]="18">
+                            <nz-input [nzSize]="'large'" [nzPlaceHolder]="'姓名'" formControlName="user.displayName"></nz-input>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="10" class="cui-data-table-form-row" [nzOffset]="2">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label>部门</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18">
+                            <spk-user-group-select formControlName="userGroup"></spk-user-group-select>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="10" class="cui-data-table-form-row" [nzOffset]="2">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSpan]="6">
+                            <label>状态</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSpan]="18">
+                            <nz-select formControlName="scoreState" [nzSize]="'large'" [nzPlaceHolder]="'Select a person'">
+                                <nz-option [nzLabel]="'已完成'" [nzValue]="'pass'">
+                                </nz-option>
+                                <nz-option [nzLabel]="'未完成'" [nzValue]="'Have'">
+                                </nz-option>
+                                <nz-option [nzLabel]="'已通过'" [nzValue]="'uncommitted'">
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="cui-data-table-form-row">
+                    <div class='complex-search-bar-search-box'>
+                        <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                            搜索</button>
+                        <button type="button" class="btn btn-link" (click)="resetForm($event);tableHandle.isComplexSearch=false">普通搜索</button>
+                    </div>
+                </div>
+                <div nz-row>
+                    <div nz-col [nzSpan]="6" [nzOffset]="9">
+                        <button type="submit" nz-button class='down-btn' (click)="showModal()">
+                            课程名称：新人育成结业证书
+                            <br> 课程编码：MC_2018_08_11
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+    <!-- 导出成绩 -->
+
+    <ng-template #simpleSearchBox>
+        <form nz-form [formGroup]="Resultsgunli" (ngSubmit)="submitForm($event,Resultsgunli.value)" [nzLayout]=" 'inline'
+                " class="cui-data-table-form-box ">
+            <div nz-row class="cui-data-table-form-body ">
+                <div nz-form-control>
+                    <nz-input formControlName="user.username" [nzPlaceHolder]=" '请输入用户名' "> </nz-input>
+                </div>
+                <div class='simple-search-bar-search-box '>
+                    <button type="submit " nz-button [nzType]=" 'primary' " class='search-btn'>
+                        搜索</button>
+                    <button type="button " class="btn btn-link " (click)="resetForm($event);tableHandle.isComplexSearch=true ">高级搜索</button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+
+
+    <!-- 成绩列表 -->
+    <cui-data-table #tableHandle [columns]="columns " [data]="message " [pagination]="paginations " selectType="checkbox" [(selection)]="selection "
+        [loading]='loading' (reload)="loadData($event)">
+        <ng-template #complexSearch>
+            <ng-container *ngTemplateOutlet="complexSearchBox "> </ng-container>
+        </ng-template>
+
+        <ng-template #simpleSearch>
+            <ng-container *ngTemplateOutlet="simpleSearchBox "></ng-container>
+        </ng-template>
+        <ng-template #listTools>
+
+            <button nz-button type="button" [nzType]=" 'primary' " [nzSize]=" 'large' " [routerLink]="['../', 'pour']" [queryParams]="{Index:2}">
+                导入成绩
+            </button>
+            <button nz-button type="button" [nzType]=" 'primary' " [nzSize]=" 'large' ">
+                <span>导出成绩</span>
+            </button>
+            <button nz-button type="button" [nzType]=" 'primary' " [nzSize]=" 'large' ">
+                <span>编辑成绩</span>
+            </button>
+            <button nz-button type="button" [nzType]=" 'primary' " [nzSize]=" 'large' ">
+                <span>切换</span>
+            </button>
+        </ng-template>
+
+        <ng-template cuiColTpl="state" let-row="row">
+            <a class="text-success" *ngIf="row.scoreState=='完成'">{{row.scoreState}}</a>
+            <a class="text-danger" *ngIf="row.scoreState=='未完成'">{{row.scoreState}}</a>
+            <a class="text-success" *ngIf="row.scoreState=='合格'">{{row.scoreState}}</a>
+            <a class="text-danger" *ngIf="row.scoreState=='不合格'">{{row.scoreState}}</a>
+        </ng-template>
+    </cui-data-table>
+
+    <nz-modal [nzVisible]="isVisible" [nzContent]="modalContenttwo" [nzWidth]="'60%'" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+        <ng-template #modalContenttwo>
+            <form nz-form [formGroup]="Resultsgunli" class="ant-advanced-modle-form">
+                <div nz-row>
+                    <!-- 用户名 -->
+                    <div nz-col [nzSpan]="9" [nzOffset]="1">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label>用户名</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="15">
+                                <nz-input [nzSize]="'large'" [nzPlaceHolder]="'用户名'"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 姓名 -->
+                    <div nz-col [nzSpan]="9" [nzOffset]="1">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSpan]="4">
+                                <label>姓名</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSpan]="15">
+                                <nz-input [nzSize]="'large'" [nzPlaceHolder]="'姓名'"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="4">
+                        <div class='simple-search-bar-search-box'>
+                            <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div nz-row>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col [nzSpan]="8">
+                    <nz-card>
+                        <ng-template #body>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                            <p>Card content</p>
+                        </ng-template>
+                    </nz-card>
+                </div>
+            </div>
+            <div nz-row class="newPersontab">
+                <div nz-col [nzSpan]="16" [nzOffset]="8">
+                    <nz-pagination [nzPageIndex]="2" class="pull-right" [nzTotal]="500" nzShowQuickJumper></nz-pagination>
+                </div>
+            </div>
+
+        </ng-template>
+    </nz-modal>
+
+</div>

@@ -1,0 +1,51 @@
+.card-action{
+    visibility: hidden;
+}
+.question-action {
+    a {
+        padding-right: 0.5rem;
+        color: #28a745;
+        font-size: 1.2rem;
+    }
+}
+.que-box{
+    border: 1px solid #fff;
+    &:hover{
+        border: 1px solid #fdb553;
+    }
+    &.se{
+        border: 1px solid #fdb553;
+    }
+
+}
+
+.card-body{ 
+    &:hover{
+        .card-action {
+           visibility: visible;
+        }
+    }    
+}
+
+.nav{
+    .nav-item > a:hover {
+        color: #fff;
+        background-color: #007bff;
+    }
+}
+.card{
+    position: relative;
+    .dis-fix{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        background-color: #F7F7F7;
+    }
+    .dis-rela{
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+}

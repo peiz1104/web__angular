@@ -1,0 +1,146 @@
+.cui-data-table-wrap {
+    th,
+    td {
+        word-break: break-all;
+    }
+}
+
+.tab-body {
+    min-height: 360px;
+    .proctor-line {
+        line-height: 36px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+        .proctor-title {
+            font-size: 16px;
+            color: #7e7e7e;
+            margin-right: 20px;
+        }
+    }
+    .ali-c {
+        text-align: center;
+    }
+    .disable {
+        cursor: not-allowed;
+        background: #f7f7ff;
+    }
+    .PJ-box,
+    .ZC-box {
+        min-height: 20px;
+        border: 1px solid #d9d9d9;
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        flex-wrap: wrap;
+        min-height: 25px;
+        max-height: 150px;
+        height: auto;
+        .main {
+            width: 100%;
+            height: 100%;
+            .nameBlock {
+                padding: 3px 6px;
+                background-color: #d1d1d1;
+                line-height: 18px;
+                border-radius: 4px;
+                width: 100%;
+                float: left;
+                display: inline-block;
+                margin-right: 5px;
+                position: relative;
+                .deletePJ {
+                    color: #fff;
+                    font-size: 16px;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 3px;
+                    top: 3px;
+                }
+            }
+            .ZCBlock {
+                border-radius: 0;
+                padding: -2px;
+            }
+        }
+        .data-single {
+            .nameBlock {
+                padding: 3px 6px;
+                margin: 6px 3px;
+                background-color: #d1d1d1;
+                line-height: 18px;
+                border-radius: 4px;
+                width: 100%;
+                float: left;
+                display: inline-block;
+                margin-right: 5px;
+                position: relative;
+                text-align: left;
+                .deletePJ {
+                    color: #fff;
+                    font-size: 16px;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 3px;
+                    top: 3px;
+                }
+            }
+        }
+    }
+}
+
+:host ::ng-deep {
+    .SH-box,
+    .AP-box {
+        .queryTools-box {}
+        .ant-select {
+            width: 0px !important;
+            overflow: hidden;
+        }
+    }
+}
+
+:host ::ng-deep .tab-body {
+    .cui-data-table-wrap {
+        .table {
+            >tbody {
+                >tr {
+                    line-height: 28px;
+                }
+            }
+            .align-middle {
+                text-overflow: inherit;
+            }
+        }
+        .text-center {
+            span {
+                display: inline-block;
+                max-width: 100%;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
+:host ::ng-deep .examination-room-table-col>div {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+:host ::ng-deep .ant-modal-wrap {
+    .cui-data-table-wrap .table .align-middle {
+        text-overflow: inherit;
+    }
+    .text-center {
+        span {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}

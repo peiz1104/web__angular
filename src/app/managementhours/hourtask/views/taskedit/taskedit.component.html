@@ -1,0 +1,307 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">学时管理
+            <small>| 年度学时任务{{id?'编辑':'添加'}}</small>
+        </h3>
+    </div>
+    <div class="actions">
+        <button type="button" class="btn btn-light" [routerLink]="['../../hourtask/', 'tasklist']" >返回列表
+            <i class="fa fa-level-up"></i>
+        </button>
+    </div>
+</div>
+<div class="hour-task-box">
+    <div class="top-bread">
+        <!--<nz-breadcrumb class="bread">
+        <nz-breadcrumb-item>
+            您所在位置：
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            学时管理
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a class="color-active">年度学时任务添加</a>
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>-->
+        <!-- <div class="page-header">
+            <h5 class="page-title">
+                <small>年度学时任务{{id?'编辑':'添加'}}</small>
+            </h5>
+            <div class="back-list">
+                <button (click)="goBack($event)" nz-button [nzType]="'primary'">
+                    <i class="anticon anticon-rollback"></i>
+                    <span>返回列表</span>
+                </button>
+            </div>
+        </div> -->
+    </div>
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <div class="form-name-box">
+            <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_save($event,_form.value)">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- <h5 class="card-title">年度任务信息</h5> -->
+                        <div class="row">
+
+                            <div class="col-6 push-6 order-1">
+                                <div class="staff-title">普通员工</div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>年度学时任务大于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="_form.controls.staffPeriod">
+                                            <!-- <nz-input-number [nzMin]="1" [nzMax]="90" [nzStep]="1" name="staffPeriod" class="form-control" formControlName="staffPeriod"></nz-input-number> -->
+                                            <input placeholder="请输入学时" type="text" name="staffPeriod" class="form-control" formControlName="staffPeriod">
+                                            <!-- <div class="explain">普通员工学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.staffPeriod.dirty&&_form.controls.staffPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.staffPeriod.dirty&&_form.controls.staffPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>总公司课程学时数大于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.staffHeadquartersPeriod">
+                                            <input placeholder="请输入学时数" type="text" name="staffHeadquartersPeriod" class="form-control" formControlName="staffHeadquartersPeriod">
+                                            <!-- <nz-input-number [nzMin]="54" [nzMax]="90" [nzStep]="1" name="staffHeadquartersPeriod" class="form-control" formControlName="staffHeadquartersPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">普通员工学习总公司学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.staffHeadquartersPeriod.dirty&&_form.controls.staffHeadquartersPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.staffHeadquartersPeriod.dirty&&_form.controls.staffHeadquartersPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>省公司课程学时计入年度学时任务小于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.staffCompanyPeriod">
+                                            <input placeholder="请输入学时数" type="text" name="staffCompanyPeriod" class="form-control" formControlName="staffCompanyPeriod">
+                                            <!-- <nz-input-number [nzMin]="54" [nzMax]="90" [nzStep]="1" name="staffCompanyPeriod" class="form-control" formControlName="staffCompanyPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">普通员工学习省公司学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.staffCompanyPeriod.dirty&&_form.controls.staffCompanyPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.staffCompanyPeriod.dirty&&_form.controls.staffCompanyPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>讲师学时计入年度学时任务小于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" nz-form-control [nzValidateStatus]="_form.controls.staffTeacherPeriod">
+                                            <!-- <nz-input-number [nzMin]="45" [nzMax]="90" [nzStep]="1" name="staffTeacherPeriod" class="form-control" formControlName="staffTeacherPeriod"></nz-input-number> -->
+                                            <input placeholder="请输入学时数" type="text" name="staffTeacherPeriod" class="form-control" formControlName="staffTeacherPeriod">
+                                            <div nz-form-explain *ngIf="_form.controls.staffTeacherPeriod.dirty&&_form.controls.staffTeacherPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.staffTeacherPeriod.dirty&&_form.controls.staffTeacherPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                            <!-- <div class="explain">普通员工老师学时数大于等于预设的学时数为合格</div> -->
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-6 pull-6 order-2">
+                                <div class="learder-period">处级及以上员工</div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>年度学时任务大于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.leaderPeriod">
+
+                                            <input placeholder="请输入学时" type="text" name="leaderPeriod" class="form-control" formControlName="leaderPeriod">
+                                            <!-- <nz-input-number [nzMin]="1" [nzMax]="110" [nzStep]="1" name="leaderPeriod" class="form-control" formControlName="leaderPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">处级及以上员工学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.leaderPeriod.dirty&&_form.controls.leaderPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.leaderPeriod.dirty&&_form.controls.leaderPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>总公司课程学时数大于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.leaderHeadquartersPeriod">
+
+                                            <input placeholder="请输入学时数" type="text" name="leaderHeadquartersPeriod" class="form-control" formControlName="leaderHeadquartersPeriod">
+                                            <!-- <nz-input-number [nzMin]="1" [nzMax]="110" [nzStep]="1" name="leaderHeadquartersPeriod" class="form-control" formControlName="leaderHeadquartersPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">处级及以上员工学习总公司课程学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.leaderHeadquartersPeriod.dirty&&_form.controls.leaderHeadquartersPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.leaderHeadquartersPeriod.dirty&&_form.controls.leaderHeadquartersPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>省公司课程学时计入年度学时任务小于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.leaderCompanyPeriod">
+
+                                            <input placeholder="请输入学时" type="text" name="leaderCompanyPeriod" class="form-control" formControlName="leaderCompanyPeriod">
+                                            <!-- <nz-input-number [nzMin]="1" [nzMax]="110" [nzStep]="1" name="leaderCompanyPeriod" class="form-control" formControlName="leaderCompanyPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">处级及以上员工学习省公司课程学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.leaderCompanyPeriod.dirty&&_form.controls.leaderCompanyPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.leaderCompanyPeriod.dirty&&_form.controls.leaderCompanyPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="14">
+                                            <label nz-form-item-required>讲师学时计入年度学时任务小于等于</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="_form.controls.leaderTeacherPeriod">
+
+                                            <input placeholder="请输入学时数" type="text" name="leaderTeacherPeriod" class="form-control" formControlName="leaderTeacherPeriod">
+                                            <!-- <nz-input-number [nzMin]="55" [nzMax]="110" [nzStep]="1" name="leaderTeacherPeriod" class="form-control" formControlName="leaderTeacherPeriod"></nz-input-number> -->
+                                            <!-- <div class="explain">处级及以上员工老师学时数大于等于预设的学时数为合格</div> -->
+                                            <div nz-form-explain *ngIf="_form.controls.leaderTeacherPeriod.dirty&&_form.controls.leaderTeacherPeriod.hasError('required')">
+                                                请输入学时!
+                                            </div>
+                                            <div nz-form-explain *ngIf="_form.controls.leaderTeacherPeriod.dirty&&_form.controls.leaderTeacherPeriod.hasError('pattern')">
+                                                输入无效，请输入数字!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="card-body">
+              <div class="row">
+                  <div class="col-7">
+
+                  </div>
+              </div>
+          </div>-->
+                    <!-- <div class="card-body">
+              <h5 class="card-title">可配置属性</h5>
+              <p>此站点没有用户的任何可配置属性。可以从站点的“管理可配置属性”页创建可配置属性。</p>
+          </div> -->
+                    <div class="card-body">
+                        <h5 class="card-title">其它信息</h5>
+                        <div class="row">
+                            <div class="col-6 push-6 order-1 no-border">
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="12">
+                                            <label nz-form-item-required>开始时间</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.startDate">
+                                            <nz-datepicker (ngModelChange)="startDate=$event;_startValueChange()" [ngModel]="startDate" [nzDisabledDate]="_disabledStartDate"
+                                                formControlName="startDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                            <div nz-form-explain *ngIf="_form.controls.startDate.dirty&&_form.controls.startDate.hasError('required')">
+                                                请选择开始时间!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="12">
+                                            <label nz-form-item-required>结束时间</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.endDate">
+                                            <nz-datepicker (ngModelChange)="endDate=$event;_endValueChange()" [ngModel]="endDate" [nzDisabledDate]="_disabledEndDate"
+                                                formControlName="endDate" [nzPlaceHolder]="'请选择日期'"></nz-datepicker>
+                                            <div nz-form-explain *ngIf="_form.controls.endDate.dirty&&_form.controls.endDate.hasError('required')">
+                                                请选择开始时间!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 pull-6 order-2">
+                                <div class="form-group row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="10">
+                                            <label nz-form-item-required>年度学时任务所属年份</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.year">
+                                            <nz-select [nzDisabled]="isEdit" formControlName="year" [nzSize]="'large'" nzAllowClear>
+                                                <nz-option [nzLabel]="year" [nzValue]="year"></nz-option>
+                                                <nz-option [nzLabel]="year+1" [nzValue]="year+1"></nz-option>
+                                                <nz-option [nzLabel]="year+2" [nzValue]="year+2"></nz-option>
+                                                <nz-option [nzLabel]="year+3" [nzValue]="year+3"></nz-option>
+                                                <nz-option [nzLabel]="year+4" [nzValue]="year+4"></nz-option>
+                                            </nz-select>
+                                            <!-- <input type="text" name="year" class="form-control" formControlName="year"> -->
+                                            <div nz-form-explain *ngIf="_form.controls.year.dirty&&_form.controls.year.hasError('required')">
+                                                请选择所属年份!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="10">
+                                            <label>描述</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="14">
+                                            <textarea rows="2" cols="70" placeholder="请输入内容" type="textarea" name="remark" class="form-control textarea-control" formControlName="remark">
+                                                  </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group row submit-btn">
+                                    <div nz-form-item nz-row>
+                                        <div nz-col [nzOffset]="18" [nzSpan]="7" nz-form-control>
+                                            <button [nzLoading]="btnstate" nz-button [nzType]="'primary'" [disabled]="!_form.valid">保存
+                                            </button>
+                                            <span (click)="goBack()" class="cancel-btn">取消</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </nz-spin>
+</div>

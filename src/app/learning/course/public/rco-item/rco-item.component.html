@@ -1,0 +1,172 @@
+<div class="rco-item-wrap d-flex my-3 rco-course" *ngIf="rco.contentType == 'COURSE'">
+    <div class="title">
+        <h5 class="py-2 m-0">
+            <i class="fa fa-{{getIcon()}} text-primary"></i>
+            <span class="text-primary">{{courseName || rco.title}}</span>
+        </h5>
+    </div>
+    <div class="actions ml-auto">
+        <ng-container *ngIf="editable">
+            <button type="button" nz-button [disabled]="getSelected()?.contentType == 'TOPIC'" (click)="openAddGroup($event)">
+                <i class="anticon anticon-folder-add"></i> 添加组</button>
+            <nz-dropdown [nzPlacement]="'bottomLeft'" [nzTrigger]="'click'">
+                <button type="button" nz-button nz-dropdown [disabled]="getSelected()?.contentType == 'TOPIC'">
+                    <i class="anticon anticon-file-add"></i> 添加内容</button>
+                <ul nz-menu>
+                    <li nz-menu-item>
+                        <a class="action-item" (click)="openAddUpload($event)" title="上传内容">
+                            <i class="anticon anticon-upload"></i> 上传内容</a>
+                    </li>
+                    <!-- <li nz-menu-item>
+              <a class="action-item" (click)="openAddLookupResouce()" title="从资源库选择"><i class="anticon anticon-select"></i> 从资源库选择</a>
+            </li> -->
+                    <li nz-menu-item>
+                        <a class="action-item" (click)="openAddLink($event)" title="添加链接">
+                            <i class="anticon anticon-link"></i> 添加链接</a>
+                    </li>
+                </ul>
+            </nz-dropdown>
+            <!-- <button type="button" nz-button [disabled]="!getSelected()"><i class="anticon anticon-switcher"></i> 批量操作</button> -->
+        </ng-container>
+        <button type="button" nz-button (click)="openPreview($event)">
+            <i class="fa fa-play-circle"></i> 预览</button>
+    </div>
+</div>
+
+<div class="rco-item-wrap group-info" *ngIf="rco.contentType == 'TOPIC_GROUP'" [ngClass]="{'selected': rco.selected}" (click)="check()">
+    <div class="rco-item d-flex align-items-center">
+        <i class="anticon anticon-folder mr-3" style="font-size: 1.5rem;"></i>
+        <div class="title d-inline" style="font-size: 1.5rem;">{{rco.title}}</div>
+        <div class="actions ml-auto" *ngIf="editable">
+            <a class="action-item" (click)="openAddGroup($event, true)" title="添加子内容组">
+                <i class="anticon anticon-folder-add"></i>
+            </a>
+            <a class="action-item" (click)="openAddUpload($event, true)" title="上传内容">
+                <i class="anticon anticon-upload"></i>
+            </a>
+            <!-- <a class="action-item" (click)="openAddLookupResouce(true)" title="从资源库选择"><i class="anticon anticon-select"></i></a> -->
+            <a class="action-item" (click)="openAddLink($event, true)" title="添加链接">
+                <i class="anticon anticon-link"></i>
+            </a>
+            <nz-dropdown [nzPlacement]="'bottomRight'" [nzTrigger]="'click'">
+                <a class="ant-dropdown-link action-item" nz-dropdown title="更多操作">
+                    <i class="anticon anticon-ellipsis"></i>
+                </a>
+                <ul nz-menu style="min-width: 5rem;">
+                    <li nz-menu-item (click)="openItemEdit($event, true)">
+                        <i class="iconfont icon-bianji-copy"></i> 修改</li>
+                    <li nz-menu-item (click)="delete($event)">
+                        <i class="iconfont icon-shanchu"></i> 删除</li>
+                </ul>
+            </nz-dropdown>
+        </div>
+    </div>
+</div>
+
+<div class="rco-item-wrap rco-topic" *ngIf="rco.contentType != 'COURSE' && rco.contentType != 'TOPIC_GROUP'" [ngClass]="{'selected': rco.selected}"
+    (click)="check()">
+    <div class="rco-item d-flex align-items-center" (click)="openPreview($event, true)">
+        <ng-container [ngTemplateOutlet]="topicInfo"></ng-container>
+        <div class="actions ml-auto" *ngIf="editable">
+            <a class="action-item" title="编辑" (click)="openItemEdit($event, true)">
+                <i class="iconfont icon-bianji-copy"></i>
+            </a>
+            <a class="action-item" title="删除" (click)="delete($event)">
+                <i class="iconfont icon-shanchu"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="hasChildren()" [hidden]="!expanded" class="rco-group" [ngClass]="{'course-children': rco.contentType == 'COURSE'}">
+    <div *ngFor="let r of children" class="rco-item-outer">
+        <spk-rco-item [rco]="r" [(rcos)]="rcos" [courseId]="courseId" [editable]="editable"></spk-rco-item>
+    </div>
+</div>
+
+<div *ngIf="isBlank()">
+    <nz-alert [nzType]="'warning'" [nzShowIcon]="true">
+        <div alert-body>
+            没有添加任何大纲信息
+            <span *ngIf="editable">，请 “创建” 或者 “导入” 大纲内容信息</span>。
+        </div>
+    </nz-alert>
+</div>
+
+<ng-template #topicInfo>
+    <ng-container [ngSwitch]="rco.trackingType">
+        <div *ngSwitchCase="'CMI'">
+            <div class="media">
+                <i class="fa fa-file-text fa-3x text-primary mr-3 align-self-center"></i>
+                <div class="no-flex-ie">
+                    <h5 class="mt-0 mb-2">{{rco.title}}</h5>
+                    <span *ngIf="rco.durition">时长: {{rco.durition}} 分钟</span>
+                    <span class="d-block text-truncate" style="max-width: 400px;">{{rco.description}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngSwitchCase="'VIDEO'">
+            <div class="media">
+                <i class="fa fa-file-video-o fa-3x text-primary mr-3 align-self-center"></i>
+                <div class="no-flex-ie">
+                    <h5 class="mt-0 mb-2">{{rco.title || rco.video?.originFileName}}</h5>
+                    <span *ngIf="rco.durition">时长: {{rco.video?.durition}} 分钟</span>
+                    <!-- 转码完成后才有，单位是秒-得转 -->
+                    <span>转码状态:
+                        <ng-container *ngTemplateOutlet="transcodeStatus; context: {$implicit:'status', status: rco.video?.transcodeStatus}"></ng-container>
+                    </span>
+                    <span class="d-block text-truncate" style="max-width: 400px;">{{rco.description}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngSwitchCase="'DOC'">
+            <div class="media">
+                <i class="fa fa-file-pdf-o fa-3x text-primary mr-3 align-self-center"></i>
+                <div class=" no-flex-ie">
+                    <h5 class="mt-0 mb-2">{{rco.title || rco.documentInfo?.originFileName}}</h5>
+                    <span>文档大小: {{rco.documentInfo?.prettyFileSize}}</span>
+                    <span>转码状态:
+                        <ng-container *ngTemplateOutlet="transcodeStatus; context: {$implicit:'status', status: rco.documentInfo?.transcodeStatus}"></ng-container>
+                    </span>
+                    <span class="d-block text-truncate" style="max-width: 400px;">{{rco.description}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngSwitchDefault>
+            <div class="media">
+                <i class="fa fa-file fa-3x text-primary mr-3 align-self-center"></i>
+                <div class="no-flex-ie">
+                    <h5 class="mt-0 mb-2">{{rco.title}}</h5>
+                    <span class="d-block text-truncate" style="max-width: 400px;">{{rco.description}}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>
+
+
+<ng-template #transcodeStatus let-status="status">
+    <ng-container [ngSwitch]="status">
+        <span *ngSwitchCase="'FAILED'">
+            失败
+        </span>
+        <span *ngSwitchCase="'COMPLETE'">
+            已完成
+        </span>
+        <span *ngSwitchCase="'TRANSCODING'">
+            转码中
+        </span>
+        <span *ngSwitchCase="'WAITING'">
+            待转码
+        </span>
+        <span *ngSwitchCase="'NOT_START'">
+            待转码
+        </span>
+        <span *ngSwitchDefault>
+            <!-- 无需转码 -->
+        </span>
+    </ng-container>
+</ng-template>

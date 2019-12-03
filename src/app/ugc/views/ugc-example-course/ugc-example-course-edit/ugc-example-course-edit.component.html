@@ -1,0 +1,7 @@
+<div class="container">
+    <div class="card-body">
+        <spk-ugc-example-course-form *ngIf="ugcExampleCourse" [(loading)]="loading"  [editable]='editable'
+            [ugcExampleCourse]='ugcExampleCourse' (save)="onSave($event)" (cancel)="onCancel($event)">
+        </spk-ugc-example-course-form>
+    </div>
+</div>

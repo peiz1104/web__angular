@@ -1,0 +1,118 @@
+<form #serverForm="ngForm" (ngSubmit)="onSubmit()" class="form-horizontal" *ngIf="server">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">基本信息</h5>
+      <div class="col-7 pull-5 order-1">
+        <div class="form-group row" [ngClass]="{'text-danger': serverName.errors && (serverName.dirty || serverName.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i> 姓名</label>
+          <div class="col-9">
+            <input #serverName="ngModel" type="text" name="serverName" class="form-control" [(ngModel)]="server.name" required minlength="2"
+              maxlength="20">
+            <span class="form-control-feedback" *ngIf="(serverName.dirty || serverName.touched) && serverName.errors?.required">服务名称必填</span>
+            <span class="form-control-feedback" *ngIf="(serverName.dirty || serverName.touched) && (serverName.errors?.minlength || serverName.errors?.maxlength)">服务名称长度在2到20之间</span>
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'text-danger': host.errors && (host.dirty || host.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i>服务域名</label>
+          <div class="col-9">
+            <input #host="ngModel" type="text" name="host" class="form-control" [(ngModel)]="server.host" required>
+            <!--域名验证-->
+            <span class="form-control-feedback" *ngIf="(host.dirty || host.touched) && host.errors?.required">服务域名必填</span>
+            <span class="form-control-feedback" *ngIf="(host.dirty || host.touched) && (host.errors?.minlength || host.errors?.maxlength)">服务名称长度在2到20之间</span>
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'text-danger': ip.errors && (ip.dirty || ip.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i> IP</label>
+          <div class="col-9">
+            <input #ip="ngModel" type="text" name="ip" class="form-control" [(ngModel)]="server.ip" required>
+            <span class="form-control-feedback" *ngIf="(ip.dirty || ip.touched) && ip.errors?.required">ip地址必填</span>
+            <!-- <span class="form-control-feedback" *ngIf="(ip.dirty || ip.touched) && ip.errors?.ip && !ip.errors?.required">请输入正确格式的IP，如217.4.5.6</span>-->
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'text-danger': port.errors && (port.dirty || port.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i>端口</label>
+          <div class="col-9">
+            <input #port="ngModel" type="text" name="port" class="form-control" [(ngModel)]="server.port" required>
+            <span class="form-control-feedback" *ngIf="(port.dirty || port.touched) && port.errors?.required">端口必填</span>
+            <!-- <span class="form-control-feedback" *ngIf="(ip.dirty || ip.touched) && ip.errors?.ip && !ip.errors?.required">请输入正确格式的IP，如217.4.5.6</span>-->
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'text-danger':physicalDirectory.errors && (physicalDirectory.dirty || physicalDirectory.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i>物理目录</label>
+          <div class="col-9">
+            <input #physicalDirectory="ngModel" type="text" name="physicalDirectory" class="form-control" [(ngModel)]="server.physicalDirectory"
+              required>
+            <span class="form-control-feedback" *ngIf="(physicalDirectory.dirty || physicalDirectory.touched) && physicalDirectory.errors?.required">物理目录必填</span>
+            <!-- <span class="form-control-feedback" *ngIf="(physicalDirectory.dirty || physicalDirectory.touched) && (physicalDirectory.errors?.minlength || physicalDirectory.errors?.maxlength)">服务名称长度在2到20之间</span>-->
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'text-danger': virtualDirectory.errors && (virtualDirectory.dirty || virtualDirectory.touched)}">
+          <label for="" class="col-form-label col-3">
+            <i class="fa fa-field-required"></i>服务目录</label>
+          <div class="col-9">
+            <input #virtualDirectory="ngModel" type="text" name="virtualDirectory" class="form-control" [(ngModel)]="server.virtualDirectory"
+              required>
+            <span class="form-control-feedback" *ngIf="(virtualDirectory.dirty || virtualDirectory.touched) && virtualDirectory.errors?.required">服务目录必填</span>
+            <!-- <span class="form-control-feedback" *ngIf="(virtualDirectory.dirty || virtualDirectory.touched) && (virtualDirectory.errors?.minlength || virtualDirectory.errors?.maxlength)">服务名称长度在2到20之间</span>-->
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-form-label col-3">服务协议</label>
+          <div class="col-5">
+            <select name="scheme" class="form-control" [(ngModel)]="server.scheme">
+              <option value="http">http</option>
+              <option value="https">https</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-form-label col-3">启用安全FTP</label>
+          <div class="col-5">
+            <select name="useSecureFtp" class="form-control" [(ngModel)]="server.useSecureFtp">
+              <option value="true">启用</option>
+              <option value="false">关闭</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-form-label col-3">是否默认</label>
+          <div class="col-5">
+            <select name="isDefault" class="form-control" [(ngModel)]="server.isDefault">
+              <option value="true">是</option>
+              <option value="false">否</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="" class="col-form-label col-3">是否可用</label>
+          <div class="col-5">
+            <select name="enabled" class="form-control" [(ngModel)]="server.enabled">
+              <option value="true">可用</option>
+              <option value="false">不可用</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- end col-7 -->
+    </div>
+    <!-- end .row -->
+    <div class="card-body">
+      <div class="row">
+        <div class="col-7">
+          <div class="form-group row">
+            <div class="col-9 offset-3">
+              <button nz-button [nzType]="'primary'" [disabled]="!serverForm.valid" [nzLoading]="loading">保存</button>
+              <!-- <button type="button" class="btn btn-info" *ngIf="isCreate" [disabled]="!serverForm.valid">保存并继续</button>-->
+              <button nz-button [nzType]="'default'" [routerLink]="[isCreate?'../':'../../']">取消</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

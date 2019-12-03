@@ -1,0 +1,191 @@
+:host ::ng-deep{
+    .china-life-new-banner {
+        width: 100%;
+        margin: 0 auto;
+        height: 400px;
+        overflow: hidden;
+        .left-course-tree-box {
+            float: left;
+            width: 50%;
+            margin-left: -378px;
+            height: 400px;
+            position: relative;
+            transition: background-color ease 0.5s;
+            .course-tree {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 222px;
+                height: 100%;
+                overflow: hidden;
+                img{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+        .center-banner-box {
+            width: 652px;
+            float: left;
+            height: 400px;
+            .home-banner {
+                width: 652px;
+                margin: -1px auto 0;
+                position: relative;
+                .ant-carousel {
+                    .slick-slide {
+                        height: 401px;
+                        background: #fff;
+                        color: #fff;
+                        overflow: hidden;
+                    }
+                    .slick-dots {
+                        display: none !important;
+                        bottom: 20px;
+                        li {
+                            margin: 0 6px;
+                            button {
+                                width: 14px;
+                                height: 14px;
+                                border-radius: 50%;
+                            }
+                        }
+                        .slick-active {
+                            button {
+                                background: #47baee;
+                            }
+                        }
+                    }
+                }
+                .banner-set-box {
+                    position: relative;
+                }
+                .slick-other-dots {
+                    position: absolute;
+                    bottom: 20px;
+                    text-align: center;
+                    width: 100%;
+                    transition: background ease 0.8s;
+                    li {
+                        margin: 0 6px;
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        display: inline-block;
+                    }
+                    .no-choose {
+                        background: rgba(255, 255, 255, 0.5);
+                        transition: background ease 1s;
+                        &:hover {
+                            background: rgba(255, 255, 255, 1);
+                        }
+                    }
+                    .slick-active {
+                        transition: all ease 1s;
+                        background: #47baee;
+                    }
+                }
+                .banner-i-left {
+                    position: absolute;
+                    top: 50%;
+                    bottom: 0;
+                    margin-top: -20px;
+                    height: 50px;
+                    line-height: 50px;
+                    font-size: 28px;
+                    width: 30px;
+                    text-align: center;
+                    left: 40px;
+                    color: #fff;
+                    cursor: pointer;
+                    transition: all ease 0.5s;
+                    &:hover {
+                        background: rgba(0, 0, 0, 0.5);
+                    }
+                }
+                .banner-i-right {
+                    position: absolute;
+                    top: 50%;
+                    bottom: 0;
+                    margin-top: -20px;
+                    height: 50px;
+                    width: 30px;
+                    text-align: center;
+                    line-height: 50px;
+                    right: 40px;
+                    font-size: 36px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    color: #fff;
+                    transition: all ease 0.5s;
+                    &:hover {
+                        background: rgba(0, 0, 0, 0.5);
+                    }
+                }
+                .banner_box {
+                    .banner_img {
+                        display: block;
+                        width: 652px;
+                        height: 401px;
+                        .img_url {
+                            height: 100%;
+                            width: 100%;
+                            max-width: 100%;
+                        }
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+                .banner-defor-box {
+                    width: 652px;
+                    height: 400px;
+                    margin: 0 auto;
+                }
+            }
+        }
+        .right-message-box {
+            float: left;
+            width: 50%;
+            margin-right: -300px;
+            height: 400px;
+            position: relative;
+            transition: background-color ease 0.5s;
+            .message-info-box {
+                position: absolute;
+                top: 40px;
+                left: 46px;
+                width: 254px;
+                height: 330px;
+                border-radius: 6px;
+                background: #fff;
+                padding: 4px 10px 20px 10px;
+                .message-head {
+                    height: 80px;
+                    border-bottom: 1px solid #e1e1e1;
+                    padding-top: 12px;
+                    .display-name {
+                        text-align: center;
+                        font-size: 16px;
+                        font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        line-height: 40px;
+                        color: #232323;
+                        font-weight: 600;
+                        span {
+                            font-family: "Microsoft YaHei";
+                        }
+                    }
+                    .user-name {
+                        text-align: center;
+                        font-size: 14px;
+                        font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                        color: #888888;
+                    }
+                }
+                
+            }
+        }
+    }
+}

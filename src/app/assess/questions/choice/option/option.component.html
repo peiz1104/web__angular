@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead class="bg-light">
+                <tr>
+                    <th>选项文字</th>
+                    <th>指定分数</th>
+                    <th>图片</th>
+                    <th>说明</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let option of options">
+                    <td style="width:200px;">
+                        <input #foo type="text" class="form-control-xs" style="width:370px;" placeholder="{{option.name}}" [(ngModel)]="option.name"
+                            (change)="optionChange(option,foo)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control-xs" style="width:3rem;" [(ngModel)]="option.score" (keyup)="keUpEvent(option)" (afterpaste)="keUpEvent(option)">
+                    </td>
+                    <td>
+                        <a title="添加图片" (click)="showImageModalMiddle(option)">
+                            <i class="fa fa-file-image-o"></i>
+                        </a>
+                        <a *ngIf="option.imgPath" (click)="delImg(option)" class="text-success">清除图片</a>
+                    </td>
+                    <td>
+                        <a title="添加说明" (click)="showDescriptionModalMiddle(option)">
+                            <i class="fa fa-file-text-o"></i>
+                        </a>
+                        <a *ngIf="option.description" (click)="delDescription(option)" class="text-success">清除描述</a>
+                    </td>
+                    <td class="question-action">
+                        <a (click)="onInsert(option);">
+                            <i class="fa fa-plus-circle"></i>
+                        </a>
+                        <a (click)="onDel(option);">
+                            <i class="fa fa fa-minus-circle"></i>
+                        </a>
+                        <a (click)="onUp(option);">
+                            <i class="fa fa-arrow-circle-up"></i>
+                        </a>
+                        <a (click)="onDown(option);">
+                            <i class="fa fa-arrow-circle-down"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalDescription" [nzVisible]="isVisibleDescriptionMiddle"
+            (nzOnOk)="okDescription($event)" (nzOnCancel)="cancelDescription($event)">
+            <ng-template #modalDescription>
+                <cui-ckeditor [(ngModel)]="inputValue"></cui-ckeditor>
+            </ng-template>
+        </nz-modal>
+
+        <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalImage" [nzVisible]="isVisibleImageMiddle" (nzOnOk)="okImage($event)"
+            (nzOnCancel)="cancelImage($event)">
+            <ng-template #modalImage>
+                <div class="">
+                    <cui-fileupload #imageFileupload name="file" accept=".jpg,.bmp,.png" mode="image" url="/api/upload/file" [auto]="true" (uploadComplete)="onUploadComplete($event)"></cui-fileupload>
+                    <br>
+                    <span class="text-muted">
+                        <i class="fa fa-info-circle text-info"></i> 可以在此处上传图片。格式应为 JPG, BMP 或 PNG。</span>
+                </div>
+            </ng-template>
+        </nz-modal>
+    </div>
+</div>

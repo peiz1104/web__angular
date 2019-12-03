@@ -1,0 +1,55 @@
+<!-- <nz-collapseset [nzBordered]="false">
+    <nz-collapse *ngFor="let m of _modules" [nzActive]="m.active">
+        <div collapse-title>
+            <label nz-checkbox [(ngModel)]="m.checked" [nzIndeterminate]="m.indeterminate" [nzDisabled]="m.disabled" class="m-0" (ngModelChange)="onItemChange(m)"
+                (click)="$event?.stopPropagation();">
+                <h5 class="d-inline ml-2">{{m.name}}</h5>
+            </label>
+        </div>
+        <div class="row">
+            <div *ngFor="let n of m.children" class="col-4 mb-4">
+                <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+                    <label nz-checkbox [(ngModel)]="n.checked" [nzIndeterminate]="n.indeterminate" [nzDisabled]="n.disabled" (ngModelChange)="onItemChange(n)">
+                        <strong class="pl-2">{{n.name}}</strong>
+                    </label>
+                </div>
+                <div class="row">
+                    <div *ngFor="let n of m.children" class="col-4 mb-4">
+                        <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+                            <label nz-checkbox [(ngModel)]="n.checked" [nzIndeterminate]="n.indeterminate" [nzDisabled]="n.disabled" (ngModelChange)="onItemChange(n)">
+                                <strong class="pl-2">{{n.name}}</strong>
+                            </label>
+                        </div>
+                        <div>
+                            <nz-checkbox-group [(ngModel)]="n.children" (ngModelChange)="onItemChange(n, true)"></nz-checkbox-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nz-collapse>
+</nz-collapseset> -->
+
+<nz-collapseset [nzBordered]="false">
+    <nz-collapse *ngFor="let m of _modules" [nzActive]="m.active">
+        <div class="title-collpase-click" (click)="openclose(m)" collapse-title>
+            <i [ngClass]="arrowArray.indexOf(m.value) ==-1?'iconfont icon-icon-- down-show':'iconfont icon-icon-- up-show'"></i>
+            <label nz-checkbox [(ngModel)]="m.checked" [nzIndeterminate]="m.indeterminate" [nzDisabled]="m.disabled" class="m-0" (ngModelChange)="onItemChange(m)"
+                (click)="$event?.stopPropagation();">
+                <h5 class="d-inline ml-2">{{m.name}}</h5>
+            </label>
+        </div>
+        <div class="row">
+            <div *ngFor="let n of m.children" class="col-4 mb-4">
+                <div style="border-bottom: 1px solid rgb(233, 233, 233);">
+                    <label nz-checkbox [(ngModel)]="n.checked" [nzIndeterminate]="n.indeterminate" [nzDisabled]="n.disabled" (ngModelChange)="onItemChange(n)">
+                        <strong class="pl-2">{{n.name}}</strong>
+                    </label>
+                </div>
+                <div>
+                    <nz-checkbox-group [(ngModel)]="n.children" (ngModelChange)="onItemChange(n, true)"></nz-checkbox-group>
+                </div>
+            </div>
+        </div>
+    </nz-collapse>
+</nz-collapseset>

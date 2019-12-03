@@ -1,0 +1,202 @@
+<div class="localtraffic-box">
+    <div class="select-body">
+        <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+                [(selection)]="selection" (reload)="loadData($event)">
+
+                <ng-template #simpleSearch>
+                    <ng-container>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body">
+                                <div nz-form-control>
+                                    <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"> </nz-input>
+                                </div>
+                                <div class='simple-search-bar-search-box'>
+                                    <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                                        <i class="fa fa-search"></i>查询</button>
+                                    <!-- <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=true">高级查询</button> -->
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template #complexSearch>
+                    <ng-container>
+                        <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'horizontal'" class="cui-data-table-form-box">
+                            <div nz-row class="cui-data-table-form-body">
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="username">用户名</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <nz-input formControlName="username" [nzPlaceHolder]="'请输入用户名'"></nz-input>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div nz-form-label nz-col [nzSpan]="6">
+                                        <label for="">姓名</label>
+                                    </div>
+                                    <div nz-col [nzSpan]="18">
+                                        <nz-input formControlName="displayName" [nzPlaceHolder]="'请输入姓名'"></nz-input>
+                                    </div>
+                                </div>
+
+                                <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label for="">组织</label>
+                                        </div>
+                                        <div nz-col [nzSpan]="18">
+                                            <spk-user-group-select mode="multiple" formControlName="userGroup"></spk-user-group-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="cui-data-table-form-row">
+                                    <div class='complex-search-bar-search-box'>
+                                        <button nz-button [nzType]="'primary'" [nzSize]="'large'" class='search-btn'>
+                                            <i class="fa fa-search"></i>查询</button>
+                                        <button type="button" class="btn btn-link" (click)="tableHandle.isComplexSearch=false">简单查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template #listTools>
+                    <div class="btn-group min-height">
+                        <!-- <span style="line-height:28px;margin-right:4px;display:inline-block;color:red">费用审核状态：{{'未审核'}}</span> -->
+                        <button (click)="showmodal()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="iconfont icon-tianjia-copy"></i> 添加</span>
+                        </button>
+                        <button (click)="mutipledelete()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="iconfont icon-shanchu"></i> 删除</span>
+                        </button>
+
+                        <!-- <button (click)="sharecost()" nz-button [nzType]="'primary'">
+                            <span>
+                                <i class="anticon anticon-share-alt"></i> 分摊费用</span>
+                        </button> -->
+                    </div>
+
+                </ng-template>
+                <ng-template cuiColTpl="transportation" let-row="row">
+                    <span>{{row.trainTrafficManner.name}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="username" let-row="row">
+                    {{row.user?row.user.username:'--'}}
+                </ng-template>
+                <ng-template cuiColTpl="displayName" let-row="row">
+                    {{row.user?row.user.displayName:'--'}}
+                </ng-template>
+                <ng-template cuiColTpl="price" let-row="row">
+                    <span>{{row.fee}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="group" let-row="row">
+                    <span>{{ row.userGroup ? row.userGroup.name: '--'}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="startDate" let-row="row">
+                    <span>{{row.startDate}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="endDate" let-row="row">
+                    <span>{{row.endDate}}</span>
+                </ng-template>
+
+                <ng-template cuiColTpl="isFromSAP" let-row="row">
+                    <span *ngIf="!row.isFromSAP" style="color:green">否</span>
+                    <span *ngIf="row.isFromSAP" style="color:red">是</span>
+                </ng-template>
+                <ng-template cuiColTpl="actions" let-row="row">
+                    <i *ngIf="!row.isFromSAP" title="编辑" (click)="viewdetail(row.id)" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#007bbf;"></i>
+                    <i *ngIf="row.isFromSAP" title="从SAP拉取不可编辑" class="iconfont icon-bianji-copy" style="cursor:pointer;color:#666;"></i>
+                </ng-template>
+
+            </cui-data-table>
+        </nz-spin>
+    </div>
+</div>
+
+<nz-modal [nzZIndex]="1001" *ngIf="isVisible" [nzFooter]="false" [nzVisible]="isVisible" [nzTitle]="'添加费用'" [nzContent]="modalContent"
+    (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)">
+            <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>人员</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.userIds">
+                        <spk-teacher-lookup [api]="api" (remove)="remove($event)" formControlName="userIds" placeholder="请选择人员"></spk-teacher-lookup>
+                        <!-- <spk-user-lookup formControlName="user" placeholder="请选择人员"></spk-user-lookup> -->
+                        <div nz-form-explain *ngIf="validateForm.controls.userIds.dirty&&validateForm.controls.userIds.hasError('required')">人员不能为空</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>交通类型</label>
+                    </div>
+                    <div nz-col nz-form-control [nzSpan]="12" [nzValidateStatus]="validateForm.controls.trainTrafficManner">
+                        <!-- <nz-input formControlName="pricename" [nzType]="'text'" [nzPlaceHolder]="'请选择费用名称'" [nzSize]="'large'">
+                        </nz-input> -->
+                        <nz-select formControlName="trainTrafficManner" [nzPlaceHolder]="'请选择交通类型'" nzAllowClear [nzShowSearch]="true">
+                            <nz-option *ngFor="let option of trainoptions" [nzLabel]="option.name" [nzValue]="option.id">
+                            </nz-option>
+                        </nz-select>
+                        <div nz-form-explain *ngIf="validateForm.controls.trainTrafficManner.dirty&&validateForm.controls.trainTrafficManner.hasError('required')">请选择交通类型!</div>
+                    </div>
+                </div>
+
+
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>费用金额</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.fee">
+                        <nz-input formControlName="fee" [nzType]="'text'" [nzPlaceHolder]="'请输入费用金额'" [nzSize]="'large'">
+                        </nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.fee.dirty&&validateForm.controls.fee.hasError('required')">请输入金额!</div>
+                        <div nz-form-explain *ngIf="validateForm.controls.fee.dirty&&validateForm.controls.fee.hasError('pattern')">输入有误!</div>
+
+                    </div>
+                </div>
+
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>开始时间</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.startDate">
+                        <nz-datepicker formControlName="startDate" [nzSize]="'large'" [nzPlaceHolder]="'请输入开始时间'"></nz-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.startDate.dirty&&validateForm.controls.startDate.hasError('required')">请选择开始时间!</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="7">
+                        <label nz-form-item-required>结束时间</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="validateForm.controls.endDate">
+                        <nz-datepicker formControlName="endDate" [nzSize]="'large'" [nzPlaceHolder]="'请输入结束时间'"></nz-datepicker>
+                        <div nz-form-explain *ngIf="validateForm.controls.endDate.dirty&&validateForm.controls.endDate.hasError('required')">请选择开始时间!</div>
+                    </div>
+                </div>
+
+                <div nz-form-item nz-row>
+                    <div nz-col [nzOffset]="7" [nzSpan]="12" nz-form-control>
+                        <button [nzLoading]="submitloading" nz-button [nzType]="'primary'" [nzSize]="'large'" [disabled]="!validateForm.valid">提交</button>
+                        <button nz-button [nzSize]="'large'" (click)="resetForm($event)">重置</button>
+                    </div>
+                </div>
+            </nz-spin>
+        </form>
+    </ng-template>
+</nz-modal>

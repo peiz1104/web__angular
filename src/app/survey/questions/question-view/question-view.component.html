@@ -1,0 +1,21 @@
+<div class="container card mt-3">
+  <h1 class="text-center mt-4">{{paperInfo?.name}}</h1>
+  <div *ngFor="let q of questions;let idx=index;" [ngSwitch]="q.type" class="que-box">
+    <spk-survey-choice [question]="q" [idx]="idx" *ngSwitchCase="'SINGLE'"></spk-survey-choice>
+    <spk-survey-choice [question]="q" [idx]="idx" *ngSwitchCase="'MULTIPLE'"></spk-survey-choice>
+    <spk-survey-fill-blank [question]="q" [idx]="idx" *ngSwitchCase="'SINGLE_FILL'"></spk-survey-fill-blank>
+    <spk-survey-fill-blank [question]="q" [idx]="idx" *ngSwitchCase="'MULTIPLE_FILL'"></spk-survey-fill-blank>
+    <spk-survey-matrix [question]="q" [idx]="idx" *ngSwitchCase="'MATRIX_SINGLE'"></spk-survey-matrix>
+    <spk-survey-matrix [question]="q" [idx]="idx" *ngSwitchCase="'MATRIX_MULTIPLE'"></spk-survey-matrix>
+    <spk-matrix-fill-blank [question]="q" [idx]="idx" *ngSwitchCase="'MATRIX_FILL'"></spk-matrix-fill-blank>
+    <!-- <spk-survey-paragraph [question]="q" [idx]="idx" *ngSwitchCase="'MATRIX_FILL1'"></spk-survey-paragraph> -->
+  </div>
+  <div class="loading text-center mt-5 mb-5 text-primary" *ngIf="loading">
+    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div class="text-center mb-3">
+    <button type="button" class="btn btn-primary mr-5" (click)="onSubmit()">提交</button>
+    <button type="button" class="btn btn-secondary" (click)="goBack()">返回</button>
+  </div>
+</div>

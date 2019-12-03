@@ -1,0 +1,39 @@
+:host ::ng-deep {
+    .hour-rule-list {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 16px;
+        .ant-form-item-control-wrapper {
+            width: 100%;
+            .ant-select-selection,
+            ant-select-selection--single>.ant-select-selection__rendered {
+                width: 120px;
+            }
+        }
+        .simple-search-bar-search-box {
+            position: absolute;
+            top: -4px;
+            right: -100px;
+        }
+        .badge-success {
+            color: #fff;
+            font-size: 14px;
+        }
+        .badge-secondary {
+            color: #fff;
+            font-size: 14px;
+        }
+    }
+    .add-edit-modal {
+        .ant-modal-body {
+            .form-horizontal {
+                .ant-row {
+                    width: 86%;
+                }
+                .form-group {
+                    margin-bottom: 0px;
+                }
+            }
+        }
+    }
+}

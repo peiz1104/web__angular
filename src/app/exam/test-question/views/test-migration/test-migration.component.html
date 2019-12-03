@@ -1,0 +1,19 @@
+<div class="migrationTest">
+  <div nz-row>
+    <div nz-col [nzSpan]="5" class="textLeft">
+      <label for="groupId">组织机构:</label>
+    </div>
+    <div nz-col [nzSpan]="16">
+      <spk-user-group-select [(ngModel)]="managerGroup" (ngModelChange)="logSelectGroup($event)"></spk-user-group-select>
+    </div>
+  </div>
+  <br/>
+  <div nz-row>
+    <div nz-col [nzSpan]="5" class="textLeft">
+      <label for="konwId">试题分类:</label>
+    </div>
+    <div nz-col [nzSpan]="16" class="selectSite">
+      <cui-tree [config]="treeConfig" [value]="nodesTree" selectionMode="single" (nodeSelect)="onNodeSelect($event)" (nodeUnselect)="onNodeUnselect($event)"></cui-tree>
+    </div>
+  </div>
+</div>

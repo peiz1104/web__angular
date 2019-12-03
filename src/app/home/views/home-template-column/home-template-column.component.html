@@ -1,0 +1,87 @@
+<!-- 项目的头部模块 -->
+<header *ngIf="itemConfig?.moduleType == 'LOGO'&&logoInfo">
+  <div class="head clearfix">
+      <div class="head-logo">
+          <img class="log-img" [src]="logoInfo?.imgUrl" onerror="this.src='assets/images/default-logo.png'" />  
+      </div>
+      <ul class="head-nav clearfix">
+          <ng-container *ngFor="let item of navigation">
+              <li *ngIf="item?.isVisible&&item.link=='/home'" class="active"><a>{{item.name}}</a></li>
+              <li *ngIf="item?.isVisible&&item.link!='/home'&&item?.link!='/opencourse'"><a>{{item.name}}</a></li>
+              <li *ngIf="item?.isVisible&&item?.link=='/opencourse'" class="nav-tree">
+                <a>课程中心<i class="anticon anticon-down tree-down"></i></a>
+              </li>
+          </ng-container>
+          <!-- <li>
+              <nz-dropdown [nzPlacement]="'bottomCenter'" [nzTrigger]="'hover'" [nzVisible]="false">
+                  <span nz-dropdown>更多…</span>
+                  <ul nz-menu class="more-menu">
+                      <li>更多导航</li>
+                      <li>更多导航</li>
+                      <li>更多导航</li>
+                  </ul>
+              </nz-dropdown>
+          </li> -->
+      </ul>
+      <div class="head-switch clearfix">
+          <div class="input-box">
+              <input type="text" name="" placeholder="请输入搜索关键字" class="input-single" >
+              <span class="input-anticon"><i class="anticon anticon-search"></i></span>
+          </div>
+          <div class="message-box">
+              <nz-badge [nzCount]="0" [nzOverflowCount]="99">
+                <ng-template #content>
+                  <a class="message-icon"><i class="anticon anticon-mail float-icon"></i></a>
+                </ng-template>
+              </nz-badge>
+          </div>
+          <div class="users-box">
+            <nz-dropdown [nzPlacement]="'bottomCenter'" [nzTrigger]="'hover'" [nzVisible]="false">
+              <div class="users-img-url">
+                <img nz-dropdown [src]="'./assets/images/header.png'" alt="头像">
+              </div>
+            </nz-dropdown>
+          </div>
+      </div>
+  </div>
+</header>
+<!-- 底部 -->
+<footer *ngIf="itemConfig?.moduleType == 'FOOTER' &&footerInfo">
+    <div class="foot-flex">
+        <div class="foot-left">
+            <div class="img-url">
+                <img class="log-img" [src]="footerInfo?.logo?.imgUrl" onerror="this.src='assets/images/default-logo.png'" />
+            </div>
+            <div class="detail">
+                {{footerInfo?.siteDescription}}
+            </div>
+        </div>
+        <div class="foot-moddle">
+            <div class="foot-moddle-con">
+                <ul class="foot-nav">
+                    <li><a href="javascript:;">关于我们</a></li>
+                    <li><a href="javascript:;">联系我们</a></li>
+                    <li><a href="javascript:;">加入我们</a></li>
+                    <li><a href="javascript:;">网站导航</a></li>
+                    <li><a href="javascript:;">合作洽谈</a></li>
+                </ul>
+                <div class="inter">意见反馈：hi@qimooc.com</div>
+                <div class="telephone">客服电话：{{footerInfo?.hotline}}</div>
+            </div>
+        </div>
+        <div class="foot-right">
+            <div class="attention">关注我们</div>
+            <div class="qr-code">
+                <div class="code-item">
+                    <img [src]="footerInfo?.wchartImg" onerror="this.src='assets/images/wx-gzh.jpg'" />
+                    <span>{{footerInfo?.app}}</span>
+                </div>
+                <div class="code-item">
+                    <img [src]="footerInfo?.appImg" onerror="this.src='assets/images/wx-gzh.jpg'" />
+                    <span>{{footerInfo?.wchart}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="foot-bottom">京ICP备08108726号 企慕课堂 版权所有 Copyright 2017 qimooc.All rights reserved</div>
+</footer>

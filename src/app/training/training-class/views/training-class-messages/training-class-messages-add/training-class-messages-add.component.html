@@ -1,0 +1,197 @@
+<div class="message-add">
+    <div class="top-bread">
+        <div class="page-header">
+            <h5 class="page-title">{{trainingName}}:
+                <small>新建消息</small>
+            </h5>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <form nz-form [formGroup]="validateForm">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="types" nz-form-item-required>发送方式</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('types')">
+                    <!-- <nz-input formControlName="mode"></nz-input> -->
+                    <nz-checkbox-group formControlName="types" [(ngModel)]="modeOption"></nz-checkbox-group>
+                    <div nz-form-explain *ngIf="getFormControl('types').dirty&&getFormControl('types').hasError('required')">发送方式必选</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="title" nz-form-item-required>主题</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('title')">
+                    <nz-input formControlName="title" [nzPlaceHolder]="'请输入主题'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">主题不能为空</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="scopes">通知范围</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('scopes')">
+                    <nz-checkbox-group formControlName="scopes" [(ngModel)]="scopeOption"></nz-checkbox-group>
+                    <div nz-form-explain *ngIf="getFormControl('scopes').dirty&&getFormControl('scopes').hasError('required')">通知范围必选</div>
+                </div>
+            </div>
+            <!-- <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="receiveUsers">接收人</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('receiveUsers')">
+                    <div class="analog" (click)="showPerson()">
+                        <p *ngIf="selection?.length == 0">请选择接收人</p>
+                        <ul *ngIf="selection?.length != 0">
+                            <li *ngFor="let one of selection;">{{one.username}}</li>
+                        </ul>
+                        <i class="anticon anticon-search"></i>
+                    </div>
+                    <div>
+                        <span>此处接收人列表为当前活动所有已报名学员。</span>
+                        <br>
+                        <span>如果不选，则按照勾选的通知范围发送消息。</span>
+                        <br>
+                        <span>选择后，则将通知范围和选择的学员合并发送消息。</span>
+                    </div>
+                </div>
+                <div nz-col class="del-person" [nzSpan]="4" (click)="delPerson()">
+                    <i class="anticon anticon-delete"></i>
+                </div>
+            </div> -->
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label>用户</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('userIds')">
+                    <spk-user-lookup formControlName="userIds" placeholder="请选择用户！"></spk-user-lookup>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="">组织</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('userGroupIds')">
+                    <spk-user-group-select mode="multiple" placeholder="请选择组织!" formControlName="userGroupIds"></spk-user-group-select>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="">用户组</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('logicalGroupIds')">
+                    <div class="ant-select-selection" (click)="openLookup()">
+                        <div class="show">
+                            <div *ngIf="!_value || _value?.length == 0" class="ant-select-selection__placeholder">{{'请选择用户组！'}}</div>
+                            <!-- <div *ngIf="overflow && _value?.length > overflow" class="ant-select-selection__placeholder text-secondary">您已选择{{_value.length}}个用户</div> -->
+                            <ul class="userGroup-show" *ngIf="_value?.length">
+                                <li *ngFor="let u of _value" class="ant-select-selection__choice userGroup-li ng-trigger ng-trigger-tagAnimation">
+                                    <div class="ant-select-selection__choice__content">
+                                        {{u.name}}
+                                        <i class="iconfont icon-2guanbi ant-select-selection__choice__remove" (click)="_remove($event,u,_value)"></i>
+                                    </div>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+                        <span class="ant-select-arrow"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="sendTime">发送时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('sendTime')">
+                    <nz-datepicker style="width:100%;" formControlName="sendTime" [nzPlaceHolder]="'请选择发送时间'" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"
+                        [nzDisabledDate]="_disabledDate"></nz-datepicker>
+                    <div>如果不选，则默认实时发送</div>
+                    <div nz-form-explain *ngIf="getFormControl('sendTime').dirty&&getFormControl('sendTime').hasError('sendTimebefore')">发送时间不得早于当前时间</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="filePath">添加附件</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('attachmentUrl')" class="form-file">
+                    <!-- <nz-input formControlName="filePath"></nz-input> -->
+                    <cui-fileupload mode="file" name="files" url="/api/upload/files" [auto]="true" (uploadComplete)="realPath($event)" [maxFileSize]="1024*1024*20"
+                        accept=".ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip,.pdf"></cui-fileupload>
+                    {{realName}}
+                    <span class="text-muted">
+                        <i class="fa fa-info-circle text-info"></i>可以在此处上传文件。格式应为PPT,PPTX,DOC,DOCX,XLS,XLSX,ZIP,PDF 大小不能超过20MB。</span>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="4">
+                    <label for="content" nz-form-item-required>正文</label>
+                </div>
+                <!-- &&!modeOption[2].checked -->
+                <div *ngIf="modeOption[2] ? !modeOption[2].checked :true" nz-col [nzSpan]="10">
+                    <cui-ueditor formControlName="content" [toolbarMode]="'um'" [setting]="ueditorSetting"></cui-ueditor>
+                    <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+                        <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+                    </div>
+                </div>
+                <div *ngIf="modeOption[2]&&modeOption[2].checked" nz-col [nzSpan]="10">
+                    <nz-input formControlName="content" nzType="textarea" [nzRows]="'4'"></nz-input>
+                    <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+                        <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+                    </div>
+                </div>
+            </div>
+            <div nz-form-item nz-row style="margin-bottom:8px;">
+                <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+                    <button nz-button [nzType]="'primary'" (click)="_submitForm()" class="mr-5" [nzLoading]="loading">保存</button>
+                    <button nz-button [nzType]="'default'" (click)="goBack()">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <nz-modal [nzWidth]="800" [nzVisible]="isVisible" [nzFooter]="false" [nzTitle]="'接收人列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <spk-training-class-messages-persons *ngIf="isVisible" (selected)="persons($event)" [selection]="selection" [id]="sourceId"></spk-training-class-messages-persons>
+        </ng-template>
+    </nz-modal>
+</div>
+
+<nz-modal *ngIf="isVisibleUserGroup" [nzZIndex]="1001" [nzVisible]="isVisibleUserGroup" [nzWidth]="800" [nzTitle]="'用户组列表'"
+    [nzContent]="modalContent" (nzOnCancel)="handleCancelUserGroup($event)" (nzOnOk)="handleOkUserGroup($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzTip]="'正在读取数据...'" [nzSpinning]="spinning">
+            <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" selectType="checkbox" [(selection)]="selectionUserGroup"
+                (reload)="loadUserGoupData()">
+                <ng-template #simpleSearch>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <nz-input name="searchtext" [nzPlaceHolder]="'请输入用户组名'" [(ngModel)]="searchtext"></nz-input>
+                        </div>
+                        <div class="form-group" style="width:260px;margin-left:10px;">
+                            <spk-user-group-select style="width:260px" name="userGroupIds" [(ngModel)]="userGroupIds"></spk-user-group-select>
+                        </div>
+
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="loadUserGoupData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-template>
+                <ng-template cuiColTpl="userGroup" let-row="row">
+                    <span>{{getUsderGroupPathName(row?.userGroup?.namePath)}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="createUser" let-row="row">
+                    <span>{{row?.createdByDisplayName}}</span>
+                </ng-template>
+                <ng-template cuiColTpl="createDate" let-row="row">
+                    <span>{{row.createdDate|date:'yyyy-MM-dd HH:mm'}}</span>
+                </ng-template>
+                <!-- 自定义列显示 -->
+            </cui-data-table>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

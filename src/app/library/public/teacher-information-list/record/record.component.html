@@ -1,0 +1,86 @@
+<div class="record-work">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="data?.content" [pagination]="data" [(selection)]="selection" (reload)="loadData($event)">
+            <ng-template #simpleSearch>
+                <ng-container *ngTemplateOutlet="simpleSearchBox"></ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <ng-container *ngTemplateOutlet="theListTools"></ng-container>
+            </ng-template>
+            <ng-template cuiColTpl="courseName" let-row="row">
+                {{row.trainingClass?.name}}
+            </ng-template>
+            <ng-template cuiColTpl="name" let-row="row">
+                {{row.offeringCourse?.course?.name}}
+            </ng-template>
+            <ng-template cuiColTpl="startDate" let-row="row">
+                {{row?.startDate|date:'yyyy-MM-dd'}}
+            </ng-template>
+            <ng-template cuiColTpl="endDate" let-row="row">
+                {{row?.endDate|date:'yyyy-MM-dd'}}
+            </ng-template>
+
+            <ng-template cuiColTpl="operaDate" let-row="row">
+                <span>{{row?.createdDate|date:'yyyy-MM-dd HH:mm'}}</span>
+
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<ng-template #simpleSearchBox>
+    <form nz-form [formGroup]="_searchForm" (ngSubmit)="_submitForm($event, _searchForm.value)" [nzLayout]="'inline'" class="cui-data-table-form-box">
+        <div nz-row class="cui-data-table-form-body">
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="name">培训班名称</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="tbcName" [nzPlaceHolder]="'培训班名称'"> </nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="startDate">开始时间</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-datepicker formControlName="startDate" [nzPlaceHolder]="'请选择开始时间'" style="width:100%;"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="endDate">结束时间</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择结束时间'" style="width:100%;"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="8" class="cui-data-table-form-row">
+                <div>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label for="courseName">课程名称</label>
+                    </div>
+                    <div nz-col [nzSpan]="18">
+                        <nz-input formControlName="courseName" [nzPlaceHolder]="'课程名称'"> </nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div class='simple-search-bar-search-box'>
+                <button type="submit" nz-button [nzType]="'primary'" class='search-btn'>
+                    <i class="fa fa-search"></i>查询</button>
+            </div>
+            <div class='simple-search-bar-search-box'>
+                 <button nz-button [nzType]="'primary'" class='dropdown-item'   (click)="export()">导出</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<ng-template #theListTools>
+
+</ng-template>

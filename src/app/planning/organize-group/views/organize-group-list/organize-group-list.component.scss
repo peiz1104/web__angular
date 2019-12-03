@@ -1,0 +1,68 @@
+.classlist {
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 100%;
+    .classlist-top {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 1rem;
+        padding-top: 1rem;
+        padding-bottom: 0.5rem;
+        .classlist-form-box {
+            border: 1px solid #ccc;
+            padding: 10px 0;
+            margin: 10px 0;
+            .form-row {
+                width: 100%;
+                margin: 0 auto;
+                padding: 10px 0;
+                height: 52px;
+            }
+        }
+    }
+    .classlist-body {
+        .classlist-edit {
+            position: relative;
+            .float-edit {
+                font-size: 18px;
+                line-height: 18px;
+                color: #388ecb;
+            }
+        }
+        .classlist-selectCity {
+            color: #388ecb;
+            &:hover {
+                color: #1835cc;
+            }
+        }
+    }
+}
+
+:host ::ng-deep {
+    .cui-data-table-wrap .cui-pagination .gobox .gobtn{
+        line-height: 30px;
+        top: -8px;
+    }
+    button{
+        cursor: pointer;
+    }
+    .form-box {
+        border: 1px solid #ccc;
+        padding: 10px 0;
+        margin: 10px 0;
+        .form-row {
+            width: 65%;
+            margin: 0 auto;
+            padding: 10px 0;
+            .ant-form-item {
+                margin: 0;
+            }
+        }
+        .ant-form-item-label {
+            label {
+                margin: 0;
+            }
+        }
+    }
+}

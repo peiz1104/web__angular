@@ -1,0 +1,123 @@
+<form nz-form [formGroup]="_form" [nzLayout]="'horizontal'">
+    <h5 class="my-3">基本信息</h5>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label nz-form-item-required>名称</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+            <nz-input formControlName="name" required maxlength="40"></nz-input>
+            <!-- <input nz-input name="name" formControlName="name" required maxlength="40"> -->
+            <div class="text-danger" *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">课程名称必填</div>
+            <div class="text-danger" *ngIf="getFormControl('name').hasError('maxlength')">课程名称不得超过40个字符</div>
+        </div>
+    </div>
+    <ng-container formGroupName="offeringCourse">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4">
+                <label nz-form-item-required>内容</label>
+            </div>
+            <div nz-form-control nz-col [nzSpan]="12">
+                <spk-course-lookup name="course" formControlName="course" (afterSelected)="doAfterCourseSelected($event)"></spk-course-lookup>
+            </div>
+        </div>
+        <div nz-form-item nz-row *ngIf="!isExcludeFiled('offeringCourse.sourceType') && !!_form.get('offeringCourse.course').value">
+            <div nz-form-label nz-col [nzSpan]="4">
+                <label nz-form-item-required>使用方式</label>
+            </div>
+            <div nz-form-control nz-col [nzSpan]="12">
+                <nz-radio-group formControlName="sourceType">
+                    <label nz-radio [nzValue]="'REFERENCED'">
+                        <span>同源</span>
+                    </label>
+                    <label nz-radio [nzValue]="'COPIED'">
+                        <span>非同源</span>
+                    </label>
+                </nz-radio-group>
+                <div nz-form-extra>对于在线课程，同源课程学习记录共享，非同源课程学习记录是独立的。</div>
+            </div>
+        </div>
+    </ng-container>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label nz-form-item-required>所属组织</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+            <spk-user-group-select name="userGroup" formControlName="userGroup"></spk-user-group-select>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>内容描述</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+            <nz-input formControlName="description" [nzType]="'textarea'" [nzRows]="'3'" [nzPlaceHolder]="''"></nz-input>
+        </div>
+    </div>
+
+    <h5 class="my-3">时间表</h5>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>开始时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+      <nz-datepicker formControlName="startDate"  [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_startDateBeginChange()" [nzDisabledDate]="_disabledStartDateBegin"></nz-datepicker>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>结束时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+      <nz-datepicker formControlName="endDate" [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_startDateEnd=$event;_startDateEndChange()" [nzDisabledDate]="_disabledStartDateEnd"></nz-datepicker>
+        </div>
+    </div>
+
+    <h5 class="my-3">报名时间</h5>
+    <p class="mb-3 d-none">设置最少注册人数和最多注册人数值, 或将这两个值留空以表示无限制。如果将最多注册人数值留空, 将不显示当前注册人数值。 如果指定了最近的取消日期, 则表示学员注销后可以获得退还学费的最后日期。</p>
+
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>报名开始时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+      <nz-datepicker formControlName="enrollStart" [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_endDateBeginChange()" [nzDisabledDate]="_disabledEndDateBegin"></nz-datepicker>
+        </div>
+    </div>
+    <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+            <label>报名截止时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="12">
+      <nz-datepicker formControlName="enrollEnd" [nzPlaceHolder]="'请选择日期'" (ngModelChange)="_endDateEndChange()" [nzDisabledDate]="_disabledEndDateEnd"></nz-datepicker>
+        </div>
+    </div>
+    <!--暂时使用 enrollMaxEnabled 隐藏“启用等待列表”与 “最大注册人数”-->
+    <ng-container *ngIf="enrollMaxEnabled">
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4">
+                <label>启用等待列表</label>
+            </div>
+            <div nz-form-control nz-col [nzSpan]="12">
+                <label nz-checkbox formControlName="enableWaitList"></label>
+            </div>
+        </div>
+        <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSpan]="4">
+                <label>最大注册人数</label>
+            </div>
+            <div nz-form-control nz-col [nzSpan]="12">
+                <nz-input-number formControlName="enrollMax" [nzMin]="0" [nzStep]="1"></nz-input-number>
+            </div>
+        </div>
+    </ng-container>
+    <div nz-form-item nz-row>
+        <div nz-form-control nz-col [nzSpan]="12" [nzOffset]="4">
+            <ng-container [ngTemplateOutlet]="actionsViewRef || defaultActions"></ng-container>
+        </div>
+    </div>
+</form>
+
+<ng-template #defaultActions>
+    <button nz-button [nzType]="'primary'" [disabled]="_form.invalid" (click)="_save($event)" [nzLoading]="loading"> 保 存 </button>
+    <button *ngIf="isCreate" nz-button [nzType]="'default'" (click)="_cancel($event)"> 取 消 </button>
+</ng-template>

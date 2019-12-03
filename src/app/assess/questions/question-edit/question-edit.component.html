@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col">
+    <span class="d-inline-block bg-light w-100 p-1">题目标题</span>
+    <textarea #foo rows="4" class="w-100" placeholder="{{question.name}}" [(ngModel)]="question.name" (change)="questionChange(question,foo)"></textarea>
+  </div>
+  <div class="col">
+    <p class="mb-1">当前题型: {{typeMap[question.type]}}</p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input [(ngModel)]="question.required" (click)="showRequired()" type="checkbox" class="form-check-input">必答题 </label>
+    </p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input [(ngModel)]="question.hasDesc" type="checkbox" class="form-check-input">填写提示</label>
+      <input *ngIf="question.hasDesc && !question.hasHighEdit" [(ngModel)]="question.description" class="form-control-xs" type="text">
+      <a *ngIf="question.hasDesc" (click)="showEditModalMiddle()" class="text-success">高级编辑模式</a>
+    </p>
+    <p class="mb-1" *ngIf="question.type === 'SHORT_ANSWER'">
+      <label class="form-check-label">设置分数</label>
+      <input [(ngModel)]="question.options[0].score" class="form-control-xs" style="width:3rem;" type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+    </p>
+
+    <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalEdit" [nzVisible]="isVisibleEditMiddle" (nzOnCancel)="cancelEdit($event)"
+      (nzOnOk)="okEdit($event)">
+      <ng-template #modalEdit>
+        <cui-ckeditor [(ngModel)]="inputValue"></cui-ckeditor>
+      </ng-template>
+    </nz-modal>
+  </div>
+</div>

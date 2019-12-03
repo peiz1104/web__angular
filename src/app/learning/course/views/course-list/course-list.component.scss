@@ -1,0 +1,20 @@
+:host::ng-deep {
+    .page-body {
+        .cui-tree-select {
+            width: 440px !important;
+        }
+        .usergroup {
+            .ant-select {
+                width: 160px !important;
+            }
+        }
+        .line-other {
+            width: 100%;
+            display: -webkit-inline-box;
+            display: -ms-inline-flexbox;
+            display: inherit;
+            margin-top: 10px;
+            margin-left: -6px;
+        }
+    }
+}

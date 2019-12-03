@@ -1,0 +1,259 @@
+:host::ng-deep {
+    .container-fluid {
+        .page-header {
+            position: relative;
+            .class-btn {
+                position: absolute;
+                right: 0;
+                top: 12px;
+            }
+        }
+    }
+    .hour-rule-import {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 14px;
+        .steps-content {
+            margin-top: 16px;
+            border: 1px dashed #e9e9e9;
+            border-radius: 6px;
+            min-height: 200px;
+            .first-content {
+                padding-bottom: 16px;
+                .import-template {
+                    text-align: center;
+                    line-height: 36px;
+                    margin: 14px 0px;
+                    .tip-word {
+                        color: red;
+                        font-size: 16px;
+                    }
+                    .hour-template-import {
+                        display: inline-block;
+                        border-radius: 6px;
+                        width: 60px;
+                        height: 30px;
+                        background: #007bff;
+                        color: #fff;
+                        line-height: 30px;
+                    }
+                }
+                .notice-message {
+                    width: 500px;
+                    margin: 10px auto;
+                    border: 1px solid #e5e5e5;
+                    padding: 10px 20px;
+                    h5 {
+                        color: #007bbf;
+                    }
+                    .item-tip {
+                        line-height: 30px;
+                        color: #666;
+                    }
+                }
+                .upload-file-box {
+                    width: 620px;
+                    margin: 10px auto;
+                    .select-title {
+                        position: relative;
+                        color: green;
+                        width: 60px;
+                        top: 22px;
+                        left: 6px;
+                    }
+                    .lond-file-box {
+                        width: 525px;
+                        margin-left: 72px;
+                    }
+                    .text-muted {
+                        padding-left: 68px;
+                    }
+                    .text-danger {
+                        padding-left: 68px;
+                        line-height: 30px;
+                    }
+                }
+            }
+            .show-right-error {
+                .right-list {
+                    width: 700px;
+                    margin: 30px auto;
+                    h5 {
+                        color: green;
+                        padding-bottom: 10px;
+                    }
+                    .tip {
+                        color: red;
+                    }
+                    .list-title {
+                        background: #f8fbfd;
+                        border-top: 1px solid #e9ecef;
+                        border-bottom: 2px solid #e9ecef;
+                        overflow: hidden;
+                        height: 32px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        .title-item {
+                            float: left;
+                            width: 20%;
+                        }
+                        .title-item-big {
+                            float: left;
+                            width: 59%;
+                        }
+                    }
+                    .no-data {
+                        line-height: 70px;
+                        text-align: center;
+                    }
+                    .sigle-box {
+                        overflow: hidden;
+                        border-bottom: 1px solid #e5e5e5;
+                        .item-box {
+                            width: 20%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                        .item-box-big {
+                            width: 59%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                    }
+                }
+                .error-list {
+                    width: 700px;
+                    margin: 30px auto;
+                    h5 {
+                        color: red;
+                        padding-bottom: 10px;
+                    }
+                    .list-title {
+                        background: #f8fbfd;
+                        border-top: 1px solid #e9ecef;
+                        border-bottom: 2px solid #e9ecef;
+                        overflow: hidden;
+                        height: 32px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        .title-item {
+                            width: 10%;
+                            float: left;
+                        }
+                        .title-item-big {
+                            width: 69%;
+                            float: left;
+                        }
+                    }
+                    .tip {
+                        color: green;
+                    }
+                    .no-data {
+                        line-height: 70px;
+                        text-align: center;
+                    }
+                    .sigle-box {
+                        overflow: hidden;
+                        border-bottom: 1px solid #e5e5e5;
+                        .item-box {
+                            width: 10%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                        .item-box-big {
+                            width: 69%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                    }
+                }
+            }
+            .import-success {
+                .title {
+                    color: green;
+                    line-height: 30px;
+                    h5 {
+                        line-height: 50px;
+                        text-align: center;
+                    }
+                    .success-icon {
+                        font-size: 30px;
+                        margin-right: 12px;
+                        color: green;
+                        .iconfont {
+                            font-size: 30px;
+                        }
+                    }
+                    .import-success {
+                        position: relative;
+                        font-size: 16px;
+                        font-weight: 600;
+                        top: -5px;
+                        color: green;
+                    }
+                }
+                .import-success-ok {
+                    width: 800px;
+                    margin: 0 auto;
+                    h5 {
+                        color: #007bbf;
+                        padding: 10px 0px;
+                    }
+                    .list-title {
+                        background: #f8fbfd;
+                        border-top: 1px solid #e9ecef;
+                        border-bottom: 2px solid #e9ecef;
+                        overflow: hidden;
+                        height: 32px;
+                        line-height: 32px;
+                        font-weight: bold;
+                        .title-item {
+                            float: left;
+                            width: 35%;
+                        }
+                        .title-item-small-box {
+                            float: left;
+                            width: 20%;
+                            padding-left: 16px;
+                        }
+                        .title-item-big {
+                            float: left;
+                            width: 40%;
+                        }
+                    }
+                    .sigle-box {
+                        overflow: hidden;
+                        border-bottom: 1px solid #e5e5e5;
+                        .item-box {
+                            width: 35%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                        .item-box-small-box {
+                            width: 20%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                            padding-left: 16px;
+                        }
+                        .item-box-big {
+                            width: 40%;
+                            min-height: 30px;
+                            line-height: 30px;
+                            float: left;
+                        }
+                    }
+                }
+            }
+        }
+        .steps-action {
+            margin-top: 24px;
+            text-align: center;
+        }
+    }
+}

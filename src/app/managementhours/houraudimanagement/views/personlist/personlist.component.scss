@@ -1,0 +1,60 @@
+:host::ng-deep {
+    .container-fluid {
+        position: relative;
+        .actions {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+    }
+    .person-list-box {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 8px;
+        .cui-data-table-form-box {
+            width: 900px;
+        }
+        .simple-search-bar {
+            width: 82% !important;
+        }
+        .simple-search-bar-search-box {
+            margin-left: 14px;
+            top: -4px;
+            position: relative;
+        }
+        .list-tool-bar {
+            // margin-bottom: 0px!important;
+        }
+        .cui-data-table-form-body .cui-data-table-form-row {
+            margin-bottom: 0px!important;
+        }
+        .complex-search-bar-search-box {
+            margin-left: 40px;
+            bottom: -35px;
+        }
+        .active {
+            color: #007eff;
+        }
+        .btn-group {
+            button {
+                // cursor: pointer;
+                // border-radius: 4px;
+                // border-top-right-radius: 4px!important;
+                // border-bottom-right-radius: 4px!important;
+                // border-top-left-radius: 4px!important;
+                // border-bottom-left-radius: 4px!important;
+                margin-right: 6px; // position: relative;
+                // padding-left: 22px;
+                // i {
+                //     position: absolute;
+                //     top: 2px;
+                //     left: 4px;
+                // }
+            }
+        }
+        .cui-data-table-form-body,
+        .ant-row {
+            width: 100%;
+        }
+    }
+}

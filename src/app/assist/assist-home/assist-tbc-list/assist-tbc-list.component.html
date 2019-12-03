@@ -1,0 +1,32 @@
+<nz-card [nzLoading]="loading">
+  <ng-template #title>
+    培训班管理
+  </ng-template>
+  <ng-template #extra>
+      <a [routerLink]="['/assist/tbc']" routerLinkActive="router-link-active" >查看全部</a>
+    </ng-template>
+  <ng-template #body>
+    <nz-card *ngFor="let item of content" class="mb-3">
+      <ng-template #body>
+        <div [routerLink]="['/assist/tbc/', item.id]" 
+            style="margin: -24px; cursor: pointer;
+            position: relative;
+            background-image: url('assets/images/default/banner.png');
+            background-repeat:no-repeat;
+            ">
+          <div style="
+            background: rgba(30, 30, 30, 0.7);
+            padding: 24px;
+            color: #ffffff;
+          ">
+          <h5 style="color: #ffffff;">{{item.name}}</h5>
+          <br>
+          <span>负责人：{{item.leaders || '未指定'}}</span>
+          <span>执行人：{{item.performers || '未指定'}}</span>
+        
+          </div>
+        </div>
+      </ng-template>
+    </nz-card>
+  </ng-template>
+</nz-card>

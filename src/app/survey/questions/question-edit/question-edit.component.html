@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col">
+    <span class="d-inline-block bg-light w-100 p-1">题目标题</span>
+    <textarea #foo rows="4" class="w-100" placeholder="{{question.name}}" [(ngModel)]="question.name" (change)="questionChange(question,foo)"></textarea>
+  </div>
+  <div class="col">
+    <p class="mb-1">当前题型: {{typeMap[question.type]}}</p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input [(ngModel)]="question.required" (click)="showRequired()" type="checkbox" class="form-check-input">必答题 </label>
+    </p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input [(ngModel)]="question.hasDesc" type="checkbox" class="form-check-input">填写提示</label>
+      <input *ngIf="question.hasDesc && !question.hasHighEdit" [(ngModel)]="question.description" class="form-control-xs" type="text">
+      <a *ngIf="question.hasDesc" (click)="showEditModalMiddle()" class="text-success">高级编辑模式</a>
+    </p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input (click)="jumpOrOption(!question.hasJump)" [(ngModel)]="question.hasJump" type="checkbox" class="form-check-input">无条件跳题 </label>
+      <span *ngIf="question.hasJump">，填写此题后跳转到第
+        <input (click)="showJumpModalMiddle()" [(ngModel)]="question.jumpNum" class="form-control-xs" style="width:2rem;cursor:pointer;"
+          type="text">
+        <input [(ngModel)]="question.jumpTo" type="hidden"> 题</span>
+    </p>
+    <p class="mb-1">
+      <label class="form-check-label">
+        <input [(ngModel)]="question.hasLogic" type="checkbox" class="form-check-input text-center">关联逻辑</label>
+      <a *ngIf="question.hasLogic" class="text-danger" (click)="showLogicModalMiddle()">
+        <!-- <ng-container *ngIf="question.relevantLogic.length;else elseTemplate"> -->
+        <ng-container *ngIf="question.logicQuestion === 0;else elseTemplate">
+          <strong class="p-1">请选择</strong>
+        </ng-container>
+        <ng-template #elseTemplate>
+          依赖于第
+          <strong class="p-1">{{question.logicQuestion}}</strong>题的第
+          <strong class="p-1">{{question.logicOption}}</strong>个选项
+        </ng-template>
+      </a>
+    </p>
+
+    <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalJump" [nzVisible]="isVisibleJumpMiddle" [nzTitle]="'选择跳转的题目'"
+      (nzOnCancel)="handleCancelMiddle($event)" (nzOnOk)="handleOkMiddle($event)">
+      <ng-template #modalJump>
+        <ul class="list-group">
+          <li class="py-1" *ngFor="let jumpItem of jumpList;let i=index;">
+            <a (click)="selectItem(jumpItem,idx+i+2)">第{{idx+i+2}}题.{{jumpItem.name}}</a>
+          </li>
+        </ul>
+      </ng-template>
+    </nz-modal>
+
+    <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalLogic" [nzVisible]="isVisibleLogicMiddle" [nzTitle]="'选择关联题目'"
+      (nzOnCancel)="cancelLogicMiddle($event)" (nzOnOk)="handleOkLogicMiddle($event)">
+      <ng-template #modalLogic>
+        <select #foo (change)="showOptions($event, foo.value)" [(ngModel)]="logicItemIdx">
+          <option [value]="0">请选择</option>
+          <ng-container *ngFor="let logicItem of logicList;let i=index">
+            <option *ngIf="logicItem.type == 'SINGLE' || logicItem.type == 'MULTIPLE'" [value]="i+1">第{{i+1}}题.{{logicItem.name}}</option>
+          </ng-container>
+        </select>
+        <div *ngIf="logicShow">
+          <ul class="list-group">
+            <li class="ml-4" *ngFor="let logicOption of logicOptions;">
+              <label class="form-check-label">
+                <input [(ngModel)]="logicOption.checked" type="checkbox" class="form-check-input">{{logicOption.name}} </label>
+            </li>
+          </ul>
+        </div>
+      </ng-template>
+    </nz-modal>
+    <nz-modal [nzWrapClassName]="'vertical-center-modal'" [nzContent]="modalEdit" [nzVisible]="isVisibleEditMiddle" (nzOnCancel)="cancelEdit($event)"
+      (nzOnOk)="okEdit($event)">
+      <ng-template #modalEdit>
+        <cui-ckeditor [(ngModel)]="inputValue"></cui-ckeditor>
+      </ng-template>
+    </nz-modal>
+  </div>
+</div>

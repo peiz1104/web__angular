@@ -1,0 +1,140 @@
+<div class="edit-update-box">
+    <div class="paper-base-message">
+        <div class="create-form">
+            <div class="from-des">* 表示必填字段</div>
+            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+                <div class="from-box">
+                    <form nz-form [formGroup]="_validateForm" (ngSubmit)="submitForm($event,_validateForm.value)">
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label nz-form-item-required>试卷名称</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control nzHasFeedback [nzValidateStatus]="_validateForm.controls.epName">
+                                    <nz-input maxlength="50" formControlName="epName" [nzType]="'text'" [nzPlaceHolder]="'请输入名称'" [nzSize]="'large'">
+                                    </nz-input>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.epName.dirty&&_validateForm.controls.epName.hasError('required')">试卷名称不能为空！</div>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.epName.dirty&&_validateForm.controls.epName.hasError('maxlength')">试卷名称最多可输入50个字！</div>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.epName.dirty&&_validateForm.controls.epName.hasError('confirm')">试卷名称不能为空！</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label nz-form-item-required>试卷类型</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="_validateForm.controls.epType">
+                                    <nz-select formControlName="epType">
+                                        <nz-option *ngFor="let option of epType" [nzLabel]="option.dicName" [nzValue]="option.dicCode"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>组卷方式</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control>
+                                    <nz-select nzDisabled="true" formControlName="titleCode" [nzSize]="'large'">
+                                        <nz-option *ngFor="let option of titleCode" [nzLabel]="option.dicName" [nzValue]="option.dicCode"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>分区顺序</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control>
+                                    <nz-select formControlName="orderCode" [nzSize]="'large'">
+                                        <nz-option *ngFor="let option of orderCode" [nzLabel]="option.dicName" [nzValue]="option.dicCode"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>答题方式</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control>
+                                    <nz-select (ngModelChange)="_changeAnswerMethod($event)" formControlName="showCode" [nzSize]="'large'">
+                                        <nz-option *ngFor="let option of answermethodOptions" [nzLabel]="option.dicName" [nzValue]="option.dicCode"></nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>每页题数</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control>
+                                    <nz-input-number [nzDisabled]="selectedOptionMethod!='twoway'" formControlName="quesPage" [(ngModel)]="demoValue" [nzMin]="0" [nzMax]="20" [nzStep]="1"></nz-input-number>
+                                    <span *ngIf="selectedOptionMethod == 'twoway'&&demoValue==0" class="warn">0为整卷显示</span>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.startTime.dirty&&_validateForm.controls.startTime.hasError('confirm')">开始时间不能小于当前时间</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label nz-form-item-required>有效起始时间</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="_validateForm.controls.startTime">
+                                    <spk-qm-datepicker [nzShowTime]="true" formControlName="startTime" [nzPlaceHolder]="'请选择起始时间'" style="width: 100%;"></spk-qm-datepicker>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.startTime.dirty&&_validateForm.controls.startTime.hasError('required')">请选择开始时间！</div>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.startTime.dirty&&_validateForm.controls.startTime.hasError('confirm')">结束时间不能小于开始时间</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSpan]="7">
+                                    <label>有效结束时间</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="_validateForm.controls.endTime">
+                                    <spk-qm-datepicker [nzShowTime]="true" formControlName="endTime" [nzPlaceHolder]="'请选择结束时间'" style="width: 100%;"></spk-qm-datepicker>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.endTime.dirty&&_validateForm.controls.endTime.hasError('required')"></div>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.endTime.dirty&&_validateForm.controls.endTime.hasError('confirm')">结束时间不能小于开始时间</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-col [nzSpan]="7" nz-form-label>
+                                    <label>限制总分值</label>
+                                </div>
+                                <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="_validateForm.controls.sumScore">
+                                    <nz-input-number formControlName="sumScore" [nzMin]="0" [nzMax]="99999" [nzStep]="0.5">
+                                    </nz-input-number>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.sumScore.dirty&&_validateForm.controls.sumScore.hasError('numberCtrol')">最多只能输入一位小数</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="8">
+                            <div nz-form-item nz-row>
+                                <div nz-col [nzSpan]="7" nz-form-label>
+                                    <label>试卷说明</label>
+                                </div>
+                                <div nz-col [nzSpan]="17" class="areatext" nz-form-control [nzValidateStatus]="_validateForm.controls.epDesc">
+                                    <nz-input maxlength="1000" formControlName="epDesc" [nzRows]="2" [nzType]="'textarea'" [nzPlaceHolder]="'请填写试卷说明'" [nzSize]="'large'">
+                                    </nz-input>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.epDesc.dirty&&_validateForm.controls.epDesc.hasError('maxlength')">试卷说明最多可输入1000中文汉字</div>
+                                    <div nz-form-explain *ngIf="_validateForm.controls.epDesc.dirty&&_validateForm.controls.epDesc.hasError('confirm')">输入试卷说明不能有空格</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div nz-col [nzSpan]="22" style="text-align: center;">
+                            <button nz-button [nzType]="'primary'" [nzLoading]="updateLoading" [nzSize]="'large'" [disabled]="!_validateForm.valid && listData.isPutout">下一步</button>
+                            <button nz-button type="button" [nzSize]="'large'" [routerLink]="['/exam/exam-paper']" [queryParams]="link">返回</button>
+                        </div>
+                    </form>
+                </div>
+            </nz-spin>
+        </div>
+    </div>
+</div>

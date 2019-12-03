@@ -1,0 +1,310 @@
+<form nz-form [formGroup]="validateForm" [nzLayout]="'horizontal'">
+    <h5 class="my-3">基本信息</h5>
+    <div class="row">
+        <div class="col-5 push-7 order-2">
+            <div>
+                <label>培训班封面</label>
+                <cui-fileupload name="file" mode="image" [imageHolder]="getFormControl('imageUrl').value" url="/api/upload/file" [auto]="true" (uploadComplete)="onImageUpload($event)" accept=".jpg,.bmp,.png"></cui-fileupload>
+                <br>
+                <span class="text-muted">
+                    <i class="fa fa-info-circle text-info"></i> 可以在此处封面图片。
+                    格式应为 JPG, BMP 或 PNG, 大小不能超过 1MB。
+                    图片尺寸建议最小200*120，比例5:4
+                </span>
+            </div>
+        </div>
+        <div class="col-7 pull-5 order-1">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="name" nz-form-item-required>班级名称</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="18">
+                    <nz-input formControlName="name" [nzPlaceHolder]="'请输入班级名称'"></nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.name.dirty&&validateForm.controls.name.hasError('required')">班级名称不能为空</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="code" nz-form-item-required>培训班编号</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.code" nz-col [nzSpan]="18">
+                    <nz-spin nzSize="small" [nzSpinning]="spinning">
+                        <nz-input formControlName="code" [nzPlaceHolder]="'请输入培训班编号'"></nz-input>
+                        <div nz-form-explain *ngIf="validateForm.controls.code.dirty&&validateForm.controls.code.hasError('required')">培训班编号不能为空</div>
+                    </nz-spin>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="trainingType" nz-form-item-required>培训方式</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-select formControlName="trainingType">
+                        <nz-option *ngFor="let item of _trainingTypes" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                        </nz-option>
+                    </nz-select>
+
+                </div>
+            </div>
+            <!-- <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="status" nz-form-item-required>班级状态</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.status" nz-col [nzSpan]="18">
+                    <nz-select formControlName="status" [nzPlaceHolder]="'请选择班级状态'" nzAllowClear [nzShowSearch]="true">
+                        <nz-option [nzLabel]="'批准开班'" [nzValue]="1"></nz-option>
+                        <nz-option [nzLabel]="'未开班'" [nzValue]="0"></nz-option>
+                    </nz-select>
+                    <div nz-form-explain *ngIf="validateForm.controls.status.dirty&&validateForm.controls.status.hasError('required')">班级状态不能为空</div>
+                </div>
+            </div> -->
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>所属组织</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <spk-user-group-select (ngModelChange)="logSelectGroup($event)" formControlName="userGroup" [permission]="['TRAINING:TRAINING_CLASS:ADD', 'TRAINING:TRAINING_CLASS:EDIT']"></spk-user-group-select>
+                </div>
+                <div style="color:red;" *ngIf="groupValidate">所属组织不能为空</div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="leaders">班级负责人</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.leaders" nz-col [nzSpan]="18">
+                    <spk-user-lookup formControlName="leaders" placeholder="请选择班级负责人"></spk-user-lookup>
+                    <!-- <div nz-form-explain *ngIf="validateForm.controls.leaders.dirty&&validateForm.controls.leaders.hasError('required')">班级负责人不能为空</div> -->
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="performers">班级执行人</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.performers" nz-col [nzSpan]="18">
+                    <spk-user-lookup formControlName="performers" placeholder="请选择班级执行人"></spk-user-lookup>
+                    <!-- <div nz-form-explain *ngIf="validateForm.controls.performers.dirty&&validateForm.controls.performers.hasError('required')">班级执行人不能为空</div> -->
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="address">培训地点</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.address" nz-col [nzSpan]="18">
+                    <nz-input formControlName="address" [nzPlaceHolder]="'请输入培训地点'"></nz-input>
+                    <div nz-form-explain *ngIf="validateForm.controls.address.dirty&&validateForm.controls.address.hasError('required')">培训地点不能为空</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="address" nz-form-item-required>培训时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <!-- 开始时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.startDate">
+                                <nz-datepicker (ngModelChange)="_startDateBeginChange()" [nzDisabledDate]="_disabledStartDateBegin" formControlName="startDate" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.startDate.dirty&&validateForm.controls.startDate.hasError('required')">开始时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="2">
+                        <p nz-form-split>-</p>
+                    </div>
+                    <!-- 结束时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.endDate">
+                                <nz-datepicker (ngModelChange)="_startDateEnd=$event;_startDateEndChange()" [nzDisabledDate]="_disabledStartDateEnd" formControlName="endDate" style="width:100%;" [ngModel]="endDate" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.endDate.dirty&&validateForm.controls.endDate.hasError('required')">结束时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="switch" nz-form-item-required>培训班报名</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.switch" nz-col [nzSpan]="18">
+                    <nz-switch formControlName="switch" [nzDisabled]="true">
+                        <i class=" anticon anticon-check" checked></i>
+                        <i class=" anticon anticon-cross" unchecked></i>
+                    </nz-switch>
+                    <div nz-form-explain *ngIf="validateForm.controls.switch.dirty&&validateForm.controls.switch.hasError('required')">培训地点不能为空</div>
+                </div>
+            </div> -->
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>报名时间</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <!-- 开始时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollStart">
+                                <nz-datepicker (ngModelChange)="_endDateBeginChange()" [nzDisabledDate]="_disabledEndDateBegin" formControlName="enrollStart" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.enrollStart.dirty&&validateForm.controls.enrollStart.hasError('required')">开始时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col [nzSpan]="2">
+                        <p nz-form-split>-</p>
+                    </div>
+                    <!-- 结束时间 -->
+                    <div nz-col [nzSpan]="11">
+                        <div nz-form-item>
+                            <div nz-form-control [nzValidateStatus]="validateForm.controls.enrollEnd">
+                                <nz-datepicker (ngModelChange)="_endDateEndChange()" [nzDisabledDate]="_disabledEndDateEnd" formControlName="enrollEnd" style="width:100%;" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+                                <div nz-form-explain *ngIf="validateForm.controls.enrollEnd.dirty&&validateForm.controls.enrollEnd.hasError('required')">结束时间不能为空</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--<div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6"><label>培训分类</label></div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-select formControlName="trainClassify">
+                        <nz-option *ngFor="let item of _trainClassify" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+             <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6"><label>培训级别</label></div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-select formControlName="trainLevel">
+                        <nz-option *ngFor="let item of _trainLevel" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                        </nz-option>
+                    </nz-select>
+
+                </div>
+            </div> -->
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>主办单位</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <spk-user-group-select formControlName="sponsorDept"></spk-user-group-select>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>协办单位</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <spk-user-group-select formControlName="undertakeDept"></spk-user-group-select>
+                </div>
+            </div>
+            <!-- <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="mobileStudy">移动端学习</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.mobileStudy" nz-col [nzSpan]="18">
+                    <nz-switch formControlName="mobileStudy"></nz-switch>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="messageInput">接站信息录入</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.messageInput" nz-col [nzSpan]="18">
+                    <nz-switch formControlName="messageInput"></nz-switch>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="message">自定义信息</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.message" nz-col [nzSpan]="18">
+                    <nz-input formControlName="message" [nzPlaceHolder]="'请输入'"></nz-input>
+                </div>
+            </div> -->
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label for="description">简介</label>
+                </div>
+                <div nz-form-control [nzValidateStatus]="validateForm.controls.description" nz-col [nzSpan]="18">
+                    <nz-input [nzRows]="4" [nzType]="'textarea'" formControlName="description" [nzPlaceHolder]="'请输入培训班简介'"></nz-input>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5>销售信息</h5>
+    <!-- TODO: 后会加全局配置，站点启用市场功能后则显示，否则影藏 -->
+    <div class="row">
+        <div class="col-7">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>启用销售</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-switch [nzSize]="'small'" formControlName="salesEnabled"></nz-switch>
+                </div>
+            </div>
+            <ng-container *ngIf="getFormControl('salesEnabled').value === true">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label>价格</label>
+                        <!-- 启用后必填 -->
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="18">
+                        <nz-input-number formControlName="price" [nzMin]="0" [nzMax]="999999999999.99" [nzStep]="5.00" style="width: 120px;"></nz-input-number>
+                        <span>元</span>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label>原价</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="18">
+                        <nz-input-number formControlName="originalPrice" [nzMin]="0" [nzMax]="999999999999.99" [nzStep]="5.00" style="width: 120px;"></nz-input-number>
+                        <span>元</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <h5>自主选课</h5>
+    <div class="row">
+        <div class="col-7">
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>启用自主选课</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="18">
+                    <nz-switch [nzSize]="'small'" formControlName="selfElective"></nz-switch>
+                </div>
+            </div>
+            <ng-container *ngIf="getFormControl('selfElective').value === true">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="6">
+                        <label>额定学时</label>
+                        <!-- 启用后必填 -->
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="18">
+                        <nz-input-number formControlName="ratedPeriod" [nzMin]="0" [nzMax]="999999999999.99"></nz-input-number>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-7">
+            <div nz-form-item nz-row>
+                <div nz-col [nzOffset]="6" [nzSpan]="12" nz-form-control>
+                    <button nz-button [nzType]="'primary'" (click)="_save($event)" [nzLoading]="loading">保存</button>
+                    <!-- <button nz-button (click)="resetForm($event)">Reset</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

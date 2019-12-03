@@ -1,0 +1,123 @@
+<div class="page-body">
+  <div class="container">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzBanner]="true">
+      <!-- <div alert-body>
+        <span>站点编码配置时，点击编辑按钮进入编辑操作</span>
+        <br>
+        <span>保存按钮在点击确定之前不可用。直到进行自定义站点配置完成后，点击确定按钮将展示编码策略和生成编码的样例，此时保存按钮启用</span>
+        <br>
+        <span>用户在保存之前可对编码策略进行调整，注意在调整过程中大括号和其中的内容是一个整体，不可拆分
+        </span>
+        <br>
+        <span>用户浏览编码策略和生成编码的样例，确认无误后进行编码策略的保存</span>
+      </div> -->
+      <div alert-body>
+        <span>站点编码配置时，点击进入编辑按钮进入编辑状态</span>
+        <br>
+        <span>在编辑状态下，点击保存按钮保存当前更改</span>
+        <br>
+      </div>
+    </nz-alert>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <form [formGroup]="_form" class="form-horizontal" *ngIf="_form">
+          <div class="row">
+            <div class="col-7">
+              <div class="form-group row">
+                <label for="" class="col-3 col-form-label">编码前缀</label>
+                <div class="col-9">
+                  <nz-input type="text" class="form-control" formControlName="prefix" placeholder="请输入编码前缀"></nz-input>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="" class="col-3 col-form-label">编码后缀</label>
+                <div class="col-9">
+                  <nz-input type="text" class="form-control" formControlName="suffix" placeholder="请输入编码后缀"></nz-input>
+                </div>
+              </div>
+
+              <!-- <div class="form-group row">
+                <label for="" class="col-form-label col-3">是否包含组织编码</label>
+                <div class="col-9 pt-1">
+                  <nz-switch formControlName="haveUgCode" [nzDisabled]="readonly">
+                    <span checked>开</span>
+                    <span unchecked>关</span>
+                  </nz-switch>
+                </div>
+              </div> -->
+
+              <!-- <div class="form-group row" *ngIf="showCcCode">
+                <label for="" class="col-form-label col-3">是否包含分类编码</label>
+                <div class="col-9 pt-1">
+                  <nz-switch formControlName="haveCcCode" [nzDisabled]="readonly">
+                    <span checked>开</span>
+                    <span unchecked>关</span>
+                  </nz-switch>
+                </div>
+              </div> -->
+
+              <div class="form-group row">
+                <label for="" class="col-3 col-form-label">
+                  <i class="fa fa-field-required"></i>流水号位数</label>
+                <div class="col-9">
+                  <nz-input type="text" class="form-control" formControlName="numDigits" required placeholder="生成几位流水号。最低6位，最高15位" (nzBlur)="numCheck()"></nz-input>
+                  <div class="text-danger" *ngIf="getFormControl('numDigits').dirty&&getFormControl('numDigits').hasError('required')">流水号必填</div>
+                  <span class="form-control-feedback" *ngIf="checkNum">流水号位数不符合规范,必须是数字，且最小为6，最大为15</span>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="" class="col-3 col-form-label">包含日期</label>
+                <div class="col-9" style="line-height:30px;">
+                  <nz-radio-group formControlName="dateFormat">
+                    <label nz-radio [nzValue]="'TY'">
+                      <span>年</span>
+                    </label>
+                    <label nz-radio [nzValue]="'TM'">
+                      <span>年月</span>
+                    </label>
+                    <label nz-radio [nzValue]="'TD'">
+                      <span>年月日</span>
+                    </label>
+                  </nz-radio-group>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="" class="col-3 col-form-label"> 编码分隔符</label>
+                <div class="col-5">
+                  <nz-select formControlName="delimiter">
+                    <nz-option *ngFor="let item of _delimiterType" [nzLabel]="item.label" [nzValue]="item.value" [nzDisabled]="item.disabled">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </div>
+
+              <!-- <div class="form-group row">
+                <label for="" class="col-3 col-form-label">编码策略</label>
+                <div class="col-9">
+                  <nz-input type="text" class="form-control" formControlName="codeFormat" [nzReadonly]="readonly" (nzFocus)="saveIsFalse()"></nz-input>
+                  <button nz-button [nzType]="'primary'" (click)="getCodeModel()">样例获取</button>
+                </div>
+              </div> -->
+
+              <!-- <div class="form-group row" *ngIf="showCodeModel">
+                <label for="" class="col-3 col-form-label">编码样例</label>
+                <div class="col-9" style="line-height:30px;">
+                  <span>{{showModel}}</span>
+                </div>
+              </div> -->
+
+              <div class="form-group row">
+                <div class="col-9 offset-3" *ngIf="!editInfo">
+                  <button nz-button [nzType]="'primary'" [disabled]="_form.invalid" (click)="save($event)" *spkAuthzIf="{hasPermission: ['SYSTEM:USER_GROUP:ADD', 'SYSTEM:USER_GROUP:EDIT']}">保存</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

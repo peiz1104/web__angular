@@ -1,0 +1,24 @@
+<div class="bg-white px-4">
+
+  <div class="page-header">
+    <h5 class="page-title">自定义属性</h5>
+  </div>
+  <p class="mb-4">管理此站点的自定义属性。可以使用自定义属性存储有关用户或课件的其它信息。</p>
+  
+  <div class="page-body">
+    <nz-alert [nzType]="'info'" [nzMessage]="'列表显示的是系统中可自定义属性的对象，点击对象名称对对象的属性进行配置。'" 
+    [nzShowIcon]="true" [nzCloseable]="true"></nz-alert>
+
+    <div class="mt-4"></div>
+
+    <cui-data-table [columns]="columns" [data]="entities" [loading]="loading" >
+
+      <ng-template cuiColTpl="actions" let-row="row">
+        <!-- <a class="text-primary" [routerLink]="[row.identifier, 'custom']">管理</a> -->
+        <a class="text-primary" [routerLink]="[row.id, 'custom']">管理</a>
+      </ng-template>
+    </cui-data-table>
+  </div>
+  
+  
+</div>

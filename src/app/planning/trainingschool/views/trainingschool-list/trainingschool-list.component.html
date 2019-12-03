@@ -1,0 +1,69 @@
+<div class="container-fluid">
+    <div class="page-header">
+        <h3 class="page-title">计划管理
+            <small>| 基础配置</small>
+            <small>| 研修院管理</small>
+        </h3>
+        <!-- <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                当前位置：
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                计划管理
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                基础配置
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                研修院管理
+            </nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="_submitForm($event,validateForm.value)" class="form-box">
+            <div nz-row class="form-row">
+                <div nz-form-item nz-col [nzSpan]="11">
+                    <div nz-form-label nz-col [nzSpan]="10">
+                        <label for="name">研修院名称</label>
+                    </div>
+                    <div nz-form-control [nzValidateStatus]="validateForm.controls.name" nz-col [nzSpan]="12">
+                        <nz-input formControlName="name" [nzType]="'name'" [nzPlaceHolder]="'请输入研修院名称'" [nzSize]="'large'"></nz-input>
+                    </div>
+                </div>
+                <div nz-col [nzSpan]="3">
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'">查询</button>
+                </div>
+            </div>
+        </form>
+        <div>
+            <button *spkAuthzIf="{hasPermission: 'PLANNING:TRAINING_SCHOOL:ADD'}" type="button" class="btn btn-primary" [routerLink]="['../', 'add']">
+                创建研修院</button>
+            <button *spkAuthzIf="{hasPermission: 'PLANNING:TRAINING_SCHOOL:DELETE'}" type="button" class="btn btn-primary" (click)="delete()">
+                删除</button>
+        </div>
+    </div>
+    <div class="page-body">
+        <cui-data-table [columns]="columns" [data]="trainingSchools?.content" [pagination]="trainingSchools" [(selection)]="selection"
+            selectType="checkbox" (reload)="loadData($event)" [loading]="loading">
+            <ng-template cuiColTpl="colname" let-row="row">
+                <div style="text-align:left;">{{row.name}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colusergroupname" let-row="row">
+                <div style="text-align:left;">{{row.userGroupName}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colcreateddate" let-row="row">
+                <div>{{row.createdDate | date:'yyyy-MM-dd hh:mm'}}</div>
+            </ng-template>
+            <ng-template cuiColTpl="colorganization" let-row="row">
+                <div>
+                    <a *spkAuthzIf="{hasPermission: 'PLANNING:TRAINING_SCHOOL:INNER_MGR'}" class="text-primary" [routerLink]="['../', row.id, 'inner']">点击管理</a>
+                </div>
+            </ng-template>
+            <ng-template cuiColTpl="rowAction" let-row="row">
+                <div class="text-center">
+                    <a title="编辑" *spkAuthzIf="{hasPermission: 'PLANNING:TRAINING_SCHOOL:EDIT'}" class="text-primary" [routerLink]="['../', row.id]">
+                        <i style="font-size:16px" class="iconfont icon-bianji-copy"></i>
+                    </a>
+                </div>
+            </ng-template>
+        </cui-data-table>
+    </div>
+</div>

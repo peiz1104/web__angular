@@ -1,0 +1,92 @@
+<div class="container-fluid" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:VIEW'}">
+    <div class="page-header">
+        <h3 class="page-title">评估列表
+            <small>查看系统中现有的评估</small>
+        </h3>
+    </div>
+
+    <div class="page-body">
+
+        <nz-tabset [nzSize]="'small'" (nzSelectChange)="_tabChange($event)" [nzSelectedIndex]="tableIndex">
+            <nz-tab *ngFor="let tab of tabs">
+                <ng-template #nzTabHeading>
+                    {{tab.name}}
+                </ng-template>
+                <cui-data-table selectType="checkbox" [columns]="columns" [data]="assessPapers" [loading]="loading" (reload)="loadData($event)" [pagination]="pagination" (select)="onSelect($event)">
+                    <ng-template #simpleSearch>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="searchtext" placeholder="请输入评估名称">
+                            </div>
+                            <div class="form-group ml-2">
+                                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+                            </div>
+                        </form>
+                    </ng-template>
+                    <ng-template #listTools>
+                        <button type="button" class="btn btn-primary" (click)="addAssess()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:ADD'}">
+                            <i class="fa fa-plus"></i> 创建评估</button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                <span>批量操作</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" (click)="publish()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}">发布</a>
+                                <a class="dropdown-item" (click)="disPublish()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}">撤销发布</a>
+                                <div class="dropdown-divider" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}"></div>
+                                <a class="dropdown-item" (click)="deleteBantch()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:REMOVE'}">批量删除</a>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template cuiColTpl="statusTpl" let-row="row">
+                        <span *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}; else elseBlock">
+                        <nz-popconfirm *ngIf="!row.isPublished" [nzTitle]="'确定要发布吗？'" (nzOnConfirm)="confirmPublish(row)">
+                            <a nz-popconfirm class="text-secondary">未发布</a>
+                        </nz-popconfirm>
+                        <nz-popconfirm *ngIf="row.isPublished" [nzTitle]="'确定要取消发布吗？'" (nzOnConfirm)="onPublish(row)">
+                            <a nz-popconfirm class="text-success">已发布</a>
+                        </nz-popconfirm>
+                        <!-- <a (click)="confirmPublish(row);" *ngIf="!row.isPublished" class="badge badge-secondary">未发布</a>
+                        <a (click)="onPublish(row);" *ngIf="row.isPublished" class="badge badge-success">已发布</a> -->
+                        </span>
+                        <ng-template #elseBlock>
+                            <span *ngIf="!row.isPublished" class="text-secondary">未发布</span>
+                            <span *ngIf="row.isPublished" class="text-success">已发布</span>
+                        </ng-template>
+                    </ng-template>
+                    <ng-template #rowActions let-row="row">
+                        <a href="javascript:;" class="text-success" (click)="editAssess(row)" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:EDIT'}">管理</a>
+                        <span *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:REMOVE'}">
+                            <span *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:EDIT'}">|</span>
+                        <nz-popconfirm *ngIf="!row?.isPublished" [nzTitle]="'确定要删除吗？'" (nzOnConfirm)="delete(row.id,row)">
+                            <a nz-popconfirm class="text-danger">删除</a>
+                        </nz-popconfirm>
+                        <!-- <a href="javascript:;" *ngIf="!row?.isPublished" class="text-danger" (click)="delete(row.id,row)">删除</a> -->
+                        <span title="已发不的评估不允许删除" *ngIf="row?.isPublished" class="text-secondary">删除</span>
+                        </span>
+                    </ng-template>
+                    <ng-template cuiColTpl="defaultTpl" let-row="row">
+                        <span *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:EDIT'}">
+                            <a (click)="onDefault(row);" *ngIf="!row.isDefault" class="text-secondary">否</a>
+                            <a (click)="onCancleDefault(row);" *ngIf="row.isDefault" class="text-success">是</a>
+                        </span>
+                    </ng-template>
+                    <!-- <ng-template cuiColTpl="start-date" let-row="row">
+              <span>{{row.startDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+            </ng-template>
+            <ng-template cuiColTpl="end-date" let-row="row">
+              <span>{{row.endDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+            </ng-template> -->
+                    <ng-template cuiColTpl="img" let-row="row">
+                        <img cui-lazy-load [src]="row.imageUrl" [alt]="row.name" width="72px" height="42px">
+                    </ng-template>
+                    <ng-template #actionGroup>
+                        <button class="btn btn-outline-primary" (click)="publish()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}">发布</button>
+                        <button class="btn btn-outline-info" (click)="disPublish()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:PUBLISH'}">撤销发布</button>
+                        <button class="btn btn-outline-danger" (click)="deleteBantch()" *spkAuthzIf="{hasPermission: 'ASSESS:ASSESS_PAPER:REMOVE'}">批量删除</button>
+                    </ng-template>
+                </cui-data-table>
+            </nz-tab>
+        </nz-tabset>
+    </div>
+</div>

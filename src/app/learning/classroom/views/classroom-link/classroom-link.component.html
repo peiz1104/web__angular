@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <div class="page-header">
+    <h3 class="page-title">创建课程培训 <small></small></h3>
+
+    <div class="actions pull-right">
+      <button type="button" class="btn btn-light" [routerLink]="['../list']">返回课程培训列表 <i class="fa fa-level-up"></i></button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="container">
+      <nz-alert [nzType]="'info'" [nzShowIcon]="true" class="d-none"
+        [nzBanner]="true">
+        <div alert-body>
+          <span>定义此教程的属性，以帮助学员搜索和查看教程。提供一个有意义的名称和说明，选择 Player 属性，并设置教程时间表。如果学员应定期重学此教程，则指定认证选项。</span>
+        </div>
+      </nz-alert>
+      <div class="card mt-3">
+        <div class="card-body">
+          <spk-classroom-form [classroom]="classroom" [loading]='loading' (save)="doSubmit($event)"></spk-classroom-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

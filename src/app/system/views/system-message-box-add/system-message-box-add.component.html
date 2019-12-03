@@ -1,0 +1,124 @@
+<div class="message-add">
+  <div class="top-bread">
+    <div class="page-header">
+      <h5 class="page-title">
+        <small>新建消息</small>
+      </h5>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <form nz-form [formGroup]="validateForm">
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="types" nz-form-item-required>发送方式</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('types')" (click)="allSite();">
+          <!-- <nz-input formControlName="mode"></nz-input> -->
+          <nz-checkbox-group formControlName="types" [(ngModel)]="modeOption"></nz-checkbox-group>
+          <div nz-form-explain *ngIf="getFormControl('types').dirty&&getFormControl('types').hasError('required')">发送方式必选</div>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="title" nz-form-item-required>主题</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('title')">
+          <nz-input formControlName="title" [nzPlaceHolder]="'请输入主题'"></nz-input>
+          <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">主题不能为空</div>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="receiveUsers" nz-form-item-required>接收人</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('receiveUsers')">
+          <spk-user-lookup formControlName="_selectedUsers" (ngModelChange)="doAfterUserSelected($event)"></spk-user-lookup>
+          <!-- <div class="analog" (click)="showPerson()">
+            <p *ngIf="selection?.length == 0">请选择接收人</p>
+            <ul *ngIf="selection?.length != 0">
+              <li *ngFor="let one of selection;">{{one.username}}</li>
+            </ul>
+            <i class="anticon anticon-search"></i>
+          </div> -->
+        </div>
+        <!-- <div nz-col class="del-person" [nzSpan]="4" (click)="delPerson()">
+          <i class="anticon anticon-delete"></i>
+        </div> -->
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="sendTime">是否全站</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('allSite')">
+          <label nz-checkbox formControlName="_checked" [nzDisabled]="isAllSite">
+            <span>选择全站点</span>
+            <span>注：选择全站点，自定义接收人功能无效</span>
+          </label>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="sendTime">发送时间</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('sendTime ')">
+          <nz-datepicker style="width:100%;" formControlName="sendTime" [nzPlaceHolder]="'请选择发送时间'" [nzShowTime]="true" [nzFormat]="'YYYY-MM-DD HH:mm:ss'"></nz-datepicker>
+          <div>如果不选，则默认实时发送</div>
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="filePath">添加附件</label>
+        </div>
+        <div nz-form-control nz-col [nzSpan]="10" [nzValidateStatus]="getFormControl('attachmentUrl')" class="form-file">
+          <!-- <nz-input formControlName="filePath"></nz-input> -->
+          <cui-fileupload mode="file" name="files" url="/api/upload/files" [auto]="true" (uploadComplete)="realPath($event)"></cui-fileupload>
+          {{realName}}
+        </div>
+      </div>
+      <div nz-form-item nz-row>
+        <div nz-form-label nz-col [nzSpan]="4">
+          <label for="content" nz-form-item-required>正文</label>
+        </div>
+        <div *ngIf="!modeOption[2].checked" nz-col [nzSpan]="10">
+          <cui-ckeditor formControlName="content" [toolbarMode]="'um'"></cui-ckeditor>
+          <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+            <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+          </div>
+        </div>
+        <div *ngIf="modeOption[2].checked" nz-col [nzSpan]="10">
+          <nz-input formControlName="content" nzType="textarea" [nzRows]="'4'"></nz-input>
+          <div nz-form-control [nzValidateStatus]="getFormControl('content')">
+            <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">正文不能为空</div>
+          </div>
+        </div>
+      </div>
+      <div nz-form-item nz-row style="margin-bottom:8px;">
+        <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+          <button nz-button [nzType]="'primary'" (click)="_submitForm()" class="mr-5" [nzLoading]="loading">保存</button>
+          <button nz-button [nzType]="'default'" (click)="goBack()">返回</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- <nz-modal [nzWidth]="800" [nzVisible]="isVisible" [nzTitle]="'接收人列表'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)"
+    (nzOnOk)="handleOk($event)">
+
+    <ng-template #modalContent>
+      <cui-data-table selectType="checkbox" [columns]="columns" [data]="receives" [loading]="loading" (reload)="getReceives($event)"
+        [pagination]="pagination" [(selection)]="selection">
+        <ng-template #simpleSearch>
+          <div class="pull-right">
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control input-lg" placeholder="请输入用户名或姓名">
+              </div>
+              <div class="form-group ml-2">
+                <button type="button" class="btn btn-primary" (click)="loadData()">搜索</button>
+              </div>
+            </form>
+          </div>
+        </ng-template>
+      </cui-data-table>
+    </ng-template>
+  </nz-modal> -->
+</div>

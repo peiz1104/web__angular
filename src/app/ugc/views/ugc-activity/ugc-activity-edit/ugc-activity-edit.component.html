@@ -1,0 +1,22 @@
+<div class="top-bread">
+    <div class="page-header">
+        <h5 class="page-title">
+            <small>管理活动</small>
+        </h5>
+        <!-- <div class="actions pull-right">
+            <button type="button" class="btn btn-light" [routerLink]="['../../', 'list']">返回活动列表
+                <i class="fa fa-level-up"></i>
+            </button>
+        </div> -->
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="page-body">
+        <div class="container">
+            <div class="card-body">
+                <spk-ugc-activity-form [(loading)]="loading" [ugcActivity]="ugcActivity"  (save)="onSave($event)" (cancel)="onCancel($event)">
+                </spk-ugc-activity-form>
+            </div>
+        </div>
+    </div>
+</div>

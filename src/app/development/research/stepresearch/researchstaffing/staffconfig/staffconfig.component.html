@@ -1,0 +1,201 @@
+<div class="select-body">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData" selectType="checkbox"
+            [(selection)]="selection" (reload)="loadData($event)">
+
+            <ng-template #simpleSearch>
+                <ng-container>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="username" placeholder="请输入员工工号">
+                            <input type="text" class="form-control input-lg" name="searchtext" [(ngModel)]="displayName" placeholder="请输入员工姓名">
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" class="btn btn-primary" (click)="searchData()">搜索</button>
+                        </div>
+                    </form>
+                </ng-container>
+            </ng-template>
+            <ng-template #listTools>
+                <div class="btn-group">
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="addstpuser($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-tianjia" style="font-size:12px;"></i>
+                        <span>添加</span>
+                    </button>
+                    <button [disabled]="devStatus=='END'|| devStatus=='CANCEL'" (click)="mutipledelete($event)" nz-button [nzType]="'primary'">
+                        <i class="iconfont icon-shanchu"></i>
+                        <span>删除</span>
+                    </button>
+                </div>
+            </ng-template>
+
+            <ng-template cuiColTpl="username" let-row="row">
+                <span> {{row.user?.username}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="displayName" let-row="row">
+                <span>{{row.user?.displayName}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="user" let-row="row">
+                <span>{{row.personType=='ORDINARY'?'研发组成员':(row.personType=='REPRESEN'?'研发代表人':(row.personType=='COLL'?'研发协力者':(row.personType=='ADVISER'?'研发顾问':'其他')))}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="userGroup" let-row="row">
+                <span>{{namePath(row.user?.userGroup?.namePath)}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="achievements" let-row="row">
+                <span>{{row.achievements=='EXCELLENT'?'优': (row.achievements=='GOOD'?'良':(row.achievements=='MEDIUM'?'中':'差'))}}</span>
+            </ng-template>
+            <ng-template cuiColTpl="actions" let-row="row">
+                <i *ngIf="devStatus!='END'&&devStatus!='CANCEL'" title="编辑" (click)="devedit(row)" style="color:#007bbf;cursor:pointer;"
+                    class="iconfont icon-bianji-copy"></i>
+                <i *ngIf="devStatus=='END'" title="已结项不可编辑" style="color:#666;cursor:pointer;" class="iconfont icon-bianji-copy"></i>
+                <i *ngIf="devStatus=='CANCEL'" title="已取消不可编辑" style="color:#666;cursor:pointer;" class="iconfont icon-bianji-copy"></i>
+            </ng-template>
+        </cui-data-table>
+    </nz-spin>
+</div>
+<!-- 添加人员modal -->
+<nz-modal class="add-modal" [nzWidth]="900" [nzZIndex]="999" [nzFooter]="false" *ngIf="isVisible" [nzVisible]="isVisible"
+    [nzTitle]="edituserId?'编辑人员':'添加人员'" [nzContent]="modalContent" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
+    <ng-template #modalContent>
+        <nz-spin [nzSpinning]="editspinning" [nzTip]="'正在读取数据...'">
+            <div class="form-name-box">
+                <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_saveformmessage($event,_form.value)">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 push-6 order-1">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>人员工号</label>
+                                            </div>
+                                            <div [nzValidateStatus]="_form.controls.username" nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'人员工号'" [nzDisabled]="true" formControlName="username"></nz-input>
+                                                <spk-user-lookup class="user-edit" #userLookup (ok)="userLookupOk($event)">
+                                                    <ng-template #echoTpl>
+                                                        <i (click)="userLookup.openLookup()($event)" class="iconfont icon-tianjia"></i> 添加人员
+                                                    </ng-template>
+                                                </spk-user-lookup>
+                                                <div nz-form-explain *ngIf="_form.controls.username.dirty&&_form.controls.username.hasError('required')">请输入培训名称!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>人员类型</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" nz-form-control [nzValidateStatus]="_form.controls.personType">
+
+                                                <nz-select formControlName="personType" [nzPlaceHolder]="'请选择人员类型'" nzAllowClear [nzShowSearch]="true">
+                                                    <nz-option [nzLabel]="'研发组成员'" [nzValue]="'ORDINARY'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'研发代表人'" [nzValue]="'REPRESEN'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'研发协力者'" [nzValue]="'COLL'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'研发顾问'" [nzValue]="'ADVISER'">
+                                                    </nz-option>
+                                                </nz-select>
+
+                                                <div nz-form-explain *ngIf="_form.controls.personType.dirty&&_form.controls.personType.hasError('required')">请输入培训内容!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>工作内容及涉及专业</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <nz-input [nzPlaceHolder]="'请输工作内容及涉及专业'" formControlName="jobContent"></nz-input>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>工作任务</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <textarea rows="3" cols="20" placeholder="请输入工作任务" type="textarea" class="form-control textarea-control" formControlName="workTask">
+                                                        </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 pull-6 order-2">
+                                    <div style="height:66px" class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label nz-form-item-required>人员姓名</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" [nzValidateStatus]="_form.controls.displayName">
+                                                <nz-input [nzPlaceHolder]="'人员姓名'" [nzDisabled]="true" formControlName="displayName"></nz-input>
+                                                <div nz-from-explain *ngIf="_form.controls.displayName.dirty&&_form.controls.displayName.hasError('required')"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>工作绩效</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14" nz-form-control>
+
+                                                <nz-select formControlName="achievements" [nzPlaceHolder]="'请选择人员类型'" nzAllowClear [nzShowSearch]="true">
+                                                    <nz-option [nzLabel]="'优'" [nzValue]="'EXCELLENT'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'良'" [nzValue]="'GOOD'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'中'" [nzValue]="'MEDIUM'">
+                                                    </nz-option>
+                                                    <nz-option [nzLabel]="'差'" [nzValue]="'POOR'">
+                                                    </nz-option>
+                                                </nz-select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-form-label nz-col [nzSpan]="8">
+                                                <label>工作表现</label>
+                                            </div>
+                                            <div nz-form-control nz-col [nzSpan]="14">
+                                                <textarea rows="3" cols="20" placeholder="请输入工作表现" type="textarea" class="form-control textarea-control" formControlName="workPerformance">
+                                                        </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group row">
+                                        <div nz-form-item nz-row>
+                                            <div nz-col [nzOffset]="18" [nzSpan]="10" nz-form-control>
+                                                <button [nzLoading]="btnstate" nz-button [nzType]="'primary'">保存</button>
+                                                <span (click)="handleCancel($event)" class="cancel-btn">取消</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </nz-spin>
+    </ng-template>
+</nz-modal>

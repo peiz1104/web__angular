@@ -1,0 +1,51 @@
+<div class="card-body mb-1" *ngIf="question.isShow && ((question.isView  && !question.hasLogic) || !question.isView)">
+  <h4 class="card-title">{{idx+1}}、{{question.name}}
+    <span *ngIf="question.type == 'SINGLE_FILL'">：
+      <input *ngIf="!question.isView" type="text" readonly/>
+      <input *ngIf="question.isView" type="text" (focus)="onJumpSubject()" />
+    </span>
+    <span class="text-danger" *ngIf="question.required">*</span>
+  </h4>
+  <div *ngIf="question.type == 'MULTIPLE_FILL'">
+    <div class="row my-2" *ngFor="let options of question.qList;">
+      <div class="col" *ngFor="let option of options;">
+        {{option.name}}
+        <input *ngIf="!question.isView" type="text" readonly/>
+        <input *ngIf="question.isView" type="text" [ngModel]="fillBlank" (ngModelChange)="onJumpSubject(option,foo)" #foo/>
+        <br/>
+        <div [innerHtml]="option.innerDescription"></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="question.hasDesc" class="py-2 row ml-1">
+    <span class="text-danger">提示：</span>
+    <div [innerHtml]="question.innerDescription"></div>
+  </div>
+  <div class="card-action" [ngClass]="{'visible': question.isEdit}">
+
+    <spk-question-action [question]="question" [idx]="idx"></spk-question-action>
+
+    <div class="edit-question" *ngIf="question.isEdit">
+
+      <spk-question-edit [question]="question" [idx]="idx"></spk-question-edit>
+      <spk-fill-option *ngIf="question.type == 'MULTIPLE_FILL'" [question]="question" [idx]="idx"></spk-fill-option>
+
+      <div *ngIf="question.type == 'MULTIPLE_FILL'" class="d-flex justify-content-end">
+        <div class="mr-auto p-2">
+          <a (click)="onAddOption();" class="btn btn-outline-success">添加选项</a>
+        </div>
+        <div class="p-2">
+          <select [(ngModel)]="question.displayOptionNum" class="form-control" (change)="showOptions()">
+            <option value="1">竖向排序</option>
+            <option value="2">每行2列</option>
+            <option value="3">每行3列</option>
+            <option value="4">每行4列</option>
+            <option value="5">每行5列</option>
+            <option value="6">每行6列</option>
+          </select>
+        </div>
+      </div>
+      <a class="btn btn-warning btn-block" (click)="onSave();">完成编辑</a>
+    </div>
+  </div>
+</div>

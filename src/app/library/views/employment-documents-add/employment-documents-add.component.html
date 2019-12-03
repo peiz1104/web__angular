@@ -1,0 +1,87 @@
+<div class="employment-documents-add">
+    <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+        <div class="container-fluid">
+            <div class="page-header">
+                <h3 class="page-title">添加文档</h3>
+                <div class="actions pull-right">
+                    <button class="btn btn-secondary" (click)="goBack()">返回文档列表
+                        <i class="fa fa-level-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="page-body">
+                <div class="container">
+
+                    <!-- <spk-document-form [document]="document" (doSubmit)="saveDocument($event)" (next)="saveAndNext($event)"></spk-document-form> -->
+                    <form nz-form [formGroup]="_form" class="form-horizontal" (ngSubmit)="_save($event,_form.value)">
+                        <h5 class=" my-3 ">基本信息</h5>
+                        <div class="row ">
+                            <div *ngIf="id===undefined" class="col-5 push-7 order-2 ">
+                                <div class="upload-file-custom">
+                                    <cui-fileupload name="file" mode="file" url="/api/documents/upload" [auto]="true" (uploadComplete)="initDocument($event)"></cui-fileupload>
+                                    <br>
+                                    <span class="text-muted ">
+                                        <i class="fa fa-info-circle text-info "></i> 可以在此处上传文档。格式应为 PPT, DOC 或 XLS, 大小不能超过1MB。</span>
+                                </div>
+                            </div>
+                            <div class="col-7 pull-5 order-1 ">
+                                <div class="form-group row ">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label nz-form-item-required>文档名称</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.docName">
+                                            <!-- [value]="document.name?document.name: '' "  -->
+                                            <input placeholder="请上传文件" [(ngModel)]="docName" name="docName" class="form-control" formControlName="docName">
+                                            <div nz-form-explain *ngIf="_form.controls.docName.dirty&&_form.controls.docName.hasError('required') ">请填写文件名！</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row ">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label nz-form-item-required>老师</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.teacherIds">
+                                            <!-- <spk-user-group-select formControlName="teacher.id"></spk-user-group-select> -->
+                                            <spk-teacher-lookup (remove)="remove($event)" formControlName="teacherIds" placeholder="请选择讲师"></spk-teacher-lookup>
+                                            <div nz-form-explain *ngIf="_form.controls.teacherIds.dirty&&_form.controls.teacherIds.hasError( 'required') ">请选择老师！</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row ">
+                                    <div nz-form-item nz-row>
+                                        <div nz-form-label nz-col [nzSpan]="6">
+                                            <label>文档描述</label>
+                                        </div>
+                                        <div nz-form-control nz-col [nzSpan]="12" [nzValidateStatus]="_form.controls.summary">
+                                            <textarea formControlName="summary" rows="3" cols="30"></textarea>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row my-3 ">
+                            <div class="col-7 ">
+                                <div class="form-group row ">
+                                    <div class="col-9 offset-3 ">
+                                        <button [nzLoading]="submitstate" nz-button [nzType]="'primary'">保存</button>
+                                        <span class="go-back" (click)="goBack()">取消</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nz-spin>
+</div>
