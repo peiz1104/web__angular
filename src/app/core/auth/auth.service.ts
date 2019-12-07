@@ -17,132 +17,132 @@ import { SiteInfoService } from '../service/site-info.service';
 
 @Injectable()
 export class AuthService {
-    isLoggedIn: boolean = false;
-    userToken: { user: User, currentSite: Site, hasPermission: boolean, isInstructor: boolean };
+  isLoggedIn: boolean = false;
+  userToken: { user: User, currentSite: Site, hasPermission: boolean, isInstructor: boolean };
 
-    // store the URL so we can redirect after logging in
-    redirectUrl: string;
+  // store the URL so we can redirect after logging in
+  redirectUrl: string;
 
-    constructor(
-        private http: Http,
-        private siteInfoService: SiteInfoService
-    ) { }
+  constructor(
+    private http: Http,
+    private siteInfoService: SiteInfoService
+  ) { }
 
-    // login(): Observable<boolean> {
-    login(username: string, passwd: string): Observable<any> {
-        let url = '/api/login';
-        let data = new FormData();
-        data.append('username', username);
-        data.append('password', passwd);
+  // login(): Observable<boolean> {
+  login(username: string, passwd: string): Observable<any> {
+    let url = '/api/login';
+    let data = new FormData();
+    data.append('username', username);
+    data.append('password', passwd);
 
-        return this.http.post(url, data)
-            .map(resp => {
-                let res = HttpUtils.extractData(resp);
-                this.isLoggedIn = res['isLoggedIn'];
-                if (this.isLoggedIn) {
-                    this.userToken = res['userToken'];
-                }
-                return this.isLoggedIn;
-            })
-            .catch(HttpUtils.handleError);
-    }
-
-    logout(): Observable<void> {
-        let url = '/api/logout';
-
-        this.isLoggedIn = false;
-        return this.http.get(url)
-            .map(HttpUtils.extractData)
-            .catch((resp: Response) => {
-                return HttpUtils.handleError(resp);
-            });
-    }
-
-    stats(): Observable<boolean> {
-        let url = '/api/stats';
-
-        // return this.http.options(url)
-        return this.http.get(url)
-            .map(resp => {
-                this.isLoggedIn = true;
-                if (!this.userToken) {
-                    this.loginfo();
-                }
-                return true;
-            })
-            .catch(resp => {
-                this.isLoggedIn = false;
-                return HttpUtils.handleError(resp);
-            });
-    }
-
-    loginfo(): Observable<any> {
-        let url = '/api/loginfo';
-        return this.http.get(url)
-            .map(resp => {
-                let ut = HttpUtils.extractData(resp);
-                this.userToken = ut;
-                return this.userToken;
-            }).catch(HttpUtils.handleError);
-    }
-
-    getCurrentUser(): Observable<User> {
-        if (!this.isLoggedIn) {
-            return;
+    return this.http.post(url, data)
+      .map(resp => {
+        let res = HttpUtils.extractData(resp);
+        this.isLoggedIn = res['isLoggedIn'];
+        if (this.isLoggedIn) {
+          this.userToken = res['userToken'];
         }
-        if (this.isLoggedIn && !this.userToken) {
-            return this.loginfo().map(ut => ut.user);
-        }
+        return this.isLoggedIn;
+      })
+      .catch(HttpUtils.handleError);
+  }
 
-        return Observable.of(this.userToken.user);
-    }
-    // 获取用户头像api
-    getuserheadimg(userId) {
-        return this.http.get(`/api/user/expand/${userId}`)
-            .map(resp => {
-                let Obj = resp.json();
-                return Obj;
-            })
-            .catch(HttpUtils.handleError)
-    }
-    getCurrentSite(): Observable<Site> {
-        if (!this.isLoggedIn) {
-            return Observable.of(new Site());
-        }
-        if (this.isLoggedIn && !this.userToken) {
-            // return this.loginfo().map(ut => ut.currentSite);
-            return this.loginfo().mergeMap(_ => {
-                return this.siteInfoService.currentSite();
-            });
-        }
+  logout(): Observable<void> {
+    let url = '/api/logout';
 
-        // return Observable.of(this.userToken.currentSite);
+    this.isLoggedIn = false;
+    return this.http.get(url)
+      .map(HttpUtils.extractData)
+      .catch((resp: Response) => {
+        return HttpUtils.handleError(resp);
+      });
+  }
+
+  stats(): Observable<boolean> {
+    let url = '/api/stats';
+
+    // return this.http.options(url)
+    return this.http.get(url)
+      .map(resp => {
+        this.isLoggedIn = true;
+        if (!this.userToken) {
+          this.loginfo();
+        }
+        return true;
+      })
+      .catch(res => {
+        this.isLoggedIn = true;
+        return HttpUtils.handleError(res);
+      });
+  }
+
+  loginfo(): Observable<any> {
+    let url = '/api/loginfo';
+    return this.http.get(url)
+      .map(resp => {
+        let ut = HttpUtils.extractData(resp);
+        this.userToken = ut;
+        return this.userToken;
+      }).catch(HttpUtils.handleError);
+  }
+
+  getCurrentUser(): Observable<User> {
+    if (!this.isLoggedIn) {
+      return;
+    }
+    if (this.isLoggedIn && !this.userToken) {
+      return this.loginfo().map(ut => ut.user);
+    }
+
+    return Observable.of(this.userToken.user);
+  }
+  // 获取用户头像api
+  getuserheadimg(userId) {
+    return this.http.get(`/api/user/expand/${userId}`)
+      .map(resp => {
+        let Obj = resp.json();
+        return Obj;
+      })
+      .catch(HttpUtils.handleError)
+  }
+  getCurrentSite(): Observable<Site> {
+    if (!this.isLoggedIn) {
+      return Observable.of(new Site());
+    }
+    if (this.isLoggedIn && !this.userToken) {
+      // return this.loginfo().map(ut => ut.currentSite);
+      return this.loginfo().mergeMap(_ => {
         return this.siteInfoService.currentSite();
+      });
     }
 
-    isSuperUser(): boolean {
-        return this.userToken && this.userToken.user && this.userToken.user.isSystemUser;
+    // return Observable.of(this.userToken.currentSite);
+    return this.siteInfoService.currentSite();
+  }
+
+  isSuperUser(): boolean {
+    return this.userToken && this.userToken.user && this.userToken.user.isSystemUser;
+  }
+
+  isAdministrator(): Observable<boolean> {
+    if (!this.isLoggedIn) {
+      return;
+    }
+    if (this.isLoggedIn && !this.userToken) {
+      return this.loginfo().map(ut => ut.hasPermission);
     }
 
-    isAdministrator(): Observable<boolean> {
-        if (!this.isLoggedIn) {
-            return;
-        }
-        if (this.isLoggedIn && !this.userToken) {
-            return this.loginfo().map(ut => ut.hasPermission);
-        }
+    return Observable.of(this.userToken.hasPermission);
+  }
 
-        return Observable.of(this.userToken.hasPermission);
+  isInstructor(): Observable<boolean> {
+    if (!this.isLoggedIn) {
+      return;
+    }
+    if (this.isLoggedIn && !this.userToken) {
+      return this.loginfo().map(ut => ut.isInstructor);
     }
 
-    isInstructor(): Observable<boolean> {
-        if (!this.isLoggedIn) {
-            return;
-        }
-        if (this.isLoggedIn && !this.userToken) {
-            return this.loginfo().map(ut => ut.isInstructor);
-        }
-
-        return Observable.of(this.userToken.isInstructor);
-    }
+    return Observable.of(this.userToken.isInstructor);
+  }
 }
