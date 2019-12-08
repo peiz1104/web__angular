@@ -36,9 +36,9 @@ export class AppComponent implements OnInit {
 
     // 设置应用名称
     // TODO: 现在是加载的站点名称，缺失登录信息的情况下，如登录页，则有问题
-    // this.authService.getCurrentSite().subscribe(site => {
-    //     this.title.setTitle(site.name);
-    // });
+    this.authService.getCurrentSite().subscribe(site => {
+        this.title.setTitle(site.name);
+    });
   }
 
 }
