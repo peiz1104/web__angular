@@ -6,10 +6,9 @@
     </div>
 </div>
 <div class="hour-annual-box">
-  
     <div class="box-lis-form">
         <div class="select-body">
-            <nz-spin [nzSpinning]="spinning" [nzTip]="'正在读取数据...'">
+            <nz-spin [nzpinning]="spinning" [nzTip]="'正在读取数据...'">
                 <cui-data-table #tableHandle [columns]="columns" [data]="testListData?.content" [pagination]="testListData"     
                     [(selection)]="selection" (reload)="loadData($event)">
 
